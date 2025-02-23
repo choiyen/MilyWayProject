@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD MyBatis Configuration 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--MyBatis 설정 내용-->
+    <mappers>
+        <mapper resource="Mybatis-Mapper/UserMapper.xml"></mapper>
+        <mapper resource="Mybatis-Mapper/ReservationMapper.xml"></mapper>
+        <mapper resource="Mybatis-Mapper/QuestionsMapper.xml"></mapper>
+        <mapper resource="Mybatis-Mapper/NoticeMapper.xml"></mapper>
+        <mapper resource="Mybatis-Mapper/NoticeDetallMapper.xml"></mapper>
+
+    </mappers>
+</configuration>

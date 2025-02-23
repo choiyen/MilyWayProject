@@ -1,4 +1,8 @@
 package project.MilkyWay.Service;
 
-public class CommentService {
+import org.springframework.stereotype.Service;
+
+@Service
+public class CommentService
+{
 }
