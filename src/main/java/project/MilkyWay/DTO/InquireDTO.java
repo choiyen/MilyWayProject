@@ -7,12 +7,12 @@ import java.util.Date;
 
 @Getter
 @Builder
-public class InqurieDTO
+public class InquireDTO
 {
-    String InqurieId;
+    String inquireId;
     String Address;
     String PhoneNumber;
-    String Inqurie;
+    String Inquire;
     Date SubmissionDate;
 }
 //- 상담 신청이 들어온 날짜에서 1주일이 지날 경우, 자동 페기하는 스케줄러 등록

@@ -3,5 +3,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.mapper.UserMapper">
-
+    <select id="findAll" resultType="project.MilkyWay.Entity.UserEntity">
+        SELECT * FROM User
+    </select>
+    <select id="FindByUserId" parameterType="String" resultType="project.MilkyWay.Entity.UserEntity">
+        SELECT * FROM User WHERE userId = #{userId}
+    </select>
+    <delete id="deleteByUserId" parameterType="String">
+        DELETE * FROM User WHERE userId = #{userId}
+    </delete>
+    <insert id="Insert" parameterType="project.MilkyWay.Entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO User(userId, password, email) VALUES(#{userId}, #{Password}, #{email})
+    </insert>
+    <update id="Update" parameterType="project.MilkyWay.Entity.UserEntity">
+        UPDATE User SET password = #{password}, email = #{email} WHERE userId = #{userId}
+    </update>
 </mapper>

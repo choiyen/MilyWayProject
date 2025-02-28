@@ -8,6 +8,5 @@
         <mapper resource="Mybatis-Mapper/QuestionsMapper.xml"></mapper>
         <mapper resource="Mybatis-Mapper/NoticeMapper.xml"></mapper>
         <mapper resource="Mybatis-Mapper/NoticeDetallMapper.xml"></mapper>
-
     </mappers>
 </configuration>

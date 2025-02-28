@@ -3,5 +3,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.mapper.ReservationMapper">
-
+    <select id="findAll" resultType="project.MilkyWay.Entity.ReservationEntity">
+        SELECT * FROM reservation
+    </select>
+    <select id="findByAdministrationId" parameterType="String" resultType="project.MilkyWay.Entity.ReservationEntity">
+        SELECT * FROM reservation WHERE administrationId = #{administrationId}
+    </select>
+    <select id="findByReservationId" parameterType="String" resultType="project.MilkyWay.Entity.ReservationEntity">
+        SELECT * FROM reservation WHERE reservationId = #{reservationId}
+    </select>
+    <delete id="deleteByReservationId" parameterType="String">
+        DELETE * FROM reservation WHERE reservationId = #{reservationId}
+    </delete>
+    <insert id="Insert" parameterType="project.MilkyWay.Entity.UserEntity"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO reservation(reservationId, administrationId, acreage,roomcount,name,phone,Address,Subission) VALUES(#{reservationId}, #{administrationId}, #{acreage},#{roomcount},#{name},#{phone},#{Address},#{Subission})
+    </insert>
+    <update id="Update" parameterType="project.MilkyWay.Entity.UserEntity">
+        UPDATE reservation SET acreage = #{acreage}, roomcount = #{roomcount}, name = #{name}, phone = #{phone}, Address = #{Address}, Subission = #{Subission} WHERE userId = #{userId}
+    </update>
 </mapper>

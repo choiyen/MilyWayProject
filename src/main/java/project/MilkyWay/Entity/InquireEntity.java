@@ -14,17 +14,17 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
-public class InqurieEntity
+public class InquireEntity
 {
     @Id
-    @Column(name = "InqurieId")
-    private String InqurieId;
+    @Column(name = "inquireId")
+    private String inquireId;
     @Column(name = "Address", nullable = false)
     private String Address;
     @Column(name = "PhoneNumber", nullable = false)
     private String PhoneNumber;
     @Column(name = "Inqurie", nullable = false)
-    private String Inqurie;
+    private String Inquire;
     @Column(name= "SubmissionDate", nullable = false)
     private Date SubmissionDate;
 }

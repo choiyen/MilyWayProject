@@ -3,5 +3,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.mapper.NoticeMapper">
-
+    <select id="findAll" resultType="project.MilkyWay.Entity.NoticeEntity">
+        SELECT * FROM Notice
+    </select>
+    <select id="findByNoticeId" parameterType="String" resultType="project.MilkyWay.Entity.NoticeEntity">
+        SELECT * FROM Notice WHERE NoticeId = #{NoticeId}
+    </select>
+    <delete id="deleteByNoticeId" parameterType="String">
+        DELETE * FROM Notice WHERE NoticeId = #{NoticeId}
+    </delete>
+    <insert id="Insert" parameterType="project.MilkyWay.Entity.NoticeEntity"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Notice(NoticeId, type, greeting) VALUES(#{NoticeId}, #{type}, #{greeting})
+    </insert>
+    <update id="Update" parameterType="project.MilkyWay.Entity.NoticeEntity">
+        UPDATE Notice SET type = #{type}, greeting = #{greeting} WHERE NoticeId = #{NoticeId}
+    </update>
 </mapper>

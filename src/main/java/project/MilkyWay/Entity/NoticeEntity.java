@@ -21,6 +21,9 @@ public class NoticeEntity
     private String type; // 어떤 유형의 일 : 이사청소, 입주청소, 주거청소.....
     @Column(name = "greeting", nullable = false)
     private String greeting;
+
+
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "NoticeId", insertable = false, updatable = false, referencedColumnName = "NoticeId")
     public Collection<NoticeDetailEntity> noticeDetailEntities;

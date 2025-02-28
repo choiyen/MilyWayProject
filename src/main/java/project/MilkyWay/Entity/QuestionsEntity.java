@@ -16,9 +16,9 @@ import lombok.*;
 public class QuestionsEntity
 {
     @Id
-    @Column(name = "Id")
+    @Column(name = "questionId")
     private String questionId; // Q&A 질문을 등록하기 위한 것
-    @Column(name = "Qestion", nullable = false)
+    @Column(name = "Question", nullable = false)
     private String ExpectionQnA; // 예상했던 Q&A 질문
     @Column(name = "Comment", nullable = false)
     private String ExpectedComment; // 예상질문에 대한 해답
