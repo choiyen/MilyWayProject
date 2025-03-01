@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Repository.InqurieRepository;
 
-import java.util.Date;
+
 
 @Service
-public class InqurieService
+public class InquireService
 {
     @Autowired
     InqurieRepository inqurieRepository;
