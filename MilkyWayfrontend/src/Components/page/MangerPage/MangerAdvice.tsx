@@ -5,7 +5,7 @@ import { TextAreaBox } from "@/Components/Common/TextAreaBox";
 import { cleanType } from "@/types/cleanType";
 import { RoomType } from "@/types/RoomType";
 import { FileTag } from "@/Components/Common/FileTag";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Footer } from "@/Components/Common/Footer";
 
 const MainBox = styled.div`
@@ -35,6 +35,16 @@ const Fontname = styled.h1`
 export const ManagerAdvice = () => {
   const [count, setCount] = useState(1);
 
+  // 마지막 항목을 가리키기 위한 ref
+  const lastItemRef = useRef<HTMLDivElement | null>(null);
+
+  // 컴포넌트가 추가될 때마다 스크롤을 내리기 위해 useEffect 사용
+  useEffect(() => {
+    if (lastItemRef.current) {
+      lastItemRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [count]);
+
   const cleanCount = () => {
     setCount(count + 1);
   };
@@ -50,7 +60,7 @@ export const ManagerAdvice = () => {
           <TextAreaBox name={"인사말"} />
           <br />
           {[...Array(count)].map((_, i) => (
-            <div key={i}>
+            <div key={i} ref={i === count - 1 ? lastItemRef : null}>
               <SelectBox name={"청소 위치"} append={RoomType} />
               <br />
               <FileTag name={"청소 전 사진"} />
@@ -64,7 +74,7 @@ export const ManagerAdvice = () => {
               <br />
             </div>
           ))}
-          <button onClick={() => cleanCount()}>추가</button>
+          <button onClick={cleanCount}>추가</button>
         </Wapper>
       </MainBox>
       <Footer />
