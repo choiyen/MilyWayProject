@@ -1,7 +1,20 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { fileURLToPath } from "url";
+import react from "@vitejs/plugin-react-swc";
+import { defineConfig } from "vite";
+import svgr from "vite-plugin-svgr";
 
-// https://vite.dev/config/
+const server = {
+  port: 8080,
+  host: "localhost",
+};
+
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  server,
+  plugins: [react(), svgr()],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+});
