@@ -10,12 +10,15 @@ import { Footer } from "@/Components/Common/Footer";
 
 const MainBox = styled.div`
   width: 100%;
-  height: 100vh; /* MainBox의 높이를 100vh로 설정하여 화면을 꽉 채우게 합니다 */
+  height: 100vh;
   background-color: white;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start; /* 상단 정렬 */
   align-items: center;
-  overflow-y: auto; /* 화면을 넘어가면 스크롤이 생기도록 */
+  padding-top: 50px; /* 상단 여백 */
+  padding-bottom: 50px; /* 하단 여백 */
+  overflow-y: auto; /* MainBox에서만 스크롤 처리 */
 `;
 
 const Wapper = styled.div`
@@ -24,12 +27,32 @@ const Wapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px; /* 여백을 추가하여 내용이 너무 꽉 차지 않게 합니다 */
+  padding: 20px; /* 내부 여백 */
   box-sizing: border-box;
+  overflow: visible; /* Wapper 내부에서는 스크롤을 사용하지 않도록 설정 */
 `;
 
 const Fontname = styled.h1`
   color: #e195ab;
+`;
+
+const AdviceButton = styled.button`
+  width: 100%;
+  max-width: 250px;
+  height: 50px;
+  margin-top: 70px;
+  border: 1px solid #e195ab;
+  border-radius: 10px;
+  background-color: #e195ab;
+  color: white;
+  display: inline-block;
+  text-align: center;
+  font-size: 20px;
+
+  &:hover {
+    background-color: #461baa;
+    color: white;
+  }
 `;
 
 export const ManagerAdvice = () => {
@@ -38,12 +61,12 @@ export const ManagerAdvice = () => {
   // 마지막 항목을 가리키기 위한 ref
   const lastItemRef = useRef<HTMLDivElement | null>(null);
 
-  // 컴포넌트가 추가될 때마다 스크롤을 내리기 위해 useEffect 사용
+  // 컴포넌트가 처음 렌더링될 때와, 추가할 때마다 스크롤을 내리기 위해 useEffect 사용
   useEffect(() => {
-    if (lastItemRef.current) {
+    if (lastItemRef.current && count != 1) {
       lastItemRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [count]);
+  }, [count]); // count가 변경될 때마다 실행되므로 추가 버튼을 눌렀을 때 스크롤이 내려갑니다.
 
   const cleanCount = () => {
     setCount(count + 1);
@@ -75,6 +98,7 @@ export const ManagerAdvice = () => {
             </div>
           ))}
           <button onClick={cleanCount}>추가</button>
+          <AdviceButton>업로드</AdviceButton>
         </Wapper>
       </MainBox>
       <Footer />
