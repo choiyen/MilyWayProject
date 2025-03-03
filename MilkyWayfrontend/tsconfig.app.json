@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.json", // 기본 tsconfig.json 설정을 확장
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
@@ -6,21 +7,21 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
+    "jsx": "react-jsx", // JSX 설정
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "baseUrl": "src", // baseUrl 설정 (src 폴더 기준)
+    "paths": {
+      "@/*": ["*"] // @ alias를 src 폴더에 맞게 설정
+    }
   },
-  "include": ["src"]
+  "include": ["src/**/*"] // src 폴더 내 모든 파일 포함
 }
