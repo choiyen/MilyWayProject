@@ -9,8 +9,6 @@ const FooterBox = styled.div`
   align-items: center;
   flex-direction: column;
   line-height: 50px;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
 `;
 
 const FooterLite = styled.div`
@@ -23,7 +21,6 @@ const FooterLite = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  
 `;
 
 const FooterText = styled.div`

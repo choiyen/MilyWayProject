@@ -1,25 +1,24 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {act} from 'react';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface addressState {
-  AddressId: String;
-  customer: String;
-  Address: String;
-  phoneNumber: String;
-  SubmissionDate: String;
+  AddressId: string;
+  customer: string;
+  Address: string;
+  phoneNumber: string;
+  SubmissionDate: string;
 }
 
 const initialAddressStateValue: addressState = {
-  AddressId: '',
-  customer: '',
-  Address: '',
-  phoneNumber: '',
-  SubmissionDate: '',
+  AddressId: "",
+  customer: "",
+  Address: "",
+  phoneNumber: "",
+  SubmissionDate: "",
 };
 
 export const addressreducer = createSlice({
-  name: 'addressreducer',
-  initialState: {value: initialAddressStateValue},
+  name: "addressreducer",
+  initialState: { value: initialAddressStateValue },
   reducers: {
     setAddressData: (state, action: PayloadAction<addressState>) => {
       state.value = action.payload;
@@ -28,4 +27,4 @@ export const addressreducer = createSlice({
 });
 
 export default addressreducer.reducer;
-export const {setAddressData} = addressreducer.actions;
+export const { setAddressData } = addressreducer.actions;
