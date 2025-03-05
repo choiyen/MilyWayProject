@@ -231,10 +231,10 @@ export const MangerHeader = () => {
             A/S관리
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "findedIdPassword"}
-            onClick={() => handleButtonClick("findedIdPassword")}
+            isActive={activeButton === "ScheduleMangeMent"}
+            onClick={() => handleButtonClick("ScheduleMangeMent")}
           >
-            계정 찾기
+            일정 관리
           </ChangeButton>
           <ChangeButton
             isActive={activeButton === "Login"}
@@ -299,10 +299,10 @@ export const MangerHeader = () => {
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "findedIdPassword"}
-                  onClick={() => handleButtonClick("findedIdPassword")}
+                  isActive={activeButton === "ScheduleMangeMent"}
+                  onClick={() => handleButtonClick("ScheduleMangeMent")}
                 >
-                  계정 찾기
+                  일정 관리
                 </ChangeButton>
               </li>
               <li>
