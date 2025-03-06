@@ -3,10 +3,7 @@ package project.MilkyWay.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.DTO.UserDTO;
 import project.MilkyWay.Entity.UserEntity;
@@ -24,8 +21,7 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController //관리자 아이디를 관리하는 DTO
 {
-    @Autowired
-    ResponseDTO responseDTO;
+    private  ResponseDTO responseDTO = new ResponseDTO<>();
 
     @Autowired
     UserService userService;
@@ -34,6 +30,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
 //    private PasswordEncoder passwordEncoder;
 
     //Spring Security 적용이 안되어 있는 상태라 평문으로 확인
+    @PostMapping("/Insert")
     public ResponseEntity<?> UserInsert(@RequestBody UserDTO userDTO)
     {
         try
@@ -48,6 +45,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", "관리자 권한 등록에 실패하였습니다."));
         }
     }
+    @PostMapping("/Update")
     public ResponseEntity<?> UserUpdate(@RequestBody UserDTO NewuserDTO)
     {
         try
@@ -62,6 +60,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", "관리자 정보 수정에 실패하였습니다."));
         }
     }
+    @PostMapping("/Find")
     public ResponseEntity<?> Userfind(@RequestBody String email)
     {
         try
@@ -79,6 +78,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", "관리자 정보 수정에 실패하였습니다."));
         }
     }
+    @PostMapping("/Delete")
     public ResponseEntity<?> UserDelete(@RequestBody String userId)
     {
         try

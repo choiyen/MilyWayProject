@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.NoticeEntity;
 import project.MilkyWay.Entity.QuestionsEntity;
+import project.MilkyWay.Expection.DeleteFailedException;
+import project.MilkyWay.Expection.FindFailedException;
+import project.MilkyWay.Expection.InsertFailedException;
+import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.mapper.NoticeMapper;
 
 import java.io.IOException;
@@ -26,7 +30,7 @@ public class NoticeService
        }
        else
        {
-           throw new RuntimeException("데이터베이스에 데이터를 추가 시키러고 시도했는데, 실패했나봐요ㅠㅠㅠ");
+           throw new InsertFailedException("데이터베이스에 데이터를 추가 시키러고 시도했는데, 실패했나봐요ㅠㅠㅠ");
        }
    }
     public NoticeEntity UpdateNotice(String encodingNoticeId, NoticeEntity newNoticeEntity)
@@ -43,12 +47,12 @@ public class NoticeService
            }
            else
            {
-               throw new RuntimeException("데이터 수정을 시도할 수 있었는데, 수정엔 실패했네요. 관리자에게 문의하세요");
+               throw new UpdateFailedException("데이터 수정을 시도할 수 있었는데, 수정엔 실패했네요. 관리자에게 문의하세요");
            }
        }
        else
        {
-           throw new RuntimeException("해당 리뷰 정보에 해당하는 메인데이터를 못찾겠어요. 관리자에게 문의해줘요");
+           throw new FindFailedException("해당 리뷰 정보에 해당하는 메인데이터를 못찾겠어요. 관리자에게 문의해줘요");
        }
    }
     public boolean DeleteByNoticeId(String encodingNoticeId) throws IOException {
@@ -63,12 +67,12 @@ public class NoticeService
             }
             else
             {
-                throw new IOException("삭제를 시도했는데 데이터가 살아있네요ㅠㅠㅠㅠ");
+                throw new DeleteFailedException("삭제를 시도했는데 데이터가 살아있네요ㅠㅠㅠㅠ");
             }
         }
         else
         {
-            throw new RuntimeException("데이터를 지울려고 했는데, 후기 Id에 맞는 정보가 없네요");
+            throw new FindFailedException("데이터를 지울려고 했는데, 후기 Id에 맞는 정보가 없네요");
         }
     }
     public List<NoticeEntity> findAll()
@@ -80,11 +84,11 @@ public class NoticeService
         }
         else if(list.isEmpty())
         {
-            throw new RuntimeException("list를 찾긴 찾았는데, 비어있어요");
+            throw new FindFailedException("list를 찾긴 찾았는데, 비어있어요");
         }
         else
         {
-            throw new RuntimeException("리뷰 데이터를 찾는 도중, 알 수 없는 오류가 발생했어요");
+            throw new FindFailedException("리뷰 데이터를 찾는 도중, 알 수 없는 오류가 발생했어요");
         }
     }
 

@@ -3,6 +3,10 @@ package project.MilkyWay.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.UserEntity;
+import project.MilkyWay.Expection.DeleteFailedException;
+import project.MilkyWay.Expection.FindFailedException;
+import project.MilkyWay.Expection.InsertFailedException;
+import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.mapper.UserMapper;
 
 import java.util.List;
@@ -23,7 +27,7 @@ public class UserService //관리자 아이디를 관리하는 DTO
       }
       else
       {
-          throw new RuntimeException("관리자 아이디 생성에 실패하였습니다.");
+          throw new InsertFailedException("관리자 아이디 생성에 실패하였습니다.");
       }
   }
     public UserEntity UpdateUser(String userId, UserEntity user)
@@ -40,12 +44,12 @@ public class UserService //관리자 아이디를 관리하는 DTO
           }
           else
           {
-              throw new RuntimeException("관리자 정보 수정에 실패하였습니다.");
+              throw new UpdateFailedException();
           }
       }
       else
       {
-          throw new RuntimeException("회원정보에 해당 아이디는 존재하지 않아요");
+          throw new FindFailedException("회원정보에 해당 아이디는 존재하지 않아요");
       }
   }
     public void DeleteUser(String userId)
@@ -57,7 +61,7 @@ public class UserService //관리자 아이디를 관리하는 DTO
       }
       else
       {
-          throw new RuntimeException("삭제할 아이디 정보가 틀립니다.");
+          throw new DeleteFailedException("삭제할 아이디 정보가 틀립니다.");
       }
 
   }
@@ -70,7 +74,7 @@ public class UserService //관리자 아이디를 관리하는 DTO
       }
       else
       {
-          throw new RuntimeException("해당 정보의 회원은 존재하지 않아요.");
+          throw new DeleteFailedException("해당 정보의 회원은 존재하지 않아요.");
       }
   }
   public List<UserEntity> findEmail(String Email)
@@ -82,7 +86,7 @@ public class UserService //관리자 아이디를 관리하는 DTO
         }
         else
         {
-            throw new RuntimeException("해당 정보의 회원은 존재하지 않아요.");
+            throw new FindFailedException("해당 정보의 회원은 존재하지 않아요.");
         }
   }
   private UserEntity ChangeUserEntity(UserEntity previousUser, UserEntity newUser)

@@ -3,6 +3,9 @@ package project.MilkyWay.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.ReservationEntity;
+import project.MilkyWay.Expection.DeleteFailedException;
+import project.MilkyWay.Expection.FindFailedException;
+import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.mapper.ReservationMapper;
 
 import java.io.IOException;
@@ -24,7 +27,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         }
         else
         {
-            throw new RuntimeException("그 날짜에 해당하는 예약 정보를 찾을 수 없습니다.");
+            throw new FindFailedException("그 날짜에 해당하는 예약 정보를 찾을 수 없습니다.");
         }
     }
 
@@ -38,7 +41,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         }
         else
         {
-            throw new RuntimeException("해당 코드를 가진 예약 데이터가 존재하지 않습니다.");
+            throw new FindFailedException("해당 코드를 가진 예약 데이터가 존재하지 않습니다.");
         }
     }
     public boolean DeleteReservation(String reservationId) throws IOException {
@@ -53,12 +56,12 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             }
             else
             {
-                throw new IOException("삭제를 시도했는데 아직 데이터가 살아있네요.");
+                throw new DeleteFailedException("삭제를 시도했는데 아직 데이터가 살아있네요.");
             }
         }
         else
         {
-            throw new RuntimeException("삭제하려고 데이터를 찾으려 했는데 없네요????");
+            throw new FindFailedException("삭제하려고 데이터를 찾으려 했는데 없네요????");
         }
 
     }
@@ -82,7 +85,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         }
         else
         {
-            throw new RuntimeException("예약 데이터 저장에 실패하였습니다. 관리자에게 문의해주세요.");
+            throw new InsertFailedException("예약 데이터 저장에 실패하였습니다. 관리자에게 문의해주세요.");
         }
     }
     public ReservationEntity ReservationSelect(String reservationId)

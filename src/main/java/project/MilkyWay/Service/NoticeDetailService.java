@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.NoticeDetailEntity;
 import project.MilkyWay.Entity.NoticeEntity;
+import project.MilkyWay.Expection.DeleteFailedException;
+import project.MilkyWay.Expection.FindFailedException;
+import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.mapper.NoticeDetailMapper;
 import project.MilkyWay.mapper.NoticeMapper;
 
@@ -21,7 +24,7 @@ public class NoticeDetailService {
         if (noticeDetailEntity != null) {
             return noticeDetailEntity;
         } else {
-            throw new RuntimeException("데이터를 추가 시키려고 시도했는데, 실패했나봐요");
+            throw new InsertFailedException("데이터를 추가 시키려고 시도했는데, 실패했나봐요");
         }
     }
 
@@ -39,7 +42,7 @@ public class NoticeDetailService {
             }
             else
             {
-                throw new RuntimeException("데이터 수정을 시도할 수 있었는데, 수정엔 실패했네요. 관리자에게 문의하세요");
+                throw new FindFailedException("데이터 수정을 시도할 수 있었는데, 수정엔 실패했네요. 관리자에게 문의하세요");
             }
         }
         return ChangingNoticeDetailEntity;
@@ -50,7 +53,7 @@ public class NoticeDetailService {
         List<NoticeDetailEntity> list = noticeDetailMapper.findByNoticeId(encodingNoticeId);
         if(list.isEmpty())
         {
-            throw new NoSuchElementException("데이터를 찾았어요. 근데 비어있는 것 같아요");
+            throw new FindFailedException("데이터를 찾았어요. 근데 비어있는 것 같아요");
         }
         else if(!list.isEmpty())
         {
@@ -58,7 +61,7 @@ public class NoticeDetailService {
         }
         else
         {
-            throw new RuntimeException("데이터 찾기를 시도했는데, 알 수 없는 오류가 발생했어요. 관리자에게 문의해줘요");
+            throw new FindFailedException("데이터 찾기를 시도했는데, 알 수 없는 오류가 발생했어요. 관리자에게 문의해줘요");
         }
     }
     public boolean DeleteToNoticeDetail(String encodingNoticeDetail)
@@ -74,7 +77,7 @@ public class NoticeDetailService {
             }
             else
             {
-                throw new RuntimeException("데이터베이스에서 삭제하는데 실패한 것 같아요. 관리자에게 문의해줘요");
+                throw new DeleteFailedException("데이터베이스에서 삭제하는데 실패한 것 같아요. 관리자에게 문의해줘요");
             }
         }
         else

@@ -3,6 +3,10 @@ package project.MilkyWay.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.QuestionsEntity;
+import project.MilkyWay.Expection.DeleteFailedException;
+import project.MilkyWay.Expection.FindFailedException;
+import project.MilkyWay.Expection.InsertFailedException;
+import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.mapper.QuestionsMapper;
 
 import java.io.IOException;
@@ -24,7 +28,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
         }
         else
         {
-            throw new RuntimeException("해당 질문 데이터를 추가할 수 없습니다.");
+            throw new InsertFailedException("해당 질문 데이터를 추가할 수 없습니다.");
         }
     }
     public QuestionsEntity updatequestion(String encodingquestionId, QuestionsEntity newQuestionEntity)
@@ -41,12 +45,12 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
             }
             else
             {
-                throw new RuntimeException("변경에 실패했는지, 변경 데이터와 요청 데이터가 달라요");
+                throw new UpdateFailedException("변경에 실패했는지, 변경 데이터와 요청 데이터가 달라요");
             }
         }
         else
         {
-            throw new RuntimeException("해당 질문코드를 지닌 질문을 찾지 못하기에 수정할 수 없습니다");
+            throw new FindFailedException("해당 질문코드를 지닌 질문을 찾지 못하기에 수정할 수 없습니다");
         }
 
     }
@@ -62,12 +66,12 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
             }
             else
             {
-                throw new IOException("삭제를 시도했는데 데이터가 살아있네요ㅠㅠㅠㅠ");
+                throw new DeleteFailedException("삭제를 시도했는데 데이터가 살아있네요ㅠㅠㅠㅠ");
             }
         }
         else
         {
-            throw new RuntimeException("데이터를 지울려고 했는데, 질문 Id에 맞는 정보가 없네요");
+            throw new FindFailedException("데이터를 지울려고 했는데, 질문 Id에 맞는 정보가 없네요");
         }
     }
 
@@ -80,11 +84,11 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
         }
         else if(list.isEmpty())
         {
-            throw new RuntimeException("전체 회원정보를 찾긴 찾았는데 리스트가 비어있어요.");
+            throw new FindFailedException("전체 회원정보를 찾긴 찾았는데 리스트가 비어있어요.");
         }
         else
         {
-            throw new RuntimeException("회원정보를 찾다가 오류가 발생했어요!! 관리자님한테 문의하세요");
+            throw new FindFailedException("회원정보를 찾다가 오류가 발생했어요!! 관리자님한테 문의하세요");
         }
     }
     public QuestionsEntity SelectQuestion(String encodingquestionId)
@@ -96,7 +100,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
         }
         else
         {
-            throw new RuntimeException("해당 질문코드를 지닌 데이터는 없어요.");
+            throw new FindFailedException("해당 질문코드를 지닌 데이터는 없어요.");
         }
     }
 
