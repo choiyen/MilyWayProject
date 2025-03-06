@@ -61,9 +61,9 @@ public class UserService //관리자 아이디를 관리하는 DTO
       }
 
   }
-    public List<UserEntity> findUser()
+  public UserEntity findUserId(String userId)
   {
-      List<UserEntity> user = userMapper.findAll();
+      UserEntity user = userMapper.FindByUserId(userId);
       if(user != null)
       {
           return user;
@@ -72,6 +72,18 @@ public class UserService //관리자 아이디를 관리하는 DTO
       {
           throw new RuntimeException("해당 정보의 회원은 존재하지 않아요.");
       }
+  }
+  public List<UserEntity> findEmail(String Email)
+  {
+        List<UserEntity> user = userMapper.FindByEmail(Email);
+        if(user != null)
+        {
+            return user;
+        }
+        else
+        {
+            throw new RuntimeException("해당 정보의 회원은 존재하지 않아요.");
+        }
   }
   private UserEntity ChangeUserEntity(UserEntity previousUser, UserEntity newUser)
   {

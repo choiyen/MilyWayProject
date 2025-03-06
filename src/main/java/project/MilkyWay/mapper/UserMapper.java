@@ -7,10 +7,10 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    List<UserEntity> findAll();
     UserEntity FindByUserId(String userId);
     void deleteByUserId(String userId);
     void Insert(UserEntity user);
     void Update(UserEntity user);
+    List<UserEntity> FindByEmail(String email);
 
 }
