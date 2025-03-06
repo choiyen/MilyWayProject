@@ -10,9 +10,10 @@ export const FixedManagerHeader = styled(MangerHeader)`
   z-index: 1000; /* Make sure it stays on top */
 `;
 
-export const Fontname = styled.h1`
+export const Fontname = styled.div`
   color: #e195ab;
-  margin-bottom: 20px; /* Add space below the title to separate from the next content */
+  font-size: 40px;
+  margin-bottom: 50px; /* Add space below the title to separate from the next content */
   font-weight: bolder;
 `;
 
@@ -24,15 +25,15 @@ export const Wapper = styled.div`
   flex-direction: column;
   justify-content: flex-start; /* Ensure all elements are top-aligned */
   align-items: center;
-  border: 1px solid black;
   padding: 20px;
   box-sizing: border-box;
   flex-grow: 1; /* Allow Wapper to take remaining space */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 export const ImgTag = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   margin-top: 50px;
 `;
 

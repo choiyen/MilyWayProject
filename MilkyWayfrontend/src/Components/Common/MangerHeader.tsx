@@ -3,7 +3,8 @@ import styled from "styled-components";
 import "../../SCSS/header.scss";
 import homeImage from "@/Components/img/home.png";
 import hamburger from "@/Components/img/hamburger.png";
-
+import { GateWayType } from "@/types/GateWayType";
+import { useNavigate } from "react-router-dom";
 // Header styles
 const HeaderBox = styled.div`
   width: 100%;
@@ -65,7 +66,7 @@ const HeaderButton1 = styled.div`
   }
 `;
 
-const ChangeButton = styled.button<{ isActive: boolean }>`
+const ChangeButton = styled.button<{ $isActive: boolean }>`
   width: 100%;
   border: none;
   background-color: #fffeee;
@@ -84,16 +85,16 @@ const ChangeButton = styled.button<{ isActive: boolean }>`
     font-style: normal;
   }
 
-  ${({ isActive }) =>
-    isActive &&
+  ${({ $isActive }) =>
+    $isActive &&
     `
     color : #f6f6fa;
     background-color: rgb(60, 32, 143); /* Add a background color to the active button */
     font-weight: bold;
-  `}
+    `}
 
   /* Mouse hover effect */
-  &:hover {
+&:hover {
     background-color: #f1f1f1; /* Change the background color on hover */
     cursor: pointer; /* Change the cursor to a pointer */
     border-bottom: 2px double #000000;
@@ -197,6 +198,10 @@ export const MangerHeader = () => {
       window.location.href = "/admin"; // 관리자 페이지 URL로 이동
     }
   };
+  const navigate = useNavigate();
+  const FuncClick = (name: string) => {
+    navigate(name);
+  };
 
   return (
     <div>
@@ -207,38 +212,38 @@ export const MangerHeader = () => {
         </div>
         <HeaderLarge>
           <ChangeButton
-            isActive={activeButton === "ReservationMangeMent"}
-            onClick={() => handleButtonClick("ReservationMangeMent")}
+            $isActive={activeButton === "ReservationMangeMent"}
+            onClick={() => FuncClick(GateWayType.ManagerMain)}
           >
             예약 관리
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "QestionMangeMent"}
-            onClick={() => handleButtonClick("QestionMangeMent")}
+            $isActive={activeButton === "QestionMangeMent"}
+            onClick={() => FuncClick(GateWayType.ManagerQuestion)}
           >
             Q & A 관리
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "ReviewMangeMent"}
-            onClick={() => handleButtonClick("ReviewMangeMent")}
+            $isActive={activeButton === "ReviewMangeMent"}
+            onClick={() => FuncClick(GateWayType.ManagerAdvice)}
           >
             후기 관리
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "AfterServiceMangeMent"}
+            $isActive={activeButton === "AfterServiceMangeMent"}
             onClick={() => handleButtonClick("AfterServiceMangeMent")}
           >
             A/S관리
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "ScheduleMangeMent"}
+            $isActive={activeButton === "ScheduleMangeMent"}
             onClick={() => handleButtonClick("ScheduleMangeMent")}
           >
             일정 관리
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "Login"}
-            onClick={() => handleButtonClick("Login")}
+            $isActive={activeButton === "Login"}
+            onClick={() => FuncClick(GateWayType.ManagerMain)}
           >
             Login
           </ChangeButton>
@@ -259,7 +264,7 @@ export const MangerHeader = () => {
             <ul style={{ width: "100%" }}>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "Home"}
+                  $isActive={activeButton === "Home"}
                   onClick={() => handleButtonClick("Home")}
                 >
                   Home
@@ -267,7 +272,7 @@ export const MangerHeader = () => {
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "ReservationMangeMent"}
+                  $isActive={activeButton === "ReservationMangeMent"}
                   onClick={() => handleButtonClick("ReservationMangeMent")}
                 >
                   예약 관리
@@ -275,23 +280,23 @@ export const MangerHeader = () => {
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "QestionMangeMent"}
-                  onClick={() => handleButtonClick("QestionMangeMent")}
+                  $isActive={activeButton === "QestionMangeMent"}
+                  onClick={() => FuncClick(GateWayType.ManagerQuestion)}
                 >
                   Q & A 관리
                 </ChangeButton>
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "ReviewMangeMent"}
-                  onClick={() => handleButtonClick("ReviewMangeMent")}
+                  $isActive={activeButton === "ReviewMangeMent"}
+                  onClick={() => FuncClick(GateWayType.ManagerAdvice)}
                 >
                   후기 관리
                 </ChangeButton>
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "AfterServiceMangeMent"}
+                  $isActive={activeButton === "AfterServiceMangeMent"}
                   onClick={() => handleButtonClick("AfterServiceMangeMent")}
                 >
                   A/S 관리
@@ -299,7 +304,7 @@ export const MangerHeader = () => {
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "ScheduleMangeMent"}
+                  $isActive={activeButton === "ScheduleMangeMent"}
                   onClick={() => handleButtonClick("ScheduleMangeMent")}
                 >
                   일정 관리
@@ -307,7 +312,7 @@ export const MangerHeader = () => {
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "Login"}
+                  $isActive={activeButton === "Login"}
                   onClick={() => handleButtonClick("Login")}
                 >
                   Login

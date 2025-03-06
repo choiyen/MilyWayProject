@@ -34,6 +34,7 @@ const MainWapper = styled.div`
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 export const ManagerAdvice = () => {

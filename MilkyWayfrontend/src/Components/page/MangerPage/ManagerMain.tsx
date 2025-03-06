@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 import { Footer } from "@/Components/Common/Footer";
-import { FixedManagerHeader } from "@/SCSS/Fixed";
+import { FixedManagerHeader, Fontname } from "@/SCSS/Fixed";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -81,7 +81,7 @@ export const ManagerMain = () => {
       <FixedManagerHeader />
       <Wrapper>
         <MangerPage>
-          <h1>관리자 로그인</h1>
+          <Fontname>관리자 로그인</Fontname>
           <MangerInput
             type="text"
             placeholder="아이디를 입력해주세요"

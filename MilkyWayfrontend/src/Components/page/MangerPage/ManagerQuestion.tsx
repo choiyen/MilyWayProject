@@ -30,16 +30,17 @@ const MainBox = styled.div`
 const Wapper = styled.div`
   width: auto;
   height: auto; /* Allow Wapper to grow dynamically */
-  background-color: gainsboro;
+  background-color: #d3f8ff;
   display: flex;
   flex-direction: column;
   justify-content: flex-start; /* Ensure all elements are top-aligned */
   align-items: center;
-  border: 1px solid black;
   padding: 20px;
   box-sizing: border-box;
   flex-grow: 1; /* Allow Wapper to take remaining space */
   margin-bottom: 50px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
 `;
 
 export const ManagerQuestion = () => {
@@ -76,7 +77,7 @@ export const ManagerQuestion = () => {
               ))}
               <ImgTag src={plus} onClick={cleanCount} />
             </Wapper>
-            <LastButton>업로드</LastButton>
+            <LastButton> 재업로드</LastButton>
           </MainWapper>
         </MainBox>
       </MainWapper>

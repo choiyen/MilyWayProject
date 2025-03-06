@@ -28,6 +28,10 @@ const CustomFileLabel = styled.label`
   text-transform: uppercase;
   font-weight: bold;
   border-radius: 10px; /* Optional: Rounded corners */
+
+  &:hover {
+    background-color: brown;
+  }
 `;
 const Label = styled.span`
   margin-right: 20px; /* Textarea와의 간격 조정 */
