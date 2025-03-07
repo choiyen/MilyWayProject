@@ -56,30 +56,28 @@ export const ManagerQuestion = () => {
       <MangerHeader />
       <MainWapper>
         <MainBox>
-          <MainWapper>
-            <Fontname> Q&A 관리</Fontname>
-            <Wapper>
-              {[...Array(count)].map((_, i) => (
-                <div
-                  key={i}
-                  ref={i === count - 1 ? lastItemRef : null}
-                  style={{ gap: "20px" }}
-                >
-                  <InputTextBox
-                    name={"Q&A 질문 (" + (i + 1) + ")"}
-                    place={"예상 질문을 입력해주세요."}
-                  ></InputTextBox>
-                  <TextAreaBox
-                    name={"Q&A 내용 (" + (i + 1) + ")"}
-                    place={"질문에 대한 내용을 입력해주세요"}
-                  ></TextAreaBox>
-                </div>
-              ))}
-              <ImgTag src={plus} onClick={cleanCount} />
-            </Wapper>
-            <LastButton> 재업로드</LastButton>
-          </MainWapper>
+          <Fontname> Q&A 관리</Fontname>
+          <Wapper>
+            {[...Array(count)].map((_, i) => (
+              <div
+                key={i}
+                ref={i === count - 1 ? lastItemRef : null}
+                style={{ gap: "20px" }}
+              >
+                <InputTextBox
+                  name={"Q&A 질문 (" + (i + 1) + ")"}
+                  place={"예상 질문을 입력해주세요."}
+                ></InputTextBox>
+                <TextAreaBox
+                  name={"Q&A 내용 (" + (i + 1) + ")"}
+                  place={"질문에 대한 내용을 입력해주세요"}
+                ></TextAreaBox>
+              </div>
+            ))}
+            <ImgTag src={plus} onClick={cleanCount} />
+          </Wapper>
         </MainBox>
+        <LastButton> 재업로드</LastButton>
       </MainWapper>
       <Footer />
     </div>

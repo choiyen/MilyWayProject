@@ -213,7 +213,7 @@ export const MangerHeader = () => {
         <HeaderLarge>
           <ChangeButton
             $isActive={activeButton === "ReservationMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerMain)}
+            onClick={() => FuncClick(GateWayType.ManagerJoin)}
           >
             예약 관리
           </ChangeButton>
@@ -273,7 +273,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ReservationMangeMent"}
-                  onClick={() => handleButtonClick("ReservationMangeMent")}
+                  onClick={() => FuncClick(GateWayType.ManagerJoin)}
                 >
                   예약 관리
                 </ChangeButton>

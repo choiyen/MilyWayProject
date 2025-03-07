@@ -1,16 +1,7 @@
-import { useNavigate } from "react-router-dom";
-
 export const GateWayType = {
-  ManagerMain: "/Manger/Login",
-  ManagerAdvice: "/Manger/Advice",
+  ManagerMain: "/Manager/Login",
+  ManagerAdvice: "/Manager/Advice",
   ManagerQuestion: "/Manager/Question",
-};
-
-export const GateWayFunc = (name: string) => {
-  const navigate = useNavigate();
-  const FuncClick = () => {
-    navigate(name);
-  };
-
-  return FuncClick;
+  ManagerSign: "/Manager/Sign",
+  ManagerJoin: "/Manager/Join",
 };

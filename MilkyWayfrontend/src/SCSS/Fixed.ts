@@ -1,5 +1,7 @@
 import { MangerHeader } from "@/Components/Common/MangerHeader";
 import styled from "styled-components";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 export const FixedManagerHeader = styled(MangerHeader)`
   position: fixed;
@@ -55,4 +57,19 @@ export const LastButton = styled.button`
     background-color: #461baa;
     color: white;
   }
+`;
+
+// 캘린더를 감싸주는 스타일
+export const StyledCalendarWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  align-items: center;
+  position: relative;
+  margin-bottom: 40px;
+`;
+// 캘린더를 불러옴
+export const StyledCalendar = styled(Calendar)`
+  width: 300px;
 `;
