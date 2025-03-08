@@ -4,4 +4,6 @@ export const GateWayType = {
   ManagerQuestion: "/Manager/Question",
   ManagerSign: "/Manager/Sign",
   ManagerJoin: "/Manager/Join",
+  ManagerCalendar: "/Manager/Calender",
+  ManagerCalendarInsert: "/Manager/Calendar/Insert",
 };

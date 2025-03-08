@@ -1,27 +1,24 @@
 import { Footer } from "@/Components/Common/Footer";
-
+import { NewCalendar } from "@/Components/Common/NewCalendar";
+import { RadioBox } from "@/Components/Common/RadioBox";
+import { SelectDate } from "@/Components/Common/SelectDate";
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { signDummy } from "@/types/Dummydata";
+import { adminstrationSelect } from "@/types/adminstrationType";
 import { GateWayType } from "@/types/GateWayType";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 const MainWapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 const MainBox = styled.div`
   width: 100%;
-  height: calc(60vh - 30px); /* Increased height to make space */
-  background-color: white;
+  height: calc(60vh - 40px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px; /* Space at the top */
-  padding-bottom: 50px; /* Space at the bottom */
   overflow-y: auto; /* Scroll only within the MainBox */
 `;
 const Label = styled.span`
@@ -33,37 +30,24 @@ const Label = styled.span`
 `;
 
 const JoinMapper = styled.div`
+  width: 40vw;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const JoinName = styled.span`
-  background-color: chartreuse;
-  width: 150px;
   height: 200px;
-  line-height: 200px;
-  text-align: center;
-`;
-
-const JoinCation = styled.div`
-  background-color: gainsboro;
-  width: auto;
-  height: 200px;
-  text-align: center;
-  display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
+  background-color: aliceblue;
+  padding-bottom: 20px;
+  gap: 50px;
+  border-radius: 20px;
+  border: 1px solid black;
 `;
 
-export const ManagerJoin = () => {
+export const ManagerCalendarInsert = () => {
   const navigate = useNavigate();
   const FuncClick = (name: string) => {
     navigate(name);
   };
-  const [Sign] = useState(signDummy);
 
   return (
     <div>
@@ -73,22 +57,13 @@ export const ManagerJoin = () => {
           <Fontname>온라인 예약 관리 </Fontname>
           <Label>청소 날짜가 지난 데이터는 자동 삭제 됩니다.</Label>
           <MainWapper>
-            {Sign.length != 0 ? (
-              Sign.map((date, index) => {
-                return (
-                  <JoinMapper key={index}>
-                    <JoinName>{date.signname + " 고객"}</JoinName>
-                    <JoinCation>
-                      <div>{date.address}</div>
-                      <div>{date.phoneNumber}</div>
-                      <div>{date.signdate}</div>
-                    </JoinCation>
-                  </JoinMapper>
-                );
-              })
-            ) : (
-              <div>최근 한달에 해당하는 데이터 존재하지 않습니다.</div>
-            )}
+            <JoinMapper>
+              <SelectDate name={"예약 날짜"}></SelectDate>
+              <RadioBox
+                name={"예약 유형"}
+                append={adminstrationSelect}
+              ></RadioBox>
+            </JoinMapper>
           </MainWapper>
         </MainBox>
         <LastButton onClick={() => FuncClick(GateWayType.ManagerSign)}>

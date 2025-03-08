@@ -31,6 +31,7 @@ export const Wapper = styled.div`
   box-sizing: border-box;
   flex-grow: 1; /* Allow Wapper to take remaining space */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
 `;
 
 export const ImgTag = styled.img`

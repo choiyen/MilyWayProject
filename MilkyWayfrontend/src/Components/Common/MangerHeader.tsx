@@ -237,7 +237,7 @@ export const MangerHeader = () => {
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "ScheduleMangeMent"}
-            onClick={() => handleButtonClick("ScheduleMangeMent")}
+            onClick={() => FuncClick(GateWayType.ManagerCalendar)}
           >
             일정 관리
           </ChangeButton>
@@ -305,7 +305,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ScheduleMangeMent"}
-                  onClick={() => handleButtonClick("ScheduleMangeMent")}
+                  onClick={() => FuncClick(GateWayType.ManagerCalendar)}
                 >
                   일정 관리
                 </ChangeButton>
