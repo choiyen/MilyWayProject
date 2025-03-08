@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.Collection;
 import java.util.Date;
-
+import java.util.Objects;
 
 
 @Entity
@@ -27,5 +27,21 @@ public class AdministrationEntity
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "administrationId", referencedColumnName = "administrationId", updatable = false, insertable = false)
     private ReservationEntity reservationEntity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AdministrationEntity AdministrationEntity = (AdministrationEntity) o;
+        return Objects.equals(administrationId, AdministrationEntity.administrationId) &&
+                Objects.equals(administrationDate, AdministrationEntity.administrationDate) &&
+                Objects.equals(adminstrationType, AdministrationEntity.adminstrationType);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(administrationId, administrationDate, adminstrationType);
+    }
 
 }

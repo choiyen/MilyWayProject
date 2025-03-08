@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 @Table(name = "board")
@@ -25,5 +26,20 @@ public class BoardEntity
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "boardId", referencedColumnName = "boardId", insertable = false, updatable = false)
     public Collection<CommentEntity> commentEntities; // Collection으로 변경
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardEntity BoardEntity = (BoardEntity) o;
+        return Objects.equals(boardId, BoardEntity.boardId) &&
+                Objects.equals(title, BoardEntity.title) &&
+                Objects.equals(content, BoardEntity.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(boardId, title, content);
+    }
 
 }

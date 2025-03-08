@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Address")
@@ -26,5 +27,23 @@ public class AddressEntity
     private String phoneNumber;
     @Column(name = "SubmissionDate", nullable = false)
     private Date SubmissionDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AddressEntity AddressEntity = (AddressEntity) o;
+        return Objects.equals(addressId, AddressEntity.addressId) &&
+                Objects.equals(customer, AddressEntity.customer) &&
+                Objects.equals(Address, AddressEntity.Address) &&
+                Objects.equals(phoneNumber, AddressEntity.phoneNumber) &&
+                Objects.equals(SubmissionDate, AddressEntity.SubmissionDate);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(addressId, customer, Address,phoneNumber, SubmissionDate);
+    }
 
 }

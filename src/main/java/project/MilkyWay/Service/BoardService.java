@@ -7,6 +7,7 @@ import project.MilkyWay.Entity.BoardEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
+import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.BoardRepository;
 
 @Service
@@ -35,7 +36,14 @@ public class BoardService
         {
             BoardEntity AfterBoardEntity = ConvertToEntity(BeforeBoardEntity, boardEntity);
             BoardEntity boardEntity1 = boardRepository.save(AfterBoardEntity);
-            return boardEntity1;
+            BoardEntity ChangeBoardEntity = boardRepository.findByBoardId(boardEntity1.getBoardId());
+            if(ChangeBoardEntity.equals(boardEntity1)) {
+                return boardEntity1;
+            }
+            else
+            {
+                throw new UpdateFailedException("게시판을 변경하려고 시도했으나, 변경에 실패했습니다.");
+            }
         }
         else
         {

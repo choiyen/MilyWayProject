@@ -6,6 +6,7 @@ import project.MilkyWay.Entity.InquireEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
+import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.InqurieRepository;
 
 import java.util.List;
@@ -36,7 +37,15 @@ public class InquireService
         {
             InquireEntity newinquireEntity2 = ConvertToNew(inquireEntity1, inquireEntity);
             InquireEntity inquireEntity2 = inqurieRepository.save(newinquireEntity2);
-            return inquireEntity2;
+            InquireEntity saveinquire = inqurieRepository.findByInquireId(newinquireEntity2.getInquireId());
+            if(saveinquire.equals(inquireEntity2))
+            {
+                return inquireEntity2;
+            }
+            else
+            {
+                throw new UpdateFailedException("inquire 클래스의 변경을 시도했으나, 변경되지 않았습니다.");
+            }
         }
         else
         {

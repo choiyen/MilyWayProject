@@ -50,7 +50,14 @@ public class CommentService
            {
                 CommentEntity UpdateComment = ConvertToEntity(commentEntity, comment);
                 CommentEntity commentEntity1 = commentRepository.save(UpdateComment);
-                return commentEntity1;
+                CommentEntity ChangeCommentEntity = commentRepository.findByCommentId(commentEntity1.getCommentId());
+                if(ChangeCommentEntity.equals(commentEntity1)) {
+                    return commentEntity1;
+                }
+                else
+                {
+                    throw new UpdateFailedException("질문 게시판에 남긴 데이터의 변경을 시도했으나, 실패했습니다.");
+                }
            }
            else
            {
