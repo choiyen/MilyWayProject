@@ -9,7 +9,6 @@ import { GateWayType } from "./types/GateWayType";
 import { ManagerSign } from "./Components/page/MangerPage/ManagerSign";
 import { ManagerJoin } from "./Components/page/MangerPage/ManagerJoin";
 import { ManagerCalendar } from "./Components/page/MangerPage/ManagerCalendar";
-import { ManagerCalendarInsert } from "./Components/page/MangerPage/ManagerCalendarInsert";
 
 const App = () => {
   return (
@@ -27,10 +26,6 @@ const App = () => {
           <Route
             path={GateWayType.ManagerCalendar}
             element={<ManagerCalendar />}
-          />
-          <Route
-            path={GateWayType.ManagerCalendarInsert}
-            element={<ManagerCalendarInsert />}
           />
         </Routes>
       </BrowserRouter>
