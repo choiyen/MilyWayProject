@@ -6,6 +6,7 @@ import project.MilkyWay.Entity.ReservationEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
+import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.mapper.ReservationMapper;
 
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         }
 
     }
-    public boolean SaveReservation(ReservationEntity reservationEntity)
+    public ReservationEntity SaveReservation(ReservationEntity reservationEntity)
     {
         ReservationEntity reservationEntity1 = reservationMapper.findByReservationId(reservationEntity.getReservationId());
         if(reservationEntity1 != null)
@@ -76,16 +77,16 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             boolean check = reservationEntity2.equals(ChangeReservation);
             if(check == true)
             {
-                return true;
+                return reservationEntity2;
             }
             else
             {
-                return false;
+                throw new UpdateFailedException("예약 데이터 업데이트에 실패하였습니다. 관리자에게 문의해주세요");
             }
         }
         else
         {
-            throw new InsertFailedException("예약 데이터 저장에 실패하였습니다. 관리자에게 문의해주세요.");
+            throw new UpdateFailedException("예약 데이터 저장에 실패하였습니다. 관리자에게 문의해주세요.");
         }
     }
     public ReservationEntity ReservationSelect(String reservationId)

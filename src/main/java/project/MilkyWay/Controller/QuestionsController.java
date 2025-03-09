@@ -11,6 +11,7 @@ import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.QuestionsEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
+import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Service.QuestionsService;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "질문 등록에 실패하였습니다." ));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
     @PostMapping("/Update")
@@ -48,22 +49,22 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
     {
         try
         {
-            QuestionsEntity oldquestionEntity = questionsService.SelectQuestion(newquestionsDTO.getQuestionId());
-            if(oldquestionEntity != null)
-            {
-                QuestionsEntity questionsEntity = ConVertToEntity(oldquestionEntity, newquestionsDTO);
-                QuestionsEntity questionsEntity1 = questionsService.updatequestion(oldquestionEntity.getQuestionId(), questionsEntity);
-                QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
-                return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success", "질문 데이터 업데이트에 성공하였습니다.", Collections.singletonList(questionsDTO1)));
-            }
-            else
-            {
-                throw new FindFailedException("현재 저장되지 않은 질문인 것 같아요.");
-            }
+
+                QuestionsEntity questionsEntity = ConVertToEntity(newquestionsDTO);
+                QuestionsEntity questionsEntity1 = questionsService.updatequestion(questionsEntity.getQuestionId(), questionsEntity);
+                if(questionsEntity1 != null)
+                {
+                    QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
+                    return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success", "질문 데이터 업데이트에 성공하였습니다.", Collections.singletonList(questionsDTO1)));
+                }
+                else
+                {
+                    throw new UpdateFailedException();
+                }
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "질문 등록에 실패하였습니다." ));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage() ));
         }
 
     }
@@ -84,7 +85,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "질문 삭제에 실패하였습니다." ));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
 
         }
     }
@@ -106,7 +107,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "질문 삭제에 실패하였습니다." ));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage() ));
         }
     }
     @PostMapping("/FindAll")
@@ -131,7 +132,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "질문 삭제에 실패하였습니다." ));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage() ));
         }
     }
     private QuestionsEntity ConVertToEntity(QuestionsDTO questionsDTO)

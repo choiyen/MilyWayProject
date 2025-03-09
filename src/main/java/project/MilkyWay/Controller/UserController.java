@@ -42,10 +42,10 @@ public class UserController //관리자 아이디를 관리하는 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "관리자 권한 등록에 실패하였습니다."));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
-    @PostMapping("/Update")
+    @PutMapping("/Update")
     public ResponseEntity<?> UserUpdate(@RequestBody UserDTO NewuserDTO)
     {
         try
@@ -57,7 +57,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "관리자 정보 수정에 실패하였습니다."));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
     @PostMapping("/Find")
@@ -75,10 +75,10 @@ public class UserController //관리자 아이디를 관리하는 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "관리자 정보 수정에 실패하였습니다."));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
-    @PostMapping("/Delete")
+    @DeleteMapping("/Delete")
     public ResponseEntity<?> UserDelete(@RequestBody String userId)
     {
         try
@@ -97,7 +97,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "관리자 정보 삭제 실패하였습니다."));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
 
         }
     }
