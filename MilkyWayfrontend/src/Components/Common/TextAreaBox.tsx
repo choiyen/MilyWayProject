@@ -73,7 +73,7 @@ export const TextAreaBox = ({
   return (
     <TextAreaContainer>
       <Label>{name}</Label>
-      {index !== undefined ? (
+      {index != undefined ? (
         <Textarea
           placeholder={place}
           value={Value[index] || ""} // undefined일 경우 빈 문자열로 초기화

@@ -15,12 +15,14 @@ const RadioBoxContainer = styled.div`
   margin-top: 20px;
 `;
 
-const Label = styled.span<{ isRed?: boolean }>`
+const Label = styled.span<{ $isred?: string | undefined }>`
   font-size: 20px; /* 글씨 크기 조정 */
   line-height: 16px;
   font-weight: bolder;
   color: ${(props) =>
-    props.isRed ? "red" : "black"}; /* isRed가 true일 때 빨간색으로 */
+    props.$isred === "true"
+      ? "red"
+      : "black"}; /* isRed가 true일 때 빨간색으로 */
 `;
 
 export const RadioBox = ({ name, append }: SelectBoxProps) => {
@@ -28,7 +30,7 @@ export const RadioBox = ({ name, append }: SelectBoxProps) => {
     <RadioBoxContainer>
       <Label>{name}</Label>
       {append.map((item) => (
-        <Label key={item} isRed={item === "업무"}>
+        <Label key={item} $isred={`${item === "업무"}`}>
           <input type="radio" name="example" value={item} />
           {item}
         </Label>

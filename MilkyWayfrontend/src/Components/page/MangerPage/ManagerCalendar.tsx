@@ -19,10 +19,23 @@ const MainWapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const SmallWapper = styled.div<{ istrue?: boolean }>`
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정 배경 */
+  z-index: 999; /* 모달보다 더 위에 놓이도록 */
+`;
+
+const SmallWrapper = styled.div<{ $istrue?: string | undefined }>`
   position: absolute;
   display: ${(props) =>
-    props.istrue ? "block" : "none"}; /* istrue가 true일 때 보이도록 */
+    props.$istrue === "true"
+      ? "block"
+      : "none"}; /* istrue가 true일 때 보이도록 */
   top: 50%;
   left: 50%; /* 화면의 왼쪽 50%로 이동 */
   transform: translate(
@@ -36,7 +49,9 @@ const SmallWapper = styled.div<{ istrue?: boolean }>`
   border-radius: 10px;
   box-shadow: 0 2px 3px 0 rebeccapurple;
   align-items: center;
+  z-index: 1000; /* 오버레이 위에 모달이 위치하도록 */
 `;
+
 const MainBox = styled.div`
   width: 100%;
   height: calc(60vh - 30px); /* Increased height to make space */
@@ -48,6 +63,7 @@ const MainBox = styled.div`
   padding-bottom: 50px; /* Space at the bottom */
   overflow-y: auto; /* Scroll only within the MainBox */
 `;
+
 const Label = styled.span`
   font-size: 20px;
   line-height: 16px;
@@ -57,7 +73,7 @@ const Label = styled.span`
 `;
 
 export const ManagerCalendar = () => {
-  const [change, setchange] = useState(false);
+  const [change, setChange] = useState(false);
   const today = new Date();
   const [date, setDate] = useState<Value>(today);
 
@@ -67,7 +83,7 @@ export const ManagerCalendar = () => {
   }, [date]);
 
   function ChangeClick(): void {
-    setchange(!change);
+    setChange(!change);
   }
 
   const handleDateChange = (newDate: Value) => {
@@ -84,7 +100,7 @@ export const ManagerCalendar = () => {
       <FixedManagerHeader />
       <MainWapper>
         <MainBox>
-          <Fontname>온라인 예약 관리 </Fontname>
+          <Fontname>온라인 예약 관리</Fontname>
           <Label>청소 날짜가 지난 데이터는 자동 삭제 됩니다.</Label>
           <MainWapper>
             <StyledCalendarWrapper>
@@ -102,19 +118,18 @@ export const ManagerCalendar = () => {
         </MainBox>
         <LastButton onClick={() => ChangeClick()}>정보 추가</LastButton>
       </MainWapper>
-      <SmallWapper istrue={change}>
-        <SelectDate
-          name={"선택 날짜"}
-          change={date?.toString() || ""}
-        ></SelectDate>
+
+      {/* 모달과 오버레이가 활성화된 경우에만 보여짐 */}
+      {change && <Overlay />}
+      <SmallWrapper $istrue={`${change}`}>
+        <SelectDate name={"선택 날짜"} change={date?.toString() || ""} />
         <br />
-        <RadioBox
-          name={"선택 유형"}
-          append={[...adminstrationSelect]}
-        ></RadioBox>
+        <RadioBox name={"선택 유형"} append={[...adminstrationSelect]} />
         <br />
         <LastButton onClick={() => ChangeDate()}>일정 확정</LastButton>
-      </SmallWapper>
+        <LastButton onClick={() => ChangeDate()}>취소</LastButton>
+      </SmallWrapper>
+
       <Footer />
     </div>
   );
