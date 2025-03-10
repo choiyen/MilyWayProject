@@ -45,6 +45,8 @@ const Wapper = styled.div`
 
 export const ManagerQuestion = () => {
   const [count, setCount] = useState(1);
+  const [Question, SetQuestion] = useState<string[]>([""]);
+  const [Comment, SetComment] = useState<string[]>([""]);
 
   const cleanCount = () => {
     setCount(count + 1);
@@ -67,10 +69,16 @@ export const ManagerQuestion = () => {
                 <InputTextBox
                   name={"Q&A 질문 (" + (i + 1) + ")"}
                   place={"예상 질문을 입력해주세요."}
+                  Value={Question}
+                  setValue={SetQuestion}
+                  index={i}
                 ></InputTextBox>
                 <TextAreaBox
                   name={"Q&A 내용 (" + (i + 1) + ")"}
                   place={"질문에 대한 내용을 입력해주세요"}
+                  Value={Comment}
+                  setValue={SetComment}
+                  index={i}
                 ></TextAreaBox>
               </div>
             ))}

@@ -4,6 +4,8 @@ import { NewCalendar } from "@/Components/Common/NewCalendar";
 import { SelectBox } from "@/Components/Common/SelectBox";
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanType";
+import { Value } from "@/types/date";
+import { useState } from "react";
 import { styled } from "styled-components";
 
 const MainWapper = styled.div`
@@ -25,6 +27,15 @@ const MainBox = styled.div`
 `;
 
 export const ManagerSign = () => {
+  const [Saleable, SetSaleable] = useState("");
+  const [Name, SetName] = useState("");
+  const [Phone, SetPhone] = useState("");
+  const [Address, SetAddress] = useState("");
+  const [AddressDetail, SetAddressDetail] = useState("");
+  const today = new Date();
+
+  const [Reservation, SetReservation] = useState<Value>(today);
+
   return (
     <div>
       <FixedManagerHeader />
@@ -33,12 +44,36 @@ export const ManagerSign = () => {
           <Fontname>온라인 예약 관리 </Fontname>
           <MainWapper>
             <SelectBox name={"서비스명"} append={cleanType}></SelectBox>
-            <InputTextBox name={"분양실평수"}></InputTextBox>
-            <InputTextBox name={"이름"}></InputTextBox>
-            <InputTextBox name={"연락처"}></InputTextBox>
-            <InputTextBox name={"주소"}></InputTextBox>
-            <InputTextBox name={"상세주소"}></InputTextBox>
-            <NewCalendar name={"예약 날짜"}></NewCalendar>
+            <InputTextBox
+              name={"분양실평수"}
+              Value={Saleable}
+              setValue2={SetSaleable}
+            ></InputTextBox>
+            <InputTextBox
+              name={"이름"}
+              Value={Name}
+              setValue2={SetName}
+            ></InputTextBox>
+            <InputTextBox
+              name={"연락처"}
+              Value={Phone}
+              setValue2={SetPhone}
+            ></InputTextBox>
+            <InputTextBox
+              name={"주소"}
+              Value={Address}
+              setValue2={SetAddress}
+            ></InputTextBox>
+            <InputTextBox
+              name={"상세주소"}
+              Value={AddressDetail}
+              setValue2={SetAddressDetail}
+            ></InputTextBox>
+            <NewCalendar
+              name={"예약 날짜"}
+              Value={Reservation}
+              setValue2={SetReservation}
+            ></NewCalendar>
             {/* 아직 캘린더 CSS 적용 안됨, 디자인 검토 후 추가할 예정 */}
           </MainWapper>
         </MainBox>

@@ -1,10 +1,12 @@
 import { StyledCalendar, StyledCalendarWrapper } from "@/SCSS/Fixed";
 import { Value } from "@/types/date";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 interface SelectBoxProps {
   name: string;
+  Value: Value;
+  setValue: Dispatch<SetStateAction<Value>>; // 수정된 부분
 }
 
 const TextAreaContainer = styled.div`
@@ -22,12 +24,9 @@ const Label = styled.span`
   text-align: left;
 `;
 
-export const NewCalendar = ({ name }: SelectBoxProps) => {
-  const today = new Date();
-  const [date, setDate] = useState<Value>(today);
-
+export const NewCalendar = ({ name, Value, setValue }: SelectBoxProps) => {
   const handleDateChange = (newDate: Value) => {
-    setDate(newDate);
+    setValue(newDate);
   };
   return (
     <div>
@@ -36,7 +35,7 @@ export const NewCalendar = ({ name }: SelectBoxProps) => {
           <Label>{name}</Label>
           <StyledCalendar
             onChange={handleDateChange}
-            value={date}
+            value={Value}
             // formatDay={(locale, date) => moment(date).format("D")} // 일 제거 숫자만 보이게
             // formatYear={(locale, date) => moment(date).format("YYYY")} // 네비게이션 눌렀을때 숫자 년도만 보이게
             // formatMonthYear={(locale, date) =>

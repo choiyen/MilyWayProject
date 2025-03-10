@@ -1,8 +1,13 @@
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 
 interface SelectBoxProps {
   name: string;
   place?: string;
+  Value: string | string[];
+  setValue?: Dispatch<SetStateAction<string[]>>;
+  setValue2?: Dispatch<SetStateAction<string>>;
+  index?: number;
 }
 
 const Textarea = styled.textarea`
@@ -32,11 +37,55 @@ const Label = styled.span`
   text-align: left;
 `;
 
-export const TextAreaBox = ({ name, place }: SelectBoxProps) => {
+export const TextAreaBox = ({
+  name,
+  place,
+  Value,
+  setValue,
+  index,
+  setValue2,
+}: SelectBoxProps) => {
+  useEffect(() => {
+    if (index !== undefined && Value.length < index && setValue !== undefined) {
+      const NewValue = [...Value];
+      NewValue.push("");
+      setValue(NewValue);
+    }
+  }, [Value, index, setValue]);
+  useEffect(() => {
+    console.log(Value);
+  }, [Value]);
+
+  function SetChange(
+    e: ChangeEvent<HTMLTextAreaElement>,
+    index?: number
+  ): void {
+    if (index !== undefined && setValue != undefined) {
+      const NewValue = [...Value];
+      NewValue[index] = e.target.value;
+      setValue(NewValue);
+    } else {
+      if (setValue2 !== undefined) {
+        setValue2(e.target.value);
+      }
+    }
+  }
   return (
     <TextAreaContainer>
       <Label>{name}</Label>
-      <Textarea placeholder={place} />
+      {index !== undefined ? (
+        <Textarea
+          placeholder={place}
+          value={Value[index] || ""} // undefined일 경우 빈 문자열로 초기화
+          onChange={(e) => SetChange(e, index)}
+        />
+      ) : (
+        <Textarea
+          placeholder={place}
+          value={Value || ""} // undefined일 경우 빈 문자열로 초기화
+          onChange={(e) => SetChange(e)}
+        />
+      )}
     </TextAreaContainer>
   );
 };

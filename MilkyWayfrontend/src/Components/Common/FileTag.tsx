@@ -1,7 +1,11 @@
+import { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 
 interface SelectBoxProps {
   name: string;
+  Value: File[][];
+  setValue: Dispatch<SetStateAction<File[][]>>;
+  index: number;
 }
 
 // The file input itself
@@ -50,7 +54,17 @@ const FileContainer = styled.div`
   margin-top: 20px;
 `;
 
-export const FileTag = ({ name }: SelectBoxProps) => {
+export const FileTag = ({ name, Value, setValue, index }: SelectBoxProps) => {
+  useEffect(() => {
+    if (Value.length < index) {
+      const copiedArray = [...Value.map((row) => [...row]), []];
+      setValue(copiedArray);
+    }
+  }, [Value, index, setValue]);
+  useEffect(() => {
+    console.log(Value);
+  }, [Value]);
+
   return (
     <FileContainer
       className="filename"
@@ -67,6 +81,12 @@ export const FileTag = ({ name }: SelectBoxProps) => {
         id="fileInput"
         placeholder="클릭 시 갤러리가 열립니다."
         multiple
+        onChange={(e) => {
+          const files = Array.from(e.target.files || []);
+          const newValue = [...Value];
+          newValue[index] = files;
+          setValue(newValue);
+        }}
       />
     </FileContainer>
   );

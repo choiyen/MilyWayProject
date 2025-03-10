@@ -38,7 +38,12 @@ const MainWapper = styled.div`
 
 export const ManagerAdvice = () => {
   const [count, setCount] = useState(1);
+  const [type, setType] = useState("");
   const [cleanspot, setcleanspot] = useState<string[]>([""]);
+  const [beforefile, setbeforefile] = useState<File[][]>([[]]);
+  const [afferfile, setAfferfile] = useState<File[][]>([[]]);
+  const [Advice, SetAdvice] = useState<string[]>([""]);
+
   // 마지막 항목을 가리키기 위한 ref
   const lastItemRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,7 +76,7 @@ export const ManagerAdvice = () => {
           <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
           <Wapper>
             <SelectBox name={"청소 유형"} append={cleanType} />
-            <TextAreaBox name={"도입 인사"} />
+            <TextAreaBox name={"도입 인사"} Value={type} setValue2={setType} />
             {[...Array(count)].map((_, i) => (
               <div
                 key={i}
@@ -84,11 +89,24 @@ export const ManagerAdvice = () => {
                   updateCleanspot={updateCleanspot}
                   Cleancount={i}
                 />
-                <FileTag name={"청소 이전 (" + cleanspot[i] + ")"} />
-                <FileTag name={"청소 이후 (" + cleanspot[i] + ")"} />
+                <FileTag
+                  name={"청소 이전 (" + cleanspot[i] + ")"}
+                  Value={beforefile}
+                  setValue={setbeforefile}
+                  index={i}
+                />
+                <FileTag
+                  name={"청소 이후 (" + cleanspot[i] + ")"}
+                  Value={afferfile}
+                  setValue={setAfferfile}
+                  index={i}
+                />
                 <TextAreaBox
                   name={"청소 후기 (" + cleanspot[i] + ")"}
                   place={"청소할 때 힘들었던 점이나 후기 글을 작성해주세요."}
+                  index={i}
+                  Value={Advice}
+                  setValue={SetAdvice}
                 />
               </div>
             ))}
