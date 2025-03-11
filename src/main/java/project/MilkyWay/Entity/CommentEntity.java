@@ -35,6 +35,14 @@ public class CommentEntity
                 Objects.equals(type, CommentEntity.type) &&
                 Objects.equals(comment, CommentEntity.comment);
     }
+    // UUID를 직접 생성하도록 할 수도 있습니다. 예를 들어 생성자에서 자동으로 UUID를 생성할 수 있습니다.
+    @PrePersist
+    public void prePersist() {
+        if (commentId == null) {
+            commentId = UUID.randomUUID();  // UUID 값이 null이면 자동으로 생성
+        }
+    }
+
 
     @Override
     public int hashCode() {

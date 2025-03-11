@@ -22,4 +22,11 @@ public class QuestionsEntity
     private String ExpectionQnA; // 예상했던 Q&A 질문
     @Column(name = "Comment", nullable = false)
     private String ExpectedComment; // 예상질문에 대한 해답
+
+    @PrePersist
+    public void prePersist() {
+        if (questionId == null) {
+            questionId = UUID.randomUUID();  // UUID 값이 null이면 자동으로 생성
+        }
+    }
 }

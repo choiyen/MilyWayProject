@@ -32,7 +32,17 @@ public class NoticeDetailEntity
     private List<String> afterURL; // 청소 후 사진
     @Column(name = "comment")
     private String comment; // 해당 구역을 청소하고 느낀점 기록
+
+
+    @PrePersist
+    public void prePersist() {
+        if (NoticeDetailId == null) {
+            NoticeDetailId = UUID.randomUUID();  // UUID 값이 null이면 자동으로 생성
+        }
+    }
 }
+
+
 
 /**
  * - NoticeDTO와 NoticedetaillDTO는 1대 다 관계로 묶인다.
