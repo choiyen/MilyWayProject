@@ -1,6 +1,7 @@
 package project.MilkyWay.Controller;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
 
     //Spring Security 적용이 안되어 있는 상태라 평문으로 확인
     @PostMapping("/Insert")
-    public ResponseEntity<?> UserInsert(@RequestBody UserDTO userDTO)
+    public ResponseEntity<?> UserInsert(@Valid @RequestBody UserDTO userDTO)
     {
         try
         {
@@ -46,7 +47,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
         }
     }
     @PutMapping("/Update")
-    public ResponseEntity<?> UserUpdate(@RequestBody UserDTO NewuserDTO)
+    public ResponseEntity<?> UserUpdate(@Valid @RequestBody UserDTO NewuserDTO)
     {
         try
         {
@@ -61,7 +62,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
         }
     }
     @PostMapping("/Find")
-    public ResponseEntity<?> Userfind(@RequestBody String email)
+    public ResponseEntity<?> Userfind(@Valid @RequestBody String email)
     {
         try
         {

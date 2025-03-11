@@ -1,5 +1,6 @@
 package project.MilkyWay.Controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
     ResponseDTO responseDTO = new ResponseDTO<>();
 
     @PostMapping("/Insert")
-    public  ResponseEntity<?> QuestionInsert(@RequestBody QuestionsDTO questionsDTO)
+    public  ResponseEntity<?> QuestionInsert(@Valid  @RequestBody QuestionsDTO questionsDTO)
     {
         try
         {
@@ -45,7 +46,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
     }
     @PostMapping("/Update")
-    public ResponseEntity<?> QuestionUpdate(@RequestBody QuestionsDTO newquestionsDTO)
+    public ResponseEntity<?> QuestionUpdate(@Valid @RequestBody QuestionsDTO newquestionsDTO)
     {
         try
         {
@@ -90,7 +91,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
     }
     @PostMapping("/Find")
-    public ResponseEntity<?> QuestionFind(@RequestBody String QuestionId)
+    public ResponseEntity<?> QuestionFind(@Valid @RequestBody String QuestionId)
     {
         try
         {

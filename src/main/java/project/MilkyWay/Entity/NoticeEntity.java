@@ -3,6 +3,7 @@ package project.MilkyWay.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import project.MilkyWay.Enum.CleanType;
 
 import java.util.Collection;
 
@@ -18,7 +19,8 @@ public class NoticeEntity
     @Column(name = "NoticeId")
     private String NoticeId; // 후기 ID : primary key이자 10자리의 렌덤키
     @Column(name = "type", nullable = false)
-    private String type; // 어떤 유형의 일 : 이사청소, 입주청소, 주거청소.....
+    @Enumerated(EnumType.STRING)
+    private CleanType type; // 어떤 유형의 일 : 이사청소, 입주청소, 주거청소.....
     @Column(name = "greeting", nullable = false)
     private String greeting;
 

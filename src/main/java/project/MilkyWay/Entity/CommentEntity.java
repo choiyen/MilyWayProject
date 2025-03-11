@@ -1,12 +1,10 @@
 package project.MilkyWay.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "Comment")
@@ -18,7 +16,8 @@ public class CommentEntity
 {
     @Id
     @Column(name = "commentId", nullable = false)
-    private String commentId; // 질문을 구분하기 위한 id
+    @GeneratedValue(strategy = GenerationType.AUTO)  // 자동 증가 설정
+    private UUID commentId; // 질문을 구분하기 위한 id
     @Column(name = "boardId", nullable = false)
     private String boardId;  // boardDTO와 연결하기 위한 것
     @Column(name = "type", nullable = false)

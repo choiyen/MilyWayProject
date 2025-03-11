@@ -1,20 +1,54 @@
 package project.MilkyWay.DTO;
 
-import lombok.Builder;
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import project.MilkyWay.Enum.CleanType;
+import project.MilkyWay.Enum.Cleandirection;
+import project.MilkyWay.Enum.EnumValue;
 
 import java.util.List;
 
 
 @Getter
 @Builder
+@EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public class NoticeDetailDTO
 {
-    String NoticeDetailId; // 1씩 증가하는 auto inclement로 작성
-    String NoticeId; // NoticeDTO와 연결하기 위한 왜래키
-    String direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
-    List<String> beforeURL; // 청소 전 사진
-    List<String> afterURL; // 청소 후 사진
+
+
+    private Long NoticeDetailId; // 1씩 증가하는 auto inclement로 작성
+
+    @NotNull(message = "NoticeId cannot be null")
+    @NotBlank(message = "NoticeId cannot be empty")
+    @Size(min = 5, max= 20, message = "NoticeId는 최소 다섯자리 이상 입력해야 함.")
+    private String NoticeId; // NoticeDTO와 연결하기 위한 왜래키
+
+    @NotNull(message = "direction cannot be null")
+    @NotBlank(message = "direction cannot be empty")
+    @Size(min = 5, max= 20, message = "direction는 최소 다섯자리 이상 입력해야 함.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    @EnumValue(enumClass = Cleandirection.class, message = "청소 유형은 거실, 화장실, 부엌, 베란다 중 하나여야 합니다.")
+    private Cleandirection direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
+    //커스텀 어노테이션을 사용하여, 특정 값 외의 데이터가 들어왔을 떄, 에러 메세지를 반환함
+
+    @NotNull(message = "beforeURL cannot be null")
+    @NotBlank(message = "beforeURL cannot be empty")
+    private List<String> beforeURL; // 청소 전 사진
+
+    @NotNull(message = "afterURL cannot be null")
+    @NotBlank(message = "afterURL cannot be empty")
+    private List<String> afterURL; // 청소 후 사진
+
+    @NotNull(message = "comment cannot be null")
+    @NotBlank(message = "comment cannot be empty")
+    @Size(min = 5, message = "comment는 최소 다섯자리 이상 입력해야 함.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     String comment; // 해당 구역을 청소하고 느낀점 기록
 }
 

@@ -1,10 +1,9 @@
 package project.MilkyWay.Controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.DTO.ReservationDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.ReservationEntity;
@@ -27,7 +26,8 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
 
     ResponseDTO responseDTO = new ResponseDTO<>();
 
-    public ResponseEntity<?> Insert(@RequestBody ReservationDTO reservationDTO)
+    @PostMapping("/Insert")
+    public ResponseEntity<?> Insert(@Valid @RequestBody ReservationDTO reservationDTO)
     {
         try
         {
@@ -48,7 +48,9 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error","예약 데이터 추가에 실패했습니다."));
         }
     }
-    public ResponseEntity<?> Update(@RequestBody ReservationDTO reservationDTO)
+
+    @PutMapping("/Update")
+    public ResponseEntity<?> Update(@Valid @RequestBody ReservationDTO reservationDTO)
     {
         try
         {
@@ -69,6 +71,8 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
+
+    @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody String EncodingReservationId)
     {
       try
@@ -88,6 +92,9 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
           return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
       }
     }
+
+
+    @GetMapping
     public ResponseEntity<?> FindAll()
     {
         try

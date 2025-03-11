@@ -1,13 +1,32 @@
 package project.MilkyWay.DTO;
 
-import lombok.Builder;
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Getter
 @Builder
+@EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public class QuestionsDTO //고객 질문을 관리하기 위한 DTO
 {
-    String questionId; // Q&A 질문을 등록하기 위한 것
-    String ExpectionQnA; // 예상했던 Q&A 질문
-    String ExpectedComment; // 예상질문에 대한 해답
+
+
+    private Long questionId; // Q&A 질문을 등록하기 위한 것
+
+    @NotNull(message = "ExpectionQnA cannot be null")
+    @NotBlank(message = "ExpectionQnA cannot be empty")
+    @Size(min = 5, max= 20, message = "예상 Q&A의 질문은 최소 다섯자리 이상에 20자리 이하로 입력해야 함.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    private  String ExpectionQnA; // 예상했던 Q&A 질문
+
+    @NotNull(message = "ExpectionQnA cannot be null")
+    @NotBlank(message = "ExpectionQnA cannot be empty")
+    @Size(min = 5, message = "예상 질문 코멘트는 최소 다섯자리 이상 입력해야 함.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    private String ExpectedComment; // 예상질문에 대한 해답
 }

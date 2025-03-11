@@ -1,5 +1,6 @@
 package project.MilkyWay.Controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class InqurieController
     ResponseDTO responseDTO = new ResponseDTO<>();
 
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@RequestBody InquireDTO inquireDTO)
+    public ResponseEntity<?> Insert(@Valid @RequestBody InquireDTO inquireDTO)
     {
         try
         {
@@ -46,7 +47,7 @@ public class InqurieController
         }
     }
     @PutMapping("/Update")
-    public ResponseEntity<?> Update(@RequestBody InquireDTO inquireDTO)
+    public ResponseEntity<?> Update(@Valid @RequestBody InquireDTO inquireDTO)
     {
         try
         {

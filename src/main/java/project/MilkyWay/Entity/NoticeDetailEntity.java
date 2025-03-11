@@ -1,12 +1,11 @@
 package project.MilkyWay.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import project.MilkyWay.Enum.Cleandirection;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
@@ -20,11 +19,12 @@ public class NoticeDetailEntity
 
     @Id
     @Column(name = "NoticeDetailId")
-    private String NoticeDetailId; // 1씩 증가하는 auto inclement로 작성
+    @GeneratedValue(strategy = GenerationType.AUTO)  // 자동 증가 설정
+    private UUID NoticeDetailId; // 1씩 증가하는 auto inclement로 작성
     @Column(name = "NoticeId")
     private String NoticeId; // NoticeDTO와 연결하기 위한 왜래키
     @Column(name = "direction")
-    private String direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
+    private Cleandirection direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
 
     @Column(name = "beforeURL")
     private List<String> beforeURL; // 청소 전 사진

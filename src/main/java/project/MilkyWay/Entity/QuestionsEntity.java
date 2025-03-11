@@ -1,11 +1,10 @@
 package project.MilkyWay.Entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "Question")
@@ -17,7 +16,8 @@ public class QuestionsEntity
 {
     @Id
     @Column(name = "questionId")
-    private String questionId; // Q&A 질문을 등록하기 위한 것
+    @GeneratedValue(strategy = GenerationType.AUTO)  // UUID는 자동 생성되지 않으므로, 이를 위한 자동 전략 사용
+    private UUID questionId; // Q&A 질문을 등록하기 위한 것
     @Column(name = "Question", nullable = false)
     private String ExpectionQnA; // 예상했던 Q&A 질문
     @Column(name = "Comment", nullable = false)

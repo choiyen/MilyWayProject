@@ -1,14 +1,32 @@
 package project.MilkyWay.DTO;
 
 
-import lombok.Builder;
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Getter
 @Builder
+@EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public class BoardDTO
 {
-    String boardId; // 그냥 1씩 증가하는 int로 작성(데이터 수정을 위한 목적) - 게시판 질문
-    String title; // 게시판 질문의 제목을 저장하는 변수
-    String content; // 게시판의 내용을 저장하는 변수
+
+    private String boardId; // 그냥 1씩 증가하는 int로 작성(데이터 수정을 위한 목적) - 게시판 질문
+
+    @NotNull(message = "title cannot be null")
+    @NotBlank(message = "title cannot be empty")
+    @Size(min = 5, message = "title는 최소 다섯자리 이상 입력해야 함.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    private String title; // 게시판 질문의 제목을 저장하는 변수
+
+    @NotNull(message = "content cannot be null")
+    @NotBlank(message = "content cannot be empty")
+    @Size(min = 5, message = "content는 최소 다섯자리 이상 입력해야 함.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    private String content; // 게시판의 내용을 저장하는 변수
 }
