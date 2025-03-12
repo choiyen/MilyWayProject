@@ -7,12 +7,13 @@ import project.MilkyWay.Entity.NoticeEntity;
 import project.MilkyWay.Entity.ReservationEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mapper
 public interface NoticeDetailMapper
 {
     List<NoticeDetailEntity> findByNoticeId(String NoticeId);
-    NoticeDetailEntity findByNoticeDetailId(String NoticeDetailId);
+    NoticeDetailEntity findByNoticeDetailId(UUID NoticeDetailId);
     void deleteByNoticeDetailId(String NoticeDetailId);
     void Insert(NoticeDetailEntity noticeEntity);
     void Update(NoticeDetailEntity noticeEntity);

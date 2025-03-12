@@ -8,10 +8,11 @@ import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.mapper.NoticeDetailMapper;
-import project.MilkyWay.mapper.NoticeMapper;
+
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.UUID;
+
 
 @Service
 public class NoticeDetailService {
@@ -30,12 +31,12 @@ public class NoticeDetailService {
 
     public NoticeDetailEntity UpdateNoticeDetailMapper(String encodingNoticeDetailId, NoticeDetailEntity ChangingNoticeDetailEntity)
     {
-        NoticeDetailEntity OldNoticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetailId);
+        NoticeDetailEntity OldNoticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetailId));
 
         if (OldNoticeDetailEntity != null) {
             NoticeDetailEntity newNoticeDetailEntity2 = ChangeToNoticeDetail(OldNoticeDetailEntity, ChangingNoticeDetailEntity);
             noticeDetailMapper.Update(newNoticeDetailEntity2);
-            NoticeDetailEntity SelectnewNoticeEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetailId);
+            NoticeDetailEntity SelectnewNoticeEntity = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetailId));
             if (SelectnewNoticeEntity.equals(newNoticeDetailEntity2))
             {
                 return SelectnewNoticeEntity;
@@ -66,11 +67,11 @@ public class NoticeDetailService {
     }
     public boolean DeleteToNoticeDetail(String encodingNoticeDetail)
     {
-        NoticeDetailEntity seach = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetail);
+        NoticeDetailEntity seach = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetail));
         if(seach != null)
         {
             noticeDetailMapper.deleteByNoticeDetailId(encodingNoticeDetail);
-            NoticeDetailEntity noticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetail);
+            NoticeDetailEntity noticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetail));
             if(noticeDetailEntity == null)
             {
                 return true;

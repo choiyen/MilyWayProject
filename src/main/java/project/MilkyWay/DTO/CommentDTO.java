@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Builder
 @EqualsAndHashCode
@@ -14,7 +16,7 @@ import lombok.*;
 @ToString
 public class CommentDTO
 {
-    private Long commentId; // 질문을 구분하기 위한 id
+    private UUID commentId; // 질문을 구분하기 위한 id
 
     @NotNull(message = "boardId cannot be null")
     @NotBlank(message = "boardId cannot be empty")

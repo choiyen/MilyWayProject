@@ -11,6 +11,7 @@ import project.MilkyWay.Repository.BoardRepository;
 import project.MilkyWay.Repository.CommentRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CommentService
@@ -45,7 +46,7 @@ public class CommentService
     {
         try
         {
-           CommentEntity commentEntity = commentRepository.findByCommentId(commentId);
+           CommentEntity commentEntity = commentRepository.findByCommentId(UUID.fromString(commentId));
            if(commentEntity != null)
            {
                 CommentEntity UpdateComment = ConvertToEntity(commentEntity, comment);
@@ -82,16 +83,29 @@ public class CommentService
             throw new DeleteFailedException("해당 CommentId를 가진 질문이 존재하지 않습니다.");
         }
     }
-    public List<CommentEntity> Find(String EnCodingBoardId)
+    public CommentEntity FindByCommentId(String EnCodingCommentId)
+    {
+        CommentEntity commentEntity = commentRepository.findByCommentId(UUID.fromString(EnCodingCommentId));
+        if(commentEntity != null)
+        {
+            return commentEntity;
+        }
+        else
+        {
+            throw new FindFailedException("코멘트 Id에 따른 데이터를 찾는데 오류가 발생했습니다. 다시 시도해주세요");
+        }
+
+    }
+    public List<CommentEntity> FindByBoardId(String EnCodingBoardId)
     {
         List<CommentEntity> commentEntities = commentRepository.findByBoardId(EnCodingBoardId);
-        if(commentEntities != null)
-        {
-            return commentEntities;
-        }
-        else if(commentEntities.isEmpty())
+        if(commentEntities.isEmpty())
         {
             throw new FindFailedException("데이터 조회에는 성공하였으나, 조회 결과가 없습니다.");
+        }
+        else if(commentEntities != null)
+        {
+            return commentEntities;
         }
         else
         {

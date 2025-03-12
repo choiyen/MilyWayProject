@@ -9,6 +9,8 @@ import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.AdministrationRepository;
 
+import java.util.List;
+
 @Service
 public class AdministrationService
 {
@@ -70,7 +72,24 @@ public class AdministrationService
             throw new FindFailedException("해당 코드로 삭제할 수 있는 게시판이 존재하지 않아요");
         }
     }
-    public AdministrationEntity Find(String EncodingAdministrationId)
+    public List<AdministrationEntity> FindAll()
+    {
+        List<AdministrationEntity> administrationEntities = administrationRepository.findAll();
+        if(administrationEntities.isEmpty())
+        {
+            throw new FindFailedException("일정 데이터를 찾았는데, 데이터베이스가 비어 있어요");
+        }
+        else if(administrationEntities != null)
+        {
+            return administrationEntities;
+        }
+        else
+        {
+            throw new FindFailedException("알 수 없는 오류로 데이터베이스 정보를 찾을 수 없어요! 다시 시도해주세요");
+        }
+    }
+
+    public AdministrationEntity FindByAdministration(String EncodingAdministrationId)
     {
         AdministrationEntity AdministrationEntity = administrationRepository.findByAdministrationId(EncodingAdministrationId);
         if(AdministrationEntity != null)

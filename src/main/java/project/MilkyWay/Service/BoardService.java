@@ -10,6 +10,8 @@ import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.BoardRepository;
 
+import java.util.List;
+
 @Service
 public class BoardService
 {
@@ -72,17 +74,38 @@ public class BoardService
             throw new FindFailedException("해당 코드로 삭제할 수 있는 게시판이 존재하지 않아요");
         }
     }
-    public BoardEntity Find(String EncodingBoardId)
+    public List<BoardEntity> FindAll()
     {
-        BoardEntity boardEntity = boardRepository.findByBoardId(EncodingBoardId);
-        if(boardEntity != null)
+        List<BoardEntity> boardEntity = boardRepository.findAll();
+        if(boardEntity.isEmpty())
+        {
+          throw new FindFailedException("데이터를 찾긴 찾았으나, 비어있습니다.");
+        }
+        else if(boardEntity != null)
         {
             return  boardEntity;
         }
         else
         {
-            throw new FindFailedException("게시판 데이터를 찾을 수 없었어요.");
+            throw new FindFailedException("전체 게시판 데이터를 찾을 수 없었어요. 알 수 없는 오류!!");
         }
+    }
+    public BoardEntity FindByBoardId(String EncodingBoardId)
+    {
+        BoardEntity boardEntity = boardRepository.findByBoardId(EncodingBoardId);
+        if(boardEntity != null)
+        {
+            return boardEntity;
+        }
+        else
+        {
+            throw new FindFailedException("게시판 Id에 따른 게시판 정보를 찾을 수 없습니다.");
+        }
+    }
+    public boolean Bool(String EncodingBoardId)
+    {
+        boolean bool = boardRepository.existsByBoardId(EncodingBoardId);
+        return bool;
     }
     private BoardEntity ConvertToEntity(BoardEntity beforeBoardEntity, BoardEntity boardEntity)
     {

@@ -52,6 +52,18 @@ public class InquireService
             throw new FindFailedException("수정할 질문 내역을 찾지 못하였습니다.");
         }
     }
+    public InquireEntity FindByInquireId(String encodingInquireId)
+    {
+        InquireEntity inquireEntity = inqurieRepository.findByInquireId(encodingInquireId);
+        if(inquireEntity != null)
+        {
+            return inquireEntity;
+        }
+        else
+        {
+            throw new FindFailedException("InqireId에 따른 정보를 찾지 못했습니다. 오류 발생!!");
+        }
+    }
     private boolean existByinquireId(String inquireId)
     {
         boolean bool = inqurieRepository.existsByInquireId(inquireId);

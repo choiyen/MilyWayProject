@@ -8,6 +8,7 @@ import project.MilkyWay.DTO.InquireDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.InquireEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
+import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.InqurieRepository;
@@ -101,6 +102,28 @@ public class InqurieController
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
+    @PostMapping("/select")
+    public ResponseEntity<?> FindById(@RequestBody String encodingInqireId)
+    {
+        try
+        {
+            InquireEntity inquireEntity = inquireService.FindByInquireId(encodingInqireId);
+            if(inquireEntity != null)
+            {
+                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 전공 완료!", Collections.singletonList(inquireEntity)));
+            }
+            else
+            {
+                throw new FindFailedException();
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
+    }
+
+
     private InquireEntity ConvertToEntity(InquireDTO inquireDTO)
     {
         return InquireEntity.builder()
