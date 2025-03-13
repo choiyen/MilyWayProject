@@ -1,17 +1,16 @@
 package project.MilkyWay.Controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.MilkyWay.DTO.BoardDTO;
-import project.MilkyWay.DTO.CommentDTO;
-import project.MilkyWay.DTO.ReservationDTO;
-import project.MilkyWay.DTO.ResponseDTO;
+import project.MilkyWay.DTO.*;
 import project.MilkyWay.Entity.ReservationEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
@@ -25,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reservation")
-@Api(tags = {"reservation 정보를 제공하는 Controller"})
+@Tag(name = "reservation 정보를 제공하는 Controller")
 public class ReservationController //고객의 예약을 관리하기 위한 DTO
 {
     @Autowired
@@ -34,15 +33,17 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     ResponseDTO responseDTO = new ResponseDTO<>();
 
 
-    @ApiOperation(
-            value = "Create a new reservation",
-            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API creates a new reservation and returns reservationDTO as response"
+    @Operation(
+            summary = "Create a new reservation",  // Provide a brief summary
+            description = "This API creates a new reservation and returns reservationDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "reservation created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid input data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "reservation created successfully"),
-            @ApiResponse(code = 400, message = "Invalid input data")
-    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody ReservationDTO reservationDTO)
     {
@@ -66,15 +67,18 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
         }
     }
 
-    @ApiOperation(
-            value = "Change a ReservationDTO by ReservationId",
-            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API Change a Reservation and returns ReservationDTO as response"
+
+    @Operation(
+            summary =  "Change a ReservationDTO by ReservationId",  // Provide a brief summary
+            description = "This API Change a Reservation and returns ReservationDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Reservation Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Change data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Reservation Changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid Change data")
-    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody ReservationDTO reservationDTO)
     {
@@ -98,16 +102,20 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
         }
     }
 
-
-    @ApiOperation(
-            value = "Delete an Reservation by ReservationId",
-            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
-            notes = "This API deletes an Reservation by the provided ReservationId and returns a ResponseEntity with a success or failure message."
+    @Operation(
+            summary = "Delete an Reservation by ReservationId",  // Provide a brief summary
+            description = "This API deletes an Reservation by the provided ReservationId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Reservation deleted successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description ="Reservation not found"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Reservation deleted successfully"),
-            @ApiResponse(code = 404, message = "Reservation not found")
-    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody String ReservationId)
     {
@@ -130,6 +138,14 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     }
 
 
+    @Operation(
+            summary = "Returns a list of ReservationDTO objects",
+            description = "This API retrieves a list of ReservationDTO objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Reservation List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Reservation List not found")
+            }
+    )
     @GetMapping
     public ResponseEntity<?> FindAll()
     {

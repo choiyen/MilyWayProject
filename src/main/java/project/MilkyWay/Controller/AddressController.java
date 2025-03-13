@@ -1,9 +1,10 @@
 package project.MilkyWay.Controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ import java.util.List;
 
 
 
-@Api(tags = {"주소 관련 정보를 제공하는  Controller"})
+@Tag(name = "주소 관련 정보를 제공하는  Controller")
 @RestController
 @RequestMapping("/address")
 public class AddressController
@@ -31,15 +32,14 @@ public class AddressController
 
     ResponseDTO responseDTO = new ResponseDTO<>();
 
-    @ApiOperation(
-            value = "Create a new Address",
-            response = AddressDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API creates a new Address and returns AddressDTO as response"
+    @Operation(
+            summary = "Create a new Address",
+            description = "This API creates a new Address and returns AddressDTO as response",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Address created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Address created successfully"),
-            @ApiResponse(code = 400, message = "Invalid input data")
-    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody AddressDTO addressDTO)
     {
@@ -63,15 +63,15 @@ public class AddressController
         }
     }
 
-    @ApiOperation(
-            value = "Change a Address by AddressId",
-            response = AddressDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API Change a  Address and returns AddressDTO as response"
+    @Operation(
+            summary = "Change an Address by AddressId",
+            description = "This API changes an Address and returns AddressDTO as response",
+            responses = {
+                    @
+                    ApiResponse(responseCode = "201", description = "Address Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid Change data")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Address Changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid Change data")
-    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody AddressDTO addressDTO)
     {
@@ -96,15 +96,14 @@ public class AddressController
         }
     }
 
-    @ApiOperation(
-            value = "Delete an Address by AddressId",
-            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
-            notes = "This API deletes an Address by the provided AddressId and returns a ResponseEntity with a success or failure message."
+    @Operation(
+            summary = "Delete an Address by AddressId",
+            description = "This API deletes an Address by the provided AddressId and returns a ResponseEntity with a success or failure message.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Address deleted successfully"),
+                    @ApiResponse(responseCode = "404", description = "Address not found")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Address deleted successfully"),
-            @ApiResponse(code = 404, message = "Address not found")
-    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody String AddrssId)
     {
@@ -126,15 +125,15 @@ public class AddressController
         }
     }
 
-    @ApiOperation(
-            value = "Returns a list of AddressDTO objects",
-            response = List.class,  // 반환 타입을 List로 지정
-            notes = "This API updates an Address and returns a List of AddressDTO objects as the response."
+
+    @Operation(
+            summary = "Returns a list of AddressDTO objects",
+            description = "This API retrieves a list of AddressDTO objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Address List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Address List not found")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Address List Found successfully"),
-            @ApiResponse(code = 404, message = "Address List not found")
-    })
     @GetMapping
     public ResponseEntity<?> FindAll()
     {
@@ -164,15 +163,16 @@ public class AddressController
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
-    @ApiOperation(
-            value = "Returns AddressDTO object for a given Address Id",
-            response = AddressDTO.class,  // 반환 타입을 AddressDTO로 지정
-            notes = "This API updates an Address based on the provided Address Id and returns the corresponding AddressDTO object as response."
+
+
+    @Operation(
+            summary = "Returns AddressDTO object for a given Address Id",
+            description = "This API retrieves an Address based on the provided Address Id and returns the corresponding AddressDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Address found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Address not found")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Address List Found successfully"),
-            @ApiResponse(code = 404, message = "Address List not found")
-    })
     @PostMapping("/Find")
     public ResponseEntity<?> FindById(@RequestBody String AddrssId)
     {

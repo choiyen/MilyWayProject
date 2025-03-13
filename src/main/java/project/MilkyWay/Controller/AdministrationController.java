@@ -1,10 +1,11 @@
 package project.MilkyWay.Controller;
 
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/time")
-@Api(tags = {"일정 관련 정보를 제공하는  Controller"})
+@Tag(name = "일정 관련 정보를 제공하는  Controller")
 public class AdministrationController
 {
     @Autowired
@@ -33,15 +34,14 @@ public class AdministrationController
     ResponseDTO responseDTO = new ResponseDTO<>();
 
 
-    @ApiOperation(
-            value = "Create a new Administration",
-            response = AdministrationDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API creates a new Administration and returns AdministrationDTO as response"
+    @Operation(
+            summary = "Create a new Administration",
+            description = "This API creates a new Administration and returns AdministrationDTO as response",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Administration created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdministrationDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Administration created successfully"),
-            @ApiResponse(code = 400, message = "Invalid input data")
-    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody AdministrationDTO administrationDTO)
     {
@@ -65,15 +65,19 @@ public class AdministrationController
         }
     }
 
-    @ApiOperation(
-            value = "Change a Administration by AdministrationId",
-            response = AdministrationDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API Change a  Administration and returns AdministrationDTO as response"
+
+
+    @Operation(
+            summary = "Change a Administration by AdministrationId",  // Provide a brief summary
+            description = "This API changes an Administration and returns AdministrationDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Administration Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdministrationDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Change data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Administration Changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid Change data")
-    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody AdministrationDTO administrationDTO)
     {
@@ -97,15 +101,20 @@ public class AdministrationController
         }
     }
 
-    @ApiOperation(
-            value = "Delete an administration by administrationId",
-            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
-            notes = "This API deletes an administration by the provided administrationId and returns a ResponseEntity with a success or failure message."
+    @Operation(
+            summary = "Delete an administration by administrationId",  // Provide a brief summary
+            description = "This API deletes an administration by the provided administrationId and returns a ResponseEntity with a success or failure message",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Administration deleted successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Administration not found"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "administration deleted successfully"),
-            @ApiResponse(code = 404, message = "administration not found")
-    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody String administrationId)
     {
@@ -129,6 +138,14 @@ public class AdministrationController
     }
 
 
+    @Operation(
+            summary = "Returns AdministrationDTO object for a given Address Id",
+            description = "This API retrieves an Administration based on the provided Administration Id and returns the corresponding AdministrationDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Address found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdministrationDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Address not found")
+            }
+    )
     @PostMapping("/Find")
     public ResponseEntity<?> FindByadministration(@RequestBody String AdministrationId)
     {
@@ -151,6 +168,14 @@ public class AdministrationController
         }
     }
 
+    @Operation(
+            summary = "Returns a list of administrationDTO objects",
+            description = "This API retrieves a list of administrationDTO objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "administration List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "administration List not found")
+            }
+    )
     @GetMapping
     public ResponseEntity<?> FindAll()
     {

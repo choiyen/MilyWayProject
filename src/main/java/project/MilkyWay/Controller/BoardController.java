@@ -1,9 +1,10 @@
 package project.MilkyWay.Controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/board")
-@Api(tags = {"게시판 관련 정보를 제공하는  Controller"})
+@Tag(name = "게시판 관련 정보를 제공하는  Controller")
 public class BoardController
 {
     @Autowired
@@ -32,15 +33,15 @@ public class BoardController
 
     ResponseDTO responseDTO = new ResponseDTO<>();
 
-    @ApiOperation(
-            value = "Create a new Board",
-            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API creates a new Board and returns BoardDTO as response"
+
+    @Operation(
+            summary =  "Create a new Board",
+            description = "This API creates a new Board and returns BoardDTO as response",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Board created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BoardDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Board created successfully"),
-            @ApiResponse(code = 400, message = "Invalid input data")
-    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody BoardDTO boardDTO)
     {
@@ -64,15 +65,18 @@ public class BoardController
         }
     }
 
-    @ApiOperation(
-            value = "Change a Board by BoardId",
-            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API Change a  Board and returns BoardDTO as response"
+
+    @Operation(
+            summary = "Change a Board by BoardId",  // Provide a brief summary
+            description = "This API Change a  Board and returns BoardDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Board Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BoardDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Change data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Board Changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid Change data")
-    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody BoardDTO boardDTO)
     {
@@ -96,15 +100,20 @@ public class BoardController
         }
     }
 
-    @ApiOperation(
-            value = "Delete an Board by BoardId",
-            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
-            notes = "This API deletes an Board by the provided BoardId and returns a ResponseEntity with a success or failure message."
+    @Operation(
+            summary = "Delete an Board by BoardId",  // Provide a brief summary
+            description = "This API deletes an Board by the provided BoardId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Board deleted successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Board not found"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Board deleted successfully"),
-            @ApiResponse(code = 404, message = "Board not found")
-    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody String BoardId)
     {
@@ -127,6 +136,15 @@ public class BoardController
         }
     }
 
+
+    @Operation(
+            summary = "Returns a list of BoardDTO objects",
+            description = "This API retrieves a list of BoardDTO objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Board List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BoardDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Board List not found")
+            }
+    )
     @GetMapping
     public ResponseEntity<?> FindALl()
     {
@@ -157,7 +175,14 @@ public class BoardController
         }
     }
 
-
+    @Operation(
+            summary = "Returns BoardDTO object for a given Board Id",
+            description = "This API retrieves an Board based on the provided Board Id and returns the corresponding BoardDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Board found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BoardDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Board not found")
+            }
+    )
     @PostMapping("/Find")
     public ResponseEntity<?> FindByBoardId(@RequestBody String BoardId)
     {

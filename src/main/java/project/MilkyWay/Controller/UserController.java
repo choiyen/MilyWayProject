@@ -1,18 +1,16 @@
 package project.MilkyWay.Controller;
 
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.MilkyWay.DTO.BoardDTO;
-import project.MilkyWay.DTO.CommentDTO;
-import project.MilkyWay.DTO.ResponseDTO;
-import project.MilkyWay.DTO.UserDTO;
+import project.MilkyWay.DTO.*;
 import project.MilkyWay.Entity.UserEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Service.UserService;
@@ -26,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-@Api(tags = {"유저 정보를 제공하는 Controller"})
+@Tag(name = "유저 정보를 제공하는 Controller")
 public class UserController //관리자 아이디를 관리하는 DTO
 {
     private  ResponseDTO responseDTO = new ResponseDTO<>();
@@ -37,16 +35,19 @@ public class UserController //관리자 아이디를 관리하는 DTO
 //    @Autowired
 //    private PasswordEncoder passwordEncoder;
 
+
     //Spring Security 적용이 안되어 있는 상태라 평문으로 확인
-    @ApiOperation(
-            value = "Create a new User",
-            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API creates a new User and returns User as response"
+    @Operation(
+            summary = "Create a new User",  // Provide a brief summary
+            description = "This API creates a new User and returns User as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "User created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid input data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "User created successfully"),
-            @ApiResponse(code = 400, message = "Invalid input data")
-    })
     @PostMapping("/Insert")
     public ResponseEntity<?> UserInsert(@Valid @RequestBody UserDTO userDTO)
     {
@@ -63,15 +64,19 @@ public class UserController //관리자 아이디를 관리하는 DTO
         }
     }
 
-    @ApiOperation(
-            value = "Change a UserDTO by ReservationId",
-            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API Change a User and returns UserDTO as response"
+
+
+    @Operation(
+            summary =  "Change a UserDTO by ReservationId",  // Provide a brief summary
+            description = "This API Change a User and returns UserDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "User Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Change data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "User Changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid Change data")
-    })
     @PutMapping("/Update")
     public ResponseEntity<?> UserUpdate(@Valid @RequestBody UserDTO NewuserDTO)
     {
@@ -89,34 +94,20 @@ public class UserController //관리자 아이디를 관리하는 DTO
     }
 
 
-    @PostMapping("/Find")
-    public ResponseEntity<?> Userfind(@Valid @RequestBody String email)
-    {
-        try
-        {
-            List<UserEntity> userEntity = userService.findEmail(email);
-            List<UserDTO> userDTOS = new ArrayList<>();
-            for(UserEntity user : userEntity)
-            {
-                userDTOS.add(ConvertToDTO(user));
+    @Operation(
+            summary = "Delete an user by userId",  // Provide a brief summary
+            description = "This API deletes an user by the provided userId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "user deleted successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description ="user not found"
+                    )
             }
-            return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 정보 찾기 성공", userDTOS));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
-        }
-    }
-
-    @ApiOperation(
-            value = "Delete an user by userId",
-            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
-            notes = "This API deletes an user by the provided userId and returns a ResponseEntity with a success or failure message."
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "user deleted successfully"),
-            @ApiResponse(code = 404, message = "user not found")
-    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> UserDelete(@RequestBody String userId)
     {
@@ -140,6 +131,36 @@ public class UserController //관리자 아이디를 관리하는 DTO
 
         }
     }
+
+
+    @Operation(
+            summary = "Returns UserDTO object for a given email",
+            description = "This API retrieves an User based on the provided email and returns the corresponding UserDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "User not found")
+            }
+    )
+    @PostMapping("/Find")
+    public ResponseEntity<?> Userfind(@Valid @RequestBody String email)
+    {
+        try
+        {
+            List<UserEntity> userEntity = userService.findEmail(email);
+            List<UserDTO> userDTOS = new ArrayList<>();
+            for(UserEntity user : userEntity)
+            {
+                userDTOS.add(ConvertToDTO(user));
+            }
+            return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 정보 찾기 성공", userDTOS));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
+    }
+
+
 
     private UserEntity ConvertToEntity(UserEntity userEntity1, UserDTO newuserDTO)
     {

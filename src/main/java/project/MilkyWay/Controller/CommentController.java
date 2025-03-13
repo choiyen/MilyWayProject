@@ -1,9 +1,11 @@
 package project.MilkyWay.Controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping("/comment")
-@Api(tags = {"댓글 관련 정보를 제공하는 Controller"})
+@Tag(name = "댓글 관련 정보를 제공하는 Controller")
 public class CommentController
 {
     @Autowired
@@ -36,15 +38,15 @@ public class CommentController
 
     ResponseDTO responseDTO = new ResponseDTO<>();
 
-    @ApiOperation(
-            value = "Create a new Comment",
-            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API creates a new Comment and returns CommentDTO as response"
+
+    @Operation(
+            summary =  "Create a new Comment",
+            description = "This API creates a new Comment and returns CommentDTO as response",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Comment created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Comment created successfully"),
-            @ApiResponse(code = 400, message = "Invalid input data")
-    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody CommentDTO commentDTO)
     {
@@ -77,15 +79,19 @@ public class CommentController
         }
     }
 
-    @ApiOperation(
-            value = "Change a Comment by CommentId",
-            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API Change a Comment and returns CommentDTO as response"
+
+
+    @Operation(
+            summary = "Change a Comment by CommentId",  // Provide a brief summary
+            description = "This API Change a Comment and returns CommentDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Comment Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Change data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Comment Changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid Change data")
-    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody CommentDTO commentDTO)
     {
@@ -109,15 +115,21 @@ public class CommentController
         }
     }
 
-    @ApiOperation(
-            value = "Delete an Comment by CommentId",
-            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
-            notes = "This API deletes an Comment by the provided CommentId and returns a ResponseEntity with a success or failure message."
+
+    @Operation(
+            summary = "Delete an Comment by CommentId",  // Provide a brief summary
+            description = "This API deletes an Comment by the provided CommentId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Comment deleted successfully"
+        ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Comment not found"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Comment deleted successfully"),
-            @ApiResponse(code = 404, message = "Comment not found")
-    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody Long CommentId)
     {
@@ -139,7 +151,14 @@ public class CommentController
         }
     }
 
-
+    @Operation(
+            summary = "Returns CommentDTO object for a given Comment Id",
+            description = "This API retrieves an Comment based on the provided Comment Id and returns the corresponding CommentDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Comment found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Comment not found")
+            }
+    )
     @PostMapping("/Find")
     public ResponseEntity<?> FindByComentId(@RequestBody Long CommentId)
     {
@@ -163,6 +182,14 @@ public class CommentController
         }
     }
 
+    @Operation(
+            summary = "Returns Comment List for a given Board Id",
+            description = "This API retrieves an Comment based on the provided Board Id and returns the corresponding CommentDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Comment found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Comment not found")
+            }
+    )
     @PostMapping("/Select")
     public ResponseEntity<?> SelectByBoardId(@RequestBody String BoardId)
     {

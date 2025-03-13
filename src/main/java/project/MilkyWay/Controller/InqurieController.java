@@ -1,9 +1,11 @@
 package project.MilkyWay.Controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/inqurie")
-@Api(tags = {"Inquire 관련 정보를 제공하는 Controller"})
+@Tag(name = "Inquire 관련 정보를 제공하는 Controller")
 public class InqurieController
 {
     @Autowired
@@ -34,15 +36,15 @@ public class InqurieController
     ResponseDTO responseDTO = new ResponseDTO<>();
 
 
-    @ApiOperation(
-            value = "Create a new Inquire",
-            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API creates a new Inquire and returns InquireDTO as response"
+
+    @Operation(
+            summary =  "Create a new Inquire",
+            description = "This API creates a new Inquire and returns InquireDTO as response",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Inquire created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Inquire created successfully"),
-            @ApiResponse(code = 400, message = "Invalid input data")
-    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody InquireDTO inquireDTO)
     {
@@ -65,15 +67,19 @@ public class InqurieController
         }
     }
 
-    @ApiOperation(
-            value = "Change a Inquire by InquireId",
-            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
-            notes = "This API Change a Inquire and returns InquireDTO as response"
+
+
+    @Operation(
+            summary = "Change a Inquire by InquireId",  // Provide a brief summary
+            description = "This API Change a Inquire and returns InquireDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Inquire Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Change data"
+                    )
+            }
     )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Inquire Changed successfully"),
-            @ApiResponse(code = 400, message = "Invalid Change data")
-    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody InquireDTO inquireDTO)
     {
@@ -95,6 +101,22 @@ public class InqurieController
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
+
+
+    @Operation(
+            summary = "Delete an Inqurie by InqurieId",  // Provide a brief summary
+            description = "This API deletes an Inqurie by the provided InqurieId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Inqurie deleted successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Inqurie not found"
+                    )
+            }
+    )
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody String EncodingInqurieId)
     {
@@ -116,6 +138,15 @@ public class InqurieController
         }
     }
 
+
+    @Operation(
+            summary = "Returns a list of InqurieDTO objects",
+            description = "This API retrieves a list of InqurieDTO objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Inqurie List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Inqurie List not found")
+            }
+    )
     @GetMapping("/ALL")
     public ResponseEntity<?> FindALL()
     {
@@ -129,12 +160,21 @@ public class InqurieController
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
+
+    @Operation(
+            summary = "Returns InqurieDTO object for a given Inqurie Id",
+            description = "This API retrieves an Inqurie based on the provided Inqurie Id and returns the corresponding InqurieDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Inqurie found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Inqurie not found")
+            }
+    )
     @PostMapping("/select")
-    public ResponseEntity<?> FindById(@RequestBody String encodingInqireId)
+    public ResponseEntity<?> FindById(@RequestBody String InqurieId)
     {
         try
         {
-            InquireEntity inquireEntity = inquireService.FindByInquireId(encodingInqireId);
+            InquireEntity inquireEntity = inquireService.FindByInquireId(InqurieId);
             if(inquireEntity != null)
             {
                 return ResponseEntity.ok().body(responseDTO.Response("success","데이터 전공 완료!", Collections.singletonList(inquireEntity)));

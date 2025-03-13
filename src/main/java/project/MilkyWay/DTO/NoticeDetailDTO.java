@@ -1,6 +1,6 @@
 package project.MilkyWay.DTO;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -23,13 +23,13 @@ public class NoticeDetailDTO
 {
 
 
-    @ApiModelProperty(value = "세부사항에 대한 Id", example = "5555")
+    @Schema(description = "세부사항에 대한 Id", example = "5555")
     private Long NoticeDetailId; // 1씩 증가하는 auto inclement로 작성
 
     @NotNull(message = "NoticeId cannot be null")
     @NotBlank(message = "NoticeId cannot be empty")
     @Size(min = 5, max= 20, message = "NoticeId는 최소 다섯자리 이상 입력해야 함.")
-    @ApiModelProperty(value = "후기 정보 Id", example = "dfasfdsfsafasfwv!ED", required = true)
+    @Schema(description= "후기 정보 Id", example = "dfasfdsfsafasfwv!ED", required = true)
     private String NoticeId; // NoticeDTO와 연결하기 위한 왜래키
 
     @NotNull(message = "direction cannot be null")
@@ -37,25 +37,25 @@ public class NoticeDetailDTO
     @Size(min = 5, max= 20, message = "direction는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     @EnumValue(enumClass = Cleandirection.class, message = "청소 유형은 거실, 화장실, 부엌, 베란다 중 하나여야 합니다.")
-    @ApiModelProperty(value = "어느 유형의 방", example = "기실", required = true)
+    @Schema(description = "어느 유형의 방", example = "기실", required = true)
     private Cleandirection direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
     //커스텀 어노테이션을 사용하여, 특정 값 외의 데이터가 들어왔을 떄, 에러 메세지를 반환함
 
     @NotNull(message = "beforeURL cannot be null")
     @NotBlank(message = "beforeURL cannot be empty")
-    @ApiModelProperty(value = "file 데이터 List", example = "file 데이터 List")
+    @Schema(description = "file 데이터 List", example = "file 데이터 List")
     private List<String> beforeURL; // 청소 전 사진
 
     @NotNull(message = "afterURL cannot be null")
     @NotBlank(message = "afterURL cannot be empty")
-    @ApiModelProperty(value = "file 데이터 List", example = "file 데이터 List")
+    @Schema(description = "file 데이터 List", example = "file 데이터 List")
     private List<String> afterURL; // 청소 후 사진
 
     @NotNull(message = "comment cannot be null")
     @NotBlank(message = "comment cannot be empty")
     @Size(min = 5, message = "comment는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
-    @ApiModelProperty(value = "청소 후 느낀 점", example = "이번에는 비교적 깨끗한 편이라 쉽게 마무리 지을 수 있었네요~~~~", required = true)
+    @Schema(description = "청소 후 느낀 점", example = "이번에는 비교적 깨끗한 편이라 쉽게 마무리 지을 수 있었네요~~~~", required = true)
     String comment; // 해당 구역을 청소하고 느낀점 기록
 }
 
