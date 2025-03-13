@@ -1,12 +1,15 @@
 package project.MilkyWay.Controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.DTO.BoardDTO;
+import project.MilkyWay.DTO.CommentDTO;
 import project.MilkyWay.DTO.QuestionsDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.QuestionsEntity;
@@ -22,6 +25,7 @@ import java.util.MissingResourceException;
 
 @RestController
 @RequestMapping("/question")
+@Api(tags = {"예시 질문 정보를 제공하는 Controller"})
 public class QuestionsController //고객 질문을 관리하기 위한 DTO
 {
     @Autowired
@@ -30,6 +34,15 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
 
     ResponseDTO responseDTO = new ResponseDTO<>();
 
+    @ApiOperation(
+            value = "Create a new Questions",
+            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API creates a new Questions and returns QuestionsDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Questions created successfully"),
+            @ApiResponse(code = 400, message = "Invalid input data")
+    })
     @PostMapping("/Insert")
     public  ResponseEntity<?> QuestionInsert(@Valid  @RequestBody QuestionsDTO questionsDTO)
     {
@@ -45,7 +58,17 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
-    @PostMapping("/Update")
+
+    @ApiOperation(
+            value = "Change a QuestionsDTO by QuestionsId",
+            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API Change a Questions and returns QuestionsDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Questions Changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid Change data")
+    })
+    @PutMapping("/Update")
     public ResponseEntity<?> QuestionUpdate(@Valid @RequestBody QuestionsDTO newquestionsDTO)
     {
         try
@@ -69,8 +92,18 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
 
     }
-    @PostMapping("/Delete")
-    public ResponseEntity<?> QuestionDelete(@RequestBody String QuestionId)
+
+    @ApiOperation(
+            value = "Delete an Comment by QuestionId",
+            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
+            notes = "This API deletes an Question by the provided QuestionId and returns a ResponseEntity with a success or failure message."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Question deleted successfully"),
+            @ApiResponse(code = 404, message = "Question not found")
+    })
+    @DeleteMapping("/Delete")
+    public ResponseEntity<?> QuestionDelete(@RequestBody Long QuestionId)
     {
         try
         {
@@ -91,7 +124,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
     }
     @PostMapping("/Find")
-    public ResponseEntity<?> QuestionFind(@Valid @RequestBody String QuestionId)
+    public ResponseEntity<?> QuestionFind(@Valid @RequestBody Long QuestionId)
     {
         try
         {

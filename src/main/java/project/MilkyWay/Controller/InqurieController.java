@@ -1,9 +1,15 @@
 package project.MilkyWay.Controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.DTO.BoardDTO;
+import project.MilkyWay.DTO.CommentDTO;
 import project.MilkyWay.DTO.InquireDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.InquireEntity;
@@ -19,6 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/inqurie")
+@Api(tags = {"Inquire 관련 정보를 제공하는 Controller"})
 public class InqurieController
 {
     @Autowired
@@ -26,6 +33,16 @@ public class InqurieController
     
     ResponseDTO responseDTO = new ResponseDTO<>();
 
+
+    @ApiOperation(
+            value = "Create a new Inquire",
+            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API creates a new Inquire and returns InquireDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Inquire created successfully"),
+            @ApiResponse(code = 400, message = "Invalid input data")
+    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody InquireDTO inquireDTO)
     {
@@ -47,6 +64,16 @@ public class InqurieController
             return ResponseEntity.badRequest().body(responseDTO.Response("error","에러가 발생함"));
         }
     }
+
+    @ApiOperation(
+            value = "Change a Inquire by InquireId",
+            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API Change a Inquire and returns InquireDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Inquire Changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid Change data")
+    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody InquireDTO inquireDTO)
     {
@@ -129,8 +156,17 @@ public class InqurieController
         return InquireEntity.builder()
                 .inquireId(inquireDTO.getInquireId())
                 .Address(inquireDTO.getAddress())
-                .SubmissionDate(inquireDTO.getSubmissionDate())
                 .PhoneNumber(inquireDTO.getPhoneNumber())
+                .Inquire(inquireDTO.getInquire())
+                .build();
+    }
+    private InquireDTO ConvertToDTO(InquireEntity inquireEntity)
+    {
+        return InquireDTO.builder()
+                .inquireId(inquireEntity.getInquireId())
+                .Address(inquireEntity.getAddress())
+                .PhoneNumber(inquireEntity.getPhoneNumber())
+                .Inquire(inquireEntity.getInquire())
                 .build();
     }
 

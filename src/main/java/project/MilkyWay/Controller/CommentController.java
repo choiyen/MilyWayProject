@@ -1,9 +1,14 @@
 package project.MilkyWay.Controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.DTO.BoardDTO;
 import project.MilkyWay.DTO.CommentDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.CommentEntity;
@@ -20,6 +25,7 @@ import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping("/comment")
+@Api(tags = {"댓글 관련 정보를 제공하는 Controller"})
 public class CommentController
 {
     @Autowired
@@ -30,7 +36,15 @@ public class CommentController
 
     ResponseDTO responseDTO = new ResponseDTO<>();
 
-
+    @ApiOperation(
+            value = "Create a new Comment",
+            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API creates a new Comment and returns CommentDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Comment created successfully"),
+            @ApiResponse(code = 400, message = "Invalid input data")
+    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody CommentDTO commentDTO)
     {
@@ -62,13 +76,23 @@ public class CommentController
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+    @ApiOperation(
+            value = "Change a Comment by CommentId",
+            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API Change a Comment and returns CommentDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Comment Changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid Change data")
+    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody CommentDTO commentDTO)
     {
         try
         {
             CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
-            CommentEntity comment = commentService.Update(commentDTO.getComment(), commentEntity);
+            CommentEntity comment = commentService.Update(commentDTO.getCommentId(), commentEntity);
             if(comment != null)
             {
                 CommentDTO commentDTO1 = ConvertToCommentDTO(comment);
@@ -85,8 +109,39 @@ public class CommentController
         }
     }
 
+    @ApiOperation(
+            value = "Delete an Comment by CommentId",
+            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
+            notes = "This API deletes an Comment by the provided CommentId and returns a ResponseEntity with a success or failure message."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Comment deleted successfully"),
+            @ApiResponse(code = 404, message = "Comment not found")
+    })
+    @DeleteMapping("/Delete")
+    public ResponseEntity<?> Delete(@RequestBody Long CommentId)
+    {
+        try
+        {
+            boolean bool = commentService.Delete(CommentId);
+            if(bool)
+            {
+                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제!"));
+            }
+            else
+            {
+                throw new DeleteFailedException("데이터 삭제 실패ㅠㅠㅠ");
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
+    }
+
+
     @PostMapping("/Find")
-    public ResponseEntity<?> FindByComentId(@RequestBody String CommentId)
+    public ResponseEntity<?> FindByComentId(@RequestBody Long CommentId)
     {
         try
         {
@@ -138,26 +193,8 @@ public class CommentController
         }
     }
 
-    @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String CommentId)
-    {
-        try 
-        {
-            boolean bool = commentService.Delete(CommentId);
-            if(bool)
-            {
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제!"));
-            }
-            else
-            {
-                throw new DeleteFailedException("데이터 삭제 실패ㅠㅠㅠ");
-            }
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
-        }
-    }
+
+
     private CommentDTO ConvertToCommentDTO(CommentEntity comment)
     {
         return CommentDTO.builder()

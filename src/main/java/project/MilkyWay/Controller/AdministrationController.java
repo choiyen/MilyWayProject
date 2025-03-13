@@ -1,10 +1,15 @@
 package project.MilkyWay.Controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.DTO.AddressDTO;
 import project.MilkyWay.DTO.AdministrationDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.AdministrationEntity;
@@ -19,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/time")
+@Api(tags = {"일정 관련 정보를 제공하는  Controller"})
 public class AdministrationController
 {
     @Autowired
@@ -27,6 +33,15 @@ public class AdministrationController
     ResponseDTO responseDTO = new ResponseDTO<>();
 
 
+    @ApiOperation(
+            value = "Create a new Administration",
+            response = AdministrationDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API creates a new Administration and returns AdministrationDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Administration created successfully"),
+            @ApiResponse(code = 400, message = "Invalid input data")
+    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody AdministrationDTO administrationDTO)
     {
@@ -50,27 +65,15 @@ public class AdministrationController
         }
     }
 
-    @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String administrationId)
-    {
-        try
-        {
-            boolean bool = administrationService.Delete(administrationId);
-            if(bool)
-            {
-                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 추가에 성공하셨습니다."));
-            }
-            else
-            {
-                throw new InsertFailedException("데이터 베이스에 데이터를 삭제하는 과정에서 예기치 못한 오류가 발생했습니다.");
-
-            }
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
-        }
-    }
+    @ApiOperation(
+            value = "Change a Administration by AdministrationId",
+            response = AdministrationDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API Change a  Administration and returns AdministrationDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Administration Changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid Change data")
+    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody AdministrationDTO administrationDTO)
     {
@@ -93,6 +96,38 @@ public class AdministrationController
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+    @ApiOperation(
+            value = "Delete an administration by administrationId",
+            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
+            notes = "This API deletes an administration by the provided administrationId and returns a ResponseEntity with a success or failure message."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "administration deleted successfully"),
+            @ApiResponse(code = 404, message = "administration not found")
+    })
+    @DeleteMapping("/Delete")
+    public ResponseEntity<?> Delete(@RequestBody String administrationId)
+    {
+        try
+        {
+            boolean bool = administrationService.Delete(administrationId);
+            if(bool)
+            {
+                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 추가에 성공하셨습니다."));
+            }
+            else
+            {
+                throw new InsertFailedException("데이터 베이스에 데이터를 삭제하는 과정에서 예기치 못한 오류가 발생했습니다.");
+
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
+    }
+
 
     @PostMapping("/Find")
     public ResponseEntity<?> FindByadministration(@RequestBody String AdministrationId)

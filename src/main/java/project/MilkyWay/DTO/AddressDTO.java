@@ -1,5 +1,6 @@
 package project.MilkyWay.DTO;
 
+import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -16,30 +17,35 @@ import java.util.Date;
 @ToString
 public class AddressDTO
 {
+    @ApiModelProperty(value = "고객 정보 Id", example = "dfasfdsfsafasfwv!ED")
     private String AddressId;
 
     @NotNull(message = "customer cannot be null")
     @NotBlank(message = "customer cannot be empty")
     @Size(min = 5, message = "customer는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    @ApiModelProperty(value = "고객 이름", example = "홍길동", required = true)
     private String customer;
 
     @NotNull(message = "Address cannot be null")
     @NotBlank(message = "Address cannot be empty")
     @Size(min = 5, message = "Address는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    @ApiModelProperty(value = "고객 주소", example = "한국시 아주동 한국파크 101동 4121호", required = true)
     private String Address;
 
     @NotNull(message = "phoneNumber cannot be null")
     @NotBlank(message = "phoneNumber cannot be empty")
     @Size(min = 5, message = "phoneNumber는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    @ApiModelProperty(value = "고객 전화번호", example = "010-1234-1234", required = true)
     private String phoneNumber;
 
     @NotNull(message = "SubmissionDate cannot be null")
     @NotBlank(message = "SubmissionDate cannot be empty")
     @Size(min = 5, message = "SubmissionDate는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
+    @ApiModelProperty(value = "예약 날짜", example = "2025-03-14", required = true)
     private Date SubmissionDate;
 }
 //- 현재 날짜보다 고객의 의뢰 날짜가 뒷날일 떄 데이터를 파기하는 함수 필요

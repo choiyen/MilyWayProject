@@ -10,8 +10,8 @@ import java.util.UUID;
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, String>
 {
-    CommentEntity findByCommentId(UUID commentId);
+    CommentEntity findByCommentId(Long commentId);
     List<CommentEntity> findByBoardId(String BoardId);
-    boolean existsByCommentId(String boardId);
-    void deleteByCommentId(String boardId);
+    boolean existsByCommentId(Long commentId);
+    void deleteByCommentId(Long commentId);
 }

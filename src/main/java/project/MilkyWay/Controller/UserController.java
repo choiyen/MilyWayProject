@@ -1,10 +1,16 @@
 package project.MilkyWay.Controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.DTO.BoardDTO;
+import project.MilkyWay.DTO.CommentDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.DTO.UserDTO;
 import project.MilkyWay.Entity.UserEntity;
@@ -20,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Api(tags = {"유저 정보를 제공하는 Controller"})
 public class UserController //관리자 아이디를 관리하는 DTO
 {
     private  ResponseDTO responseDTO = new ResponseDTO<>();
@@ -31,6 +38,15 @@ public class UserController //관리자 아이디를 관리하는 DTO
 //    private PasswordEncoder passwordEncoder;
 
     //Spring Security 적용이 안되어 있는 상태라 평문으로 확인
+    @ApiOperation(
+            value = "Create a new User",
+            response = CommentDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API creates a new User and returns User as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "User created successfully"),
+            @ApiResponse(code = 400, message = "Invalid input data")
+    })
     @PostMapping("/Insert")
     public ResponseEntity<?> UserInsert(@Valid @RequestBody UserDTO userDTO)
     {
@@ -46,6 +62,16 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+    @ApiOperation(
+            value = "Change a UserDTO by ReservationId",
+            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API Change a User and returns UserDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "User Changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid Change data")
+    })
     @PutMapping("/Update")
     public ResponseEntity<?> UserUpdate(@Valid @RequestBody UserDTO NewuserDTO)
     {
@@ -61,6 +87,8 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+
     @PostMapping("/Find")
     public ResponseEntity<?> Userfind(@Valid @RequestBody String email)
     {
@@ -79,6 +107,16 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+    @ApiOperation(
+            value = "Delete an user by userId",
+            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
+            notes = "This API deletes an user by the provided userId and returns a ResponseEntity with a success or failure message."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "user deleted successfully"),
+            @ApiResponse(code = 404, message = "user not found")
+    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> UserDelete(@RequestBody String userId)
     {

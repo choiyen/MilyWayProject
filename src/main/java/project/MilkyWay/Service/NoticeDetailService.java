@@ -29,14 +29,14 @@ public class NoticeDetailService {
         }
     }
 
-    public NoticeDetailEntity UpdateNoticeDetailMapper(String encodingNoticeDetailId, NoticeDetailEntity ChangingNoticeDetailEntity)
+    public NoticeDetailEntity UpdateNoticeDetailMapper(Long encodingNoticeDetailId, NoticeDetailEntity ChangingNoticeDetailEntity)
     {
-        NoticeDetailEntity OldNoticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetailId));
+        NoticeDetailEntity OldNoticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetailId);
 
         if (OldNoticeDetailEntity != null) {
             NoticeDetailEntity newNoticeDetailEntity2 = ChangeToNoticeDetail(OldNoticeDetailEntity, ChangingNoticeDetailEntity);
             noticeDetailMapper.Update(newNoticeDetailEntity2);
-            NoticeDetailEntity SelectnewNoticeEntity = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetailId));
+            NoticeDetailEntity SelectnewNoticeEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetailId);
             if (SelectnewNoticeEntity.equals(newNoticeDetailEntity2))
             {
                 return SelectnewNoticeEntity;
@@ -65,13 +65,13 @@ public class NoticeDetailService {
             throw new FindFailedException("데이터 찾기를 시도했는데, 알 수 없는 오류가 발생했어요. 관리자에게 문의해줘요");
         }
     }
-    public boolean DeleteToNoticeDetail(String encodingNoticeDetail)
+    public boolean DeleteToNoticeDetail(Long encodingNoticeDetail)
     {
-        NoticeDetailEntity seach = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetail));
+        NoticeDetailEntity seach = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetail);
         if(seach != null)
         {
             noticeDetailMapper.deleteByNoticeDetailId(encodingNoticeDetail);
-            NoticeDetailEntity noticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(UUID.fromString(encodingNoticeDetail));
+            NoticeDetailEntity noticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetail);
             if(noticeDetailEntity == null)
             {
                 return true;

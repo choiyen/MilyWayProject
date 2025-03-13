@@ -17,7 +17,7 @@ public class CommentEntity
     @Id
     @Column(name = "commentId", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)  // 자동 증가 설정
-    private UUID commentId; // 질문을 구분하기 위한 id
+    private Long commentId; // 질문을 구분하기 위한 id
     @Column(name = "boardId", nullable = false)
     private String boardId;  // boardDTO와 연결하기 위한 것
     @Column(name = "type", nullable = false)
@@ -35,14 +35,6 @@ public class CommentEntity
                 Objects.equals(type, CommentEntity.type) &&
                 Objects.equals(comment, CommentEntity.comment);
     }
-    // UUID를 직접 생성하도록 할 수도 있습니다. 예를 들어 생성자에서 자동으로 UUID를 생성할 수 있습니다.
-    @PrePersist
-    public void prePersist() {
-        if (commentId == null) {
-            commentId = UUID.randomUUID();  // UUID 값이 null이면 자동으로 생성
-        }
-    }
-
 
     @Override
     public int hashCode() {

@@ -42,11 +42,11 @@ public class CommentService
             throw  new InsertFailedException();
         }
     }
-    public CommentEntity Update(String commentId, CommentEntity comment)
+    public CommentEntity Update(Long EncodingcommentId, CommentEntity comment)
     {
         try
         {
-           CommentEntity commentEntity = commentRepository.findByCommentId(UUID.fromString(commentId));
+           CommentEntity commentEntity = commentRepository.findByCommentId(EncodingcommentId);
            if(commentEntity != null)
            {
                 CommentEntity UpdateComment = ConvertToEntity(commentEntity, comment);
@@ -70,7 +70,7 @@ public class CommentService
             throw new UpdateFailedException();
         }
     }
-    public boolean Delete(String EnCodingCommentId)
+    public boolean Delete(Long EnCodingCommentId)
     {
         boolean bool = commentRepository.existsByCommentId(EnCodingCommentId);
         if(bool)
@@ -83,9 +83,9 @@ public class CommentService
             throw new DeleteFailedException("해당 CommentId를 가진 질문이 존재하지 않습니다.");
         }
     }
-    public CommentEntity FindByCommentId(String EnCodingCommentId)
+    public CommentEntity FindByCommentId(Long EnCodingCommentId)
     {
-        CommentEntity commentEntity = commentRepository.findByCommentId(UUID.fromString(EnCodingCommentId));
+        CommentEntity commentEntity = commentRepository.findByCommentId(EnCodingCommentId);
         if(commentEntity != null)
         {
             return commentEntity;

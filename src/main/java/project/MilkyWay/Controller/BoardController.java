@@ -1,9 +1,15 @@
 package project.MilkyWay.Controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.DTO.AddressDTO;
+import project.MilkyWay.DTO.AdministrationDTO;
 import project.MilkyWay.DTO.BoardDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.BoardEntity;
@@ -18,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/board")
+@Api(tags = {"게시판 관련 정보를 제공하는  Controller"})
 public class BoardController
 {
     @Autowired
@@ -25,6 +32,15 @@ public class BoardController
 
     ResponseDTO responseDTO = new ResponseDTO<>();
 
+    @ApiOperation(
+            value = "Create a new Board",
+            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API creates a new Board and returns BoardDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Board created successfully"),
+            @ApiResponse(code = 400, message = "Invalid input data")
+    })
     @PostMapping("/Insert")
     public ResponseEntity<?> Insert(@Valid @RequestBody BoardDTO boardDTO)
     {
@@ -48,6 +64,15 @@ public class BoardController
         }
     }
 
+    @ApiOperation(
+            value = "Change a Board by BoardId",
+            response = BoardDTO.class,  // AddressDTO를 반환 타입으로 지정
+            notes = "This API Change a  Board and returns BoardDTO as response"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Board Changed successfully"),
+            @ApiResponse(code = 400, message = "Invalid Change data")
+    })
     @PutMapping("/Update")
     public ResponseEntity<?> Update(@Valid @RequestBody BoardDTO boardDTO)
     {
@@ -70,6 +95,16 @@ public class BoardController
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+    @ApiOperation(
+            value = "Delete an Board by BoardId",
+            response = ResponseEntity.class,  // 반환 타입을 ResponseEntity로 지정
+            notes = "This API deletes an Board by the provided BoardId and returns a ResponseEntity with a success or failure message."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Board deleted successfully"),
+            @ApiResponse(code = 404, message = "Board not found")
+    })
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(@RequestBody String BoardId)
     {

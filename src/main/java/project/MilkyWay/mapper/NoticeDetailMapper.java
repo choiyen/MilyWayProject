@@ -13,8 +13,8 @@ import java.util.UUID;
 public interface NoticeDetailMapper
 {
     List<NoticeDetailEntity> findByNoticeId(String NoticeId);
-    NoticeDetailEntity findByNoticeDetailId(UUID NoticeDetailId);
-    void deleteByNoticeDetailId(String NoticeDetailId);
+    NoticeDetailEntity findByNoticeDetailId(Long NoticeDetailId);
+    void deleteByNoticeDetailId(Long NoticeDetailId);
     void Insert(NoticeDetailEntity noticeEntity);
     void Update(NoticeDetailEntity noticeEntity);
 

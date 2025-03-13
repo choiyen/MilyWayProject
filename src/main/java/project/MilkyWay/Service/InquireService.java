@@ -111,7 +111,6 @@ public class InquireService
                 .inquireId(oldinquireEntity.getInquireId())
                 .Inquire(newinquireEntity.getInquire())
                 .PhoneNumber(newinquireEntity.getPhoneNumber())
-                .SubmissionDate(newinquireEntity.getSubmissionDate())
                 .Address(newinquireEntity.getAddress())
                 .build();
     }

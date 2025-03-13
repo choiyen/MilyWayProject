@@ -11,6 +11,7 @@ import project.MilkyWay.mapper.QuestionsMapper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class QuestionsService //고객 질문을 관리하기 위한 DTO
@@ -31,7 +32,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
             throw new InsertFailedException("해당 질문 데이터를 추가할 수 없습니다.");
         }
     }
-    public QuestionsEntity updatequestion(String encodingquestionId, QuestionsEntity newQuestionEntity)
+    public QuestionsEntity updatequestion(Long encodingquestionId, QuestionsEntity newQuestionEntity)
     {
         QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(encodingquestionId);
         if(questionsEntity != null)
@@ -54,7 +55,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
         }
 
     }
-    public boolean DeleteByQuestionId(String encodingQuestionId) throws IOException {
+    public boolean DeleteByQuestionId(Long encodingQuestionId) throws IOException {
         QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(encodingQuestionId);
         if(questionsEntity != null)
         {
@@ -91,7 +92,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
             throw new FindFailedException("회원정보를 찾다가 오류가 발생했어요!! 관리자님한테 문의하세요");
         }
     }
-    public QuestionsEntity SelectQuestion(String encodingquestionId)
+    public QuestionsEntity SelectQuestion(Long encodingquestionId)
     {
         QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(encodingquestionId);
         if(questionsEntity != null)
@@ -108,7 +109,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     {
         QuestionsEntity ChangeNewQuestion = QuestionsEntity.builder()
                 .questionId(questionsEntity.getQuestionId())
-                .ExpectionQnA(newQuestionEntity.getQuestionId())
+                .ExpectionQnA(newQuestionEntity.getExpectionQnA())
                 .ExpectedComment(newQuestionEntity.getExpectedComment())
                 .build();
 
