@@ -89,7 +89,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             if(reservationEntity2 != null)
             {
                 ReservationDTO reservationDTO1 = ConvertToDTO(reservationEntity2);
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 추가에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
+                return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success","데이터 추가에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
             }
             else
             {
@@ -98,7 +98,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
+            return ResponseEntity.<ResponseDTO>badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
 
@@ -163,12 +163,12 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             }
             else
             {
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 조회에 성공했습니다.",reservationDTOS));
+                return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success","데이터 조회에 성공했습니다.",reservationDTOS));
             }
         } 
         catch (Exception e) 
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
+            return ResponseEntity.<ResponseDTO>badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
 

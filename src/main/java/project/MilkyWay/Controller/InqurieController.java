@@ -10,8 +10,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.MilkyWay.DTO.BoardDTO;
-import project.MilkyWay.DTO.CommentDTO;
 import project.MilkyWay.DTO.InquireDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.InquireEntity;
@@ -19,7 +17,6 @@ import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
-import project.MilkyWay.Repository.InqurieRepository;
 import project.MilkyWay.Service.InquireService;
 
 import java.util.Collections;

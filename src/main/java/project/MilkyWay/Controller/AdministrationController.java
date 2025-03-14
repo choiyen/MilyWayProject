@@ -14,7 +14,6 @@ import project.MilkyWay.DTO.AddressDTO;
 import project.MilkyWay.DTO.AdministrationDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.AdministrationEntity;
-import project.MilkyWay.Entity.BoardEntity;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Service.AdministrationService;

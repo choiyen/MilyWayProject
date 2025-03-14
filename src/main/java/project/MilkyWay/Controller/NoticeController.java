@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.DTO.*;
 import project.MilkyWay.Entity.NoticeDetailEntity;
 import project.MilkyWay.Entity.NoticeEntity;
-import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Service.NoticeDetailService;
 import project.MilkyWay.Service.NoticeService;

@@ -9,8 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.MilkyWay.DTO.AddressDTO;
-import project.MilkyWay.DTO.AdministrationDTO;
 import project.MilkyWay.DTO.BoardDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.BoardEntity;

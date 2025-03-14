@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.DTO.AddressDTO;
-import project.MilkyWay.DTO.AdministrationDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.AddressEntity;
 import project.MilkyWay.Expection.FindFailedException;
@@ -21,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-
 @Tag(name = "주소 관련 정보를 제공하는  Controller")
 @RestController
 @RequestMapping("/address")
@@ -30,7 +28,7 @@ public class AddressController
     @Autowired
     AddressService addressService;
 
-    ResponseDTO responseDTO = new ResponseDTO<>();
+    ResponseDTO<AddressDTO> responseDTO = new ResponseDTO<>();
 
     @Operation(
             summary = "Create a new Address",
@@ -105,11 +103,11 @@ public class AddressController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String AddrssId)
+    public ResponseEntity<?> Delete(@RequestBody String AddressId)
     {
         try
         {
-            boolean bool = addressService.Delete(AddrssId);
+            boolean bool = addressService.Delete(AddressId);
             if(bool)
             {
                 return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 삭제 성공"));
@@ -144,18 +142,12 @@ public class AddressController
             {
                 throw new FindFailedException("데이터베이스를 조회하긴 했으나, 비어있습니다.");
             }
-            else if(addressEntityList != null)
-            {
+            else {
                 List<AddressDTO> addressDTOS = new ArrayList<>();
-                for(int i = 0; i < addressEntityList.size(); i++)
-                {
-                    addressDTOS.add(ConvertToDTO(addressEntityList.get(i)));
+                for (AddressEntity addressEntity : addressEntityList) {
+                    addressDTOS.add(ConvertToDTO(addressEntity));
                 }
                 return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 조회 성공", addressDTOS));
-            }
-            else
-            {
-                throw new RuntimeException("예기치 못한 오류로 런타임 오류 발생!!");
             }
         }
         catch (Exception e)
@@ -174,14 +166,15 @@ public class AddressController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindById(@RequestBody String AddrssId)
+    public ResponseEntity<?> FindById(@RequestBody String AddressId)
     {
         try
         {
-            AddressEntity addressEntity = addressService.findByAddressId(AddrssId);
+            AddressEntity addressEntity = addressService.findByAddressId(AddressId);
             if(addressEntity != null)
             {
-                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회 성공", Collections.singletonList(addressEntity)));
+                AddressDTO addressDTO = ConvertToDTO(addressEntity);
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회 성공", Collections.singletonList(addressDTO)));
             }
             else
             {
