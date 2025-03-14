@@ -30,7 +30,7 @@ public class AdministrationController
     @Autowired
     AdministrationService administrationService;
 
-    ResponseDTO responseDTO = new ResponseDTO<>();
+    ResponseDTO<AdministrationDTO> responseDTO = new ResponseDTO<>();
 
 
     @Operation(
@@ -87,7 +87,7 @@ public class AdministrationController
             if(administrationEntity != null)
             {
                 AdministrationDTO administrationDTO1 = ConvertToDTO(administrationEntity);
-                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 업데이트에 성공하셨습니다."));
+                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 업데이트에 성공하셨습니다.", Collections.singletonList(administrationDTO1)));
             }
             else
             {
@@ -146,7 +146,7 @@ public class AdministrationController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindByadministration(@RequestBody String AdministrationId)
+    public ResponseEntity<?> FindAdministration(@RequestBody String AdministrationId)
     {
         try
         {
@@ -186,18 +186,12 @@ public class AdministrationController
             {
                 throw new FindFailedException("데이터를 조회하는데는 성공했으나, 데이터베이스가 비어있음");
             }
-            else if(administrationEntities != null) 
-            {
+            else {
                 List<AdministrationDTO> administrationDTOS = new ArrayList<>();
-                for(int i = 0; i< administrationEntities.size(); i++)
-                {
-                    administrationDTOS.add(ConvertToDTO(administrationEntities.get(i)));
+                for (AdministrationEntity administrationEntity : administrationEntities) {
+                    administrationDTOS.add(ConvertToDTO(administrationEntity));
                 }
                 return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 일정데이터 전체조회 성공",  administrationDTOS));
-            }
-            else
-            {
-                throw new FindFailedException("예기치 못한 오류 발생!! 데이터 찾기 종료");
             }
         }
         catch (Exception e)

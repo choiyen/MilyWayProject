@@ -21,7 +21,7 @@ import project.MilkyWay.Service.CommentService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.zip.DataFormatException;
+
 
 @RestController
 @RequestMapping("/comment")
@@ -34,7 +34,7 @@ public class CommentController
     @Autowired
     BoardService boardService;
 
-    ResponseDTO responseDTO = new ResponseDTO<>();
+    ResponseDTO<CommentDTO> responseDTO = new ResponseDTO<>();
 
 
     @Operation(
@@ -50,7 +50,7 @@ public class CommentController
     {
         try
         {
-            Boolean bool = boardService.Bool(commentDTO.getBoardId());
+            boolean bool = boardService.Bool(commentDTO.getBoardId());
             if(bool)
             {
                 CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
@@ -158,7 +158,7 @@ public class CommentController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindByComentId(@RequestBody Long CommentId)
+    public ResponseEntity<?> FindByCommentId(@RequestBody Long CommentId)
     {
         try
         {
@@ -203,13 +203,8 @@ public class CommentController
             {
                 throw new FindFailedException("데이터가 비어있습니다. 다시 시도해주세요");
             }
-            else if(commentDTOS != null)
-            {
+            else {
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터베이스에 데이터가 등록되어 있습니다.", commentDTOS));
-            }
-            else
-            {
-                throw new RuntimeException("알 수 없는 오류가 발생했습니다. 다시 시도해주세요");
             }
         }
         catch (Exception e)

@@ -31,7 +31,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     @Autowired
     NoticeDetailService noticeDetailService;
 
-    ResponseDTO responseDTO = new ResponseDTO<>();
+    private final ResponseDTO<Object> responseDTO = new ResponseDTO<>();
 
 
     @Operation(
@@ -63,7 +63,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     List<Object> list = new ArrayList<>();
                     list.add(notice1);
                     list.add(noticeDetailEntity1);
-                    return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
+                    return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
                 }
                 else
                 {

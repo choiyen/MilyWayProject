@@ -26,14 +26,11 @@ import java.util.List;
 @Tag(name = "유저 정보를 제공하는 Controller")
 public class UserController //관리자 아이디를 관리하는 DTO
 {
-    private  ResponseDTO responseDTO = new ResponseDTO<>();
+    private final ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
 
     @Autowired
     UserService userService;
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
+    
 
     //Spring Security 적용이 안되어 있는 상태라 평문으로 확인
     @Operation(
@@ -114,7 +111,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
         try
         {
             boolean bool = userService.DeleteUser(userId);
-            if(bool == true)
+            if(bool)
             {
                 return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 정보 삭제 성공"));
 
@@ -159,17 +156,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     } //데이터 CRUD 정상 동작 확인
-
-
-
-    private UserEntity ConvertToEntity(UserEntity userEntity1, UserDTO newuserDTO)
-    {
-        return UserEntity.builder()
-                .userId(userEntity1.getUserId())
-                .email(newuserDTO.getEmail())
-                .password(newuserDTO.getPassword())
-                .build();
-    }
+    
     private UserEntity ConvertToEntity(UserDTO userDTO)
     {
         System.out.println(userDTO.getPassword());

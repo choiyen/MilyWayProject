@@ -19,7 +19,7 @@ import project.MilkyWay.Service.QuestionsService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.MissingResourceException;
+
 
 @RestController
 @RequestMapping("/question")
@@ -30,7 +30,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
     QuestionsService questionsService;
 
 
-    ResponseDTO responseDTO = new ResponseDTO<>();
+    ResponseDTO<QuestionsDTO> responseDTO = new ResponseDTO<>();
 
 
     @Operation(
@@ -83,7 +83,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                 if(questionsEntity1 != null)
                 {
                     QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
-                    return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success", "질문 데이터 업데이트에 성공하였습니다.", Collections.singletonList(questionsDTO1)));
+                    return ResponseEntity.ok().body(responseDTO.Response("success", "질문 데이터 업데이트에 성공하였습니다.", Collections.singletonList(questionsDTO1)));
                 }
                 else
                 {
@@ -119,7 +119,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             boolean bool = questionsService.DeleteByQuestionId(QuestionId);
             if(bool)
             {
-                return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success", "질문 데이터 삭제에 성공하였습니다."));
+                return ResponseEntity.ok().body(responseDTO.Response("success", "질문 데이터 삭제에 성공하였습니다."));
             }
             else
             {
@@ -151,7 +151,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             if(questionsEntity != null)
             {
                 QuestionsDTO questionsDTO = ConVertToDTO(questionsEntity);
-                return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success", "질문 데이터 찾기에 성공하였습니다.", Collections.singletonList(questionsDTO)));
+                return ResponseEntity.ok().body(responseDTO.Response("success", "질문 데이터 찾기에 성공하였습니다.", Collections.singletonList(questionsDTO)));
             }
             else
             {
@@ -189,7 +189,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
             else
             {
-                return ResponseEntity.<ResponseDTO>ok().body(responseDTO.Response("success","질문 데이터 조회에 성공했습니다.",questionsDTOS));
+                return ResponseEntity.ok().body(responseDTO.Response("success","질문 데이터 조회에 성공했습니다.",questionsDTOS));
             }
         }
         catch (Exception e)
@@ -210,14 +210,6 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                 .questionId(questionsEntity.getQuestionId())
                 .ExpectionQnA(questionsEntity.getExpectionQnA())
                 .ExpectedComment(questionsEntity.getExpectedComment())
-                .build();
-    }
-    private QuestionsEntity ConVertToEntity(QuestionsEntity oldquestionEntity, QuestionsDTO newquestionsDTO)
-    {
-        return QuestionsEntity.builder()
-                .questionId(oldquestionEntity.getQuestionId())
-                .ExpectionQnA(newquestionsDTO.getExpectionQnA())
-                .ExpectedComment(newquestionsDTO.getExpectedComment())
                 .build();
     }
 }

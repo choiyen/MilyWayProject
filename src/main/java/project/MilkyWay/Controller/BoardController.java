@@ -29,7 +29,7 @@ public class BoardController
     @Autowired
     BoardService boardService;
 
-    ResponseDTO responseDTO = new ResponseDTO<>();
+    private final ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<>();
 
 
     @Operation(
@@ -158,13 +158,8 @@ public class BoardController
             {
                 throw new FindFailedException("데이터베이스에서 데이터를 찾았는데 비어있어요!!");
             }
-            else if(boardDTOS != null)
-            {
+            else {
                 return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 데이터를 못찾겠어요. 다시 시도해주세요!!", boardDTOS));
-            }
-            else
-            {
-                throw new RuntimeException("데이터베이스 조회 도중 알 수 없는 오류가 발생했습니다. 다시 시도해주세요");
             }
         }
         catch (Exception e)
