@@ -20,7 +20,7 @@ public class UserService //관리자 아이디를 관리하는 DTO
   public UserEntity createUser(UserEntity user)
   {
       userMapper.Insert(user);
-      UserEntity newUser = userMapper.FindByUserId(user.getUserID());
+      UserEntity newUser = userMapper.FindByUserId(user.getUserId());
       if(newUser != null)
       {
           return newUser;
@@ -38,7 +38,7 @@ public class UserService //관리자 아이디를 관리하는 DTO
           UserEntity ChangeUser = ChangeUserEntity(previousUser, user);
           userMapper.Update(user);
           UserEntity newUser = userMapper.FindByUserId(userId);
-          if(newUser.getUserID().equals(ChangeUser.getUserID()) && newUser.getPassword().equals(ChangeUser.getPassword())&& newUser.getEmail().equals(ChangeUser.getEmail()))
+          if(newUser.getUserId().equals(ChangeUser.getUserId()) && newUser.getPassword().equals(ChangeUser.getPassword())&& newUser.getEmail().equals(ChangeUser.getEmail()))
           {
               return newUser;
           }
@@ -52,18 +52,19 @@ public class UserService //관리자 아이디를 관리하는 DTO
           throw new FindFailedException("회원정보에 해당 아이디는 존재하지 않아요");
       }
   }
-    public void DeleteUser(String userId)
+  public boolean DeleteUser(String userId)
   {
+      System.out.println("ddddd " + userId );
       UserEntity user = userMapper.FindByUserId(userId);
       if(user != null)
       {
           userMapper.deleteByUserId(userId);
+          return true;
       }
       else
       {
-          throw new DeleteFailedException("삭제할 아이디 정보가 틀립니다.");
+          throw new DeleteFailedException("삭제할 아이디가 없거나 정보가 틀립니다.");
       }
-
   }
   public UserEntity findUserId(String userId)
   {
@@ -77,9 +78,11 @@ public class UserService //관리자 아이디를 관리하는 DTO
           throw new DeleteFailedException("해당 정보의 회원은 존재하지 않아요.");
       }
   }
-  public List<UserEntity> findEmail(String Email)
+  public List<UserEntity> findEmail(String email)
   {
-        List<UserEntity> user = userMapper.FindByEmail(Email);
+      System.out.println(email);
+        System.out.println("DDDDD" + userMapper.FindByEmail(email));
+        List<UserEntity> user = userMapper.FindByEmail(email);
         if(user != null)
         {
             return user;
@@ -92,9 +95,9 @@ public class UserService //관리자 아이디를 관리하는 DTO
   private UserEntity ChangeUserEntity(UserEntity previousUser, UserEntity newUser)
   {
       UserEntity user = UserEntity.builder()
-              .userID(previousUser.getUserID())
-              .Password(newUser.getPassword())
-              .email(newUser.getUserID())
+              .userId(previousUser.getUserId())
+              .password(newUser.getPassword())
+              .email(newUser.getEmail())
               .build();
 
       return user;

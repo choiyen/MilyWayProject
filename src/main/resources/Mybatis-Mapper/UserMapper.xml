@@ -10,10 +10,11 @@
         SELECT * FROM User WHERE email = #{email}
     </select>
     <delete id="deleteByUserId" parameterType="String">
-        DELETE * FROM User WHERE userId = #{userId}
+        DELETE FROM User WHERE userId = #{userId}
     </delete>
-    <insert id="Insert" parameterType="project.MilkyWay.Entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO User(userId, password, email) VALUES(#{userId}, #{Password}, #{email})
+    <insert id="Insert" parameterType="project.MilkyWay.Entity.UserEntity" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO User(userId, password, email)
+        VALUES(#{userId}, #{password}, #{email})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.Entity.UserEntity">
         UPDATE User SET password = #{password}, email = #{email} WHERE userId = #{userId}

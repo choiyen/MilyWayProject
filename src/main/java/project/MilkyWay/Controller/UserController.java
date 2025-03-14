@@ -56,13 +56,14 @@ public class UserController //관리자 아이디를 관리하는 DTO
             UserEntity userEntity = ConvertToEntity(userDTO);
             UserEntity newUserEntity = userService.createUser(userEntity);
             UserDTO userDTO1 = ConvertToDTO(newUserEntity);
+            System.out.println(userDTO1);
             return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 권한 등록 성공", Collections.singletonList(userDTO1)));
         }
         catch (Exception e)
         {
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
-    }
+    } //1차 Test 완료, Spring Security 설정 후 재 Test 예정
 
 
 
@@ -83,7 +84,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
         try
         {
             UserEntity userEntity = ConvertToEntity(NewuserDTO);
-            UserEntity userEntity2 = userService.UpdateUser(userEntity.getUserID(), userEntity);
+            UserEntity userEntity2 = userService.UpdateUser(userEntity.getUserId(), userEntity);
             UserDTO userDTO1 = ConvertToDTO(userEntity2);
             return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 권한 수정 성공", Collections.singletonList(userDTO1)));
         }
@@ -91,7 +92,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
         {
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
-    }
+    }//1차 Test 완료, Spring Security 설정 후 재 Test 예정
 
 
     @Operation(
@@ -109,13 +110,12 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> UserDelete(@RequestBody String userId)
+    public ResponseEntity<?> UserDelete(@RequestParam String userId)
     {
         try
         {
-            userService.DeleteUser(userId);
-            UserEntity userEntity = userService.findUserId(userId);
-            if(userEntity != null)
+            boolean bool = userService.DeleteUser(userId);
+            if(bool == true)
             {
                 return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 정보 삭제 성공"));
 
@@ -142,11 +142,12 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> Userfind(@Valid @RequestBody String email)
+    public ResponseEntity<?> Userfind(@RequestParam String email)
     {
         try
         {
             List<UserEntity> userEntity = userService.findEmail(email);
+            System.out.println(userEntity);
             List<UserDTO> userDTOS = new ArrayList<>();
             for(UserEntity user : userEntity)
             {
@@ -158,32 +159,33 @@ public class UserController //관리자 아이디를 관리하는 DTO
         {
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
-    }
+    } //데이터 CRUD 정상 동작 확인
 
 
 
     private UserEntity ConvertToEntity(UserEntity userEntity1, UserDTO newuserDTO)
     {
         return UserEntity.builder()
-                .userID(userEntity1.getUserID())
+                .userId(userEntity1.getUserId())
                 .email(newuserDTO.getEmail())
-                .Password(newuserDTO.getPassword())
+                .password(newuserDTO.getPassword())
                 .build();
     }
     private UserEntity ConvertToEntity(UserDTO userDTO)
     {
+        System.out.println(userDTO.getPassword());
         return UserEntity.builder()
-                .userID(userDTO.getUserID())
+                .userId(userDTO.getUserId())
                 .email(userDTO.getEmail())
-                .Password(userDTO.getPassword())
+                .password(userDTO.getPassword())
                 .build();
     }
     private UserDTO ConvertToDTO(UserEntity userEntity)
     {
         return UserDTO.builder()
-                .userID(userEntity.getUserID())
+                .userId(userEntity.getUserId())
                 .email(userEntity.getEmail())
-                .Password(userEntity.getPassword())
+                .password(userEntity.getPassword())
                 .build();
     }
 }
