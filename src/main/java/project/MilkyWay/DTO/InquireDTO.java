@@ -20,21 +20,18 @@ public class InquireDTO
     @Schema(description = "게시판 정보 Id", example = "dfasfdsfsafasfwv!ED")
     private String inquireId;
 
-    @NotNull(message = "Address cannot be null")
     @NotBlank(message = "Address cannot be empty")
     @Size(min = 5, message = "Address는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     @Schema(description = "문의 주소", example = "경상남도 진주시 석촌동", required = true)
     private String Address;
 
-    @NotNull(message = "PhoneNumber cannot be null")
     @NotBlank(message = "PhoneNumber cannot be empty")
     @Size(min = 5, message = "PhoneNumber는  최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     @Schema(description = "휴대전화 번호", example = "111-111-1111", required = true)
     private String PhoneNumber;
 
-    @NotNull(message = "Inquire cannot be null")
     @NotBlank(message = "Inquire cannot be empty")
     @Size(min = 5, message = "Inquire는  최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")

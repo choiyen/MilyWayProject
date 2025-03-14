@@ -20,28 +20,24 @@ public class AddressDTO
     @Schema(description  = "고객 정보 Id", example = "dfasfdsfsafasfwv!ED")
     private String AddressId;
 
-    @NotNull(message = "customer cannot be null")
     @NotBlank(message = "customer cannot be empty")
     @Size(min = 5, message = "customer는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     @Schema(description = "고객 이름", example = "홍길동", required = true)
     private String customer;
 
-    @NotNull(message = "Address cannot be null")
     @NotBlank(message = "Address cannot be empty")
     @Size(min = 5, message = "Address는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     @Schema(description = "고객 주소", example = "한국시 아주동 한국파크 101동 4121호", required = true)
     private String Address;
 
-    @NotNull(message = "phoneNumber cannot be null")
     @NotBlank(message = "phoneNumber cannot be empty")
     @Size(min = 5, message = "phoneNumber는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     @Schema(description = "고객 전화번호", example = "010-1234-1234", required = true)
     private String phoneNumber;
 
-    @NotNull(message = "SubmissionDate cannot be null")
     @NotBlank(message = "SubmissionDate cannot be empty")
     @Size(min = 5, message = "SubmissionDate는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")

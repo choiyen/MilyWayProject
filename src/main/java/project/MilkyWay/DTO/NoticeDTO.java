@@ -20,7 +20,6 @@ public class NoticeDTO
     @Schema(description = "후기에 대한 Id", example = "5555")
     private String NoticeId; // 후기 ID : primary key이자 10자리의 렌덤키
 
-    @NotNull(message = "type cannot be null")
     @NotBlank(message = "type cannot be empty")
     @Size(min = 5, max= 20, message = "ExpectionQnA는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[0-9가-힣]*$", message = "한글, 숫자만 입력 가능합니다.")
@@ -28,7 +27,6 @@ public class NoticeDTO
     @Schema(description = "어떤 유형의 일?", example = "이사청소", required = true)
     private CleanType type; // 어떤 유형의 일 : 이사청소, 입주청소, 주거청소.....
 
-    @NotNull(message = "greeting cannot be null")
     @NotBlank(message = "greeting cannot be empty")
     @Size(min = 5, max= 20, message = "greeting는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
