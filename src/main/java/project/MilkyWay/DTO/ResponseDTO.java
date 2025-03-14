@@ -18,21 +18,20 @@ public class ResponseDTO<T>
 
     public ResponseDTO<T> Response(String result, String message, List<T> list)
     {
-        ResponseDTO<T> responseDTO = ResponseDTO.<T>builder()
+        // List<T> 그대로 사용
+
+        return ResponseDTO.<T>builder()
                 .resultType(result)
                 .message(message)
                 .data(list) // List<T> 그대로 사용
                 .build();
-
-        return responseDTO;
     }
     public ResponseDTO<T> Response(String result, String message)
     {
-        ResponseDTO<T> responseDTO = ResponseDTO.<T>builder()
+        return ResponseDTO.<T>builder()
                 .resultType(result)
                 .message(message)
                 .build();
-        return responseDTO;
     }
 }
 

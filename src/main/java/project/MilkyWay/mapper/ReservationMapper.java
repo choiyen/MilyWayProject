@@ -2,7 +2,6 @@ package project.MilkyWay.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import project.MilkyWay.Entity.ReservationEntity;
-import project.MilkyWay.Entity.UserEntity;
 
 import java.util.List;
 

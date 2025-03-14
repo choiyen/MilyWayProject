@@ -10,11 +10,12 @@ import project.MilkyWay.DTO.ResponseDTO;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
 
         // Validation 오류가 발생한 필드에서 메시지를 추출
@@ -22,13 +23,13 @@ public class GlobalExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.add(errorMessage);
         });
-        String serror = "";
+        StringBuilder serror = new StringBuilder();
         for(String error : errors)
         {
-            serror += error + " ";
+            serror.append(error).append(" ");
         }
         // ErrorResponse 객체 생성
-        ResponseDTO errorResponse = new ResponseDTO<>().Response("error", serror);
+        ResponseDTO<Object> errorResponse = new ResponseDTO<>().Response("error", serror.toString());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

@@ -2,10 +2,10 @@ package project.MilkyWay.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import project.MilkyWay.Entity.QuestionsEntity;
-import project.MilkyWay.Entity.ReservationEntity;
+
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Mapper
 public interface QuestionsMapper

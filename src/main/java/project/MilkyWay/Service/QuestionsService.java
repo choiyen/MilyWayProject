@@ -9,9 +9,7 @@ import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.mapper.QuestionsMapper;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class QuestionsService //고객 질문을 관리하기 위한 DTO
@@ -55,13 +53,13 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
         }
 
     }
-    public boolean DeleteByQuestionId(Long encodingQuestionId) throws IOException {
+    public boolean DeleteByQuestionId(Long encodingQuestionId) {
         QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(encodingQuestionId);
         if(questionsEntity != null)
         {
             questionsMapper.deleteByQuestionId(encodingQuestionId);
             QuestionsEntity questionsEntity2 = questionsMapper.findByQuestionId(encodingQuestionId);
-            if(questionsEntity == null)
+            if(questionsEntity2 == null)
             {
                 return true;
             }
@@ -79,7 +77,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     public List<QuestionsEntity> findAll()
     {
         List<QuestionsEntity> list = questionsMapper.findAll();
-        if(!list.isEmpty())
+        if(!(list.isEmpty()))
         {
             return list;
         }
@@ -107,13 +105,12 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
 
     private QuestionsEntity ChangeToQuestion(QuestionsEntity questionsEntity, QuestionsEntity newQuestionEntity)
     {
-        QuestionsEntity ChangeNewQuestion = QuestionsEntity.builder()
+
+        return QuestionsEntity.builder()
                 .questionId(questionsEntity.getQuestionId())
                 .ExpectionQnA(newQuestionEntity.getExpectionQnA())
                 .ExpectedComment(newQuestionEntity.getExpectedComment())
                 .build();
-
-        return ChangeNewQuestion;
     }
 
 

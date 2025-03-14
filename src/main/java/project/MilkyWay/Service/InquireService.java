@@ -66,8 +66,7 @@ public class InquireService
     }
     private boolean existByinquireId(String inquireId)
     {
-        boolean bool = inqurieRepository.existsByInquireId(inquireId);
-        return bool;
+        return inqurieRepository.existsByInquireId(inquireId);
     }
     public List<InquireEntity> findAll()
     {
@@ -97,7 +96,7 @@ public class InquireService
             }
             else
             {
-              return bool;
+              return false;
             }
         }
         catch (Exception e)

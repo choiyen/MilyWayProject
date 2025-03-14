@@ -104,8 +104,7 @@ public class BoardService
     }
     public boolean Bool(String EncodingBoardId)
     {
-        boolean bool = boardRepository.existsByBoardId(EncodingBoardId);
-        return bool;
+        return boardRepository.existsByBoardId(EncodingBoardId);
     }
     private BoardEntity ConvertToEntity(BoardEntity beforeBoardEntity, BoardEntity boardEntity)
     {

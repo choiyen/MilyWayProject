@@ -11,7 +11,6 @@ import project.MilkyWay.Repository.BoardRepository;
 import project.MilkyWay.Repository.CommentRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CommentService
@@ -29,8 +28,7 @@ public class CommentService
             boolean bool = boardRepository.existsByBoardId(comment.getBoardId());
             if(bool)
             {
-                CommentEntity commentEntity = commentRepository.save(comment);
-                return commentEntity;
+                return commentRepository.save(comment);
             }
             else
             {
@@ -76,7 +74,7 @@ public class CommentService
         if(bool)
         {
             commentRepository.deleteByCommentId(EnCodingCommentId);
-            return  bool;
+            return true;
         }
         else
         {

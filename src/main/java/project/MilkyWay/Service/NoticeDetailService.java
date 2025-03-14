@@ -3,7 +3,6 @@ package project.MilkyWay.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.NoticeDetailEntity;
-import project.MilkyWay.Entity.NoticeEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
@@ -11,7 +10,6 @@ import project.MilkyWay.mapper.NoticeDetailMapper;
 
 
 import java.util.List;
-import java.util.UUID;
 
 
 @Service

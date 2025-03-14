@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.ReservationEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
-import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.mapper.ReservationMapper;
 
-import java.io.IOException;
+
 import java.util.List;
 
 
@@ -45,7 +44,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             throw new FindFailedException("해당 코드를 가진 예약 데이터가 존재하지 않습니다.");
         }
     }
-    public boolean DeleteReservation(String reservationId) throws IOException {
+    public boolean DeleteReservation(String reservationId) {
         ReservationEntity reservationEntity1 = reservationMapper.findByReservationId(reservationId);
         if(reservationEntity1 != null)
         {
@@ -75,7 +74,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             reservationMapper.Update(ChangeReservation);
             ReservationEntity reservationEntity2 = reservationMapper.findByReservationId(ChangeReservation.getReservationId());
             boolean check = reservationEntity2.equals(ChangeReservation);
-            if(check == true)
+            if(check)
             {
                 return reservationEntity2;
             }
@@ -91,17 +90,15 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
     }
     public ReservationEntity ReservationSelect(String reservationId)
     {
-        ReservationEntity reservationEntity = reservationMapper.findByReservationId(reservationId);
-        return reservationEntity;
+        return reservationMapper.findByReservationId(reservationId);
     }
     public List<ReservationEntity> ListReservation()
     {
-        List<ReservationEntity> list = reservationMapper.findAll();
-        return list;
+        return reservationMapper.findAll();
     }
     private ReservationEntity ChangeReservation(ReservationEntity OldReservation, ReservationEntity newReservation)
     {
-        ReservationEntity reservationEntity = ReservationEntity.builder()
+        return ReservationEntity.builder()
                 .administrationId(OldReservation.getAdministrationId())
                 .SubissionDate(newReservation.getSubissionDate())
                 .name(newReservation.getName())
@@ -110,7 +107,6 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
                 .Address(newReservation.getAddress())
                 .phone(newReservation.getPhone())
                 .build();
-        return reservationEntity;
     }
 
 

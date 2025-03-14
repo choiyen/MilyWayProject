@@ -5,9 +5,11 @@ import lombok.*;
 import project.MilkyWay.Enum.Cleandirection;
 
 import java.util.List;
-import java.util.UUID;
 
-
+/**
+ * - NoticeDTO와 NoticedetaillDTO는 1대 다 관계로 묶인다.
+ * - NotciedetaillDTO가 저장되지 않으면 NoticeDTO를 삭제하는 로직 필요
+ */
 @Entity
 @Table(name = "NoticeDetail")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -34,10 +36,3 @@ public class NoticeDetailEntity
     private String comment; // 해당 구역을 청소하고 느낀점 기록
 
 }
-
-
-
-/**
- * - NoticeDTO와 NoticedetaillDTO는 1대 다 관계로 묶인다.
- * - NotciedetaillDTO가 저장되지 않으면 NoticeDTO를 삭제하는 로직 필요
- */

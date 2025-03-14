@@ -4,10 +4,10 @@ package project.MilkyWay.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Entity.AddressEntity;
-import project.MilkyWay.Entity.AdministrationEntity;
+
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
-import project.MilkyWay.Expection.InsertFailedException;
+
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.AddressRepository;
 
@@ -22,15 +22,7 @@ public class AddressService
 
     public AddressEntity insert(AddressEntity newAddressEntity)
     {
-        AddressEntity addressEntity = addressRepository.save(newAddressEntity);
-        if(addressEntity != null)
-        {
-            return addressEntity;
-        }
-        else
-        {
-            throw new InsertFailedException("고객 주소 데이터를 저장하는데 실패했습니다.");
-        }
+        return addressRepository.save(newAddressEntity);
     }
     public AddressEntity update(AddressEntity newAddressEntity)
     {
@@ -69,7 +61,7 @@ public class AddressService
             }
             else
             {
-                return bool;
+                return true;
             }
         }
         else
@@ -79,8 +71,7 @@ public class AddressService
     }
     public AddressEntity findByAddressId(String EncodingAddressId)
     {
-        AddressEntity addressEntity = addressRepository.findByAddressId(EncodingAddressId);
-        return addressEntity;
+        return addressRepository.findByAddressId(EncodingAddressId);
     }
     public List<AddressEntity> findALL()
     {
@@ -89,13 +80,8 @@ public class AddressService
         {
             throw new FindFailedException("데이터를 찾으려고 시도했으나, 비어 있어요.");
         }
-        else if(addressEntities != null)
-        {
+        else {
             return addressEntities;
-        }
-        else
-        {
-            throw new FindFailedException("알 수 없는 오류로 데이터베이스 정보를 찾을 수 없습니다.");
         }
     }
     private AddressEntity ConvertToEntity(AddressEntity oldAddressEntity, AddressEntity newAddressEntity)
