@@ -66,18 +66,6 @@ public class UserService //관리자 아이디를 관리하는 DTO
           throw new DeleteFailedException("삭제할 아이디가 없거나 정보가 틀립니다.");
       }
   }
-  public UserEntity findUserId(String userId)
-  {
-      UserEntity user = userMapper.FindByUserId(userId);
-      if(user != null)
-      {
-          return user;
-      }
-      else
-      {
-          throw new DeleteFailedException("해당 정보의 회원은 존재하지 않아요.");
-      }
-  }
   public List<UserEntity> findEmail(String email)
   {
       System.out.println(email);

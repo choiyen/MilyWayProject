@@ -9,6 +9,7 @@ import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.AdministrationRepository;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,6 +51,14 @@ public class AdministrationService
         {
             throw new FindFailedException("기존 데이터를 찾을 수 없습니다.");
         }
+    }
+    public boolean exists(String EncodingAdminsistrationId)
+    {
+        return administrationRepository.existsByAdministrationId(EncodingAdminsistrationId);
+    }
+    public boolean existsByDate(Date AdminsistrationDate)
+    {
+        return administrationRepository.existsByAdministrationDate(AdminsistrationDate);
     }
     public boolean Delete(String EncodingAdministrationId)
     {

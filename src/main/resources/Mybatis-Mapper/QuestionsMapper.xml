@@ -6,16 +6,16 @@
     <select id="findAll" resultType="project.MilkyWay.Entity.QuestionsEntity">
         SELECT * FROM Question
     </select>
-    <select id="findByQuestionId" parameterType="String" resultType="project.MilkyWay.Entity.QuestionsEntity">
-        SELECT * FROM Question WHERE questionId = #{questionId}
+    <select id="findById" parameterType="java.lang.Long" resultType="project.MilkyWay.Entity.QuestionsEntity">
+        SELECT * FROM Question WHERE Id = #{id}
     </select>
-    <delete id="deleteByQuestionId" parameterType="String">
-        DELETE * FROM Question WHERE questionId = #{questionId}
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM Question WHERE Id = #{id}
     </delete>
     <insert id="Insert" parameterType="project.MilkyWay.Entity.QuestionsEntity"  useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO Question(questionId, Qestion, Comment) VALUES(#{questionId}, #{Qestion}, #{Comment})
+        INSERT INTO Question(exceptionQA, expectedComment) VALUES(#{exceptionQA}, #{expectedComment})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.Entity.QuestionsEntity">
-        UPDATE Question SET Question = #{Question}, Comment = #{Comment} WHERE questionId = #{questionId}
+        UPDATE Question SET exceptionQA = #{exceptionQA}, expectedComment = #{expectedComment} WHERE Id = #{id}
     </update>
 </mapper>

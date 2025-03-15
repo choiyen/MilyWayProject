@@ -24,8 +24,6 @@ public class ReservationEntity
     private String administrationId;
     @Column(name = "acreage") //청소 유형
     private String acreage;
-    @Column(name = "roomcount")
-    private String roomcount; // 방/화장실/베란다 갯수를 기록하기 위한 것
     @Column(name = "name")
     private String name; // 고객의 이름
     @Column(name = "phone")
@@ -43,7 +41,6 @@ public class ReservationEntity
         return Objects.equals(reservationId, reservationEntity.reservationId) &&
                 Objects.equals(administrationId, reservationEntity.administrationId) &&
                 Objects.equals(acreage, reservationEntity.acreage) &&
-                Objects.equals(roomcount, reservationEntity.roomcount) &&
                 Objects.equals(name, reservationEntity.name) &&
                 Objects.equals(phone, reservationEntity.phone) &&
                 Objects.equals(Address, reservationEntity.Address) &&
@@ -52,7 +49,7 @@ public class ReservationEntity
 
     @Override
     public int hashCode() {
-        return Objects.hash(reservationId, administrationId, acreage, roomcount, name, phone, Address, SubissionDate);
+        return Objects.hash(reservationId, administrationId, acreage, name, phone, Address, SubissionDate);
     }
 
 }

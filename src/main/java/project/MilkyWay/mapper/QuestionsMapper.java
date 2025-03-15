@@ -11,8 +11,8 @@ import java.util.List;
 public interface QuestionsMapper
 {
     List<QuestionsEntity> findAll();
-    QuestionsEntity findByQuestionId(Long questionId);
-    void deleteByQuestionId(Long questionId);
+    QuestionsEntity findById(Long Id);
+    void deleteById(Long Id);
     void Insert(QuestionsEntity questionsEntity);
     void Update(QuestionsEntity questionsEntity);
 

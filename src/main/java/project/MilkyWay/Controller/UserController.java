@@ -45,7 +45,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> UserInsert(@Valid @RequestBody UserDTO userDTO)
+    public ResponseEntity<?> UserInsert(@RequestBody @Valid UserDTO userDTO)
     {
         try
         {
@@ -75,7 +75,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PutMapping("/Update")
-    public ResponseEntity<?> UserUpdate(@Valid @RequestBody UserDTO NewuserDTO)
+    public ResponseEntity<?> UserUpdate(@RequestBody @Valid UserDTO NewuserDTO)
     {
         try
         {

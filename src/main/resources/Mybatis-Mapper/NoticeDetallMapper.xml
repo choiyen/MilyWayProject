@@ -10,7 +10,7 @@
         SELECT * FROM NoticeDetail WHERE NoticeDetailId = #{NoticeDetailId}
     </select>
     <delete id="deleteByNoticeDetailId" parameterType="String">
-        DELETE * FROM NoticeDetail WHERE NoticeDetailId = #{NoticeDetailId}
+        DELETE FROM NoticeDetail WHERE NoticeDetailId = #{NoticeDetailId}
     </delete>
     <insert id="Insert" parameterType="project.MilkyWay.Entity.QuestionsEntity"  useGeneratedKeys="true" keyProperty="id">
         INSERT INTO NoticeDetail(NoticeId, direction, beforeURL,afterURL,comment ) VALUES(#{NoticeId}, #{direction}, #{beforeURL}, #{afterURL}, #{comment})

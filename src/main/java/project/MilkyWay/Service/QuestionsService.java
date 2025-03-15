@@ -20,7 +20,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     public QuestionsEntity Insertquestion(QuestionsEntity newQuestionEntity)
     {
         questionsMapper.Insert(newQuestionEntity);
-        QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(newQuestionEntity.getQuestionId());
+        QuestionsEntity questionsEntity = questionsMapper.findById(newQuestionEntity.getId());
         if(questionsEntity != null)
         {
             return  questionsEntity;
@@ -32,13 +32,13 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     }
     public QuestionsEntity updatequestion(Long encodingquestionId, QuestionsEntity newQuestionEntity)
     {
-        QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(encodingquestionId);
+        QuestionsEntity questionsEntity = questionsMapper.findById(encodingquestionId);
         if(questionsEntity != null)
         {
             QuestionsEntity changeQuestionEntity = ChangeToQuestion(questionsEntity, newQuestionEntity);
             questionsMapper.Update(changeQuestionEntity);
-            QuestionsEntity ChangeDate = questionsMapper.findByQuestionId(encodingquestionId);
-            if(ChangeDate.getQuestionId().equals(changeQuestionEntity.getQuestionId()) && ChangeDate.getExpectionQnA().equals(changeQuestionEntity.getExpectionQnA())&&ChangeDate.getExpectedComment().equals(changeQuestionEntity.getExpectedComment()))
+            QuestionsEntity ChangeDate = questionsMapper.findById(encodingquestionId);
+            if(ChangeDate.getId().equals(changeQuestionEntity.getId()) && ChangeDate.getExceptionQA().equals(changeQuestionEntity.getExceptionQA())&&ChangeDate.getExpectedComment().equals(changeQuestionEntity.getExpectedComment()))
             {
                 return ChangeDate;
             }
@@ -54,11 +54,11 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
 
     }
     public boolean DeleteByQuestionId(Long encodingQuestionId) {
-        QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(encodingQuestionId);
+        QuestionsEntity questionsEntity = questionsMapper.findById(encodingQuestionId);
         if(questionsEntity != null)
         {
-            questionsMapper.deleteByQuestionId(encodingQuestionId);
-            QuestionsEntity questionsEntity2 = questionsMapper.findByQuestionId(encodingQuestionId);
+            questionsMapper.deleteById(encodingQuestionId);
+            QuestionsEntity questionsEntity2 = questionsMapper.findById(encodingQuestionId);
             if(questionsEntity2 == null)
             {
                 return true;
@@ -92,7 +92,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     }
     public QuestionsEntity SelectQuestion(Long encodingquestionId)
     {
-        QuestionsEntity questionsEntity = questionsMapper.findByQuestionId(encodingquestionId);
+        QuestionsEntity questionsEntity = questionsMapper.findById(encodingquestionId);
         if(questionsEntity != null)
         {
             return questionsEntity;
@@ -107,9 +107,9 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     {
 
         return QuestionsEntity.builder()
-                .questionId(questionsEntity.getQuestionId())
-                .ExpectionQnA(newQuestionEntity.getExpectionQnA())
-                .ExpectedComment(newQuestionEntity.getExpectedComment())
+                .id(questionsEntity.getId())
+                .exceptionQA(newQuestionEntity.getExceptionQA())
+                .expectedComment(newQuestionEntity.getExpectedComment())
                 .build();
     }
 

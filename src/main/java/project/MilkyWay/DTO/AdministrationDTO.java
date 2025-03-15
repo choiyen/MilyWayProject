@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import project.MilkyWay.Enum.DateType;
 
 import java.util.Date;
 
@@ -29,5 +30,5 @@ public class AdministrationDTO
     @Size(min = 5, message = "adminstrationType는 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
     @Schema(description = "일정 유형", example = "휴일")
-    private String adminstrationType; // 일정의 유형 - 휴일, 일하는 날, 현재 비어있는 날
+    private DateType adminstrationType; // 일정의 유형 - 휴일, 일하는 날, 현재 비어있는 날
 }

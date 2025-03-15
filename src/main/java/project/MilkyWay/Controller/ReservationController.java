@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.DTO.*;
+import project.MilkyWay.Entity.AdministrationEntity;
 import project.MilkyWay.Entity.ReservationEntity;
+import project.MilkyWay.Enum.DateType;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
+import project.MilkyWay.Service.AdministrationService;
 import project.MilkyWay.Service.ReservationService;
 
 import java.util.ArrayList;
@@ -32,6 +35,10 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
 
     ResponseDTO<ReservationDTO> responseDTO = new ResponseDTO<>();
 
+    @Autowired
+    AdministrationService administrationService;
+
+
 
     @Operation(
             summary = "Create a new reservation",  // Provide a brief summary
@@ -45,31 +52,35 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@Valid @RequestBody ReservationDTO reservationDTO)
-    {
+    public ResponseEntity<?> Insert(@Valid @RequestBody ReservationDTO reservationDTO) {
         try
         {
-            ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
-            ReservationEntity reservationEntity2 = reservationService.InsertReservation(reservationEntity);
-            if(reservationEntity2 != null)
+            AdministrationEntity administration = administrationService.FindByAdministration(reservationDTO.getAdministrationId());
+            if(administration.getAdminstrationType() == DateType.일하는날)
             {
-                ReservationDTO reservationDTO1 = ConvertToDTO(reservationEntity2);
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 추가에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
+                throw new InsertFailedException("다른 일정이 있는 것 같으니, 일정 표를 확인해주세요");
             }
             else
             {
-                throw new InsertFailedException();
+                ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
+                ReservationEntity reservationEntity2 = reservationService.InsertReservation(reservationEntity);
+                if (reservationEntity2 != null)
+                {
+                    ReservationDTO reservationDTO1 = ConvertToDTO(reservationEntity2);
+                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 추가에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
+                } else {
+                    throw new InsertFailedException();
+                }
             }
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error","예약 데이터 추가에 실패했습니다."));
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", "예약 데이터 추가에 실패했습니다."));
         }
     }
 
 
     @Operation(
-            summary =  "Change a ReservationDTO by ReservationId",  // Provide a brief summary
+            summary = "Change a ReservationDTO by ReservationId",  // Provide a brief summary
             description = "This API Change a Reservation and returns ReservationDTO as response",  // Provide detailed description
             responses = {
                     @ApiResponse(responseCode = "201", description = "Reservation Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservationDTO.class))),
@@ -80,25 +91,19 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             }
     )
     @PutMapping("/Update")
-    public ResponseEntity<?> Update(@Valid @RequestBody ReservationDTO reservationDTO)
-    {
+    public ResponseEntity<?> Update(@Valid @RequestBody ReservationDTO reservationDTO) {
         try
         {
             ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
             ReservationEntity reservationEntity2 = reservationService.SaveReservation(reservationEntity);
-            if(reservationEntity2 != null)
-            {
+            if (reservationEntity2 != null) {
                 ReservationDTO reservationDTO1 = ConvertToDTO(reservationEntity2);
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 추가에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
-            }
-            else
-            {
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 추가에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
+            } else {
                 throw new InsertFailedException();
             }
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
 
@@ -112,29 +117,22 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description ="Reservation not found"
+                            description = "Reservation not found"
                     )
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String ReservationId)
-    {
-      try
-      {
-          boolean bool = reservationService.DeleteReservation(ReservationId);
-          if(bool)
-          {
-              return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제에 성공하였습니다."));
-          }
-          else
-          {
-              throw new DeleteFailedException();
-          }
-      }
-      catch (Exception e)
-      {
-          return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
-      }
+    public ResponseEntity<?> Delete(@RequestBody String ReservationId) {
+        try {
+            boolean bool = reservationService.DeleteReservation(ReservationId);
+            if (bool) {
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제에 성공하였습니다."));
+            } else {
+                throw new DeleteFailedException();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
     }
 
 
@@ -146,32 +144,54 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "Reservation List not found")
             }
     )
-    @GetMapping
-    public ResponseEntity<?> FindAll()
-    {
-        try
-        {
+    @GetMapping("/Find")
+    public ResponseEntity<?> FindAll() {
+        try {
             List<ReservationEntity> reservationEntities = reservationService.ListReservation();
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
-            for(ReservationEntity reservationEntity : reservationEntities)
-            {
+            for (ReservationEntity reservationEntity : reservationEntities) {
                 reservationDTOS.add(ConvertToDTO(reservationEntity));
             }
-            if(reservationDTOS.isEmpty())
-            {
+            if (reservationDTOS.isEmpty()) {
                 throw new FindFailedException("데이터 찾기를 시도했는데, 비어있어요ㅠㅠㅠ");
+            } else {
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회에 성공했습니다.", reservationDTOS));
             }
-            else
-            {
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 조회에 성공했습니다.",reservationDTOS));
-            }
-        } 
-        catch (Exception e) 
-        {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
 
+    @GetMapping("/FindBy")
+    public ResponseEntity<?> FindBy(@RequestParam String ReservationId) {
+        try {
+            ReservationEntity reservationEntity = reservationService.ReservationSelect(ReservationId);
+            if (reservationEntity == null) {
+                throw new FindFailedException("결과를 찾을 수 없습니다.");
+            } else {
+                ReservationDTO reservationDTO = ConvertToDTO(reservationEntity);
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료", Collections.singletonList(reservationDTO)));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping
+    ResponseEntity<?> FindByAdmin(@RequestParam String AdminstrationId)
+    {
+        try {
+            ReservationEntity reservationEntity = reservationService.SelectAdminstrationID(AdminstrationId);
+            if (reservationEntity == null) {
+                throw new FindFailedException("결과를 찾을 수 없습니다.");
+            } else {
+                ReservationDTO reservationDTO = ConvertToDTO(reservationEntity);
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료", Collections.singletonList(reservationDTO)));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
+    }
     private ReservationDTO ConvertToDTO(ReservationEntity reservationEntity2)
     {
         return ReservationDTO.builder()
@@ -180,7 +200,6 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 .phone(reservationEntity2.getPhone())
                 .Address(reservationEntity2.getAddress())
                 .name(reservationEntity2.getName())
-                .roomcount(reservationEntity2.getRoomcount())
                 .acreage(reservationEntity2.getAcreage())
                 .SubissionDate(reservationEntity2.getSubissionDate())
                 .build();
@@ -194,7 +213,6 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 .phone(reservationDTO.getPhone())
                 .Address(reservationDTO.getAddress())
                 .name(reservationDTO.getName())
-                .roomcount(reservationDTO.getRoomcount())
                 .acreage(reservationDTO.getAcreage())
                 .SubissionDate(reservationDTO.getSubissionDate())
                 .build();

@@ -2,6 +2,7 @@ package project.MilkyWay.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import project.MilkyWay.Enum.DateType;
 
 import java.util.Date;
 import java.util.Objects;
@@ -21,7 +22,7 @@ public class AdministrationEntity
     @Column(name= "Date", nullable = false, unique = true)
     private Date administrationDate; //일정을 기록할 id
     @Column(name= "Type", nullable = false)
-    private String adminstrationType; // 일정의 유형 - 휴일, 일하는 날, 현재 비어있는 날
+    private DateType adminstrationType; // 일정의 유형 - 휴일, 일하는 날, 현재 비어있는 날
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "administrationId", referencedColumnName = "administrationId", updatable = false, insertable = false)

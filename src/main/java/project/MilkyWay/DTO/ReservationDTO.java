@@ -31,12 +31,6 @@ public class ReservationDTO //고객의 예약을 관리하기 위한 DTO
     @Schema(description = "실 평수", example = "25평")
     String acreage;
 
-    @NotBlank(message = "roomcount cannot be empty")
-    @Size(min = 5, max= 50, message = "Roomcount는 최소 다섯자리 이상 입력해야 함.")
-    @Pattern(regexp = "^[가-힣0-9]+$", message = "roomcount는 한글과 숫자만 입력 가능합니다.")
-    @Schema(description = "대략 적으로 방별로 몇개가 있는가?", example = "방3/화장실2/베란다2/부엌1")
-    String roomcount; // 방/화장실/베란다 갯수를 기록하기 위한 것
-
     @NotBlank(message = "name cannot be empty")
     @Size(min = 5, max= 10, message = "이름은 최소 다섯자리 이상 입력해야 함.")
     @Pattern(regexp = "^[가-힣0-9]+$", message = "name은 한글과 숫자만 입력 가능합니다.")

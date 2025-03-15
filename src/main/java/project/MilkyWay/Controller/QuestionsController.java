@@ -45,13 +45,14 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
     )
     @PostMapping("/Insert")
-    public  ResponseEntity<?> QuestionInsert(@Valid  @RequestBody QuestionsDTO questionsDTO)
+    public  ResponseEntity<?> QuestionInsert(@RequestBody @Valid QuestionsDTO questionsDTO)
     {
         try
         {
             QuestionsEntity questionsEntity = ConVertToEntity(questionsDTO);
             QuestionsEntity questionsEntity1 = questionsService.Insertquestion(questionsEntity);
             QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
+            System.out.println(questionsEntity1);
             return ResponseEntity.badRequest().body(responseDTO.Response("success", "질문 등록에 성공하였습니다." , Collections.singletonList(questionsDTO1)));
         }
         catch (Exception e)
@@ -73,13 +74,13 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
     )
     @PutMapping("/Update")
-    public ResponseEntity<?> QuestionUpdate(@Valid @RequestBody QuestionsDTO newquestionsDTO)
+    public ResponseEntity<?> QuestionUpdate(@RequestBody @Valid QuestionsDTO newquestionsDTO)
     {
         try
         {
-
+                System.out.println(newquestionsDTO);
                 QuestionsEntity questionsEntity = ConVertToEntity(newquestionsDTO);
-                QuestionsEntity questionsEntity1 = questionsService.updatequestion(questionsEntity.getQuestionId(), questionsEntity);
+                QuestionsEntity questionsEntity1 = questionsService.updatequestion(questionsEntity.getId(), questionsEntity);
                 if(questionsEntity1 != null)
                 {
                     QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
@@ -112,7 +113,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> QuestionDelete(@RequestBody Long QuestionId)
+    public ResponseEntity<?> QuestionDelete(@RequestParam Long QuestionId)
     {
         try
         {
@@ -143,7 +144,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> QuestionFind(@Valid @RequestBody Long QuestionId)
+    public ResponseEntity<?> QuestionFind(@RequestParam Long QuestionId)
     {
         try
         {
@@ -172,7 +173,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "Questions List not found")
             }
     )
-    @PostMapping("/FindAll")
+    @PostMapping("/FindALL")
     public ResponseEntity<?> QuestionFindAll()
     {
         try
@@ -200,16 +201,17 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
     private QuestionsEntity ConVertToEntity(QuestionsDTO questionsDTO)
     {
         return QuestionsEntity.builder()
-                .ExpectionQnA(questionsDTO.getExpectionQnA())
-                .ExpectedComment(questionsDTO.getExpectedComment())
+                .id(questionsDTO.getId())
+                .exceptionQA(questionsDTO.getExceptionQA())
+                .expectedComment(questionsDTO.getExpectedComment())
                 .build();
     }
     private QuestionsDTO ConVertToDTO(QuestionsEntity questionsEntity)
     {
         return QuestionsDTO.builder()
-                .questionId(questionsEntity.getQuestionId())
-                .ExpectionQnA(questionsEntity.getExpectionQnA())
-                .ExpectedComment(questionsEntity.getExpectedComment())
+                .id(questionsEntity.getId())
+                .exceptionQA(questionsEntity.getExceptionQA())
+                .expectedComment(questionsEntity.getExpectedComment())
                 .build();
     }
 }
