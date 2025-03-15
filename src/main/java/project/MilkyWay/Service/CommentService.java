@@ -2,6 +2,8 @@ package project.MilkyWay.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import project.MilkyWay.Entity.CommentEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
@@ -10,6 +12,7 @@ import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.BoardRepository;
 import project.MilkyWay.Repository.CommentRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,10 +24,10 @@ public class CommentService
     @Autowired
     BoardRepository boardRepository;
 
+
     public CommentEntity Insert(CommentEntity comment)
     {
-        try
-        {
+
             boolean bool = boardRepository.existsByBoardId(comment.getBoardId());
             if(bool)
             {
@@ -34,16 +37,11 @@ public class CommentService
             {
                 throw new FindFailedException("추가하는데 필요한 질문 게시판 정보를 찾을 수 없어요.");
             }
-        }
-        catch (Exception e)
-        {
-            throw  new InsertFailedException();
-        }
+
     }
     public CommentEntity Update(Long EncodingcommentId, CommentEntity comment)
     {
-        try
-        {
+
            CommentEntity commentEntity = commentRepository.findByCommentId(EncodingcommentId);
            if(commentEntity != null)
            {
@@ -62,12 +60,8 @@ public class CommentService
            {
                throw new FindFailedException("댓글 내역을 찾을 수 없습니다.");
            }
-        }
-        catch (Exception e)
-        {
-            throw new UpdateFailedException();
-        }
     }
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean Delete(Long EnCodingCommentId)
     {
         boolean bool = commentRepository.existsByCommentId(EnCodingCommentId);
@@ -96,7 +90,8 @@ public class CommentService
     }
     public List<CommentEntity> FindByBoardId(String EnCodingBoardId)
     {
-        List<CommentEntity> commentEntities = commentRepository.findByBoardId(EnCodingBoardId);
+        List<CommentEntity> commentEntities = new ArrayList<>(commentRepository.findByBoardId(EnCodingBoardId));
+
         if(commentEntities.isEmpty())
         {
             throw new FindFailedException("데이터 조회에는 성공하였으나, 조회 결과가 없습니다.");

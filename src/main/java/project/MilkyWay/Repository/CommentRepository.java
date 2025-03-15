@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, String>
 {
+
     CommentEntity findByCommentId(Long commentId);
     List<CommentEntity> findByBoardId(String BoardId);
     boolean existsByCommentId(Long commentId);

@@ -3,7 +3,7 @@ package project.MilkyWay.Enum;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class EnumValidator implements ConstraintValidator<EnumValue, String> {
+public class EnumValidator implements ConstraintValidator<EnumValue, Enum<?>> {
 
     private Class<? extends Enum<?>> enumClass;
 
@@ -13,7 +13,7 @@ public class EnumValidator implements ConstraintValidator<EnumValue, String> {
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(Enum<?> value, ConstraintValidatorContext context) {
         if (value == null) {
             return true; // Null은 허용하도록 설정할 수도 있습니다
         }
@@ -21,7 +21,7 @@ public class EnumValidator implements ConstraintValidator<EnumValue, String> {
         // enum 값들 중 하나인지 확인
         Object[] enumValues = enumClass.getEnumConstants();
         for (Object enumValue : enumValues) {
-            if (enumValue.toString().equals(value)) {
+            if (enumValue.equals(value)) {
                 return true; // 값이 enum에 포함되면 유효
             }
         }

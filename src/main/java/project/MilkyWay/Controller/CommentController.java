@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.DTO.CommentDTO;
 import project.MilkyWay.DTO.ResponseDTO;
 import project.MilkyWay.Entity.CommentEntity;
+import project.MilkyWay.Enum.UserType;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
@@ -50,10 +51,12 @@ public class CommentController
     {
         try
         {
+            System.out.println(commentDTO);
             boolean bool = boardService.Bool(commentDTO.getBoardId());
             if(bool)
             {
                 CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
+
                 CommentEntity comment = commentService.Insert(commentEntity);
                 if(comment != null)
                 {
@@ -129,7 +132,7 @@ public class CommentController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody Long CommentId)
+    public ResponseEntity<?> Delete(@RequestParam Long CommentId)
     {
         try
         {
@@ -158,7 +161,7 @@ public class CommentController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindByCommentId(@RequestBody Long CommentId)
+    public ResponseEntity<?> FindByCommentId(@RequestParam Long CommentId)
     {
         try
         {
@@ -189,7 +192,7 @@ public class CommentController
             }
     )
     @PostMapping("/Select")
-    public ResponseEntity<?> SelectByBoardId(@RequestBody String BoardId)
+    public ResponseEntity<?> SelectByBoardId(@RequestParam String BoardId)
     {
         try
         {
@@ -218,7 +221,7 @@ public class CommentController
     private CommentDTO ConvertToCommentDTO(CommentEntity comment)
     {
         return CommentDTO.builder()
-                .type(comment.getType())
+                .type(UserType.valueOf(comment.getType()))
                 .commentId(comment.getCommentId())
                 .boardId(comment.getBoardId())
                 .comment(comment.getComment())
@@ -228,7 +231,7 @@ public class CommentController
     private CommentEntity ConvertToCommentEntity(@Valid CommentDTO commentDTO)
     {
         return CommentEntity.builder()
-                .type(commentDTO.getType())
+                .type(String.valueOf(commentDTO.getType()))
                 .commentId(commentDTO.getCommentId())
                 .boardId(commentDTO.getBoardId())
                 .comment(commentDTO.getComment())
