@@ -3,6 +3,8 @@ package project.MilkyWay.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import project.MilkyWay.Entity.BoardEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
@@ -53,6 +55,7 @@ public class BoardService
         }
 
     }
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean Delete(String EncodingBoardId)
     {
         boolean bool = boardRepository.existsByBoardId(EncodingBoardId);

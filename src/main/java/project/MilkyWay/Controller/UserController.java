@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/user")
 @Tag(name = "유저 정보를 제공하는 Controller")
 public class UserController //관리자 아이디를 관리하는 DTO
-{
+{ //1차 Test 완료 - 보안 설정 후 재테스트
     private final ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
 
     @Autowired

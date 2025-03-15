@@ -113,7 +113,7 @@ public class BoardController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String BoardId)
+    public ResponseEntity<?> Delete(@RequestParam String BoardId)
     {
         try
         {
@@ -177,10 +177,11 @@ public class BoardController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindByBoardId(@RequestBody String BoardId)
+    public ResponseEntity<?> FindByBoardId(@RequestParam String BoardId)
     {
         try 
         {
+            System.out.println(BoardId);
             BoardEntity boardEntity = boardService.FindByBoardId(BoardId);
             if(boardEntity != null)
             {
