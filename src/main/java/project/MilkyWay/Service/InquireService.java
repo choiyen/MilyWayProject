@@ -2,6 +2,8 @@ package project.MilkyWay.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import project.MilkyWay.Entity.InquireEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
@@ -20,14 +22,19 @@ public class InquireService
 
     public InquireEntity Insert(InquireEntity inquireEntity)
     {
-        InquireEntity inquireEntity1 = inqurieRepository.save(inquireEntity);
-        if(inquireEntity1 != null)
+        boolean bool = inqurieRepository.existsByInquireId(inquireEntity.getInquireId());
+        if(bool)
         {
-            return inquireEntity1;
+            throw new FindFailedException("해당 inquireId를 가진 정보는 이미 존재해요.");
         }
         else
         {
-            throw new InsertFailedException("날짜 가능 문의 등록이 실패하였습니다.");
+            InquireEntity inquireEntity1 = inqurieRepository.save(inquireEntity);
+            if (inquireEntity1 != null) {
+                return inquireEntity1;
+            } else {
+                throw new InsertFailedException("날짜 가능 문의 등록이 실패하였습니다.");
+            }
         }
     }
     public InquireEntity Update(String encodinginquireId,InquireEntity inquireEntity)
@@ -84,33 +91,30 @@ public class InquireService
             throw new FindFailedException("알 수 없는 오류로 데이터 조회에 실패하였습니다.");
         }
     }
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean Delete(String encodingInquireId)
     {
-        try
-        {
-            inqurieRepository.deleteByInquireId(encodingInquireId);
-            boolean bool = existByinquireId(encodingInquireId);
-            if(bool)
-            {
-                throw new DeleteFailedException("데이터 삭제에 실패한 것 같아요. 다시 시도해주세요.");
+            if(inqurieRepository.existsByInquireId(encodingInquireId)) {
+                inqurieRepository.deleteByInquireId(encodingInquireId);
+                boolean bool = existByinquireId(encodingInquireId);
+                if (bool) {
+                    throw new DeleteFailedException("데이터 삭제에 실패한 것 같아요. 다시 시도해주세요.");
+                } else {
+                    return true;
+                }
             }
             else
             {
-              return false;
+                throw new FindFailedException("이미 삭제가 되었거나, 삭제할 문의 Id를 찾을 수 없습니다.");
             }
-        }
-        catch (Exception e)
-        {
-            throw new DeleteFailedException("데이터 삭제에 실패하였습니다.");
-        }
     }
     private InquireEntity ConvertToNew(InquireEntity oldinquireEntity, InquireEntity newinquireEntity)
     {
         return InquireEntity.builder()
                 .inquireId(oldinquireEntity.getInquireId())
-                .Inquire(newinquireEntity.getInquire())
-                .PhoneNumber(newinquireEntity.getPhoneNumber())
-                .Address(newinquireEntity.getAddress())
+                .inquire(newinquireEntity.getInquire())
+                .phoneNumber(newinquireEntity.getPhoneNumber())
+                .address(newinquireEntity.getAddress())
                 .build();
     }
 

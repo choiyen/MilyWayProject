@@ -2,6 +2,8 @@ package project.MilkyWay.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import project.MilkyWay.Entity.QuestionsEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
@@ -53,6 +55,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
         }
 
     }
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean DeleteByQuestionId(Long encodingQuestionId) {
         QuestionsEntity questionsEntity = questionsMapper.findById(encodingQuestionId);
         if(questionsEntity != null)

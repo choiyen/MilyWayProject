@@ -19,12 +19,12 @@ public class InquireEntity
     @Id
     @Column(name = "inquireId")
     private String inquireId;
-    @Column(name = "Address", nullable = false)
-    private String Address;
-    @Column(name = "PhoneNumber", nullable = false)
-    private String PhoneNumber;
-    @Column(name = "Inqurie", nullable = false)
-    private String Inquire;
+    @Column(name = "address", nullable = false)
+    private String address;
+    @Column(name = "phoneNumber", nullable = false)
+    private String phoneNumber;
+    @Column(name = "inquire", nullable = false)
+    private String inquire;
 
 
     @Override
@@ -33,14 +33,14 @@ public class InquireEntity
         if (o == null || getClass() != o.getClass()) return false;
         InquireEntity InquireEntity = (InquireEntity) o;
         return Objects.equals(inquireId, InquireEntity.inquireId) &&
-                Objects.equals(Address, InquireEntity.Address) &&
-                Objects.equals(PhoneNumber, InquireEntity.PhoneNumber) &&
-                Objects.equals(Inquire, InquireEntity.Inquire);
+                Objects.equals(address, InquireEntity.address) &&
+                Objects.equals(phoneNumber, InquireEntity.phoneNumber) &&
+                Objects.equals(inquire, InquireEntity.inquire);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inquireId, Address, PhoneNumber, Inquire);
+        return Objects.hash(inquireId, address, phoneNumber, inquire);
     }
 }
 //고객의 상담을 받기 위한 Entity니까, 따로 묶을 이유는 없음(그 날짜가 상담 가능한 날짜인지만 확인하면 됨)

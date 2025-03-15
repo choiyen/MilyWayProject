@@ -58,12 +58,12 @@ public class InqurieController
             }
             else
             {
-                throw new InsertFailedException();
+                throw new InsertFailedException("inquire 저장에 실패했는지, 정보를 가져올 수 없어요");
             }
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error","에러가 발생함"));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
 
@@ -119,18 +119,18 @@ public class InqurieController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String EncodingInqurieId)
+    public ResponseEntity<?> Delete(@RequestParam String inqurieId)
     {
         try
         {
-            boolean bool = inquireService.Delete(EncodingInqurieId);
+            boolean bool = inquireService.Delete(inqurieId);
             if(bool)
             {
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제에 성공했습니다."));
             }
             else
             {
-                throw new DeleteFailedException();
+                throw new DeleteFailedException("이미 삭제가 진행된 상태입니다.");
             }
         }
         catch (Exception e)
@@ -175,8 +175,8 @@ public class InqurieController
                     @ApiResponse(responseCode = "404", description = "Inquire not found")
             }
     )
-    @PostMapping("/select")
-    public ResponseEntity<?> FindById(@RequestBody String InquireId)
+    @GetMapping("/select")
+    public ResponseEntity<?> FindById(@RequestParam String InquireId)
     {
         try
         {
@@ -202,18 +202,18 @@ public class InqurieController
     {
         return InquireEntity.builder()
                 .inquireId(inquireDTO.getInquireId())
-                .Address(inquireDTO.getAddress())
-                .PhoneNumber(inquireDTO.getPhoneNumber())
-                .Inquire(inquireDTO.getInquire())
+                .address(inquireDTO.getAddress())
+                .phoneNumber(inquireDTO.getPhoneNumber())
+                .inquire(inquireDTO.getInquire())
                 .build();
     }
     private InquireDTO ConvertToDTO(InquireEntity inquireEntity)
     {
         return InquireDTO.builder()
                 .inquireId(inquireEntity.getInquireId())
-                .Address(inquireEntity.getAddress())
-                .PhoneNumber(inquireEntity.getPhoneNumber())
-                .Inquire(inquireEntity.getInquire())
+                .address(inquireEntity.getAddress())
+                .phoneNumber(inquireEntity.getPhoneNumber())
+                .inquire(inquireEntity.getInquire())
                 .build();
     }
 
