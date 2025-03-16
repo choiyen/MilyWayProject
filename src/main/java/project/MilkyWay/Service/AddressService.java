@@ -3,11 +3,14 @@ package project.MilkyWay.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import project.MilkyWay.Entity.AddressEntity;
 
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 
+import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.AddressRepository;
 
@@ -22,7 +25,14 @@ public class AddressService
 
     public AddressEntity insert(AddressEntity newAddressEntity)
     {
-        return addressRepository.save(newAddressEntity);
+        if(addressRepository.existsByAddressId(newAddressEntity.getAddressId()))
+        {
+            throw new InsertFailedException("같은 주소Id를 가진 데이터가 존재합니다. 변경 후 시도해주세요.");
+        }
+        else
+        {
+            return addressRepository.save(newAddressEntity);
+        }
     }
     public AddressEntity update(AddressEntity newAddressEntity)
     {
@@ -47,7 +57,7 @@ public class AddressService
         }
     }
 
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean Delete(String EncodingAddressId)
     {
         boolean bool = addressRepository.existsByAddressId(EncodingAddressId);
@@ -88,10 +98,10 @@ public class AddressService
     {
         return AddressEntity.builder()
                 .addressId(oldAddressEntity.getAddressId())
-                .Address(newAddressEntity.getAddress())
+                .address(newAddressEntity.getAddress())
                 .phoneNumber(newAddressEntity.getPhoneNumber())
                 .customer(newAddressEntity.getCustomer())
-                .SubmissionDate(newAddressEntity.getSubmissionDate())
+                .submissionDate(newAddressEntity.getSubmissionDate())
                 .build();
     }
 }

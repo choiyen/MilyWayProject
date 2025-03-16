@@ -2,6 +2,8 @@ package project.MilkyWay.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import project.MilkyWay.Entity.AdministrationEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
@@ -9,6 +11,7 @@ import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.AdministrationRepository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -56,10 +59,11 @@ public class AdministrationService
     {
         return administrationRepository.existsByAdministrationId(EncodingAdminsistrationId);
     }
-    public boolean existsByDate(Date AdminsistrationDate)
+    public boolean existsByDate(LocalDate AdminsistrationDate)
     {
         return administrationRepository.existsByAdministrationDate(AdminsistrationDate);
     }
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean Delete(String EncodingAdministrationId)
     {
         boolean bool = administrationRepository.existsByAdministrationId(EncodingAdministrationId);
@@ -78,7 +82,7 @@ public class AdministrationService
         }
         else
         {
-            throw new FindFailedException("해당 코드로 삭제할 수 있는 게시판이 존재하지 않아요");
+            throw new FindFailedException("해당 코드로 삭제할 수 있는 일정표가 존재하지 않아요");
         }
     }
     public List<AdministrationEntity> FindAll()

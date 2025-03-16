@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -31,7 +32,7 @@ public class ReservationEntity
     @Column(name = "Address")
     private String Address; // 주소(암호화 처리 필요)
     @Column(name = "Subission")
-    private Date SubissionDate; // 예약 날짜
+    private LocalDate SubissionDate; // 예약 날짜
 
     @Override
     public boolean equals(Object o) {

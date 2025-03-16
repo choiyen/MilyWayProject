@@ -3,6 +3,7 @@ package project.MilkyWay.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,11 +21,11 @@ public class AddressEntity
     @Column(name = "customer", nullable = false)
     private String customer;
     @Column(name = "Address", nullable = false)
-    private String Address;
+    private String address;
     @Column(name = "phoneNumber", nullable = false)
     private String phoneNumber;
     @Column(name = "SubmissionDate", nullable = false)
-    private Date SubmissionDate;
+    private LocalDate submissionDate;
 
     @Override
     public boolean equals(Object o) {
@@ -33,15 +34,15 @@ public class AddressEntity
         AddressEntity AddressEntity = (AddressEntity) o;
         return Objects.equals(addressId, AddressEntity.addressId) &&
                 Objects.equals(customer, AddressEntity.customer) &&
-                Objects.equals(Address, AddressEntity.Address) &&
+                Objects.equals(address, AddressEntity.address) &&
                 Objects.equals(phoneNumber, AddressEntity.phoneNumber) &&
-                Objects.equals(SubmissionDate, AddressEntity.SubmissionDate);
+                Objects.equals(submissionDate, AddressEntity.submissionDate);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(addressId, customer, Address,phoneNumber, SubmissionDate);
+        return Objects.hash(addressId, customer, address,phoneNumber, submissionDate);
     }
 
 }

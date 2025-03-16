@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -52,5 +53,5 @@ public class ReservationDTO //고객의 예약을 관리하기 위한 DTO
     @NotBlank(message = "SubissionDate cannot be empty")
     @Size(min = 5, max= 15, message = "아이디는 최소 다섯자리 이상 입력해야 함.")
     @Schema(description = "예약 날짜", example = "2025-03-14")
-    private Date SubissionDate; // 예약 날짜
+    private LocalDate SubissionDate; // 예약 날짜
 }

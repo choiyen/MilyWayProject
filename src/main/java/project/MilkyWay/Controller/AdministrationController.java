@@ -46,24 +46,31 @@ public class AdministrationController
     {
         try
         {
-            AdministrationEntity administration = ConvertToEntity(administrationDTO);
-            AdministrationEntity administrationEntity = administrationService.insert(administration);
-            if(administrationEntity != null)
+            if(administrationService.exists(administrationDTO.getAdministrationId()) || administrationService.existsByDate(administrationDTO.getAdministrationDate()))
             {
-                AdministrationDTO administrationDTO1 = ConvertToDTO(administrationEntity);
-                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 추가에 성공하셨습니다.", Collections.singletonList(administrationDTO1)));
+                throw new InsertFailedException("해당 코드나 날짜를 가진 일정이 이미 있어서, 추가가 불가능 합니다.");
             }
             else
             {
-                throw new InsertFailedException("데이터 베이스에 데이터를 추가하는 과정에서 예기치 못한 오류가 발생했습니다.");
+                AdministrationEntity administration = ConvertToEntity(administrationDTO);
+                AdministrationEntity administrationEntity = administrationService.insert(administration);
+                if(administrationEntity != null)
+                {
+                    AdministrationDTO administrationDTO1 = ConvertToDTO(administrationEntity);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 추가에 성공하셨습니다.", Collections.singletonList(administrationDTO1)));
+                }
+                else
+                {
+                    throw new InsertFailedException("데이터 베이스에 데이터를 추가하는 과정에서 예기치 못한 오류가 발생했습니다.");
+                }
             }
+
         }
         catch (Exception e)
         {
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
-    }
-
+    }//에러 메세지가 정상적으로 송출되지 않음을 확인 - 코드 수정 필요
 
 
     @Operation(
@@ -115,14 +122,14 @@ public class AdministrationController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String administrationId)
+    public ResponseEntity<?> Delete(@RequestParam String administrationId)
     {
         try
         {
             boolean bool = administrationService.Delete(administrationId);
             if(bool)
             {
-                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 추가에 성공하셨습니다."));
+                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 삭제에 성공하셨습니다."));
             }
             else
             {
@@ -146,7 +153,7 @@ public class AdministrationController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindAdministration(@RequestBody String AdministrationId)
+    public ResponseEntity<?> FindAdministration(@RequestParam String AdministrationId)
     {
         try
         {

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import project.MilkyWay.Enum.DateType;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class AdministrationEntity
     @Column(name= "administrationId")
     private String administrationId; //일정표를 관리하기 위한 id
     @Column(name= "Date", nullable = false, unique = true)
-    private Date administrationDate; //일정을 기록할 id
+    private LocalDate administrationDate; //일정을 기록할 id
     @Column(name= "Type", nullable = false)
     private DateType adminstrationType; // 일정의 유형 - 휴일, 일하는 날, 현재 비어있는 날
 

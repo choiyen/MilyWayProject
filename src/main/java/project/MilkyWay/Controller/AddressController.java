@@ -103,7 +103,7 @@ public class AddressController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String AddressId)
+    public ResponseEntity<?> Delete(@RequestParam String AddressId)
     {
         try
         {
@@ -166,7 +166,7 @@ public class AddressController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindById(@RequestBody String AddressId)
+    public ResponseEntity<?> FindById(@RequestParam String AddressId)
     {
         try
         {
@@ -190,11 +190,11 @@ public class AddressController
     private AddressDTO ConvertToDTO(AddressEntity addressEntity1)
     {
         return AddressDTO.builder()
-                .AddressId(addressEntity1.getAddressId())
-                .Address(addressEntity1.getAddress())
+                .addressId(addressEntity1.getAddressId())
+                .address(addressEntity1.getAddress())
                 .customer(addressEntity1.getCustomer())
                 .phoneNumber(addressEntity1.getPhoneNumber())
-                .SubmissionDate(addressEntity1.getSubmissionDate())
+                .submissionDate(addressEntity1.getSubmissionDate())
                 .build();
     }
 
@@ -202,10 +202,10 @@ public class AddressController
     {
         return AddressEntity.builder()
                 .addressId(addressDTO.getAddressId())
-                .Address(addressDTO.getAddress())
+                .address(addressDTO.getAddress())
                 .customer(addressDTO.getCustomer())
                 .phoneNumber(addressDTO.getPhoneNumber())
-                .SubmissionDate(addressDTO.getSubmissionDate())
+                .submissionDate(addressDTO.getSubmissionDate())
                 .build();
     }
 
