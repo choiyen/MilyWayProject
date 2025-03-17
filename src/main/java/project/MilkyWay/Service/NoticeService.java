@@ -105,4 +105,16 @@ public class NoticeService
     }
 
 
+    public NoticeEntity findNoticeId(String noticeId)
+    {
+        NoticeEntity noticeEntity = noticeMapper.findByNoticeId(noticeId);
+        if(noticeEntity == null)
+        {
+            throw new FindFailedException("NoticeId에 맞는 정보를 찾지 못했습니다.");
+        }
+        else
+        {
+            return noticeEntity;
+        }
+    }
 }
