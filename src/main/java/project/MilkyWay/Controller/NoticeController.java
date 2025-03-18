@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import project.MilkyWay.DTO.*;
 import project.MilkyWay.Entity.NoticeDetailEntity;
 import project.MilkyWay.Entity.NoticeEntity;
 import project.MilkyWay.Expection.DeleteFailedException;
+import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
 import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Service.NoticeDetailService;
@@ -53,26 +55,36 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@RequestBody NoticeEntity notice, @RequestBody NoticeDetailEntity noticeDetailEntity)
+    public ResponseEntity<?> Insert(@RequestBody NoticeJsonDTO noticeJsonDTO)
     {
         try
         {
-            NoticeEntity notice1 = noticeService.InsertNotice(notice);
+            NoticeEntity noticeEntity = ConvertToNotice(noticeJsonDTO.getNoticeDTO());
+            NoticeEntity notice1 = noticeService.InsertNotice(noticeEntity);
             if(notice1 != null)
             {
-                NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
-                if(noticeDetailEntity1 != null)
+                int i = 0;
+                List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
+                while (i < noticeJsonDTO.getNoticeDetailDTO().size() )
                 {
-                    List<Object> list = new ArrayList<>();
-                    list.add(notice1);
-                    list.add(noticeDetailEntity1);
-                    return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
+                    NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i));
+                    NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
+                    if(noticeDetailEntity1 != null)
+                    {
+                        noticeDetailEntities.add(noticeDetailEntity1);
+                    }
+                    else
+                    {
+                        noticeService.DeleteByNoticeId(notice1.getNoticeId());
+                        throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                    }
+                    i++;
                 }
-                else
-                {
-                   noticeService.DeleteByNoticeId(notice1.getNoticeId());
-                   throw new InsertFailedException("데이터 저장에 실패했습니다.");
-                }
+                List<Object> list = new ArrayList<>();
+                list.add(notice1);
+                list.add(noticeDetailEntities);
+                return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
+
             }
             else
             {
@@ -84,28 +96,57 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             return ResponseEntity.badRequest().body(responseDTO.Response("error","후기 등록에 실패했습니다."));
         }
     }
+
+    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO)
+    {
+        return NoticeDetailEntity.builder()
+                .NoticeId(noticeDetailDTO.getNoticeId())
+                .NoticeDetailId(noticeDetailDTO.getNoticeDetailId())
+                .direction(noticeDetailDTO.getDirection())
+                .beforeURL(noticeDetailDTO.getBeforeURL())
+                .afterURL(noticeDetailDTO.getAfterURL())
+                .comment(noticeDetailDTO.getNoticeId())
+                .build();
+    }
+
+    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO)
+    {
+        return NoticeEntity.builder()
+                .NoticeId(noticeDTO.getNoticeId())
+                .type(noticeDTO.getType())
+                .greeting(noticeDTO.getNoticeId())
+                .build();
+    }
+
     @PutMapping("/Update")
-    public ResponseEntity<?> Update(@RequestBody NoticeEntity notice, @RequestBody NoticeDetailEntity noticeDetailEntity)
+    public ResponseEntity<?> Update(@RequestBody NoticeJsonDTO noticeJsonDTO)
     {
         try
         {
-            NoticeEntity oldnotice = noticeService.findNoticeId(notice.getNoticeId());
-            NoticeEntity notice1 = noticeService.UpdateNotice(notice.getNoticeId(), notice);
+            NoticeEntity oldnotice = noticeService.findNoticeId(noticeJsonDTO.getNoticeDTO().getNoticeId());
+            NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO()));
             if(notice1 != null)
             {
-                NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeDetailEntity.getNoticeDetailId(), noticeDetailEntity);
-                if(noticeDetailEntity1 != null)
+                int i = 0;
+                List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
+                while (i < noticeJsonDTO.getNoticeDetailDTO().size())
                 {
-                    List<Object> list = new ArrayList<>();
-                    list.add(notice1);
-                    list.add(noticeDetailEntity1);
-                    return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
+                    NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId(), ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i)));
+                    if(noticeDetailEntity1 != null)
+                    {
+                         noticeDetailEntities.add(noticeDetailEntity1);
+                    }
+                    else
+                    {
+                        noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), oldnotice);
+                        throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                    }
+                    i++;
                 }
-                else
-                {
-                    noticeService.UpdateNotice(notice.getNoticeId(), oldnotice);
-                    throw new InsertFailedException("데이터 저장에 실패했습니다.");
-                }
+                List<Object> list = new ArrayList<>();
+                list.add(notice1);
+                list.add(noticeDetailEntities);
+                return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
             }
             else
             {
@@ -146,7 +187,56 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+    @PostMapping("/findall")
+    public ResponseEntity<?> FindALl()
+    {
+        try
+        {
+            List<Object> list = new ArrayList<>();
+            List<NoticeEntity> notice = new ArrayList<>(noticeService.findAll());
+            if(notice != null)
+            {
+                list.add(notice);//자동으로 못가져오면 추가하거나 수정 예정
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
+            }
+            else
+            {
+                throw new FindFailedException("전체 후기 데이터를 찾아내는데 실패했습니다.");
+            }
 
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+
+        }
+    }
+    @PostMapping("/find")
+    public ResponseEntity<?> FindByNoticeId(@RequestParam String NoticeId)
+    {
+        try
+        {
+            List<Object> list = new ArrayList<>();
+            NoticeEntity notice = noticeService.findNoticeId(NoticeId);
+            if(notice != null)
+            {
+                list.add(notice);//자동으로 못가져오면 추가하거나 수정 예정
+                List<NoticeDetailEntity> noticeEntities = new ArrayList<>(noticeDetailService.ListNoticeDetail(NoticeId));
+                list.add(noticeEntities);
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
+            }
+            else
+            {
+                throw new FindFailedException("전체 후기 데이터를 찾아내는데 실패했습니다.");
+            }
+
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+
+        }
+    }
 
 
 }
