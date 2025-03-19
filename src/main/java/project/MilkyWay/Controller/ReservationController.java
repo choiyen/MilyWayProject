@@ -52,7 +52,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@Valid @RequestBody ReservationDTO reservationDTO) {
+    public ResponseEntity<?> Insert(@RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
             AdministrationEntity administration = administrationService.FindByAdministration(reservationDTO.getAdministrationId());
@@ -91,7 +91,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             }
     )
     @PutMapping("/Update")
-    public ResponseEntity<?> Update(@Valid @RequestBody ReservationDTO reservationDTO) {
+    public ResponseEntity<?> Update(@RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
             ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
