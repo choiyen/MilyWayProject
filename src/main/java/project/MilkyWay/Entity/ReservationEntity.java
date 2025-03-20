@@ -7,7 +7,6 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
+@ToString
 public class ReservationEntity
 {
     @Id
@@ -30,9 +30,9 @@ public class ReservationEntity
     @Column(name = "phone")
     private String phone; // 전화번호
     @Column(name = "Address")
-    private String Address; // 주소(암호화 처리 필요)
-    @Column(name = "Subission")
-    private LocalDate SubissionDate; // 예약 날짜
+    private String address; // 주소(암호화 처리 필요)
+    @Column(name = "SubissionDate")
+    private LocalDate subissionDate; // 예약 날짜
 
     @Override
     public boolean equals(Object o) {
@@ -44,13 +44,13 @@ public class ReservationEntity
                 Objects.equals(acreage, reservationEntity.acreage) &&
                 Objects.equals(name, reservationEntity.name) &&
                 Objects.equals(phone, reservationEntity.phone) &&
-                Objects.equals(Address, reservationEntity.Address) &&
-                Objects.equals(SubissionDate, reservationEntity.SubissionDate);
+                Objects.equals(address, reservationEntity.address) &&
+                Objects.equals(subissionDate, reservationEntity.subissionDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reservationId, administrationId, acreage, name, phone, Address, SubissionDate);
+        return Objects.hash(reservationId, administrationId, acreage, name, phone, address, subissionDate);
     }
 
 }

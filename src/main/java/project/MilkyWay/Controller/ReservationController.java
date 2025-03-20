@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.DTO.*;
-import project.MilkyWay.Entity.AdministrationEntity;
 import project.MilkyWay.Entity.ReservationEntity;
-import project.MilkyWay.Enum.DateType;
 import project.MilkyWay.Expection.DeleteFailedException;
 import project.MilkyWay.Expection.FindFailedException;
 import project.MilkyWay.Expection.InsertFailedException;
@@ -55,14 +53,9 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     public ResponseEntity<?> Insert(@RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
-            AdministrationEntity administration = administrationService.FindByAdministration(reservationDTO.getAdministrationId());
-            if(administration.getAdminstrationType() == DateType.일하는날)
-            {
-                throw new InsertFailedException("다른 일정이 있는 것 같으니, 일정 표를 확인해주세요");
-            }
-            else
-            {
+                System.out.println(reservationDTO);
                 ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
+                System.out.println(reservationEntity);
                 ReservationEntity reservationEntity2 = reservationService.InsertReservation(reservationEntity);
                 if (reservationEntity2 != null)
                 {
@@ -71,12 +64,10 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 } else {
                     throw new InsertFailedException();
                 }
-            }
-
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", "예약 데이터 추가에 실패했습니다."));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
-    }
+    }//테스트 완료 : 단, 사용자가 예약을 하고, 예약정보를 확인한 후, 승인이 되었을 떄, 일정 정보에 추가하는 형태로 바꿀 지는 고민 필요.
 
 
     @Operation(
@@ -96,9 +87,10 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
         {
             ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
             ReservationEntity reservationEntity2 = reservationService.SaveReservation(reservationEntity);
+            System.out.println(reservationEntity2);
             if (reservationEntity2 != null) {
                 ReservationDTO reservationDTO1 = ConvertToDTO(reservationEntity2);
-                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 추가에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 수정에 성공하였습니다.", Collections.singletonList(reservationDTO1)));
             } else {
                 throw new InsertFailedException();
             }
@@ -198,10 +190,10 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 .reservationId(reservationEntity2.getReservationId())
                 .administrationId(reservationEntity2.getReservationId())
                 .phone(reservationEntity2.getPhone())
-                .Address(reservationEntity2.getAddress())
+                .address(reservationEntity2.getAddress())
                 .name(reservationEntity2.getName())
                 .acreage(reservationEntity2.getAcreage())
-                .SubissionDate(reservationEntity2.getSubissionDate())
+                .subissionDate(reservationEntity2.getSubissionDate())
                 .build();
     }
 
@@ -211,10 +203,10 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 .reservationId(reservationDTO.getReservationId())
                 .administrationId(reservationDTO.getAdministrationId())
                 .phone(reservationDTO.getPhone())
-                .Address(reservationDTO.getAddress())
+                .address(reservationDTO.getAddress())
                 .name(reservationDTO.getName())
                 .acreage(reservationDTO.getAcreage())
-                .SubissionDate(reservationDTO.getSubissionDate())
+                .subissionDate(reservationDTO.getSubissionDate())
                 .build();
     }
 }

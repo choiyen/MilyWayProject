@@ -5,7 +5,6 @@ import lombok.*;
 import project.MilkyWay.Enum.DateType;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 
@@ -15,6 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
+@ToString
 public class AdministrationEntity
 {
     @Id

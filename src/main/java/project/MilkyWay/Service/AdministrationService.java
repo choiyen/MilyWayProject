@@ -12,7 +12,6 @@ import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.Repository.AdministrationRepository;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -52,7 +51,7 @@ public class AdministrationService
         }
         else
         {
-            throw new FindFailedException("기존 데이터를 찾을 수 없습니다.");
+            throw new FindFailedException("기존 일정 데이터를 찾을 수 없습니다.");
         }
     }
     public boolean exists(String EncodingAdminsistrationId)
@@ -111,7 +110,7 @@ public class AdministrationService
         }
         else
         {
-            throw new FindFailedException("게시판 데이터를 찾을 수 없었어요.");
+            throw new FindFailedException("일정 데이터를 찾을 수 없었어요.");
         }
     }
     private AdministrationEntity ConVertToEntity(AdministrationEntity oldAdmin, AdministrationEntity administration)
