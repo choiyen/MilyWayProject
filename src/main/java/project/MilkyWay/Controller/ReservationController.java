@@ -37,7 +37,6 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     AdministrationService administrationService;
 
 
-
     @Operation(
             summary = "Create a new reservation",  // Provide a brief summary
             description = "This API creates a new reservation and returns reservationDTO as response",  // Provide detailed description
@@ -114,8 +113,10 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestBody String ReservationId) {
-        try {
+    public ResponseEntity<?> Delete(@RequestParam String ReservationId) {
+        try
+        {
+            System.out.println(ReservationId);
             boolean bool = reservationService.DeleteReservation(ReservationId);
             if (bool) {
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제에 성공하였습니다."));

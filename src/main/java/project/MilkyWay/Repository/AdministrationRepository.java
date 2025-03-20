@@ -15,4 +15,5 @@ public interface AdministrationRepository extends JpaRepository<AdministrationEn
     boolean existsByAdministrationId(String administrationId);
     void deleteByAdministrationId(String administrationId);
     boolean existsByAdministrationDate(LocalDate AdministrationDate);
+    AdministrationEntity findByAdministrationDate(LocalDate subissionDate);
 }

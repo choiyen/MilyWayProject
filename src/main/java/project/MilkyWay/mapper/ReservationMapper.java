@@ -3,6 +3,7 @@ package project.MilkyWay.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import project.MilkyWay.Entity.ReservationEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper

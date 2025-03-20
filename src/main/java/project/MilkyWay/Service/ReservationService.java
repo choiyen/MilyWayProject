@@ -12,6 +12,7 @@ import project.MilkyWay.Expection.UpdateFailedException;
 import project.MilkyWay.mapper.ReservationMapper;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -52,7 +53,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             {
                 if(!administrationEntity.getAdministrationDate().equals(reservationEntity.getSubissionDate()))
                 {
-                    throw new FindFailedException("일정 데이터를 찾았으나, 일정 데이터의 날짜인 " + administrationEntity.getAdministrationDate() + "와 일정 예약 데이터의 날짜인 " + reservationEntity.getSubissionDate() + "가 서로 다른 것 같습니다. 확인해주세요");
+                    throw new FindFailedException("관련 일정 데이터를 찾았으나, 일정 데이터의 날짜인 " + administrationEntity.getAdministrationDate() + "와 예약하려는 날짜 데이터의 날짜인 " + reservationEntity.getSubissionDate() + "가 서로 다른 것 같습니다. 확인해주세요");
                 }
                 else
                 {
@@ -93,6 +94,9 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             throw new FindFailedException("해당 코드를 가진 예약 데이터가 존재하지 않습니다.");
         }
     }
+    // Id가 아니라 날짜로 일정 데이터를 찾아야 함.
+
+
     public boolean DeleteReservation(String reservationId) {
         ReservationEntity reservationEntity1 = reservationMapper.findByReservationId(reservationId);
         if(reservationEntity1 != null)
@@ -101,6 +105,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             ReservationEntity reservationEntity2 = reservationMapper.findByReservationId(reservationId);
             if(reservationEntity2 == null)
             {
+                administrationService.Delete(reservationEntity1.getAdministrationId());
                 return true;
             }
             else
@@ -117,7 +122,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
     public ReservationEntity SaveReservation(ReservationEntity reservationEntity)
     {
 
-            AdministrationEntity administrationEntity = administrationService.FindByAdministration(reservationEntity.getAdministrationId());
+            AdministrationEntity administrationEntity = administrationService.FindByAdministrationDate(reservationEntity.getSubissionDate());
             System.out.println(administrationEntity.getAdminstrationType());
             if(administrationEntity.getAdminstrationType() == DateType.일하는날)
             {
@@ -167,7 +172,9 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
                     throw new UpdateFailedException("예약 데이터 찾기에 실패하였습니다. 관리자에게 문의해주세요.");
                 }
             }
-    }
+    }//기능 변경 고민을 제외하면 완료
+
+
     public ReservationEntity ReservationSelect(String reservationId)
     {
         return reservationMapper.findByReservationId(reservationId);
