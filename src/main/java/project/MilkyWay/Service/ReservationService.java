@@ -125,7 +125,6 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             AdministrationEntity administrationEntity = administrationService.FindByAdministrationDate(reservationEntity.getSubissionDate());
             //Id에 해당하는 날짜는 기존 날짜를 가르킬 테니 뺴고, 변경할 날짜에 일정이 일하는 일정이 있는지 여부를 확인
 
-            System.out.println(administrationEntity.getAdminstrationType());
             if(administrationEntity.getAdminstrationType() == DateType.일하는날)
             {
                 throw new InsertFailedException("해당 날짜에는 일정이 존재하기에 변경할 수 없습니다.");
@@ -153,7 +152,6 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
                     }
                     else
                     {
-                        System.out.println(ChangeReservation);
                         reservationMapper.Update(ChangeReservation);
                         ReservationEntity reservationEntity2 = reservationMapper.findByReservationId(ChangeReservation.getReservationId());
 
