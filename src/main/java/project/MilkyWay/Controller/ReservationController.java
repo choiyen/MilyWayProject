@@ -170,7 +170,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
         }
     }
 
-    @GetMapping
+    @GetMapping("/FindByAdmin")
     ResponseEntity<?> FindByAdmin(@RequestParam String AdminstrationId)
     {
         try {
