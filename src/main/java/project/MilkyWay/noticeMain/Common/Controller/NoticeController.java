@@ -1,4 +1,4 @@
-package project.MilkyWay.noticeMain.Notice.Controller;
+package project.MilkyWay.noticeMain.Common.Controller;
 
 
 
@@ -94,29 +94,8 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error","후기 등록에 실패했습니다."));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
-    }
-
-    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO)
-    {
-        return NoticeDetailEntity.builder()
-                .NoticeId(noticeDetailDTO.getNoticeId())
-                .NoticeDetailId(noticeDetailDTO.getNoticeDetailId())
-                .direction(noticeDetailDTO.getDirection())
-                .beforeURL(noticeDetailDTO.getBeforeURL())
-                .afterURL(noticeDetailDTO.getAfterURL())
-                .comment(noticeDetailDTO.getNoticeId())
-                .build();
-    }
-
-    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO)
-    {
-        return NoticeEntity.builder()
-                .NoticeId(noticeDTO.getNoticeId())
-                .type(noticeDTO.getType())
-                .greeting(noticeDTO.getNoticeId())
-                .build();
     }
 
     @PutMapping("/Update")
@@ -239,5 +218,24 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
         }
     }
 
+    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO)
+    {
+        return NoticeDetailEntity.builder()
+                .noticeId(noticeDetailDTO.getNoticeId())
+                .noticeDetailId(noticeDetailDTO.getNoticeDetailId())
+                .direction(noticeDetailDTO.getDirection())
+                .beforeURL(noticeDetailDTO.getBeforeURL())
+                .afterURL(noticeDetailDTO.getAfterURL())
+                .comment(noticeDetailDTO.getNoticeId())
+                .build();
+    }
 
+    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO)
+    {
+        return NoticeEntity.builder()
+                .noticeId(noticeDTO.getNoticeId())
+                .type(noticeDTO.getType())
+                .greeting(noticeDTO.getNoticeId())
+                .build();
+    }
 }

@@ -7,15 +7,15 @@
         SELECT * FROM Notice
     </select>
     <select id="findByNoticeId" parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
-        SELECT * FROM Notice WHERE NoticeId = #{NoticeId}
+        SELECT * FROM Notice WHERE noticeId = #{noticeId}
     </select>
     <delete id="deleteByNoticeId" parameterType="String">
-        DELETE FROM Notice WHERE NoticeId = #{NoticeId}
+        DELETE FROM Notice WHERE noticeId = #{noticeId}
     </delete>
     <insert id="Insert" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO Notice(NoticeId, type, greeting) VALUES(#{NoticeId}, #{type}, #{greeting})
+        INSERT INTO Notice(noticeId, type, greeting) VALUES(#{noticeId}, #{type}, #{greeting})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
-        UPDATE Notice SET type = #{type}, greeting = #{greeting} WHERE NoticeId = #{NoticeId}
+        UPDATE Notice SET type = #{type}, greeting = #{greeting} WHERE noticeId = #{noticeId}
     </update>
 </mapper>

@@ -2,6 +2,8 @@ package project.MilkyWay.noticeMain.NoticeDetail.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
@@ -63,6 +65,7 @@ public class NoticeDetailService {
             throw new FindFailedException("데이터 찾기를 시도했는데, 알 수 없는 오류가 발생했어요. 관리자에게 문의해줘요");
         }
     }
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean DeleteToNoticeDetail(Long encodingNoticeDetail)
     {
         NoticeDetailEntity seach = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetail);
@@ -88,8 +91,8 @@ public class NoticeDetailService {
     private NoticeDetailEntity ChangeToNoticeDetail(NoticeDetailEntity oldNoticeDetailEntity, NoticeDetailEntity changingNoticeDetailEntity)
     {
         NoticeDetailEntity noticeDetailEntity = NoticeDetailEntity.builder()
-                .NoticeDetailId(oldNoticeDetailEntity.getNoticeDetailId())
-                .NoticeId(oldNoticeDetailEntity.getNoticeId())
+                .noticeDetailId(oldNoticeDetailEntity.getNoticeDetailId())
+                .noticeId(oldNoticeDetailEntity.getNoticeId())
                 .afterURL(changingNoticeDetailEntity.getAfterURL())
                 .beforeURL(changingNoticeDetailEntity.getBeforeURL())
                 .direction(changingNoticeDetailEntity.getDirection())

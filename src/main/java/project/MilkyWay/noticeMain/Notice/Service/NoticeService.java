@@ -95,7 +95,7 @@ public class NoticeService
     private NoticeEntity ChangeToNotice(NoticeEntity oldNoticeEntity, NoticeEntity newNoticeEntity)
     {
         NoticeEntity notice = NoticeEntity.builder()
-                .NoticeId(oldNoticeEntity.getNoticeId())
+                .noticeId(oldNoticeEntity.getNoticeId())
                 .type(newNoticeEntity.getType())
                 .greeting(newNoticeEntity.getGreeting())
                 .build();

@@ -34,7 +34,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         }
         else
         {
-            throw new FindFailedException("그 날짜에 해당하는 예약 정보를 찾을 수 없습니다.");
+            throw new FindFailedException("그 AdiminstrationId에 해당하는 예약 정보를 찾을 수 없습니다.");
         }
     }
 

@@ -25,12 +25,12 @@ public class NoticeDetailDTO
 
 
     @Schema(description = "세부사항에 대한 Id", example = "5555")
-    private Long NoticeDetailId; // 1씩 증가하는 auto inclement로 작성
+    private Long noticeDetailId; // 1씩 증가하는 auto inclement로 작성
 
     @NotBlank(message = "NoticeId cannot be empty")
     @Size(min = 5, max= 20, message = "NoticeId는 최소 다섯자리 이상 입력해야 함.")
     @Schema(description= "후기 정보 Id", example = "dfasfdsfsafasfwv!ED")
-    private String NoticeId; // NoticeDTO와 연결하기 위한 왜래키
+    private String noticeId; // NoticeDTO와 연결하기 위한 왜래키
 
     @NotBlank(message = "direction cannot be empty")
     @Size(min = 5, max= 20, message = "direction는 최소 다섯자리 이상 입력해야 함.")

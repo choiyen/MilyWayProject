@@ -4,18 +4,18 @@
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.noticeMain.NoticeDetail.mapper.NoticeDetailMapper">
     <select id="findByNoticeId" parameterType="String" resultType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
-        SELECT * FROM NoticeDetail WHERE NoticeId = #{NoticeId}
+        SELECT * FROM NoticeDetail WHERE noticeId = #{noticeId}
     </select>
     <select id="findByNoticeDetailId" parameterType="String" resultType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
-        SELECT * FROM NoticeDetail WHERE NoticeDetailId = #{NoticeDetailId}
+        SELECT * FROM NoticeDetail WHERE noticeDetailId = #{noticeDetailId}
     </select>
     <delete id="deleteByNoticeDetailId" parameterType="String">
-        DELETE FROM NoticeDetail WHERE NoticeDetailId = #{NoticeDetailId}
+        DELETE FROM NoticeDetail WHERE noticeDetailId = #{noticeDetailId}
     </delete>
-    <insert id="Insert" parameterType="project.MilkyWay.Question.Entity.QuestionsEntity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO NoticeDetail(NoticeId, direction, beforeURL,afterURL,comment ) VALUES(#{NoticeId}, #{direction}, #{beforeURL}, #{afterURL}, #{comment})
+    <insert id="Insert" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO NoticeDetail(noticeId, direction, beforeURL,afterURL,comment ) VALUES(#{noticeId}, #{direction}, #{beforeURL}, #{afterURL}, #{comment})
     </insert>
-    <update id="Update" parameterType="project.MilkyWay.Question.Entity.QuestionsEntity">
-        UPDATE NoticeDetail SET direction = #{direction}, beforeURL = #{beforeURL}, afterURL = #{afterURL} WHERE NoticeDetailId = #{NoticeDetailId}
+    <update id="Update" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
+        UPDATE NoticeDetail SET direction = #{direction}, beforeURL = #{beforeURL}, afterURL = #{afterURL} WHERE noticeDetailId = #{noticeDetailId}
     </update>
 </mapper>

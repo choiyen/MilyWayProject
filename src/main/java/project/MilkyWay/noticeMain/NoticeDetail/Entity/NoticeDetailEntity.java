@@ -22,9 +22,9 @@ public class NoticeDetailEntity
     @Id
     @Column(name = "NoticeDetailId")
     @GeneratedValue(strategy = GenerationType.AUTO)  // 자동 증가 설정
-    private Long NoticeDetailId; // 1씩 증가하는 auto inclement로 작성
+    private Long noticeDetailId; // 1씩 증가하는 auto inclement로 작성
     @Column(name = "NoticeId")
-    private String NoticeId; // NoticeDTO와 연결하기 위한 왜래키
+    private String noticeId; // NoticeDTO와 연결하기 위한 왜래키
     @Column(name = "direction")
     private Cleandirection direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
 
