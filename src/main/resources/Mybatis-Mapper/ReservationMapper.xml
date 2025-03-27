@@ -2,23 +2,23 @@
 <!--XML 문서 버전과 인코딩 선언-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
-<mapper namespace="project.MilkyWay.mapper.ReservationMapper">
-    <select id="findAll" resultType="project.MilkyWay.Entity.ReservationEntity">
+<mapper namespace="project.MilkyWay.Reservation.Mapper.ReservationMapper">
+    <select id="findAll" resultType="project.MilkyWay.Reservation.Entity.ReservationEntity">
         SELECT * FROM reservation
     </select>
-    <select id="findByAdministrationId" parameterType="String" resultType="project.MilkyWay.Entity.ReservationEntity">
+    <select id="findByAdministrationId" parameterType="String" resultType="project.MilkyWay.Reservation.Entity.ReservationEntity">
         SELECT * FROM reservation WHERE administrationId = #{administrationId}
     </select>
-    <select id="findByReservationId" parameterType="String" resultType="project.MilkyWay.Entity.ReservationEntity">
+    <select id="findByReservationId" parameterType="String" resultType="project.MilkyWay.Reservation.Entity.ReservationEntity">
         SELECT * FROM reservation WHERE reservationId = #{reservationId}
     </select>
     <delete id="deleteByReservationId" parameterType="String">
         DELETE FROM reservation WHERE reservationId = #{reservationId}
     </delete>
-    <insert id="Insert" parameterType="project.MilkyWay.Entity.UserEntity"  useGeneratedKeys="true" keyProperty="id">
+    <insert id="Insert" parameterType="project.MilkyWay.Login.Entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO reservation(reservationId, administrationId, acreage,name,phone,address,subissionDate) VALUES(#{reservationId}, #{administrationId}, #{acreage},#{name},#{phone},#{address},#{subissionDate})
     </insert>
-    <update id="Update" parameterType="project.MilkyWay.Entity.UserEntity">
+    <update id="Update" parameterType="project.MilkyWay.Login.Entity.UserEntity">
         UPDATE reservation SET acreage = #{acreage}, name = #{name}, phone = #{phone}, address = #{address}, subissionDate = #{subissionDate} WHERE reservationId = #{reservationId}
     </update>
 </mapper>

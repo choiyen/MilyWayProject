@@ -2,21 +2,21 @@
 <!--XML 문서 버전과 인코딩 선언-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
-<mapper namespace="project.MilkyWay.mapper.UserMapper">
-    <select id="FindByUserId" parameterType="String" resultType="project.MilkyWay.Entity.UserEntity">
+<mapper namespace="project.MilkyWay.Login.Mapper.UserMapper">
+    <select id="FindByUserId" parameterType="String" resultType="project.MilkyWay.Login.Entity.UserEntity">
         SELECT * FROM User WHERE userId = #{userId}
     </select>
-    <select id="FindByEmail" parameterType="String" resultType="project.MilkyWay.Entity.UserEntity">
+    <select id="FindByEmail" parameterType="String" resultType="project.MilkyWay.Login.Entity.UserEntity">
         SELECT * FROM User WHERE email = #{email}
     </select>
     <delete id="deleteByUserId" parameterType="String">
         DELETE FROM User WHERE userId = #{userId}
     </delete>
-    <insert id="Insert" parameterType="project.MilkyWay.Entity.UserEntity" useGeneratedKeys="true" keyProperty="userId">
+    <insert id="Insert" parameterType="project.MilkyWay.Login.Entity.UserEntity" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO User(userId, password, email)
         VALUES(#{userId}, #{password}, #{email})
     </insert>
-    <update id="Update" parameterType="project.MilkyWay.Entity.UserEntity">
+    <update id="Update" parameterType="project.MilkyWay.Login.Entity.UserEntity">
         UPDATE User SET password = #{password}, email = #{email} WHERE userId = #{userId}
     </update>
 </mapper>
