@@ -64,6 +64,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             NoticeEntity notice1 = noticeService.InsertNotice(noticeEntity);
             if(notice1 != null)
             {
+                System.out.println(notice1);
                 int i = 0;
                 List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
                 while (i < noticeJsonDTO.getNoticeDetailDTO().size() )

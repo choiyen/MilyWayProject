@@ -14,6 +14,7 @@ import java.util.Collection;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
+@ToString
 public class NoticeEntity
 {
     @Id
