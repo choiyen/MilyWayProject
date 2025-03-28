@@ -2,6 +2,18 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD MyBatis Configuration 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <!--MyBatis 설정 내용-->
+        <typeAliases>
+            <package name="project.MilkyWay.Address.Entity"/>
+            <package name="project.MilkyWay.Administration.Entity"/>
+            <package name="project.MilkyWay.BoardMain.Board.Entity"/>
+            <package name="project.MilkyWay.BoardMain.Comment.Entity"/>
+            <package name="project.MilkyWay.Inquire.Entity"/>
+            <package name="project.MilkyWay.Login.Entity"/>
+            <package name="project.MilkyWay.noticeMain.Notice.Entity"/>
+            <package name="project.MilkyWay.noticeMain.NoticeDetail.Entity"/>
+            <package name="project.MilkyWay.Question.Entity"/>
+            <package name="project.MilkyWay.Reservation.Entity"/>
+        </typeAliases>
     <mappers>
         <mapper resource="Mybatis-Mapper/UserMapper.xml"></mapper>
         <mapper resource="Mybatis-Mapper/ReservationMapper.xml"></mapper>

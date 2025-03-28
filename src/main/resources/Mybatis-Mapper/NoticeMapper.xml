@@ -12,7 +12,7 @@
     <delete id="deleteByNoticeId" parameterType="String">
         DELETE FROM Notice WHERE noticeId = #{noticeId}
     </delete>
-    <insert id="Insert" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="Insert" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
         INSERT INTO Notice(noticeId, type, greeting) VALUES(#{noticeId}, #{type}, #{greeting})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">

@@ -12,12 +12,13 @@
     <delete id="deleteByNoticeDetailId" parameterType="String">
         DELETE FROM NoticeDetail WHERE noticeDetailId = #{noticeDetailId}
     </delete>
-    <insert id="Insert" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO NoticeDetail(noticeId, direction, beforeURL,afterURL,comment ) VALUES(#{noticeId}, #{direction}, #{beforeURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, #{comment})
+    <insert id="Insert" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity" useGeneratedKeys="true" keyProperty="noticeDetailId">
+        INSERT INTO NoticeDetail(noticeId, direction, beforeURL,afterURL,comment ) VALUES(#{noticeId}, #{direction, typeHandler=project.MilkyWay.ComonType.CleandirectionTypeHandler}, #{beforeURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, #{comment})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
-        UPDATE NoticeDetail SET direction = #{direction}, beforeURL =
-        #{beforeURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, afterURL = #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler} WHERE
+        UPDATE NoticeDetail SET direction = #{direction, typeHandler=project.MilkyWay.ComonType.CleandirectionTypeHandler}, beforeURL =
+        #{beforeURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, afterURL =
+        #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler} WHERE
         noticeDetailId = #{noticeDetailId}
     </update>
 </mapper>

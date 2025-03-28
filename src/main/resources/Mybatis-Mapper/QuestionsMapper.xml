@@ -12,7 +12,7 @@
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM Question WHERE Id = #{id}
     </delete>
-    <insert id="Insert" parameterType="project.MilkyWay.Question.Entity.QuestionsEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="Insert" parameterType="project.MilkyWay.Question.Entity.QuestionsEntity">
         INSERT INTO Question(exceptionQA, expectedComment) VALUES(#{exceptionQA}, #{expectedComment})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.Question.Entity.QuestionsEntity">
