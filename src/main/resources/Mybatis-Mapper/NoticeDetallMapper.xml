@@ -13,9 +13,11 @@
         DELETE FROM NoticeDetail WHERE noticeDetailId = #{noticeDetailId}
     </delete>
     <insert id="Insert" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO NoticeDetail(noticeId, direction, beforeURL,afterURL,comment ) VALUES(#{noticeId}, #{direction}, #{beforeURL}, #{afterURL}, #{comment})
+        INSERT INTO NoticeDetail(noticeId, direction, beforeURL,afterURL,comment ) VALUES(#{noticeId}, #{direction}, #{beforeURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, #{comment})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
-        UPDATE NoticeDetail SET direction = #{direction}, beforeURL = #{beforeURL}, afterURL = #{afterURL} WHERE noticeDetailId = #{noticeDetailId}
+        UPDATE NoticeDetail SET direction = #{direction}, beforeURL =
+        #{beforeURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, afterURL = #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler} WHERE
+        noticeDetailId = #{noticeDetailId}
     </update>
 </mapper>

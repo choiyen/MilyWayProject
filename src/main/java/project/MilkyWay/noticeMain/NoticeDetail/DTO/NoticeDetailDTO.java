@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import project.MilkyWay.ComonType.Enum.Cleandirection;
+import project.MilkyWay.ComonType.Enum.DateType;
 import project.MilkyWay.ComonType.Enum.EnumValue;
 
 import java.util.List;
@@ -32,11 +33,8 @@ public class NoticeDetailDTO
     @Schema(description= "후기 정보 Id", example = "dfasfdsfsafasfwv!ED")
     private String noticeId; // NoticeDTO와 연결하기 위한 왜래키
 
-    @NotBlank(message = "direction cannot be empty")
-    @Size(min = 5, max= 20, message = "direction는 최소 다섯자리 이상 입력해야 함.")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "대소문자, 한글, 숫자만 입력 가능합니다.")
-    @EnumValue(enumClass = Cleandirection.class, message = "청소 유형은 거실, 화장실, 부엌, 베란다 중 하나여야 합니다.")
     @Schema(description = "어느 유형의 방", example = "기실")
+    @EnumValue(enumClass = Cleandirection.class, message = "허용되지 않은 위치 타입입니다.")
     private Cleandirection direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
     //커스텀 어노테이션을 사용하여, 특정 값 외의 데이터가 들어왔을 떄, 에러 메세지를 반환함
 
