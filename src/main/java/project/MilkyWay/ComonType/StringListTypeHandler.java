@@ -14,31 +14,40 @@ import java.util.List;
 
 @MappedTypes(List.class)
 @MappedJdbcTypes(JdbcType.VARCHAR)
-public class StringListTypeHandler extends BaseTypeHandler<List<String>> {
+public class StringListTypeHandler extends BaseTypeHandler<List<String>>
+{
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, List<String> parameter, JdbcType jdbcType) throws SQLException {
+
         // List<String>을 String으로 변환하여 저장 (쉼표로 구분된 문자열 등)
         ps.setString(i, String.join(",", parameter));
+
     }
 
     @Override
     public List<String> getNullableResult(ResultSet rs, String columnName) throws SQLException {
+
         String value = rs.getString(columnName);
         // 쉼표로 구분된 문자열을 List로 변환
         return value == null ? null : Arrays.asList(value.split(","));
+
     }
 
     @Override
     public List<String> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+
         String value = rs.getString(columnIndex);
         return value == null ? null : Arrays.asList(value.split(","));
+
     }
 
     @Override
     public List<String> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+
         String value = cs.getString(columnIndex);
         return value == null ? null : Arrays.asList(value.split(","));
+
     }
 }
 /*
