@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CleandirectionTypeHandler extends BaseTypeHandler<Cleandirection>
-{
+{//https://amagrammer91.tistory.com/115
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Cleandirection parameter, JdbcType jdbcType) throws SQLException
