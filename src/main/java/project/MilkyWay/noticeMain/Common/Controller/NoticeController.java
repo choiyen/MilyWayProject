@@ -39,7 +39,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
 
     private final ResponseDTO<Object> responseDTO = new ResponseDTO<>();
 
-
+    //Node jS에서도 사용 가능하니까, 나중에 플젝 정리할 때 추가 체크하자.
     @Operation(
             summary =  "Create a new NoticeEntity and NoticeDetail",
             description = "This API creates a new NoticeEntity and NoticeDetail and returns NoticeDTO and NoticeDetailDTO  as response",
