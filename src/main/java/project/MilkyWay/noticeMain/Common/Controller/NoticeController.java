@@ -127,7 +127,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 List<Object> list = new ArrayList<>();
                 list.add(notice1);
                 list.add(noticeDetailEntities);
-                return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
+                return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 수정에 성공했습니다.", list));
             }
             else
             {
@@ -144,24 +144,36 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     {
         try
         {
-            NoticeEntity noticeEntity = noticeService.findNoticeId(noticeId);
-            if(noticeEntity != null)
+            List<NoticeDetailEntity> noticeDetailEntity = noticeDetailService.ListNoticeDetail(noticeId);
+            if(noticeDetailEntity != null)
             {
-                noticeService.DeleteByNoticeId(noticeId);
-                NoticeEntity noticeEntity2 = noticeService.findNoticeId(noticeId);
-                if(noticeEntity2 != null)
+                for(NoticeDetailEntity noticeDetail : noticeDetailEntity)
                 {
-                    throw new DeleteFailedException("데이터 삭제에 실패했습니다. 다시 시도해주세요");
+                    noticeDetailService.DeleteToNoticeDetail(noticeDetail.getNoticeDetailId());
+                }
+                NoticeEntity noticeEntity = noticeService.findNoticeId(noticeId);
+                if(noticeEntity != null)
+                {
+                    boolean bool =  noticeService.DeleteByNoticeId(noticeId);
+                    if(!bool)
+                    {
+                        throw new DeleteFailedException("데이터 삭제에 실패했습니다. 다시 시도해주세요");
+                    }
+                    else
+                    {
+                        return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제!"));
+                    }
                 }
                 else
                 {
-                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제!"));
+                    throw new DeleteFailedException("데이터를 지우는데 실패했습니다. 다시 시도해주세요");
                 }
             }
             else
             {
-                throw new DeleteFailedException("데이터를 지우는데 실패했습니다. 다시 시도해주세요");
+                throw new FindFailedException("삭제할 세부 정보를 찾을 수 없습니다.");
             }
+
         }
         catch (Exception e)
         {
@@ -177,6 +189,15 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             List<NoticeEntity> notice = new ArrayList<>(noticeService.findAll());
             if(notice != null)
             {
+                for (int i = 0; i < notice.size(); i++) {
+                    NoticeEntity notice1 = notice.get(i); // 리스트에서 해당 인덱스의 NoticeEntity를 가져옵니다.
+                    notice.set(i, NoticeEntity.builder()  // 새로 만든 NoticeEntity 객체로 덮어씁니다.
+                            .noticeId(notice1.getNoticeId())
+                            .greeting(notice1.getGreeting())
+                            .type(notice1.getType())
+                            .noticeDetailEntities(noticeDetailService.ListNoticeDetail(notice1.getNoticeId()))
+                            .build());
+                }
                 list.add(notice);//자동으로 못가져오면 추가하거나 수정 예정
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
             }
@@ -201,9 +222,12 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             NoticeEntity notice = noticeService.findNoticeId(NoticeId);
             if(notice != null)
             {
-                list.add(notice);//자동으로 못가져오면 추가하거나 수정 예정
-                List<NoticeDetailEntity> noticeEntities = new ArrayList<>(noticeDetailService.ListNoticeDetail(NoticeId));
-                list.add(noticeEntities);
+                list.add(NoticeEntity.builder()
+                                .type(notice.getType())
+                                .noticeId(notice.getNoticeId())
+                                .greeting(notice.getGreeting())
+                                .noticeDetailEntities(noticeDetailService.ListNoticeDetail(notice.getNoticeId()))
+                        .build());
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
             }
             else
@@ -227,7 +251,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 .direction(noticeDetailDTO.getDirection())
                 .beforeURL(noticeDetailDTO.getBeforeURL())
                 .afterURL(noticeDetailDTO.getAfterURL())
-                .comment(noticeDetailDTO.getNoticeId())
+                .comment(noticeDetailDTO.getComment())
                 .build();
     }
 
@@ -236,7 +260,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
         return NoticeEntity.builder()
                 .noticeId(noticeDTO.getNoticeId())
                 .type(noticeDTO.getType())
-                .greeting(noticeDTO.getNoticeId())
+                .greeting(noticeDTO.getGreeting())
                 .build();
     }
 }

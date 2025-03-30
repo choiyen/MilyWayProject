@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.noticeMain.NoticeDetail.mapper.NoticeDetailMapper">
-    <select id="findByNoticeId" parameterType="java.lang.Long" resultType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
+    <select id="findByNoticeId" parameterType="string" resultType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
         SELECT * FROM NoticeDetail WHERE noticeId = #{noticeId}
     </select>
     <select id="findByNoticeDetailId" parameterType="java.lang.Long" resultType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
@@ -18,7 +18,7 @@
     <update id="Update" parameterType="project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity">
         UPDATE NoticeDetail SET direction = #{direction, typeHandler=project.MilkyWay.ComonType.CleandirectionTypeHandler}, beforeURL =
         #{beforeURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, afterURL =
-        #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler} WHERE
+        #{afterURL, typeHandler=project.MilkyWay.ComonType.StringListTypeHandler}, comment= #{comment} WHERE
         noticeDetailId = #{noticeDetailId}
     </update>
 </mapper>

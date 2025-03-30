@@ -28,7 +28,7 @@ public class NoticeEntity
 
 
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "NoticeId", insertable = false, updatable = false, referencedColumnName = "NoticeId")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "NoticeId", referencedColumnName = "NoticeId")
     public Collection<NoticeDetailEntity> noticeDetailEntities;
 }

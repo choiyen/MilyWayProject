@@ -32,18 +32,18 @@ public class NoticeDetailService {
     public NoticeDetailEntity UpdateNoticeDetailMapper(Long encodingNoticeDetailId, NoticeDetailEntity ChangingNoticeDetailEntity)
     {
         NoticeDetailEntity OldNoticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetailId);
-
-        if (OldNoticeDetailEntity != null) {
+        if (OldNoticeDetailEntity != null)
+        {
             NoticeDetailEntity newNoticeDetailEntity2 = ChangeToNoticeDetail(OldNoticeDetailEntity, ChangingNoticeDetailEntity);
             noticeDetailMapper.Update(newNoticeDetailEntity2);
             NoticeDetailEntity SelectnewNoticeEntity = noticeDetailMapper.findByNoticeDetailId(encodingNoticeDetailId);
-            if (SelectnewNoticeEntity.equals(newNoticeDetailEntity2))
+            if (!SelectnewNoticeEntity.equals(newNoticeDetailEntity2))
             {
                 return SelectnewNoticeEntity;
             }
             else
             {
-                throw new FindFailedException("데이터 수정을 시도할 수 있었는데, 수정엔 실패했네요. 관리자에게 문의하세요");
+                throw new FindFailedException(encodingNoticeDetailId + "데이터 수정을 시도할 수 있었는데, 세부 내역 수정엔 실패했네요. 관리자에게 문의하세요");
             }
         }
         return ChangingNoticeDetailEntity;

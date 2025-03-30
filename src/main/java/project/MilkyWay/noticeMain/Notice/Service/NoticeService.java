@@ -1,6 +1,7 @@
 package project.MilkyWay.noticeMain.Notice.Service;
 
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
@@ -77,6 +78,11 @@ public class NoticeService
     public List<NoticeEntity> findAll()
     {
         List<NoticeEntity> list = noticeMapper.findAll();
+        for(NoticeEntity notice : list)
+        {
+            Hibernate.initialize(notice.getNoticeDetailEntities());
+        }
+
         if(!list.isEmpty())
         {
             return list;
