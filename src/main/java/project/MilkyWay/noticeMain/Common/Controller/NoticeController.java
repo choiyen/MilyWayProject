@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
+import project.MilkyWay.Inquire.DTO.InquireDTO;
+import project.MilkyWay.Question.DTO.QuestionsDTO;
 import project.MilkyWay.noticeMain.Common.DTO.NoticeJsonDTO;
 import project.MilkyWay.noticeMain.Notice.DTO.NoticeDTO;
 import project.MilkyWay.noticeMain.NoticeDetail.DTO.NoticeDetailDTO;
@@ -107,6 +109,17 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
         }
     }
 
+    @Operation(
+            summary =  "Change a NoticeDTO and NoticeDetailDTO List by NoticeId , but only if the user is an administrator.",  // Provide a brief summary
+            description = "This API Change a NoticeDTO, NoticeDetailDTO and returns NoticeJsonDTO as response",  // Provide detailed description
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "notice and NoticeDetail Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = NoticeJsonDTO.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid Change data"
+                    )
+            }
+    )
     @PutMapping("/Update")
     public ResponseEntity<?> Update(HttpServletRequest request, @RequestBody NoticeJsonDTO noticeJsonDTO)
     {
@@ -155,6 +168,21 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+    @Operation(
+            summary = "Delete an notice and NoticeDetail List by noticeId , but only if the user is an administrator.",  // Provide a brief summary
+            description = "This API deletes an notice and NoticeDetail List by the provided noticeId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "notice and NoticeDetail deleted successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "notice and NoticeDetail not found"
+                    )
+            }
+    )
     @DeleteMapping("/Delete")
     public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String noticeId)
     {
@@ -204,6 +232,15 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
+
+    @Operation(
+            summary = "Returns a list of Notice objects along with their associated NoticeDetails.",
+            description = "This API fetches a list of Notice and NoticeDetail objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Notice and Notice Detail List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = NoticeJsonDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Notice and Notice Detail List not found")
+            }
+    )
     @PostMapping("/findall")
     public ResponseEntity<?> FindALl()
     {
@@ -237,6 +274,15 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
 
         }
     }
+
+    @Operation(
+            summary = "Returns a NoticeDTO object for a given notice ID, along with its associated NoticeDetail list. ",
+            description = "This API retrieves a notice based on the provided notice ID and returns the corresponding NoticeDTO along with its associated NoticeDetail list.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "NoticeDTO and NoticeDetail List found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = NoticeJsonDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "NoticeDTO and NoticeDetail List not found")
+            }
+    )
     @PostMapping("/find")
     public ResponseEntity<?> FindByNoticeId(@RequestParam String NoticeId)
     {

@@ -79,7 +79,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             summary =  "Change a QuestionsDTO by QuestionsId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API Change a Questions and returns QuestionsDTO as response",  // Provide detailed description
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Questions Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
+                    @ApiResponse(responseCode = "201", description = "Questions Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = QuestionsDTO.class))),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Invalid Change data"
