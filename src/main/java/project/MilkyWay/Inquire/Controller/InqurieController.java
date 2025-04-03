@@ -6,17 +6,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.ComonType.Expection.*;
+import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Inquire.DTO.InquireDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.Inquire.Entity.InquireEntity;
-import project.MilkyWay.ComonType.Expection.DeleteFailedException;
-import project.MilkyWay.ComonType.Expection.FindFailedException;
-import project.MilkyWay.ComonType.Expection.InsertFailedException;
-import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.Inquire.Service.InquireService;
 
 
@@ -34,10 +33,10 @@ public class InqurieController
     
     ResponseDTO<InquireDTO> responseDTO = new ResponseDTO<>();
 
-
+    LoginSuccess loginSuccess = new LoginSuccess();
 
     @Operation(
-            summary =  "Create a new Inquire",
+            summary =  "Create a new Inquire, but only if the user is an administrator.",
             description = "This API creates a new Inquire and returns InquireDTO as response",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Inquire created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
@@ -45,7 +44,7 @@ public class InqurieController
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@Valid @RequestBody InquireDTO inquireDTO)
+    public ResponseEntity<?> Insert(HttpServletRequest request, @Valid @RequestBody InquireDTO inquireDTO)
     {
         try
         {
@@ -70,42 +69,7 @@ public class InqurieController
 
 
     @Operation(
-            summary = "Change a Inquire by InquireId",  // Provide a brief summary
-            description = "This API Change a Inquire and returns InquireDTO as response",  // Provide detailed description
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Inquire Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Invalid Change data"
-                    )
-            }
-    )
-    @PutMapping("/Update")
-    public ResponseEntity<?> Update(@Valid @RequestBody InquireDTO inquireDTO)
-    {
-        try
-        {
-            InquireEntity inquireEntity1 = ConvertToEntity(inquireDTO);
-            InquireEntity inquireEntity2 = inquireService.Update(inquireEntity1.getInquireId(), inquireEntity1);
-            if (inquireEntity2 != null)
-            {
-                InquireDTO inquireDTO1 = ConvertToDTO(inquireEntity2);
-                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 업데이트에 성공했습니다.", Collections.singletonList(inquireDTO1)));
-            }
-            else
-            {
-                throw new UpdateFailedException();
-            }
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
-        }
-    }
-
-
-    @Operation(
-            summary = "Delete an Inquire by InquireId",  // Provide a brief summary
+            summary = "Delete an Inquire by InquireId, but only if the user is an administrator.",  // Provide a brief summary
             description = "This API deletes an Inquire by the provided InquireId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
             responses = {
                     @ApiResponse(
@@ -119,19 +83,27 @@ public class InqurieController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestParam String inqurieId)
+    public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String inqurieId)
     {
         try
         {
-            boolean bool = inquireService.Delete(inqurieId);
-            if(bool)
+            if(loginSuccess.isSessionExist(request))
             {
-                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제에 성공했습니다."));
+                boolean bool = inquireService.Delete(inqurieId);
+                if(bool)
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제에 성공했습니다."));
+                }
+                else
+                {
+                    throw new DeleteFailedException("이미 삭제가 진행된 상태입니다.");
+                }
             }
             else
             {
-                throw new DeleteFailedException("이미 삭제가 진행된 상태입니다.");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 고객의 문의를 수정할 수 있는 건 관리자 뿐입니다.");
             }
+
         }
         catch (Exception e)
         {
@@ -141,7 +113,7 @@ public class InqurieController
 
 
     @Operation(
-            summary = "Returns a list of InqurieDTO objects",
+            summary = "Returns a list of InqurieDTO objects, but only if the user is an administrator.",
             description = "This API retrieves a list of InqurieDTO objects from the database.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Inqurie List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
@@ -149,17 +121,25 @@ public class InqurieController
             }
     )
     @GetMapping("/ALL")
-    public ResponseEntity<?> FindALL()
+    public ResponseEntity<?> FindALL(HttpServletRequest request)
     {
         try
         {
-            List<InquireEntity> inquireEntities = inquireService.findAll();
-            List<InquireDTO> inquireDTOS = new ArrayList<>();
-            for(InquireEntity inquireEntity : inquireEntities)
+            if(loginSuccess.isSessionExist(request))
             {
-                inquireDTOS.add(ConvertToDTO(inquireEntity));
+                List<InquireEntity> inquireEntities = inquireService.findAll();
+                List<InquireDTO> inquireDTOS = new ArrayList<>();
+                for(InquireEntity inquireEntity : inquireEntities)
+                {
+                    inquireDTOS.add(ConvertToDTO(inquireEntity));
+                }
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회에 성공했습니다.", inquireDTOS));
             }
-            return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회에 성공했습니다.", inquireDTOS));
+            else
+            {
+                throw new SessionNotFoundExpection("관리자 로그인 X, 고객이 보내온 전체 문의는 관리자만이 확인할 수 있어요");
+            }
+
         }
         catch (Exception e)
         {
@@ -168,7 +148,7 @@ public class InqurieController
     }
 
     @Operation(
-            summary = "Returns InquireDTO object for a given Inquire Id",
+            summary = "Returns InquireDTO object for a given Inquire Id, but only if the user is an administrator.",
             description = "This API retrieves an Inquire based on the provided Inquire Id and returns the corresponding InqurieDTO object.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Inquire found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
@@ -176,19 +156,26 @@ public class InqurieController
             }
     )
     @GetMapping("/select")
-    public ResponseEntity<?> FindById(@RequestParam String InquireId)
+    public ResponseEntity<?> FindById(HttpServletRequest request, @RequestParam String InquireId)
     {
         try
         {
-            InquireEntity inquireEntity = inquireService.FindByInquireId(InquireId);
-            if(inquireEntity != null)
+            if(loginSuccess.isSessionExist(request))
             {
-                InquireDTO inquireDTO = ConvertToDTO(inquireEntity);
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 전공 완료!", Collections.singletonList(inquireDTO)));
+                InquireEntity inquireEntity = inquireService.FindByInquireId(InquireId);
+                if(inquireEntity != null)
+                {
+                    InquireDTO inquireDTO = ConvertToDTO(inquireEntity);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터 전공 완료!", Collections.singletonList(inquireDTO)));
+                }
+                else
+                {
+                    throw new FindFailedException();
+                }
             }
             else
             {
-                throw new FindFailedException();
+                throw new SessionNotFoundExpection("관리자 로그인 X, 고객의 문의 정보 확인은 관리자만 가능해요");
             }
         }
         catch (Exception e)
@@ -196,7 +183,6 @@ public class InqurieController
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
-
 
     private InquireEntity ConvertToEntity(InquireDTO inquireDTO)
     {

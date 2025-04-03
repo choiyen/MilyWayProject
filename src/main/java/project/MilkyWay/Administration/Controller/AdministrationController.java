@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import project.MilkyWay.Administration.Entity.AdministrationEntity;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
 import project.MilkyWay.ComonType.Expection.InsertFailedException;
 import project.MilkyWay.Administration.Service.AdministrationService;
+import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
+import project.MilkyWay.ComonType.LoginSuccess;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,9 +35,10 @@ public class AdministrationController
 
     ResponseDTO<AdministrationDTO> responseDTO = new ResponseDTO<>();
 
+    LoginSuccess loginSuccess = new LoginSuccess();
 
     @Operation(
-            summary = "Create a new Administration",
+            summary = "Create a new Administration , but only if the user is an administrator. ",
             description = "This API creates a new Administration and returns AdministrationDTO as response",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Administration created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdministrationDTO.class))),
@@ -42,29 +46,43 @@ public class AdministrationController
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@Valid @RequestBody AdministrationDTO administrationDTO)
+    public ResponseEntity<?> Insert(HttpServletRequest request, @Valid @RequestBody AdministrationDTO administrationDTO)
     {
         try
         {
-            if(administrationService.exists(administrationDTO.getAdministrationId()) || administrationService.existsByDate(administrationDTO.getAdministrationDate()))
+            if(loginSuccess.isSessionExist(request))
             {
-                throw new InsertFailedException("해당 코드나 날짜를 가진 일정이 이미 있어서, 추가가 불가능 합니다.");
-            }
-            else
-            {
-                AdministrationEntity administration = ConvertToEntity(administrationDTO);
-                AdministrationEntity administrationEntity = administrationService.insert(administration);
-                if(administrationEntity != null)
+                if(administrationDTO.getAdminstrationType().equals("일하는날") == true)
                 {
-                    AdministrationDTO administrationDTO1 = ConvertToDTO(administrationEntity);
-                    return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 추가에 성공하셨습니다.", Collections.singletonList(administrationDTO1)));
+                    throw new InsertFailedException("고객 정보의 추가 없이 일하는 날 정보를 추가하지 못해요");
                 }
                 else
                 {
-                    throw new InsertFailedException("데이터 베이스에 데이터를 추가하는 과정에서 예기치 못한 오류가 발생했습니다.");
+                    if(administrationService.exists(administrationDTO.getAdministrationId()) || administrationService.existsByDate(administrationDTO.getAdministrationDate()))
+                    {
+                        throw new InsertFailedException("해당 코드나 날짜를 가진 일정이 이미 있어서, 추가가 불가능 합니다.");
+                    }
+                    else
+                    {
+                        AdministrationEntity administration = ConvertToEntity(administrationDTO);
+                        AdministrationEntity administrationEntity = administrationService.insert(administration);
+                        if(administrationEntity != null)
+                        {
+                            AdministrationDTO administrationDTO1 = ConvertToDTO(administrationEntity);
+                            return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 추가에 성공하셨습니다.", Collections.singletonList(administrationDTO1)));
+                        }
+                        else
+                        {
+                            throw new InsertFailedException("데이터 베이스에 데이터를 추가하는 과정에서 예기치 못한 오류가 발생했습니다.");
+                        }
+                    }
                 }
-            }
 
+            }
+            else
+            {
+                throw new SessionNotFoundExpection("관리자 로그인 X, 사내 일정 조회 불가");
+            }
         }
         catch (Exception e)
         {
@@ -74,7 +92,7 @@ public class AdministrationController
 
 
     @Operation(
-            summary = "Change a Administration by AdministrationId",  // Provide a brief summary
+            summary = "Change a Administration by AdministrationId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API changes an Administration and returns AdministrationDTO as response",  // Provide detailed description
             responses = {
                     @ApiResponse(responseCode = "201", description = "Administration Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdministrationDTO.class))),
@@ -85,20 +103,27 @@ public class AdministrationController
             }
     )
     @PutMapping("/Update")
-    public ResponseEntity<?> Update(@Valid @RequestBody AdministrationDTO administrationDTO)
+    public ResponseEntity<?> Update(HttpServletRequest request, @Valid @RequestBody AdministrationDTO administrationDTO)
     {
         try
         {
-            AdministrationEntity administration = ConvertToEntity(administrationDTO);
-            AdministrationEntity administrationEntity = administrationService.Update(administration);
-            if(administrationEntity != null)
+            if(loginSuccess.isSessionExist(request))
             {
-                AdministrationDTO administrationDTO1 = ConvertToDTO(administrationEntity);
-                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 업데이트에 성공하셨습니다.", Collections.singletonList(administrationDTO1)));
+                AdministrationEntity administration = ConvertToEntity(administrationDTO);
+                AdministrationEntity administrationEntity = administrationService.Update(administration);
+                if(administrationEntity != null)
+                {
+                    AdministrationDTO administrationDTO1 = ConvertToDTO(administrationEntity);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 업데이트에 성공하셨습니다.", Collections.singletonList(administrationDTO1)));
+                }
+                else
+                {
+                    throw new InsertFailedException("데이터 베이스의 데이터를 수정하는 과정에서 예기치 못한 오류가 발생했습니다.");
+                }
             }
             else
             {
-                throw new InsertFailedException("데이터 베이스의 데이터를 수정하는 과정에서 예기치 못한 오류가 발생했습니다.");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 회사 일정 변경 불가");
             }
         }
         catch (Exception e)
@@ -108,7 +133,7 @@ public class AdministrationController
     }
 
     @Operation(
-            summary = "Delete an administration by administrationId",  // Provide a brief summary
+            summary = "Delete an administration by administrationId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API deletes an administration by the provided administrationId and returns a ResponseEntity with a success or failure message",  // Provide detailed description
             responses = {
                     @ApiResponse(
@@ -122,20 +147,28 @@ public class AdministrationController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestParam String administrationId)
+    public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String administrationId)
     {
         try
         {
-            boolean bool = administrationService.Delete(administrationId);
-            if(bool)
+            if(loginSuccess.isSessionExist(request))
             {
-                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 삭제에 성공하셨습니다."));
+                boolean bool = administrationService.Delete(administrationId);
+                if(bool)
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 삭제에 성공하셨습니다."));
+                }
+                else
+                {
+                    throw new InsertFailedException("데이터 베이스에 데이터를 삭제하는 과정에서 예기치 못한 오류가 발생했습니다.");
+
+                }
             }
             else
             {
-                throw new InsertFailedException("데이터 베이스에 데이터를 삭제하는 과정에서 예기치 못한 오류가 발생했습니다.");
-
+                throw new SessionNotFoundExpection("관리자 로그인 X, 일정 정보 삭제를 위해선 관리자 로그인이 필요해요");
             }
+
         }
         catch (Exception e)
         {
@@ -145,7 +178,7 @@ public class AdministrationController
 
 
     @Operation(
-            summary = "Returns AdministrationDTO object for a given Address Id",
+            summary = "Returns AdministrationDTO object for a given Address Id , but only if the user is an administrator." ,
             description = "This API retrieves an Administration based on the provided Administration Id and returns the corresponding AdministrationDTO object.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Address found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdministrationDTO.class))),
@@ -153,20 +186,28 @@ public class AdministrationController
             }
     )
     @PostMapping("/Find")
-    public ResponseEntity<?> FindAdministration(@RequestParam String AdministrationId)
+    public ResponseEntity<?> FindAdministration(HttpServletRequest request, @RequestParam String AdministrationId)
     {
         try
         {
-            AdministrationEntity administration = administrationService.FindByAdministration(AdministrationId);
-            if(administration != null)
+            if(loginSuccess.isSessionExist(request))
             {
-                AdministrationDTO administrationDTO = ConvertToDTO(administration);
-                return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 찾기 성공", Collections.singletonList(administrationDTO)));
+                AdministrationEntity administration = administrationService.FindByAdministration(AdministrationId);
+                if(administration != null)
+                {
+                    AdministrationDTO administrationDTO = ConvertToDTO(administration);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","일정 데이터 찾기 성공", Collections.singletonList(administrationDTO)));
+                }
+                else
+                {
+                    throw new FindFailedException("예기치 못한 오류로 일정 데이터 찾기를 보류합니다. 에러코드를 확인해주세요");
+                }
             }
             else
             {
-                throw new FindFailedException("예기치 못한 오류로 일정 데이터 찾기를 보류합니다. 에러코드를 확인해주세요");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 개발 조회를 위해선 관리자 로그인이 필요해요");
             }
+
         }
         catch (Exception e)
         {
@@ -205,7 +246,8 @@ public class AdministrationController
         {
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
-    }
+    } //일정이 없는 날짜에만 고객이 회사의 전체 등록을 알아야 할 테니까, 일단 보류 -> 따로 일정만 가져오는 함수를 만들어야 할 려나?
+
     private AdministrationDTO ConvertToDTO(AdministrationEntity administrationEntity)
     {
         return AdministrationDTO.builder()

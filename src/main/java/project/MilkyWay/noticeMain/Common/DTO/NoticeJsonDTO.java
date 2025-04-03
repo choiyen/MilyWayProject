@@ -1,4 +1,4 @@
-package project.MilkyWay.noticeMain.Common;
+package project.MilkyWay.noticeMain.Common.DTO;
 
 
 import lombok.Builder;

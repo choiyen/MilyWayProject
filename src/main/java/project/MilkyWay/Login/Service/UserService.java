@@ -1,7 +1,12 @@
 package project.MilkyWay.Login.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import project.MilkyWay.Login.DTO.LoginDTO;
 import project.MilkyWay.Login.Entity.UserEntity;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
@@ -30,7 +35,23 @@ public class UserService //관리자 아이디를 관리하는 DTO
           throw new InsertFailedException("관리자 아이디 생성에 실패하였습니다.");
       }
   }
-    public UserEntity UpdateUser(String userId, UserEntity user)
+  public UserEntity existUser(LoginDTO loginDTO)
+  {
+      UserEntity newUser = userMapper.FindByUserId(loginDTO.getUserId());
+      if(newUser != null)
+      {
+          return newUser;
+      }
+      else
+      {
+          throw new FindFailedException("관리자 아이디 생성에 실패하였습니다.");
+      }
+  }
+
+
+
+
+  public UserEntity UpdateUser(String userId, UserEntity user)
   {
       UserEntity previousUser = userMapper.FindByUserId(userId);
       if(previousUser != null)
@@ -90,4 +111,6 @@ public class UserService //관리자 아이디를 관리하는 DTO
 
       return user;
   }
+
+
 }

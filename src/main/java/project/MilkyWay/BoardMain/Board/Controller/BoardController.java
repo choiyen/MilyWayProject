@@ -17,6 +17,7 @@ import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
 import project.MilkyWay.ComonType.Expection.InsertFailedException;
+import project.MilkyWay.ComonType.LoginSuccess;
 
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class BoardController
     {
         try
         {
+
             BoardEntity boardEntity = ConvertToBoardEntity(boardDTO);
             BoardEntity boardEntity1 = boardService.Insert(boardEntity);
             if(boardEntity1 != null)

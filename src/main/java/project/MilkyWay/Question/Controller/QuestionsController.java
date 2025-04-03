@@ -5,11 +5,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
+import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
+import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Question.DTO.QuestionsDTO;
 import project.MilkyWay.Question.Entity.QuestionsEntity;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
@@ -34,9 +37,11 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
 
     ResponseDTO<QuestionsDTO> responseDTO = new ResponseDTO<>();
 
+    LoginSuccess loginSuccess = new LoginSuccess();
+
 
     @Operation(
-            summary = "Create a new Questions",  // Provide a brief summary
+            summary = "Create a new Questions , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API creates a new Questions and returns QuestionsDTO as response",  // Provide detailed description
             responses = {
                     @ApiResponse(responseCode = "201", description = "Questions created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = QuestionsDTO.class))),
@@ -47,15 +52,21 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
     )
     @PostMapping("/Insert")
-    public  ResponseEntity<?> QuestionInsert(@RequestBody @Valid QuestionsDTO questionsDTO)
+    public  ResponseEntity<?> QuestionInsert(HttpServletRequest request, @RequestBody @Valid QuestionsDTO questionsDTO)
     {
         try
         {
-            QuestionsEntity questionsEntity = ConVertToEntity(questionsDTO);
-            QuestionsEntity questionsEntity1 = questionsService.Insertquestion(questionsEntity);
-            QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
-            System.out.println(questionsEntity1);
-            return ResponseEntity.badRequest().body(responseDTO.Response("success", "질문 등록에 성공하였습니다." , Collections.singletonList(questionsDTO1)));
+            if(loginSuccess.isSessionExist(request))
+            {
+                QuestionsEntity questionsEntity = ConVertToEntity(questionsDTO);
+                QuestionsEntity questionsEntity1 = questionsService.Insertquestion(questionsEntity);
+                QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
+                return ResponseEntity.badRequest().body(responseDTO.Response("success", "질문 등록에 성공하였습니다." , Collections.singletonList(questionsDTO1)));
+            }
+            else
+            {
+                throw new SessionNotFoundExpection("관리자 로그인 X, 예상 질문의 등록은 관리자만 가능한 영역입니다.");
+            }
         }
         catch (Exception e)
         {
@@ -65,7 +76,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
 
 
     @Operation(
-            summary =  "Change a QuestionsDTO by QuestionsId",  // Provide a brief summary
+            summary =  "Change a QuestionsDTO by QuestionsId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API Change a Questions and returns QuestionsDTO as response",  // Provide detailed description
             responses = {
                     @ApiResponse(responseCode = "201", description = "Questions Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InquireDTO.class))),
@@ -76,11 +87,12 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
     )
     @PutMapping("/Update")
-    public ResponseEntity<?> QuestionUpdate(@RequestBody @Valid QuestionsDTO newquestionsDTO)
+    public ResponseEntity<?> QuestionUpdate(HttpServletRequest request,@RequestBody @Valid QuestionsDTO newquestionsDTO)
     {
         try
         {
-                System.out.println(newquestionsDTO);
+            if(loginSuccess.isSessionExist(request))
+            {
                 QuestionsEntity questionsEntity = ConVertToEntity(newquestionsDTO);
                 QuestionsEntity questionsEntity1 = questionsService.updatequestion(questionsEntity.getId(), questionsEntity);
                 if(questionsEntity1 != null)
@@ -92,6 +104,11 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                 {
                     throw new UpdateFailedException();
                 }
+            }
+            else
+            {
+                throw new SessionNotFoundExpection("관리자 로그인 X, 고객에 대한 예상 질문 정보 수정은 관리자만 가능합니다.");
+            }
         }
         catch (Exception e)
         {
@@ -101,7 +118,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
     }
 
     @Operation(
-            summary = "Delete an Comment by QuestionId",  // Provide a brief summary
+            summary = "Delete an Comment by QuestionId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API deletes an Question by the provided QuestionId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
             responses = {
                     @ApiResponse(
@@ -115,18 +132,26 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> QuestionDelete(@RequestParam Long QuestionId)
+    public ResponseEntity<?> QuestionDelete(HttpServletRequest request, @RequestParam Long QuestionId)
     {
         try
         {
-            boolean bool = questionsService.DeleteByQuestionId(QuestionId);
-            if(bool)
+            if(loginSuccess.isSessionExist(request))
             {
-                return ResponseEntity.ok().body(responseDTO.Response("success", "질문 데이터 삭제에 성공하였습니다."));
+                boolean bool = questionsService.DeleteByQuestionId(QuestionId);
+                if(bool)
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("success", "질문 데이터 삭제에 성공하였습니다."));
+                }
+                else
+                {
+                    throw new DeleteFailedException("삭제할 데이터가 존재하지 않습니다.");
+                }
+
             }
             else
             {
-                throw new DeleteFailedException("삭제할 데이터가 존재하지 않습니다.");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 고객 예상 질문의 삭제는 관리자만 가능한 영역입니다.");
             }
         }
         catch (Exception e)
@@ -138,7 +163,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
 
 
     @Operation(
-            summary = "Returns QuestionDTO object for a given Question Id",
+            summary = "Returns QuestionDTO object for a given Question Id ",
             description = "This API retrieves an Question based on the provided Question Id and returns the corresponding QuestionDTO object.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Question found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = QuestionsDTO.class))),

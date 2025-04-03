@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import project.MilkyWay.BoardMain.Comment.Entity.CommentEntity;
 import project.MilkyWay.ComonType.Enum.UserType;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
+import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
 import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 
 import project.MilkyWay.BoardMain.Comment.Service.CommentService;
+import project.MilkyWay.ComonType.LoginSuccess;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +41,7 @@ public class CommentController
 
     ResponseDTO<CommentDTO> responseDTO = new ResponseDTO<>();
 
+    LoginSuccess loginSuccess = new LoginSuccess();
 
     @Operation(
             summary =  "Create a new Comment",
@@ -48,31 +52,57 @@ public class CommentController
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@Valid @RequestBody CommentDTO commentDTO)
+    public ResponseEntity<?> Insert(HttpServletRequest httpServletRequest, @Valid @RequestBody CommentDTO commentDTO)
     {
         try
         {
-            System.out.println(commentDTO);
-            boolean bool = boardService.Bool(commentDTO.getBoardId());
-            if(bool)
+            if(loginSuccess.isSessionExist(httpServletRequest))
             {
-                CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
-
-                CommentEntity comment = commentService.Insert(commentEntity);
-                if(comment != null)
+                boolean bool = boardService.Bool(commentDTO.getBoardId());
+                if(bool)
                 {
-                    CommentDTO commentDTO1 = ConvertToCommentDTO(comment);
-                    return ResponseEntity.ok().body(responseDTO.Response("success", "게시판에 댓글 등록 완료!", Collections.singletonList(commentDTO1)));
+                    CommentEntity commentEntity = ConvertToCommentEntity(commentDTO, "관리자");
+
+                    CommentEntity comment = commentService.Insert(commentEntity);
+                    if(comment != null)
+                    {
+                        CommentDTO commentDTO1 = ConvertToCommentDTO(comment);
+                        return ResponseEntity.ok().body(responseDTO.Response("success", "게시판에 댓글 등록 완료!", Collections.singletonList(commentDTO1)));
+                    }
+                    else
+                    {
+                        throw new FindFailedException("게시판에 데이터 등록 완료");
+                    }
                 }
                 else
                 {
-                    throw new FindFailedException("게시판에 데이터 등록 완료");
+                    throw new FindFailedException("코멘트 정보와 매칭되는 게시판을 찾을 수 없습니다.");
                 }
             }
             else
             {
-                throw new FindFailedException("코멘트 정보와 매칭되는 게시판을 찾을 수 없습니다.");
+                boolean bool = boardService.Bool(commentDTO.getBoardId());
+                if(bool)
+                {
+                    CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
+
+                    CommentEntity comment = commentService.Insert(commentEntity);
+                    if(comment != null)
+                    {
+                        CommentDTO commentDTO1 = ConvertToCommentDTO(comment);
+                        return ResponseEntity.ok().body(responseDTO.Response("success", "게시판에 댓글 등록 완료!", Collections.singletonList(commentDTO1)));
+                    }
+                    else
+                    {
+                        throw new FindFailedException("게시판에 데이터 등록 완료");
+                    }
+                }
+                else
+                {
+                    throw new FindFailedException("코멘트 정보와 매칭되는 게시판을 찾을 수 없습니다.");
+                }
             }
+
 
         }
         catch (Exception e)
@@ -83,9 +113,10 @@ public class CommentController
 
 
 
+
     @Operation(
             summary = "Change a Comment by CommentId",  // Provide a brief summary
-            description = "This API Change a Comment and returns CommentDTO as response",  // Provide detailed description
+            description = "This API changes a comment and returns a CommentDTO as a response, but only if the user is an administrator.",  // Provide detailed description
             responses = {
                     @ApiResponse(responseCode = "201", description = "Comment Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class))),
                     @ApiResponse(
@@ -95,21 +126,29 @@ public class CommentController
             }
     )
     @PutMapping("/Update")
-    public ResponseEntity<?> Update(@Valid @RequestBody CommentDTO commentDTO)
+    public ResponseEntity<?> Update(HttpServletRequest request, @Valid @RequestBody CommentDTO commentDTO)
     {
         try
         {
-            CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
-            CommentEntity comment = commentService.Update(commentDTO.getCommentId(), commentEntity);
-            if(comment != null)
+            if(loginSuccess.isSessionExist(request))
             {
-                CommentDTO commentDTO1 = ConvertToCommentDTO(comment);
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 변경 완료!", Collections.singletonList(commentDTO1)));
+                CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
+                CommentEntity comment = commentService.Update(commentDTO.getCommentId(), commentEntity);
+                if(comment != null)
+                {
+                    CommentDTO commentDTO1 = ConvertToCommentDTO(comment);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터 변경 완료!", Collections.singletonList(commentDTO1)));
+                }
+                else
+                {
+                    throw new UpdateFailedException("알 수 없는 오류로 업데이트에 실패했습니다.");
+                }
             }
             else
             {
-                throw new UpdateFailedException("알 수 없는 오류로 업데이트에 실패했습니다.");
+                throw new SessionNotFoundExpection("관리자가 아니라면 댓글의 삭제는 불가능합니다.");
             }
+
         }
         catch (Exception e)
         {
@@ -119,7 +158,7 @@ public class CommentController
 
 
     @Operation(
-            summary = "Delete an Comment by CommentId",  // Provide a brief summary
+            summary = "Delete an Comment by CommentId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API deletes an Comment by the provided CommentId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
             responses = {
                     @ApiResponse(
@@ -133,19 +172,27 @@ public class CommentController
             }
     )
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestParam Long CommentId)
+    public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam Long CommentId)
     {
         try
         {
-            boolean bool = commentService.Delete(CommentId);
-            if(bool)
+            if(loginSuccess.isSessionExist(request))
             {
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제!"));
+                boolean bool = commentService.Delete(CommentId);
+                if(bool)
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제!"));
+                }
+                else
+                {
+                    throw new DeleteFailedException("데이터 삭제 실패ㅠㅠㅠ");
+                }
             }
             else
             {
-                throw new DeleteFailedException("데이터 삭제 실패ㅠㅠㅠ");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 댓글의 삭제는 관리자에게 문의하세요");
             }
+
         }
         catch (Exception e)
         {
@@ -154,7 +201,7 @@ public class CommentController
     }
 
     @Operation(
-            summary = "Returns CommentDTO object for a given Comment Id",
+            summary = "Returns CommentDTO object for a given Comment Id ",
             description = "This API retrieves an Comment based on the provided Comment Id and returns the corresponding CommentDTO object.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Comment found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class))),
@@ -238,5 +285,13 @@ public class CommentController
                 .comment(commentDTO.getComment())
                 .build();
     }
-
+    private CommentEntity ConvertToCommentEntity(@Valid CommentDTO commentDTO, String provider)
+    {
+        return CommentEntity.builder()
+                .type(provider)
+                .commentId(commentDTO.getCommentId())
+                .boardId(commentDTO.getBoardId())
+                .comment(commentDTO.getComment())
+                .build();
+    }
 }

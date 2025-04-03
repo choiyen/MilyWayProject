@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -29,12 +33,13 @@ public class WebSecurityConfig {
         http.cors(Customizer.withDefaults())
                 .csrf(CsrfConfigurer::disable)
                 .sessionManagement(
-                        sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/","/auth/**", "/address/**", "/time/**", "/board/**","/comment/**", "/inqurie/**","/notice/**", "/notice/**","/reservation/**").permitAll().anyRequest().authenticated());
+                        sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션을 사용하도록 설정
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/", "/auth/**", "/address/**", "/time/**", "/board/**", "/comment/**", "/inqurie/**", "/notice/**", "/reservation/**").permitAll()  // 해당 경로는 모두 허용
+                        .anyRequest().authenticated());  // 나머지 요청은 인증 필요
 
         return http.build();
     }
-
     // cors 설정 정의
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

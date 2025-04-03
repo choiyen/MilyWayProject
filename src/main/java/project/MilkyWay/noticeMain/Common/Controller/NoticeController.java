@@ -7,19 +7,18 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
-import project.MilkyWay.noticeMain.Common.NoticeJsonDTO;
+import project.MilkyWay.ComonType.Expection.*;
+import project.MilkyWay.ComonType.LoginSuccess;
+import project.MilkyWay.noticeMain.Common.DTO.NoticeJsonDTO;
 import project.MilkyWay.noticeMain.Notice.DTO.NoticeDTO;
 import project.MilkyWay.noticeMain.NoticeDetail.DTO.NoticeDetailDTO;
 import project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity;
 import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
-import project.MilkyWay.ComonType.Expection.DeleteFailedException;
-import project.MilkyWay.ComonType.Expection.FindFailedException;
-import project.MilkyWay.ComonType.Expection.InsertFailedException;
-import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.noticeMain.NoticeDetail.Service.NoticeDetailService;
 import project.MilkyWay.noticeMain.Notice.Service.NoticeService;
 
@@ -39,9 +38,11 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
 
     private final ResponseDTO<Object> responseDTO = new ResponseDTO<>();
 
+    LoginSuccess loginSuccess = new LoginSuccess();
+
     //Node jS에서도 사용 가능하니까, 나중에 플젝 정리할 때 추가 체크하자.
     @Operation(
-            summary =  "Create a new NoticeEntity and NoticeDetail",
+            summary =  "Create a new NoticeEntity and NoticeDetail , but only if the user is an administrator.",
             description = "This API creates a new NoticeEntity and NoticeDetail and returns NoticeDTO and NoticeDetailDTO  as response",
             responses = {
                     @ApiResponse(
@@ -56,41 +57,48 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             }
     )
     @PostMapping("/Insert")
-    public ResponseEntity<?> Insert(@RequestBody NoticeJsonDTO noticeJsonDTO)
+    public ResponseEntity<?> Insert(HttpServletRequest request, @RequestBody NoticeJsonDTO noticeJsonDTO)
     {
         try
         {
-            NoticeEntity noticeEntity = ConvertToNotice(noticeJsonDTO.getNoticeDTO());
-            NoticeEntity notice1 = noticeService.InsertNotice(noticeEntity);
-            if(notice1 != null)
+            if(loginSuccess.isSessionExist(request))
             {
-                System.out.println(notice1);
-                int i = 0;
-                List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
-                while (i < noticeJsonDTO.getNoticeDetailDTO().size() )
+                NoticeEntity noticeEntity = ConvertToNotice(noticeJsonDTO.getNoticeDTO());
+                NoticeEntity notice1 = noticeService.InsertNotice(noticeEntity);
+                if(notice1 != null)
                 {
-                    NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i));
-                    NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
-                    if(noticeDetailEntity1 != null)
+                    System.out.println(notice1);
+                    int i = 0;
+                    List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
+                    while (i < noticeJsonDTO.getNoticeDetailDTO().size() )
                     {
-                        noticeDetailEntities.add(noticeDetailEntity1);
+                        NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i));
+                        NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
+                        if(noticeDetailEntity1 != null)
+                        {
+                            noticeDetailEntities.add(noticeDetailEntity1);
+                        }
+                        else
+                        {
+                            noticeService.DeleteByNoticeId(notice1.getNoticeId());
+                            throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                        }
+                        i++;
                     }
-                    else
-                    {
-                        noticeService.DeleteByNoticeId(notice1.getNoticeId());
-                        throw new InsertFailedException("데이터 저장에 실패했습니다.");
-                    }
-                    i++;
-                }
-                List<Object> list = new ArrayList<>();
-                list.add(notice1);
-                list.add(noticeDetailEntities);
-                return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
+                    List<Object> list = new ArrayList<>();
+                    list.add(notice1);
+                    list.add(noticeDetailEntities);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
 
+                }
+                else
+                {
+                    throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                }
             }
             else
             {
-                throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 후기 정보 등록은 관리자 로그인이 필요합니다.");
             }
         }
         catch (Exception e)
@@ -100,39 +108,47 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     }
 
     @PutMapping("/Update")
-    public ResponseEntity<?> Update(@RequestBody NoticeJsonDTO noticeJsonDTO)
+    public ResponseEntity<?> Update(HttpServletRequest request, @RequestBody NoticeJsonDTO noticeJsonDTO)
     {
         try
         {
-            NoticeEntity oldnotice = noticeService.findNoticeId(noticeJsonDTO.getNoticeDTO().getNoticeId());
-            NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO()));
-            if(notice1 != null)
+            if(loginSuccess.isSessionExist(request))
             {
-                int i = 0;
-                List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
-                while (i < noticeJsonDTO.getNoticeDetailDTO().size())
+                NoticeEntity oldnotice = noticeService.findNoticeId(noticeJsonDTO.getNoticeDTO().getNoticeId());
+                NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO()));
+                if(notice1 != null)
                 {
-                    NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId(), ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i)));
-                    if(noticeDetailEntity1 != null)
+                    int i = 0;
+                    List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
+                    while (i < noticeJsonDTO.getNoticeDetailDTO().size())
                     {
-                         noticeDetailEntities.add(noticeDetailEntity1);
+                        NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId(), ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i)));
+                        if(noticeDetailEntity1 != null)
+                        {
+                            noticeDetailEntities.add(noticeDetailEntity1);
+                        }
+                        else
+                        {
+                            noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), oldnotice);
+                            throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                        }
+                        i++;
                     }
-                    else
-                    {
-                        noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), oldnotice);
-                        throw new InsertFailedException("데이터 저장에 실패했습니다.");
-                    }
-                    i++;
+                    List<Object> list = new ArrayList<>();
+                    list.add(notice1);
+                    list.add(noticeDetailEntities);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 수정에 성공했습니다.", list));
                 }
-                List<Object> list = new ArrayList<>();
-                list.add(notice1);
-                list.add(noticeDetailEntities);
-                return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 수정에 성공했습니다.", list));
+                else
+                {
+                    throw new UpdateFailedException("후기 데이터 수정에 실패하였습니다.");
+                }
             }
             else
             {
-                throw new UpdateFailedException("후기 데이터 수정에 실패하였습니다.");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 후기 정보의 수정은 관리자에게만 허용됩니다.");
             }
+
         }
         catch (Exception e)
         {
@@ -140,39 +156,47 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
         }
     }
     @DeleteMapping("/Delete")
-    public ResponseEntity<?> Delete(@RequestParam String noticeId)
+    public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String noticeId)
     {
         try
         {
-            List<NoticeDetailEntity> noticeDetailEntity = noticeDetailService.ListNoticeDetail(noticeId);
-            if(noticeDetailEntity != null)
+            if(loginSuccess.isSessionExist(request))
             {
-                for(NoticeDetailEntity noticeDetail : noticeDetailEntity)
+                List<NoticeDetailEntity> noticeDetailEntity = noticeDetailService.ListNoticeDetail(noticeId);
+                if(noticeDetailEntity != null)
                 {
-                    noticeDetailService.DeleteToNoticeDetail(noticeDetail.getNoticeDetailId());
-                }
-                NoticeEntity noticeEntity = noticeService.findNoticeId(noticeId);
-                if(noticeEntity != null)
-                {
-                    boolean bool =  noticeService.DeleteByNoticeId(noticeId);
-                    if(!bool)
+                    for(NoticeDetailEntity noticeDetail : noticeDetailEntity)
                     {
-                        throw new DeleteFailedException("데이터 삭제에 실패했습니다. 다시 시도해주세요");
+                        noticeDetailService.DeleteToNoticeDetail(noticeDetail.getNoticeDetailId());
+                    }
+                    NoticeEntity noticeEntity = noticeService.findNoticeId(noticeId);
+                    if(noticeEntity != null)
+                    {
+                        boolean bool =  noticeService.DeleteByNoticeId(noticeId);
+                        if(!bool)
+                        {
+                            throw new DeleteFailedException("데이터 삭제에 실패했습니다. 다시 시도해주세요");
+                        }
+                        else
+                        {
+                            return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제!"));
+                        }
                     }
                     else
                     {
-                        return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 삭제!"));
+                        throw new DeleteFailedException("데이터를 지우는데 실패했습니다. 다시 시도해주세요");
                     }
                 }
                 else
                 {
-                    throw new DeleteFailedException("데이터를 지우는데 실패했습니다. 다시 시도해주세요");
+                    throw new FindFailedException("삭제할 세부 정보를 찾을 수 없습니다.");
                 }
             }
             else
             {
-                throw new FindFailedException("삭제할 세부 정보를 찾을 수 없습니다.");
+                throw new SessionNotFoundExpection("관리자 로그인 X, 후기 정보 삭제에는 관리자 로그인이 반드시 필요합니다.");
             }
+
 
         }
         catch (Exception e)
