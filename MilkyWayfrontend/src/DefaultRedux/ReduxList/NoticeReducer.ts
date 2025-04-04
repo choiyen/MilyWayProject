@@ -1,25 +1,20 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {validate} from 'webpack';
-import {setQuestionData} from './QusetionsReducer';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Notice {
-  NoticeId: String;
-  type: String;
-  greeting: String;
+  NoticeId: string;
+  type: string;
+  greeting: string;
 }
 
-
 const initialNoticeStateValue: Notice = {
-  NoticeId: '',
-  type: '',
-  greeting: '',
+  NoticeId: "",
+  type: "",
+  greeting: "",
 };
 
-
-
 export const NoticeSave = createSlice({
-  name: 'setNoticeData',
-  initialState: {value: initialNoticeStateValue},
+  name: "setNoticeData",
+  initialState: { value: initialNoticeStateValue },
   reducers: {
     setNoticeData: (state, action: PayloadAction<Notice>) => {
       state.value = action.payload;
@@ -27,3 +22,5 @@ export const NoticeSave = createSlice({
   },
 });
 
+export default NoticeSave.reducer;
+export const { setNoticeData } = NoticeSave.actions;

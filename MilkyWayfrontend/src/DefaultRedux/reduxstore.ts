@@ -1,11 +1,35 @@
-import React, {useReducer} from 'react';
-import {configureStore} from '@reduxjs/toolkit';
-import userReducer from './ReduxList/userlogin';
-import modelactionReducer from './ReduxList/modelaction';
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./ReduxList/userlogin";
+import userSignReducer from "./ReduxList/usersign"; // userSignSlice에서 export한 reducer
+import ReservationReducer from "./ReduxList/ReservationReducer";
+import QuestionReducer from "./ReduxList/QuestionsReducer";
+import NoticeReducer from "./ReduxList/NoticeReducer";
+import NoticeDetailReducer from "./ReduxList/NoticeDetailReducer";
+import ModelReducer from "./ReduxList/modelaction";
+import InqurleReducer from "./ReduxList/InqurieReducer";
+import BoardReducer from "./ReduxList/BoardReducer";
+import CommentReducer from "./ReduxList/CommentReducer";
+import AdministrationReducer from "./ReduxList/AdministrationReducer";
+import AddressReducer from "./ReduxList/addressReducer";
 
-export default configureStore({
+const store = configureStore({
   reducer: {
-    user: userReducer,
-    modelaction: modelactionReducer,
+    userlogin: userReducer,
+    usersign: userSignReducer,
+    Reservation: ReservationReducer,
+    Question: QuestionReducer,
+    Notice: NoticeReducer,
+    NoticeDetail: NoticeDetailReducer,
+    Model: ModelReducer,
+    Inqurle: InqurleReducer,
+    Board: BoardReducer,
+    Comment: CommentReducer,
+    Administration: AdministrationReducer,
+    Address: AddressReducer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>; // 스토어에서 상태 타입을 추론
+export type AppDispatch = typeof store.dispatch; // 디스패치 타입을 추론
+
+export default store;

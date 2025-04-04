@@ -3,6 +3,8 @@ import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 import { Footer } from "@/Components/Common/Footer";
 import { FixedManagerHeader, Fontname } from "@/SCSS/Fixed";
+import { useDispatch } from "react-redux";
+import { login } from "@/DefaultRedux/ReduxList/userlogin";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -73,8 +75,14 @@ const MangerButton = styled.button`
 `;
 
 export const ManagerMain = () => {
+  const dispatch = useDispatch();
+
   const [IdState, setIdState] = useState("");
   const [PasswordState, setPasswordState] = useState("");
+
+  const handleLogin = () => {
+    dispatch(login({ userID: IdState, Password: PasswordState }));
+  };
 
   return (
     <div>
@@ -94,7 +102,7 @@ export const ManagerMain = () => {
             value={PasswordState}
             onChange={(e) => setPasswordState(e.target.value)}
           />
-          <MangerButton>로그인</MangerButton>
+          <MangerButton onClick={handleLogin}>로그인</MangerButton>
         </MangerPage>
       </Wrapper>
       <Footer />
