@@ -113,7 +113,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             summary =  "Change a NoticeDTO and NoticeDetailDTO List by NoticeId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API Change a NoticeDTO, NoticeDetailDTO and returns NoticeJsonDTO as response",  // Provide detailed description
             responses = {
-                    @ApiResponse(responseCode = "201", description = "notice and NoticeDetail Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = NoticeJsonDTO.class))),
+                    @ApiResponse(responseCode = "201", description = "notice and NoticeDetail Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(oneOf = {NoticeDTO.class, NoticeDetailDTO.class} ))),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Invalid Change data"
