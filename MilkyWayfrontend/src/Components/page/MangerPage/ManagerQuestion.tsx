@@ -7,6 +7,8 @@ import { Fontname, ImgTag, LastButton } from "@/SCSS/Fixed";
 import plus from "@/Components/img/plus.png";
 import { TextAreaBox } from "@/Components/Common/TextAreaBox";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
+import { setQuestionData } from "@/DefaultRedux/ReduxList/QuestionsReducer";
+import { useDispatch } from "react-redux";
 
 const MainWapper = styled.div`
   display: flex;
@@ -47,12 +49,21 @@ export const ManagerQuestion = () => {
   const [count, setCount] = useState(1);
   const [Question, SetQuestion] = useState<string[]>([""]);
   const [Comment, SetComment] = useState<string[]>([""]);
-
+  const questionData: { ExpectionQnA: string; ExpectedComment: string }[] = [];
+  const dispatch = useDispatch();
   const cleanCount = () => {
     setCount(count + 1);
   };
   const lastItemRef = useRef<HTMLDivElement | null>(null);
-
+  const handleEX = () => {
+    for (let i = 0; i < count; i++) {
+      questionData.push({
+        ExpectionQnA: Question[i],
+        ExpectedComment: Comment[i],
+      });
+    }
+    dispatch(setQuestionData(questionData));
+  };
   return (
     <div>
       <MangerHeader />
@@ -85,7 +96,7 @@ export const ManagerQuestion = () => {
             <ImgTag src={plus} onClick={cleanCount} />
           </Wapper>
         </MainBox>
-        <LastButton> 재업로드</LastButton>
+        <LastButton onClick={handleEX}> 재업로드</LastButton>
       </MainWapper>
       <Footer />
     </div>

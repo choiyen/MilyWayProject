@@ -2,10 +2,12 @@ import { Footer } from "@/Components/Common/Footer";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { NewCalendar } from "@/Components/Common/NewCalendar";
 import { SelectBox } from "@/Components/Common/SelectBox";
+import { setReservationData } from "@/DefaultRedux/ReduxList/ReservationReducer";
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanType";
 import { Value } from "@/types/date";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
 
 const MainWapper = styled.div`
@@ -33,8 +35,20 @@ export const ManagerSign = () => {
   const [Address, SetAddress] = useState("");
   const [AddressDetail, SetAddressDetail] = useState("");
   const today = new Date();
-
   const [Reservation, SetReservation] = useState<Value>(today);
+  const dispatch = useDispatch();
+
+  const handleReservation = () => {
+    dispatch(
+      setReservationData({
+        name: Name,
+        phone: Phone,
+        Address: Address + " " + AddressDetail,
+        SubssionDate: Reservation ? Reservation.toString() : "",
+        acreage: Saleable,
+      })
+    );
+  };
 
   return (
     <div>
@@ -44,11 +58,6 @@ export const ManagerSign = () => {
           <Fontname>온라인 예약 관리 </Fontname>
           <MainWapper>
             <SelectBox name={"서비스명"} append={cleanType}></SelectBox>
-            <InputTextBox
-              name={"분양실평수"}
-              Value={Saleable}
-              setValue2={SetSaleable}
-            ></InputTextBox>
             <InputTextBox
               name={"이름"}
               Value={Name}
@@ -69,15 +78,20 @@ export const ManagerSign = () => {
               Value={AddressDetail}
               setValue2={SetAddressDetail}
             ></InputTextBox>
+            <InputTextBox
+              name={"분양실평수"}
+              Value={Saleable}
+              setValue2={SetSaleable}
+            ></InputTextBox>
             <NewCalendar
               name={"예약 날짜"}
               Value={Reservation}
-              setValue2={SetReservation}
+              setValue={SetReservation}
             ></NewCalendar>
             {/* 아직 캘린더 CSS 적용 안됨, 디자인 검토 후 추가할 예정 */}
           </MainWapper>
         </MainBox>
-        <LastButton>예약 등록</LastButton>
+        <LastButton onClick={handleReservation}>예약 등록</LastButton>
       </MainWapper>
       <Footer />
     </div>
