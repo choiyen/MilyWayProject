@@ -3,6 +3,8 @@ import styled from "styled-components";
 interface SelectBoxProps {
   name: string;
   append: string[];
+  value: string;
+  setValue: (value: string) => void;
 }
 
 const RadioBoxContainer = styled.div`
@@ -25,13 +27,22 @@ const Label = styled.span<{ $isred?: string | undefined }>`
       : "black"}; /* isRed가 true일 때 빨간색으로 */
 `;
 
-export const RadioBox = ({ name, append }: SelectBoxProps) => {
+export const RadioBox = ({ name, append, setValue }: SelectBoxProps) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+  };
+
   return (
     <RadioBoxContainer>
       <Label>{name}</Label>
       {append.map((item) => (
         <Label key={item} $isred={`${item === "업무"}`}>
-          <input type="radio" name="example" value={item} />
+          <input
+            type="radio"
+            name="example"
+            value={item}
+            onChange={handleChange}
+          />
           {item}
         </Label>
       ))}

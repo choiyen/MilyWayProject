@@ -14,6 +14,9 @@ import {
   LastButton,
   Wapper,
 } from "@/SCSS/Fixed";
+import { useDispatch } from "react-redux";
+import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
+import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
 
 const MainBox = styled.div`
   width: 100%;
@@ -35,17 +38,31 @@ const MainWapper = styled.div`
   flex-direction: column;
   min-height: 100vh;
 `;
-
+interface NoticeDetail {
+  NoticeDetailId?: string;
+  NoticeId?: string;
+  direction: string;
+  beforeURL: File[];
+  afterURL: File[];
+  Advice: string;
+}
 export const ManagerAdvice = () => {
   const [count, setCount] = useState(1);
-  const [type, setType] = useState("");
+
+  const [type, setType] = useState<string>("");
+  const [greeting, setgreeting] = useState("");
+
   const [cleanspot, setcleanspot] = useState<string[]>([""]);
   const [beforefile, setbeforefile] = useState<File[][]>([[]]);
   const [afferfile, setAfferfile] = useState<File[][]>([[]]);
   const [Advice, SetAdvice] = useState<string[]>([""]);
 
+  const AdviceData: NoticeDetail[] = [];
+
   // 마지막 항목을 가리키기 위한 ref
   const lastItemRef = useRef<HTMLDivElement | null>(null);
+
+  const dispatch = useDispatch();
 
   // 컴포넌트가 처음 렌더링될 때와, 추가할 때마다 스크롤을 내리기 위해 useEffect 사용
   useEffect(() => {
@@ -68,6 +85,26 @@ export const ManagerAdvice = () => {
     setcleanspot(newcleanspot);
   };
 
+  const handleOnclick = () => {
+    dispatch(
+      setNoticeData({
+        type: type,
+        greeting: greeting,
+      })
+    );
+
+    for (let i = 0; i < count + 1; i++) {
+      AdviceData.push({
+        direction: cleanspot[i],
+        beforeURL: beforefile[i],
+        afterURL: afferfile[i],
+        Advice: Advice[i],
+      });
+    }
+
+    dispatch(setNoticeDetailData(AdviceData));
+  };
+
   return (
     <div style={{ overflow: "Visble" }}>
       <FixedManagerHeader />
@@ -75,8 +112,16 @@ export const ManagerAdvice = () => {
         <MainBox>
           <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
           <Wapper>
-            <SelectBox name={"청소 유형"} append={cleanType} />
-            <TextAreaBox name={"도입 인사"} Value={type} setValue2={setType} />
+            <SelectBox
+              name={"청소 유형"}
+              append={cleanType}
+              setValue={setType}
+            />
+            <TextAreaBox
+              name={"도입 인사"}
+              Value={greeting}
+              setValue2={setgreeting}
+            />
             {[...Array(count)].map((_, i) => (
               <div
                 key={i}
@@ -113,7 +158,7 @@ export const ManagerAdvice = () => {
             <ImgTag src={plus} onClick={cleanCount} />
           </Wapper>
         </MainBox>
-        <LastButton>업로드</LastButton>
+        <LastButton onClick={handleOnclick}>업로드</LastButton>
       </MainWapper>
       <Footer />
     </div>

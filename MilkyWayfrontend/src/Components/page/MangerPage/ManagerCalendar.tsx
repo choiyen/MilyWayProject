@@ -1,6 +1,7 @@
 import { Footer } from "@/Components/Common/Footer";
 import { RadioBox } from "@/Components/Common/RadioBox";
 import { SelectDate } from "@/Components/Common/SelectDate";
+import { setAdministrationData } from "@/DefaultRedux/ReduxList/AdministrationReducer";
 import {
   FixedManagerHeader,
   Fontname,
@@ -11,6 +12,7 @@ import {
 import { adminstrationSelect } from "@/types/adminstrationType";
 import { Value } from "@/types/date";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
 
 const MainWapper = styled.div`
@@ -73,9 +75,11 @@ const Label = styled.span`
 `;
 
 export const ManagerCalendar = () => {
-  const [change, setChange] = useState(false);
+  const [change, setChange] = useState(false); //모달창 활성화를 담당당
   const today = new Date();
-  const [date, setDate] = useState<Value>(today);
+  const [date, setDate] = useState<Date | null>(today);
+  const [type, setType] = useState(""); // 예약 타입
+  const dispatch = useDispatch(); // Redux dispatch 함수
 
   useEffect(() => {
     // This effect will run whenever `date` is updated
@@ -86,13 +90,37 @@ export const ManagerCalendar = () => {
     setChange(!change);
   }
 
-  const handleDateChange = (newDate: Value) => {
-    console.log("Selected Date:", newDate);
-    setDate(newDate);
+  const handleDateChange = (
+    value: Value,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    if (value instanceof Date) {
+      console.log("Selected Date:", value);
+      const result = new Date(value);
+      if (value !== null) {
+        setDate(result); // Date 객체나 null일 경우 그대로 상태 설정
+      } // Convert newDate to a Date object
+    } else console.error("Invalid date value:", value);
   };
 
   function ChangeDate(): void {
-    throw new Error("Function not implemented.");
+    // 예약 타입과 날짜를 서버에 전송하는 로직을 여기에 추가합니다.
+    console.log("예약 타입:", type);
+    console.log("예약 날짜:", date);
+    if (date) {
+      dispatch(
+        setAdministrationData({
+          administrationType: type,
+          administrationDate: date,
+        })
+      ); // Redux action dispatch
+    } else {
+      throw new Error("Invalid date selected.");
+    }
+    // 예시: 서버에 예약 요청 보내기
+    // 모달창 닫기
+    setChange(false);
   }
 
   return (
@@ -124,7 +152,11 @@ export const ManagerCalendar = () => {
       <SmallWrapper $istrue={`${change}`}>
         <SelectDate name={"선택 날짜"} change={date?.toString() || ""} />
         <br />
-        <RadioBox name={"선택 유형"} append={[...adminstrationSelect]} />
+        <RadioBox
+          name={"선택 유형"}
+          append={[...adminstrationSelect]}
+          setValue={setType}
+        />
         <br />
         <LastButton onClick={() => ChangeDate()}>일정 확정</LastButton>
         <LastButton onClick={() => ChangeDate()}>취소</LastButton>

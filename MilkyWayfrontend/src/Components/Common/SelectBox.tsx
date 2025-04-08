@@ -6,6 +6,7 @@ interface SelectBoxProps {
   append: string[];
   updateCleanspot?: (newMessage: string, count: number) => void;
   Cleancount?: number;
+  setValue?: (value: string) => void;
 }
 
 const Select = styled.select`
@@ -47,6 +48,7 @@ export const SelectBox = ({
   append,
   updateCleanspot,
   Cleancount,
+  setValue,
 }: SelectBoxProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // 선택된 값을 부모에게 전달
@@ -54,6 +56,8 @@ export const SelectBox = ({
     if (updateCleanspot != null && Cleancount != null) {
       console.log(Cleancount);
       updateCleanspot(event.target.value, Cleancount);
+    } else if (setValue != null) {
+      setValue(event.target.value);
     }
   };
   useEffect(() => {

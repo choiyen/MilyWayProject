@@ -1,24 +1,23 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface InqurieType {
-  InqurieId: String;
-  Address: String;
-  PhoneNumber: String;
-  Inqurie: String;
-  SubmissionDate: String;
+  InqurieId?: string;
+  Address: string;
+  PhoneNumber: string;
+  Inqurie: string;
+  SubmissionDate: string;
 }
 
 const initialInqurieValue: InqurieType = {
-  InqurieId: '',
-  Address: '',
-  PhoneNumber: '',
-  Inqurie: '',
-  SubmissionDate: '',
+  Address: "",
+  PhoneNumber: "",
+  Inqurie: "",
+  SubmissionDate: "",
 };
 
 export const InqurleValue = createSlice({
-  name: 'setInqurieData',
-  initialState: {value: initialInqurieValue},
+  name: "setInqurieData",
+  initialState: { value: initialInqurieValue },
   reducers: {
     setIqurieData: (state, action: PayloadAction<InqurieType>) => {
       state.value = action.payload;
@@ -27,4 +26,4 @@ export const InqurleValue = createSlice({
 });
 
 export default InqurleValue.reducer;
-export const {setIqurieData} = InqurleValue.actions;
+export const { setIqurieData } = InqurleValue.actions;

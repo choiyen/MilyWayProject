@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface addressState {
-  AddressId: string;
+  AddressId?: string;
   customer: string;
   Address: string;
   phoneNumber: string;
   SubmissionDate: string;
+  acreage?: string;
 }
 
 const initialAddressStateValue: addressState = {
-  AddressId: "",
   customer: "",
   Address: "",
   phoneNumber: "",
@@ -28,3 +28,5 @@ export const addressreducer = createSlice({
 
 export default addressreducer.reducer;
 export const { setAddressData } = addressreducer.actions;
+
+// 데이터 추가를 위한 리듀서 설정완료

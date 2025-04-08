@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Notice {
-  NoticeId: string;
+  NoticeId?: string;
   type: string;
   greeting: string;
 }
 
 const initialNoticeStateValue: Notice = {
-  NoticeId: "",
   type: "",
   greeting: "",
 };

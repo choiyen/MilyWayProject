@@ -313,7 +313,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "Login"}
-                  onClick={() => handleButtonClick("Login")}
+                  onClick={() => FuncClick(GateWayType.ManagerMain)}
                 >
                   Login
                 </ChangeButton>

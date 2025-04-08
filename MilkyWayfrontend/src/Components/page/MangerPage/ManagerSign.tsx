@@ -2,7 +2,7 @@ import { Footer } from "@/Components/Common/Footer";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { NewCalendar } from "@/Components/Common/NewCalendar";
 import { SelectBox } from "@/Components/Common/SelectBox";
-import { setReservationData } from "@/DefaultRedux/ReduxList/ReservationReducer";
+import { setAddressData } from "@/DefaultRedux/ReduxList/addressReducer";
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanType";
 import { Value } from "@/types/date";
@@ -40,11 +40,11 @@ export const ManagerSign = () => {
 
   const handleReservation = () => {
     dispatch(
-      setReservationData({
-        name: Name,
-        phone: Phone,
+      setAddressData({
+        customer: Name,
+        phoneNumber: Phone,
         Address: Address + " " + AddressDetail,
-        SubssionDate: Reservation ? Reservation.toString() : "",
+        SubmissionDate: Reservation ? Reservation.toString() : "",
         acreage: Saleable,
       })
     );

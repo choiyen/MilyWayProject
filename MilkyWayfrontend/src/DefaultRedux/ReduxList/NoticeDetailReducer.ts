@@ -1,29 +1,32 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface NoticeDetail {
-  NoticeDetailId: String;
-  NoticeId: String;
-  direction: String;
-  beforeURL: String[];
-  afterURL: String[];
+  NoticeDetailId?: string;
+  NoticeId?: string;
+  direction: string;
+  beforeURL: File[];
+  afterURL: File[];
+  Advice: string;
 }
 
-const initialNoticeDetailStateValue: NoticeDetail = {
-  NoticeDetailId: '',
-  NoticeId: '',
-  direction: '',
-  beforeURL: [],
-  afterURL: [],
-};
+const initialNoticeDetailStateValue: NoticeDetail[] = [
+  {
+    NoticeId: "",
+    direction: "",
+    beforeURL: [],
+    afterURL: [],
+    Advice: "",
+  },
+];
 export const NoticeDetailSave = createSlice({
-  name: 'setNoticeDetailData',
-  initialState: {value: initialNoticeDetailStateValue},
+  name: "setNoticeDetailData",
+  initialState: { value: initialNoticeDetailStateValue },
   reducers: {
-    setNoticeData: (state, action: PayloadAction<NoticeDetail>) => {
+    setNoticeDetailData: (state, action: PayloadAction<NoticeDetail[]>) => {
       state.value = action.payload;
     },
   },
 });
 
 export default NoticeDetailSave.reducer;
-export const {setNoticeData} = NoticeDetailSave.actions;
+export const { setNoticeDetailData } = NoticeDetailSave.actions;

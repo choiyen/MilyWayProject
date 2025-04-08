@@ -1,11 +1,10 @@
 import { Footer } from "@/Components/Common/Footer";
-import { login } from "@/DefaultRedux/ReduxList/userlogin";
 
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
 import { signDummy } from "@/types/Dummydata";
 import { GateWayType } from "@/types/GateWayType";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
@@ -63,15 +62,9 @@ const JoinCation = styled.div`
 export const ManagerJoin = () => {
   const navigate = useNavigate();
   const [Sign] = useState(signDummy);
-  const dispatch = useDispatch();
   const FuncClick = (name: string) => {
-    dispatch(login({ userID: "", Password: "" }));
     navigate(name);
   };
-  useEffect(() => {
-    dispatch(login({ userID: "", Password: "" }));
-    // 로그인 상태 초기화
-  }, [dispatch]);
 
   return (
     <div>

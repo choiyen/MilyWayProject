@@ -1,26 +1,25 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface BoardType {
-  boardId: String;
-  title: String;
-  content: String;
+  boardId?: string;
+  title: string;
+  content: string;
 }
 
 const initialBoardValue: BoardType = {
-  boardId: '',
-  title: '',
-  content: '',
+  title: "",
+  content: "",
 };
 
 export const setBoarding = createSlice({
-  name: 'SetBoardData',
-  initialState: {value: initialBoardValue},
+  name: "SetBoardData",
+  initialState: { value: initialBoardValue },
   reducers: {
-    setBoardData: (state, action) => {
+    setBoardData: (state, action: PayloadAction<BoardType>) => {
       state.value = action.payload;
     },
   },
 });
 
 export default setBoarding.reducer;
-export const {setBoardData} = setBoarding.actions;
+export const { setBoardData } = setBoarding.actions;
