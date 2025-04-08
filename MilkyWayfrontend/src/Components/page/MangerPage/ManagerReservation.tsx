@@ -28,7 +28,7 @@ const MainBox = styled.div`
   overflow-y: auto; /* Scroll only within the MainBox */
 `;
 
-export const ManagerSign = () => {
+export const ManagerReservation = () => {
   const [Saleable, SetSaleable] = useState("");
   const [Name, SetName] = useState("");
   const [Phone, SetPhone] = useState("");

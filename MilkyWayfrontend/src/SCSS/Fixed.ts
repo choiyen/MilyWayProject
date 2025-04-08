@@ -15,7 +15,7 @@ export const FixedManagerHeader = styled(MangerHeader)`
 export const Fontname = styled.div`
   color: #e195ab;
   font-size: 40px;
-  margin-bottom: 50px; /* Add space below the title to separate from the next content */
+  margin-bottom: 30px; /* Add space below the title to separate from the next content */
   font-weight: bolder;
 `;
 

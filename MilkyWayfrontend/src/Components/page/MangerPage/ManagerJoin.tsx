@@ -92,7 +92,7 @@ export const ManagerJoin = () => {
             )}
           </MainWapper>
         </MainBox>
-        <LastButton onClick={() => FuncClick(GateWayType.ManagerSign)}>
+        <LastButton onClick={() => FuncClick(GateWayType.ManagerReservation)}>
           정보 추가
         </LastButton>
       </MainWapper>

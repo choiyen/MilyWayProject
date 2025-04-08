@@ -6,11 +6,12 @@ import { ManagerMain } from "./Components/page/MangerPage/ManagerMain";
 import { ManagerAdvice } from "./Components/page/MangerPage/MangerAdvice";
 import { ManagerQuestion } from "./Components/page/MangerPage/ManagerQuestion";
 import { GateWayType } from "./types/GateWayType";
-import { ManagerSign } from "./Components/page/MangerPage/ManagerSign";
+import { ManagerReservation } from "./Components/page/MangerPage/ManagerReservation";
 import { ManagerJoin } from "./Components/page/MangerPage/ManagerJoin";
 import { ManagerCalendar } from "./Components/page/MangerPage/ManagerCalendar";
 import { Provider } from "react-redux";
 import store from "./DefaultRedux/reduxstore";
+import { ManagerSignUp } from "./Components/page/MangerPage/ManagerSignUp";
 
 const App = () => {
   return (
@@ -27,8 +28,15 @@ const App = () => {
               path={GateWayType.ManagerQuestion}
               element={<ManagerQuestion />}
             />
-            <Route path={GateWayType.ManagerSign} element={<ManagerSign />} />
+            <Route
+              path={GateWayType.ManagerReservation}
+              element={<ManagerReservation />}
+            />
             <Route path={GateWayType.ManagerJoin} element={<ManagerJoin />} />
+            <Route
+              path={GateWayType.ManagerSignUp}
+              element={<ManagerSignUp />}
+            />
             <Route
               path={GateWayType.ManagerCalendar}
               element={<ManagerCalendar />}

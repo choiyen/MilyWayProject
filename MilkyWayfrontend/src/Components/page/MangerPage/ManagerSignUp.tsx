@@ -4,9 +4,7 @@ import styled from "styled-components";
 import { Footer } from "@/Components/Common/Footer";
 import { FixedManagerHeader, Fontname } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
-import { login } from "@/DefaultRedux/ReduxList/userlogin";
-import { Link } from "react-router-dom";
-import { GateWayType } from "@/types/GateWayType";
+import { setSignData } from "@/DefaultRedux/ReduxList/usersign";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -14,8 +12,15 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 80vh;
+  flex-direction: column;
   padding: 20px;
   background-color: #f0f0f0;
+`;
+
+const Warning = styled.div`
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
 `;
 
 const MangerPage = styled.div`
@@ -62,7 +67,7 @@ const MangerButton = styled.button`
   width: 100%;
   max-width: 250px;
   height: 50px;
-  margin-top: 70px;
+  margin-top: 20px;
   border: 1px solid #e195ab;
   border-radius: 10px;
   background-color: #e195ab;
@@ -76,22 +81,31 @@ const MangerButton = styled.button`
   }
 `;
 
-export const ManagerMain = () => {
+export const ManagerSignUp = () => {
   const dispatch = useDispatch();
 
   const [IdState, setIdState] = useState("");
   const [PasswordState, setPasswordState] = useState("");
+  const [emailState, setEmailState] = useState("");
 
-  const handleLogin = () => {
-    dispatch(login({ userID: IdState, Password: PasswordState }));
+  const handleSignup = () => {
+    dispatch(
+      setSignData({
+        userID: IdState,
+        Password: PasswordState,
+        email: emailState,
+      })
+    );
   };
-
   return (
     <div>
       <FixedManagerHeader />
       <Wrapper>
         <MangerPage>
-          <Fontname>관리자 로그인</Fontname>
+          <Fontname>관리자 회원가입</Fontname>
+          <Warning>
+            주의!! 기존에 가입된 관리자가 존재 할 경우, 회원가입이 불가능합니다.
+          </Warning>
           <MangerInput
             type="text"
             placeholder="아이디를 입력해주세요"
@@ -104,8 +118,13 @@ export const ManagerMain = () => {
             value={PasswordState}
             onChange={(e) => setPasswordState(e.target.value)}
           />
-          <MangerButton onClick={handleLogin}>로그인</MangerButton>
-          <Link to={GateWayType.ManagerSignUp}>회원가입 </Link>
+          <MangerInput
+            type="email"
+            placeholder="이메일을 입력해주세요"
+            value={emailState}
+            onChange={(e) => setEmailState(e.target.value)}
+          />
+          <MangerButton onClick={handleSignup}>회원가입</MangerButton>
         </MangerPage>
       </Wrapper>
       <Footer />
