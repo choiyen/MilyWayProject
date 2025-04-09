@@ -240,10 +240,11 @@ public class AddressController
                 .customer(addressEntity1.getCustomer())
                 .phoneNumber(addressEntity1.getPhoneNumber())
                 .submissionDate(addressEntity1.getSubmissionDate())
+                .acreage(addressEntity1.getAcreage())
                 .build();
     }
 
-    private AddressEntity ConvertToEntity(@Valid AddressDTO addressDTO)
+    private AddressEntity ConvertToEntity(AddressDTO addressDTO)
     {
         return AddressEntity.builder()
                 .addressId(addressDTO.getAddressId())
@@ -251,6 +252,7 @@ public class AddressController
                 .customer(addressDTO.getCustomer())
                 .phoneNumber(addressDTO.getPhoneNumber())
                 .submissionDate(addressDTO.getSubmissionDate())
+                .acreage(addressDTO.getAcreage())
                 .build();
     }
 

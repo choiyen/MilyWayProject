@@ -102,6 +102,7 @@ public class AddressService
                 .phoneNumber(newAddressEntity.getPhoneNumber())
                 .customer(newAddressEntity.getCustomer())
                 .submissionDate(newAddressEntity.getSubmissionDate())
+                .acreage(newAddressEntity.getAcreage())
                 .build();
     }
 }

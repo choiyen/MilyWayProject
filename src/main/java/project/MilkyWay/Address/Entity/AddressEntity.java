@@ -26,6 +26,9 @@ public class AddressEntity
     @Column(name = "SubmissionDate", nullable = false)
     private LocalDate submissionDate;
 
+    @Column(name = "acreage", nullable = false)
+    private String acreage;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,13 +38,13 @@ public class AddressEntity
                 Objects.equals(customer, AddressEntity.customer) &&
                 Objects.equals(address, AddressEntity.address) &&
                 Objects.equals(phoneNumber, AddressEntity.phoneNumber) &&
-                Objects.equals(submissionDate, AddressEntity.submissionDate);
+                Objects.equals(submissionDate, AddressEntity.submissionDate) && Objects.equals(acreage, AddressEntity.acreage);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(addressId, customer, address,phoneNumber, submissionDate);
+        return Objects.hash(addressId, customer, address,phoneNumber, submissionDate, acreage);
     }
 
 }

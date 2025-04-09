@@ -41,6 +41,12 @@ public class AddressDTO
     @Schema(description = "예약 날짜", example = "2025-03-14")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate submissionDate;
+
+    @NotBlank(message = "acreage cannot be empty")
+    @Pattern(regexp = "^[0-9]+평$", message = "평수는 숫자와 '평'만 입력 가능합니다.")
+    private String acreage;
 }
 //- 현재 날짜보다 고객의 의뢰 날짜가 뒷날일 떄 데이터를 파기하는 함수 필요
 //고객 관리를 위한 목적의 DTO
+
+
