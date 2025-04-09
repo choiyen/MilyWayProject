@@ -27,4 +27,4 @@ const Administration = createSlice({
 export default Administration.reducer;
 export const { setAdministrationData } = Administration.actions;
 
-// 데이터 추가를 위한 리듀서 설정완료
+///현재 Mangager 페이지에 적용 완료

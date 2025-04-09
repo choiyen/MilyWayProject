@@ -23,3 +23,5 @@ export const NoticeSave = createSlice({
 
 export default NoticeSave.reducer;
 export const { setNoticeData } = NoticeSave.actions;
+
+// Notice에 관한 redux로 현재 ManagerAdvice에서 사용되고 있음

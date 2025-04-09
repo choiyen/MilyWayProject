@@ -1,12 +1,12 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface login {
-  userID: String;
-  Password: String;
+  userID: string;
+  Password: string;
 }
-const initialStateValue: login = {userID: '', Password: ''};
+const initialStateValue: login = { userID: "", Password: "" };
 export const userSlice = createSlice({
-  name: 'user',
-  initialState: {value: initialStateValue},
+  name: "user",
+  initialState: { value: initialStateValue },
   reducers: {
     login: (state, action: PayloadAction<login>) => {
       state.value = action.payload;
@@ -18,6 +18,6 @@ export const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const {login, logout} = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
-//login 정보에 관한 redux
+//login 정보에 관한 redux로 ManagerMainPage에서 사용되고 있음

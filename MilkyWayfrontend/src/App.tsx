@@ -6,7 +6,7 @@ import { ManagerMain } from "./Components/page/MangerPage/ManagerMain";
 import { ManagerAdvice } from "./Components/page/MangerPage/MangerAdvice";
 import { ManagerQuestion } from "./Components/page/MangerPage/ManagerQuestion";
 import { GateWayType } from "./types/GateWayType";
-import { ManagerReservation } from "./Components/page/MangerPage/ManagerReservation";
+import { ManagerAddress } from "./Components/page/MangerPage/ManagerAddress";
 import { ManagerJoin } from "./Components/page/MangerPage/ManagerJoin";
 import { ManagerCalendar } from "./Components/page/MangerPage/ManagerCalendar";
 import { Provider } from "react-redux";
@@ -29,8 +29,8 @@ const App = () => {
               element={<ManagerQuestion />}
             />
             <Route
-              path={GateWayType.ManagerReservation}
-              element={<ManagerReservation />}
+              path={GateWayType.ManagerAddress}
+              element={<ManagerAddress />}
             />
             <Route path={GateWayType.ManagerJoin} element={<ManagerJoin />} />
             <Route

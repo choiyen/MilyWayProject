@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface addressState {
+export interface addressState {
   AddressId?: string;
   customer: string;
   Address: string;
@@ -29,4 +29,4 @@ export const addressreducer = createSlice({
 export default addressreducer.reducer;
 export const { setAddressData } = addressreducer.actions;
 
-// 데이터 추가를 위한 리듀서 설정완료
+// Address에 관한 redux로 현재 ManagerAddress에서 사용되고 있음

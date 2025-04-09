@@ -1,16 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Question {
-  questionId: string;
+  questionId?: string;
   ExpectionQnA: string;
   ExpectedComment: string;
 }
 
 const initialQuestionValue: Question[] = [
   {
-    questionId: "",
-    ExpectedComment: "",
     ExpectionQnA: "",
+    ExpectedComment: "",
   },
 ];
 
@@ -26,3 +25,5 @@ export const SaveQuestionData = createSlice({
 
 export default SaveQuestionData.reducer;
 export const { setQuestionData } = SaveQuestionData.actions;
+
+// 현재 ManagerQuestion.tsx에서 사용하고 있는 QuestionReducer.ts입니다.

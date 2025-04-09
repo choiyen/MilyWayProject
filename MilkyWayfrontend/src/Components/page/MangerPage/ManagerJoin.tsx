@@ -1,9 +1,10 @@
 import { Footer } from "@/Components/Common/Footer";
 
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { signDummy } from "@/types/Dummydata";
+import { signDummy } from "@/types/Dummydata"; // Assuming signDummy is a value
+import type { signDummyType } from "@/types/Dummydata"; // Import the correct type
 import { GateWayType } from "@/types/GateWayType";
-import { useState } from "react";
+import { Key, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
@@ -60,11 +61,17 @@ const JoinCation = styled.div`
 `;
 
 export const ManagerJoin = () => {
+  const [Sign, setSign] = useState<null | signDummyType[]>(null);
   const navigate = useNavigate();
-  const [Sign] = useState(signDummy);
   const FuncClick = (name: string) => {
     navigate(name);
   };
+
+  useEffect(() => {
+    // 여기서 Sign에 들어갈 데이터를 가져오는 API 호출을 수행하고, setSign으로 상태를 업데이트합니다.
+    // 예시로 더미 데이터를 사용하고 있습니다.
+    setSign(signDummy); // signDummy는 더미 데이터입니다.
+  }, [Sign]);
 
   return (
     <div>
@@ -74,8 +81,8 @@ export const ManagerJoin = () => {
           <Fontname>온라인 예약 관리 </Fontname>
           <Label>청소 날짜가 지난 데이터는 자동 삭제 됩니다.</Label>
           <MainWapper>
-            {Sign.length != 0 ? (
-              Sign.map((date, index) => {
+            {Sign != null && Sign.length != 0 ? (
+              Sign.map((date: signDummyType, index: Key) => {
                 return (
                   <JoinMapper key={index}>
                     <JoinName>{date.signname + " 고객"}</JoinName>
@@ -92,7 +99,7 @@ export const ManagerJoin = () => {
             )}
           </MainWapper>
         </MainBox>
-        <LastButton onClick={() => FuncClick(GateWayType.ManagerReservation)}>
+        <LastButton onClick={() => FuncClick(GateWayType.ManagerAddress)}>
           정보 추가
         </LastButton>
       </MainWapper>

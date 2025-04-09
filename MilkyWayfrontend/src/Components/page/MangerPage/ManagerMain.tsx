@@ -105,7 +105,9 @@ export const ManagerMain = () => {
             onChange={(e) => setPasswordState(e.target.value)}
           />
           <MangerButton onClick={handleLogin}>로그인</MangerButton>
-          <Link to={GateWayType.ManagerSignUp}>회원가입 </Link>
+          <Link style={{ marginTop: "30px" }} to={GateWayType.ManagerSignUp}>
+            아직 서버를 관리하는 사람이 없나요? 없다면 눌러주세요
+          </Link>
         </MangerPage>
       </Wrapper>
       <Footer />

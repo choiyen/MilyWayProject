@@ -33,3 +33,5 @@ export type RootState = ReturnType<typeof store.getState>; // 스토어에서 �
 export type AppDispatch = typeof store.dispatch; // 디스패치 타입을 추론
 
 export default store;
+
+// 스토어를 export하여 다른 컴포넌트에서 사용할 수 있도록 함

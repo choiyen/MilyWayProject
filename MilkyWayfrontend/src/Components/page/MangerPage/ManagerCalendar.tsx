@@ -141,6 +141,8 @@ export const ManagerCalendar = () => {
                 prev2Label={null} // -1년 & -10년 이동 버튼 숨기기
                 minDetail="year" // 10년단위 년도 숨기기
               />
+              {/* //기존 캘린더로는 부족해서 업그레이드할 예정 - 클릭 시 클릭한
+              날짜에 해당하는 배열이 출력되어야 함. */}
             </StyledCalendarWrapper>
           </MainWapper>
         </MainBox>
