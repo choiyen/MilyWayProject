@@ -1,7 +1,7 @@
 import { Footer } from "@/Components/Common/Footer";
 
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { AddressDummy } from "@/types/Dummydata"; // Assuming signDummy is a value
+import { AddressDummy } from "@/types/ManagerDummydata"; // Assuming signDummy is a value
 import { GateWayType } from "@/types/GateWayType";
 import { AddressType } from "@/types/ProjectDataType";
 import { Key, useEffect, useState } from "react";
@@ -89,7 +89,9 @@ export const ManagerJoin = () => {
                     <JoinCation>
                       <div>{date.Address}</div>
                       <div>{date.phoneNumber}</div>
-                      <div>{date.SubmissionDate}</div>
+                      <div>
+                        {new Date(date.SubmissionDate).toLocaleDateString()}
+                      </div>
                       <div>{date.acreage}</div>
                     </JoinCation>
                   </JoinMapper>

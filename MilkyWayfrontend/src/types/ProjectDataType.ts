@@ -7,7 +7,7 @@ export type AddressType = {
   customer: string;
   Address: string;
   phoneNumber: string;
-  SubmissionDate: string;
+  SubmissionDate: Date;
   acreage?: string;
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Footer } from "@/Components/Common/Footer";
 import { RadioBox } from "@/Components/Common/RadioBox";
 import { SelectDate } from "@/Components/Common/SelectDate";
@@ -11,6 +12,8 @@ import {
 } from "@/SCSS/Fixed";
 import { adminstrationSelect } from "@/types/adminstrationType";
 import { Value } from "@/types/date";
+import { AddressDummy, AdministrationDummy } from "@/types/ManagerDummydata";
+import { AddressType, AdministrationType } from "@/types/ProjectDataType";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
@@ -76,15 +79,27 @@ const Label = styled.span`
 
 export const ManagerCalendar = () => {
   const [change, setChange] = useState(false); //모달창 활성화를 담당당
-  const today = new Date();
-  const [date, setDate] = useState<Date | null>(today);
+  const [date, setDate] = useState<Date | null>(null); // 예약 날짜
   const [type, setType] = useState(""); // 예약 타입
+  const [admintration, setAdmintration] =
+    useState<AdministrationType[]>(AdministrationDummy); // 예약 타입
+  const [address, setAddress] = useState<AddressType[]>(AddressDummy); // 주소 타입
   const dispatch = useDispatch(); // Redux dispatch 함수
 
   useEffect(() => {
-    // This effect will run whenever `date` is updated
-    console.log("Updated date:", date);
-  }, [date]);
+    // This effect will run once when the component mounts
+    setAdmintration(AdministrationDummy); // 초기 데이터 설정
+    console.log("Initial data:", AdministrationDummy);
+  }, []); // 빈 배열을 의존성 배열로 전달하여 컴포넌트가 처음 렌더링될 때만 실행
+
+  const isSameDate = (d1: Date, d2: Date) => {
+    console.log("Comparing:", d1, d2); // 비교되는 날짜를 출력해서 확인
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
+  };
 
   function ChangeClick(): void {
     setChange(!change);
@@ -92,17 +107,44 @@ export const ManagerCalendar = () => {
 
   const handleDateChange = (
     value: Value,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _event: React.MouseEvent<HTMLButtonElement>
   ) => {
+    console.log("Selected date:", value);
+
+    // 기본 데이터로 초기화
+    setAdmintration(AdministrationDummy);
+    setAddress(AddressDummy);
     if (value instanceof Date) {
-      console.log("Selected Date:", value);
       const result = new Date(value);
-      if (value !== null) {
-        setDate(result); // Date 객체나 null일 경우 그대로 상태 설정
-      } // Convert newDate to a Date object
-    } else console.error("Invalid date value:", value);
+      if (result !== null) {
+        setDate(result); // 새로운 날짜로 상태 설정
+      }
+    } else {
+      console.error("Invalid date value:", value);
+    }
   };
+
+  // admintration이 변경될 때마다 필터링 로직 실행
+  useEffect(() => {
+    if (date) {
+      const date2 = admintration.filter((item) => {
+        const itemDate = new Date(item.administrationDate);
+        console.log(`==> Same date?`, isSameDate(itemDate, date));
+        return isSameDate(itemDate, date); // 조건에 맞는 항목만 반환
+      });
+      const filteredData = address.filter((item) => {
+        const itemDate = new Date(item.SubmissionDate); // 날짜 형식 변환
+        console.log(
+          `==> Same date?`,
+          isSameDate(itemDate, admintration[0].administrationDate)
+        );
+        return isSameDate(itemDate, date); // 조건에 맞는 항목만 반환
+      });
+      console.log("Filtered data:", filteredData); // 필터링된 데이터 출력
+      setAdmintration(date2); // 필터링된 배열을 상태에 설정
+      setAddress(filteredData); // 필터링된 배열을 상태에 설정
+    }
+  }, [date]); // `date`나 `admintration`이 변경될 때마다 실행
 
   function ChangeDate(): void {
     // 예약 타입과 날짜를 서버에 전송하는 로직을 여기에 추가합니다.
@@ -147,6 +189,26 @@ export const ManagerCalendar = () => {
             </StyledCalendarWrapper>
           </MainWapper>
         </MainBox>
+        <Label>예약된 날짜</Label>
+        <MainWapper>
+          {date !== null && address.length !== 0 ? (
+            address.map((date: AddressType, index) => {
+              return (
+                <div key={index}>
+                  <div>{date.Address}</div>
+                  <div>{date.phoneNumber}</div>
+                  <div>
+                    {new Date(date.SubmissionDate).toLocaleDateString()}
+                  </div>
+                  <div>{date.acreage}</div>
+                </div>
+                // 여기다가, taillwind css로 스타일링 해주기
+              );
+            })
+          ) : (
+            <div>예약된 날짜가 없습니다.</div>
+          )}
+        </MainWapper>
         <LastButton onClick={() => ChangeClick()}>정보 추가</LastButton>
       </MainWapper>
 
