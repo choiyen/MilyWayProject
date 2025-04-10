@@ -1,14 +1,12 @@
+import { loginType } from "@/types/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface login {
-  userID: string;
-  Password: string;
-}
-const initialStateValue: login = { userID: "", Password: "" };
+
+const initialStateValue: loginType = { userID: "", Password: "" };
 export const userSlice = createSlice({
   name: "user",
   initialState: { value: initialStateValue },
   reducers: {
-    login: (state, action: PayloadAction<login>) => {
+    login: (state, action: PayloadAction<loginType>) => {
       state.value = action.payload;
     },
     logout: (state) => {

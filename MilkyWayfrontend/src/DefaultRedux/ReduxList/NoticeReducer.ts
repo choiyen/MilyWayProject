@@ -1,12 +1,7 @@
+import { NoticeType } from "@/types/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Notice {
-  NoticeId?: string;
-  type: string;
-  greeting: string;
-}
-
-const initialNoticeStateValue: Notice = {
+const initialNoticeStateValue: NoticeType = {
   type: "",
   greeting: "",
 };
@@ -15,7 +10,7 @@ export const NoticeSave = createSlice({
   name: "setNoticeData",
   initialState: { value: initialNoticeStateValue },
   reducers: {
-    setNoticeData: (state, action: PayloadAction<Notice>) => {
+    setNoticeData: (state, action: PayloadAction<NoticeType>) => {
       state.value = action.payload;
     },
   },

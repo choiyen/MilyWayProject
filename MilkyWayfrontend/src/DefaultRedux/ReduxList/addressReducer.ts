@@ -1,15 +1,7 @@
+import { AddressType } from "@/types/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface addressState {
-  AddressId?: string;
-  customer: string;
-  Address: string;
-  phoneNumber: string;
-  SubmissionDate: string;
-  acreage?: string;
-}
-
-const initialAddressStateValue: addressState = {
+const initialAddressStateValue: AddressType = {
   customer: "",
   Address: "",
   phoneNumber: "",
@@ -20,7 +12,7 @@ export const addressreducer = createSlice({
   name: "addressreducer",
   initialState: { value: initialAddressStateValue },
   reducers: {
-    setAddressData: (state, action: PayloadAction<addressState>) => {
+    setAddressData: (state, action: PayloadAction<AddressType>) => {
       state.value = action.payload;
     },
   },

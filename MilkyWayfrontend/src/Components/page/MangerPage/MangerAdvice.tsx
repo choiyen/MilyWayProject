@@ -17,6 +17,7 @@ import {
 import { useDispatch } from "react-redux";
 import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
+import { NoticeDetailType } from "@/types/ProjectDataType";
 
 const MainBox = styled.div`
   width: 100%;
@@ -38,14 +39,7 @@ const MainWapper = styled.div`
   flex-direction: column;
   min-height: 100vh;
 `;
-interface NoticeDetail {
-  NoticeDetailId?: string;
-  NoticeId?: string;
-  direction: string;
-  beforeURL: File[];
-  afterURL: File[];
-  Advice: string;
-}
+
 export const ManagerAdvice = () => {
   const [count, setCount] = useState(1);
 
@@ -57,7 +51,7 @@ export const ManagerAdvice = () => {
   const [afferfile, setAfferfile] = useState<File[][]>([[]]);
   const [Advice, SetAdvice] = useState<string[]>([""]);
 
-  const AdviceData: NoticeDetail[] = [];
+  const AdviceData: NoticeDetailType[] = [];
 
   // 마지막 항목을 가리키기 위한 ref
   const lastItemRef = useRef<HTMLDivElement | null>(null);

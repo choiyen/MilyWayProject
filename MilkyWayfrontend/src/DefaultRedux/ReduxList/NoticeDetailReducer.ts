@@ -1,15 +1,7 @@
+import { NoticeDetailType } from "@/types/ProjectDataType";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface NoticeDetail {
-  NoticeDetailId?: string;
-  NoticeId?: string;
-  direction: string;
-  beforeURL: File[];
-  afterURL: File[];
-  Advice: string;
-}
-
-const initialNoticeDetailStateValue: NoticeDetail[] = [
+const initialNoticeDetailStateValue: NoticeDetailType[] = [
   {
     NoticeId: "",
     direction: "",
@@ -22,7 +14,7 @@ export const NoticeDetailSave = createSlice({
   name: "setNoticeDetailData",
   initialState: { value: initialNoticeDetailStateValue },
   reducers: {
-    setNoticeDetailData: (state, action: PayloadAction<NoticeDetail[]>) => {
+    setNoticeDetailData: (state, action: PayloadAction<NoticeDetailType[]>) => {
       state.value = action.payload;
     },
   },

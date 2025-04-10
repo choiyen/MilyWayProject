@@ -1,10 +1,7 @@
+import { signupType } from "@/types/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface signup {
-  userID: string;
-  Password: string;
-  email: string;
-}
-const initialSignStateValue: signup = {
+
+const initialSignStateValue: signupType = {
   userID: "",
   Password: "",
   email: "",
@@ -13,7 +10,7 @@ export const userSignSlice = createSlice({
   name: "usersign",
   initialState: { value: initialSignStateValue },
   reducers: {
-    setSignData: (state, action: PayloadAction<signup>) => {
+    setSignData: (state, action: PayloadAction<signupType>) => {
       state.value = action.payload;
     },
   },

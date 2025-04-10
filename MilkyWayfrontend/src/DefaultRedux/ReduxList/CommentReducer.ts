@@ -1,13 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface CommentValue {
-  commentId?: string;
-  boardId: string;
-  type: string;
-  comment: string;
-}
+import { CommentValueType } from "@/types/ProjectDataType";
 
-const initialCommentValue: CommentValue = {
+const initialCommentValue: CommentValueType = {
   boardId: "",
   type: "",
   comment: "",
@@ -17,7 +12,7 @@ export const SetCommentValue = createSlice({
   name: "SetCommentData",
   initialState: { value: initialCommentValue },
   reducers: {
-    setCommentData: (state, action: PayloadAction<CommentValue>) => {
+    setCommentData: (state, action: PayloadAction<CommentValueType>) => {
       state.value = action.payload;
     },
   },

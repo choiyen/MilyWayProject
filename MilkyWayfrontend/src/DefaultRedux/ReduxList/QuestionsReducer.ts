@@ -1,12 +1,7 @@
+import { QuestionType } from "@/types/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Question {
-  questionId?: string;
-  ExpectionQnA: string;
-  ExpectedComment: string;
-}
-
-const initialQuestionValue: Question[] = [
+const initialQuestionValue: QuestionType[] = [
   {
     ExpectionQnA: "",
     ExpectedComment: "",
@@ -17,7 +12,7 @@ export const SaveQuestionData = createSlice({
   name: "SaveQuestionData",
   initialState: { value: initialQuestionValue },
   reducers: {
-    setQuestionData: (state, action: PayloadAction<Question[]>) => {
+    setQuestionData: (state, action: PayloadAction<QuestionType[]>) => {
       state.value = action.payload;
     },
   },

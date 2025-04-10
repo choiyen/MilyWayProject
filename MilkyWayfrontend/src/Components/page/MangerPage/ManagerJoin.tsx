@@ -1,9 +1,9 @@
 import { Footer } from "@/Components/Common/Footer";
 
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { signDummy } from "@/types/Dummydata"; // Assuming signDummy is a value
-import type { signDummyType } from "@/types/Dummydata"; // Import the correct type
+import { AddressDummy } from "@/types/Dummydata"; // Assuming signDummy is a value
 import { GateWayType } from "@/types/GateWayType";
+import { AddressType } from "@/types/ProjectDataType";
 import { Key, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -61,7 +61,7 @@ const JoinCation = styled.div`
 `;
 
 export const ManagerJoin = () => {
-  const [Sign, setSign] = useState<null | signDummyType[]>(null);
+  const [Sign, setSign] = useState<null | AddressType[]>(null);
   const navigate = useNavigate();
   const FuncClick = (name: string) => {
     navigate(name);
@@ -70,7 +70,7 @@ export const ManagerJoin = () => {
   useEffect(() => {
     // 여기서 Sign에 들어갈 데이터를 가져오는 API 호출을 수행하고, setSign으로 상태를 업데이트합니다.
     // 예시로 더미 데이터를 사용하고 있습니다.
-    setSign(signDummy); // signDummy는 더미 데이터입니다.
+    setSign(AddressDummy); // signDummy는 더미 데이터입니다.
   }, [Sign]);
 
   return (
@@ -82,14 +82,15 @@ export const ManagerJoin = () => {
           <Label>청소 날짜가 지난 데이터는 자동 삭제 됩니다.</Label>
           <MainWapper>
             {Sign != null && Sign.length != 0 ? (
-              Sign.map((date: signDummyType, index: Key) => {
+              Sign.map((date: AddressType, index: Key) => {
                 return (
                   <JoinMapper key={index}>
-                    <JoinName>{date.signname + " 고객"}</JoinName>
+                    <JoinName>{date.customer + " 고객"}</JoinName>
                     <JoinCation>
-                      <div>{date.address}</div>
+                      <div>{date.Address}</div>
                       <div>{date.phoneNumber}</div>
-                      <div>{date.signdate}</div>
+                      <div>{date.SubmissionDate}</div>
+                      <div>{date.acreage}</div>
                     </JoinCation>
                   </JoinMapper>
                 );

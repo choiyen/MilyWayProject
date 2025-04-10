@@ -1,10 +1,5 @@
+import { AdministrationType } from "@/types/ProjectDataType";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-interface AdministrationType {
-  administrationId?: string;
-  administrationDate: Date;
-  administrationType: string;
-}
 
 const initialAdministrationData: AdministrationType = {
   administrationDate: new Date(),

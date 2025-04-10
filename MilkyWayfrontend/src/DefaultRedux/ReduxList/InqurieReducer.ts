@@ -1,12 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-interface InqurieType {
-  InqurieId?: string;
-  Address: string;
-  PhoneNumber: string;
-  Inqurie: string;
-  SubmissionDate: string;
-}
+import { InqurieType } from "@/types/ProjectDataType";
 
 const initialInqurieValue: InqurieType = {
   Address: "",

@@ -1,15 +1,7 @@
+import { ReservationType } from "@/types/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Reservation {
-  reservationId?: string;
-  acreage: string;
-  name: string;
-  phone: string;
-  Address: string;
-  SubssionDate: string;
-}
-
-const initialReservationValue: Reservation = {
+const initialReservationValue: ReservationType = {
   acreage: "",
   name: "",
   phone: "",
@@ -21,7 +13,7 @@ export const ReservationSlice = createSlice({
   name: "SaveReservationData",
   initialState: { value: initialReservationValue },
   reducers: {
-    setReservationData: (state, action: PayloadAction<Reservation>) => {
+    setReservationData: (state, action: PayloadAction<ReservationType>) => {
       state.value = action.payload;
     },
   },

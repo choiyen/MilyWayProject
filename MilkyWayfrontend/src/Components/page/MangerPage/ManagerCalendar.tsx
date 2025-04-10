@@ -143,6 +143,7 @@ export const ManagerCalendar = () => {
               />
               {/* //기존 캘린더로는 부족해서 업그레이드할 예정 - 클릭 시 클릭한
               날짜에 해당하는 배열이 출력되어야 함. */}
+              {/* 이후 수정, 조회 페이지 제작 작업 수행 */}
             </StyledCalendarWrapper>
           </MainWapper>
         </MainBox>
