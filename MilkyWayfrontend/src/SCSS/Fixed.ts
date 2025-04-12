@@ -13,7 +13,7 @@ export const FixedManagerHeader = styled(MangerHeader)`
 `;
 
 export const Fontname = styled.div`
-  color: rgb(43, 49, 220);
+  color: rgb(149, 151, 225);
   font-size: 40px;
   margin-bottom: 30px; /* Add space below the title to separate from the next content */
   font-weight: bolder;
