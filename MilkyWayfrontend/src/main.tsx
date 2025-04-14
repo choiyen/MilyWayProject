@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./SCSS/index.scss";
+// import "./index.css";
 import reduxstore from "./DefaultRedux/reduxstore";
 import { Provider } from "react-redux";
 const rootElement = document.getElementById("root");
