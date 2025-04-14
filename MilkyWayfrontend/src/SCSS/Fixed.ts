@@ -16,6 +16,7 @@ export const Fontname = styled.div`
   color: rgb(149, 151, 225);
   font-size: 40px;
   margin-bottom: 30px; /* Add space below the title to separate from the next content */
+  margin-top: 30px;
   font-weight: bolder;
 `;
 

@@ -26,7 +26,6 @@ const CalendarWapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 20px;
   width: 100%;
   background-color: white;
 `;
@@ -34,8 +33,8 @@ const CalendarWapper = styled.div`
 const CalendarsWrapper = styled(StyledCalendarWrapper)`
   display: flex;
   flex-direction: column;
-  gap: 20px;
   width: 100%;
+  gap: 0px;
 `;
 
 const Label2 = styled.span`
@@ -65,6 +64,11 @@ export const ManagerCalendar = () => {
 
   useEffect(() => {
     setAdmintration(AdministrationDummy);
+    setAddress(AddressDummy);
+
+    console.log("관리자 달력 렌더링");
+    console.log("관리자 달력 렌더링", AdministrationDummy);
+    console.log("관리자 일정 렌더링", AddressDummy);
   }, []);
 
   const isSameDate = (d1: Date, d2: Date | string) => {
@@ -101,6 +105,8 @@ export const ManagerCalendar = () => {
       );
       setAdmintration(filteredAdmin);
       setAddress(filteredAddr);
+      console.log("관리자 일정 렌더링", filteredAdmin);
+      console.log("관리자 예약 렌더링", filteredAddr);
     }
   }, [date]);
 
@@ -109,14 +115,17 @@ export const ManagerCalendar = () => {
       alert("날짜를 선택해주세요");
       return;
     }
-
-    dispatch(
-      setAdministrationData({
-        administrationType: type,
-        administrationDate: date,
-      })
-    );
-    setChange(false);
+    if (date.getDate() === new Date().getDate()) {
+      console.log("오늘 날짜는 선택할 수 없습니다.");
+    } else {
+      dispatch(
+        setAdministrationData({
+          administrationType: type,
+          administrationDate: date,
+        })
+      );
+      setChange(false);
+    }
   };
 
   return (
@@ -128,7 +137,7 @@ export const ManagerCalendar = () => {
 
         <CalendarsWrapper>
           {/* 이전/다음 달 이동 */}
-          <Wapper className="flex justify-between items-center w-full px-4">
+          <Wapper className="flex justify-between items-center w-full px-4 m-10">
             <button
               onClick={() => {
                 calendar.setCurrentDate(subMonths(calendar.currentDate, 1));
@@ -195,12 +204,13 @@ export const ManagerCalendar = () => {
                     key={`${weekIndex}-${dayIndex}`}
                     onClick={() => {
                       setSelect(day);
-                      setDate(
+                      handleDateChange(
                         new Date(
                           calendar.currentDate.getFullYear(),
                           calendar.currentDate.getMonth(),
                           day
-                        )
+                        ),
+                        undefined as unknown as React.MouseEvent<HTMLButtonElement>
                       );
                     }}
                     className={`
@@ -222,12 +232,31 @@ export const ManagerCalendar = () => {
               })}
             </div>
           ))}
-
-          <LastButton onClick={ChangeClick}>일정 추가</LastButton>
         </CalendarsWrapper>
+        <div className="flex flex-col items-center mt-4">
+          {/* 선택된 날짜에 대한 정보 표시 */}
+          {address.length > 0 && address[0].SubmissionDate === date ? (
+            <div className="text-gray-700 text-lg font-semibold">
+              {address.map((item, index) => (
+                <div key={index}>
+                  {item.customer} 고객님{" "}
+                  {new Date(item.SubmissionDate).toLocaleDateString()}{" "}
+                  {item.Address} {item.phoneNumber} {item.acreage}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-500 text-lg font-semibold">
+              {"선택된 날짜에 대한 정보가 없습니다."}
+            </div>
+          )}
+        </div>
+
+        <LastButton onClick={ChangeClick} className="mt-120">
+          일정 추가
+        </LastButton>
       </CalendarWapper>
       <Footer />
-
       {/* 모달 */}
       {change && <Overlay />}
       <ModelWrapper $istrue={`${change}`}>
@@ -239,7 +268,9 @@ export const ManagerCalendar = () => {
           setValue={setType}
         />
         <br />
-        <LastButton onClick={ChangeDate}>일정 확정</LastButton>
+        <LastButton onClick={ChangeDate} className="gap-4">
+          일정 확정
+        </LastButton>
         <LastButton onClick={ChangeClick}>취소</LastButton>
       </ModelWrapper>
     </>
