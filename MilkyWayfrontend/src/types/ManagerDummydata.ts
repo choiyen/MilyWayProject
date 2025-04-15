@@ -7,6 +7,7 @@ export const AddressDummy: ProjectDataType.AddressType[] = [
     phoneNumber: "010-1234-5678",
     SubmissionDate: new Date("2025-02-11"),
     acreage: "34평",
+    cleanType: "이사청소",
   },
   {
     customer: "박신명우",
@@ -14,6 +15,7 @@ export const AddressDummy: ProjectDataType.AddressType[] = [
     phoneNumber: "010-1234-5648",
     SubmissionDate: new Date("2025-03-21"),
     acreage: "25평",
+    cleanType: "정기청소",
   },
   {
     customer: "이훈",
@@ -21,6 +23,7 @@ export const AddressDummy: ProjectDataType.AddressType[] = [
     phoneNumber: "010-1234-5678",
     SubmissionDate: new Date("2025-05-07"),
     acreage: "40평",
+    cleanType: "입주청소",
   },
 ]; //이미 적용된 더미데이터
 

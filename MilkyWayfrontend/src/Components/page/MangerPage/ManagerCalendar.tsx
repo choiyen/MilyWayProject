@@ -27,7 +27,6 @@ const CalendarWapper = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  background-color: white;
 `;
 
 const CalendarsWrapper = styled(StyledCalendarWrapper)`
@@ -43,6 +42,10 @@ const Label2 = styled.span`
   font-weight: bolder;
   text-align: left;
   margin-bottom: 50px;
+  @media screen and (max-width: 1044px) {
+    font-size: 15px;
+    line-height: 16px;
+  }
 `;
 
 const Wapper = styled.div`
@@ -61,14 +64,15 @@ export const ManagerCalendar = () => {
   const [select, setSelect] = useState<number | null>(null);
   const calendar = userCalendar();
   const CALENDER_RESULT_LIST: number[][] = calendar.weekCalendarList;
+  const todate: Date[] = [];
 
   useEffect(() => {
     setAdmintration(AdministrationDummy);
     setAddress(AddressDummy);
-
-    console.log("관리자 달력 렌더링");
-    console.log("관리자 달력 렌더링", AdministrationDummy);
-    console.log("관리자 일정 렌더링", AddressDummy);
+    address.forEach((item) => {
+      console.log("관리자 예약 렌더링", item.SubmissionDate);
+      todate.push(new Date(item.SubmissionDate));
+    });
   }, []);
 
   const isSameDate = (d1: Date, d2: Date | string) => {
@@ -141,6 +145,7 @@ export const ManagerCalendar = () => {
             <button
               onClick={() => {
                 calendar.setCurrentDate(subMonths(calendar.currentDate, 1));
+                // setSelect(null);
               }}
               className="px-4 py-2 text-lg font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow"
             >
@@ -152,13 +157,13 @@ export const ManagerCalendar = () => {
             <button
               onClick={() => {
                 calendar.setCurrentDate(subMonths(calendar.currentDate, -1));
+                setSelect(null);
               }}
               className="px-4 py-2 text-lg font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow"
             >
               다음 {">"}
             </button>
           </Wapper>
-
           {/* 요일 헤더 */}
           <div className="grid grid-cols-7 w-full text-center font-semibold text-gray-700 border border-gray-300">
             {WeekDay.map((item, index) => (
@@ -170,7 +175,6 @@ export const ManagerCalendar = () => {
               </div>
             ))}
           </div>
-
           {/* 날짜 셀 */}
           {CALENDER_RESULT_LIST.map((week, weekIndex) => (
             <div
@@ -189,42 +193,47 @@ export const ManagerCalendar = () => {
                   );
                 }
 
+                const buttonDate = new Date(
+                  calendar.currentDate.getFullYear(),
+                  calendar.currentDate.getMonth(),
+                  day
+                );
+
                 const isToday =
-                  new Date().getFullYear() ===
-                    calendar.currentDate.getFullYear() &&
-                  new Date().getMonth() === calendar.currentDate.getMonth() &&
-                  new Date().getDate() === day;
+                  new Date().getFullYear() === buttonDate.getFullYear() &&
+                  new Date().getMonth() === buttonDate.getMonth() &&
+                  new Date().getDate() === buttonDate.getDate();
 
                 const isSelected = select === day;
                 const isSaturday = dayIndex === 6;
                 const isSunday = dayIndex === 0;
+
+                const isAddressMatched = AddressDummy.some((item) => {
+                  return (
+                    new Date(item.SubmissionDate).toDateString() ===
+                    buttonDate.toDateString()
+                  );
+                });
+
+                const getBgColor = () => {
+                  if (isSelected) return "bg-blue-600 text-white font-bold";
+                  if (isAddressMatched) return "bg-green-200";
+                  if (isToday) return "bg-yellow-200";
+                  return "bg-white hover:bg-gray-100";
+                };
 
                 return (
                   <button
                     key={`${weekIndex}-${dayIndex}`}
                     onClick={() => {
                       setSelect(day);
-                      handleDateChange(
-                        new Date(
-                          calendar.currentDate.getFullYear(),
-                          calendar.currentDate.getMonth(),
-                          day
-                        ),
-                        undefined as unknown as React.MouseEvent<HTMLButtonElement>
-                      );
+                      handleDateChange(buttonDate, undefined as never);
                     }}
-                    className={`
-                      h-[48px] border border-gray-300 w-full
-                      ${isSelected ? "bg-blue-600 text-white font-bold" : ""}
-                      ${isToday && !isSelected ? "bg-yellow-200" : ""}
-                      ${
-                        !isSelected && !isToday
-                          ? "bg-white hover:bg-gray-100"
-                          : ""
-                      }
-                      ${isSunday ? "text-red-500" : ""}
-                      ${isSaturday ? "text-blue-500" : ""}
-                    `}
+                    className={`h-[48px] border border-gray-300 w-full
+            ${getBgColor()}
+            ${isSunday ? "text-red-500" : ""}
+            ${isSaturday ? "text-blue-500" : ""}
+          `}
                   >
                     {day}
                   </button>
@@ -233,15 +242,85 @@ export const ManagerCalendar = () => {
             </div>
           ))}
         </CalendarsWrapper>
-        <div className="flex flex-col items-center mt-4">
+        <div className="flex flex-col items-center mt-4 bg-gray-100 p-4 rounded-lg shadow-md w-full">
           {/* 선택된 날짜에 대한 정보 표시 */}
-          {address.length > 0 && address[0].SubmissionDate === date ? (
-            <div className="text-gray-700 text-lg font-semibold">
+          {date != null &&
+          address.length > 0 &&
+          new Date(address[0].SubmissionDate).toDateString() ===
+            date.toDateString() ? (
+            <div className="text-gray-700 text-lg font-semibold text-xl">
               {address.map((item, index) => (
-                <div key={index}>
-                  {item.customer} 고객님{" "}
-                  {new Date(item.SubmissionDate).toLocaleDateString()}{" "}
-                  {item.Address} {item.phoneNumber} {item.acreage}
+                <div key={index} className="bg-blue-100 w-full">
+                  {/* 데스크탑 테이블 (md 이상에서만 보이게) */}
+                  <table className="hidden md:table table-auto border-2 border-black border-collapse w-full">
+                    <thead className="bg-blue-200">
+                      <tr>
+                        <th className="p-2 text-left border-2 border-black">
+                          청소유형
+                        </th>
+                        <th className="p-2 text-left border-2 border-black">
+                          예약자
+                        </th>
+                        <th className="p-2 text-left border-2 border-black">
+                          주소
+                        </th>
+                        <th className="p-2 text-left border-2 border-black">
+                          전화번호
+                        </th>
+                        <th className="p-2 text-left border-2 border-black">
+                          신청일
+                        </th>
+                        <th className="p-2 text-left border-2 border-black">
+                          면적
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr key={index}>
+                        <td className="p-2 border-2 border-black">
+                          {item.cleanType}
+                        </td>
+                        <td className="p-2 border-2 border-black">
+                          {item.customer}
+                        </td>
+                        <td className="p-2 border-2 border-black">
+                          {item.Address}
+                        </td>
+                        <td className="p-2 border-2 border-black">
+                          {item.phoneNumber}
+                        </td>
+                        <td className="p-2 border-2 border-black">
+                          {new Date(item.SubmissionDate).toLocaleDateString()}
+                        </td>
+                        <td className="p-2 border-2 border-black">
+                          {item.acreage}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  {/* 모바일 카드뷰 (md 미만에서만 보이게) */}
+                  <div className="md:hidden border-2 border-black rounded-md p-4 mb-4">
+                    <div className="mb-2">
+                      <strong>청소유형:</strong> {item.cleanType}
+                    </div>
+                    <div className="mb-2">
+                      <strong>예약자:</strong> {item.customer}
+                    </div>
+                    <div className="mb-2">
+                      <strong>주소:</strong> {item.Address}
+                    </div>
+                    <div className="mb-2">
+                      <strong>전화번호:</strong> {item.phoneNumber}
+                    </div>
+                    <div className="mb-2">
+                      <strong>신청일:</strong>{" "}
+                      {new Date(item.SubmissionDate).toLocaleDateString()}
+                    </div>
+                    <div className="mb-2">
+                      <strong>면적:</strong> {item.acreage}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

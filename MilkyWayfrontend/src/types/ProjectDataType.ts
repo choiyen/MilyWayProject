@@ -9,6 +9,7 @@ export type AddressType = {
   phoneNumber: string;
   SubmissionDate: Date;
   acreage?: string;
+  cleanType?: (typeof cleanType)[number];
 };
 
 export type QuestionType = {
