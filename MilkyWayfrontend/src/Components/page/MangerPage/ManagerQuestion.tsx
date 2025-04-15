@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 import { MangerHeader } from "@/Components/Common/MangerHeader";
@@ -9,6 +9,7 @@ import { TextAreaBox } from "@/Components/Common/TextAreaBox";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { setQuestionData } from "@/DefaultRedux/ReduxList/QuestionsReducer";
 import { useDispatch } from "react-redux";
+import { QuestionDummy } from "@/types/ManagerDummydata";
 
 const MainWapper = styled.div`
   display: flex;
@@ -47,8 +48,8 @@ const Wapper = styled.div`
 
 export const ManagerQuestion = () => {
   const [count, setCount] = useState(1);
-  const [Question, SetQuestion] = useState<string[]>([""]);
-  const [Comment, SetComment] = useState<string[]>([""]);
+  const [Question, SetQuestion] = useState<string[]>([]);
+  const [Comment, SetComment] = useState<string[]>([]);
   const questionData: { ExpectionQnA: string; ExpectedComment: string }[] = [];
   const dispatch = useDispatch();
   const cleanCount = () => {
@@ -64,6 +65,26 @@ export const ManagerQuestion = () => {
     }
     dispatch(setQuestionData(questionData));
   };
+  const lastQuestion = (
+    questionDataRef: string[],
+    CommentDataRef: string[]
+  ) => {
+    SetQuestion([...questionDataRef, ""]);
+    SetComment([...CommentDataRef, ""]);
+    setCount(questionDataRef.length + 1);
+  };
+  useEffect(() => {
+    const questionDataRef: string[] = [];
+    const CommentDataRef: string[] = [];
+    QuestionDummy.forEach((data) => {
+      questionDataRef.push(data.ExpectionQnA);
+      CommentDataRef.push(data.ExpectedComment);
+    });
+    SetQuestion(questionDataRef);
+    SetComment(CommentDataRef);
+    lastQuestion(questionDataRef, CommentDataRef);
+  }, []);
+
   return (
     <div>
       <MangerHeader />
