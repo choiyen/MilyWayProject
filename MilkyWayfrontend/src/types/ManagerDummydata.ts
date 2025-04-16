@@ -66,27 +66,6 @@ export const InqurieDummy: ProjectDataType.InqurieType[] = [
   },
 ];
 
-export const NoticeDummy: ProjectDataType.NoticeType[] = [
-  {
-    NoticeId: "1",
-    type: "이사청소",
-    greeting:
-      "저희는 이사청소를 전문으로 하는 업체로써, 고객님들의 소중한 공간을 깨끗하게 청소해 드립니다. 이사청소는 저희에게 맡겨주세요! 이번엔 한보아파트 이사청소를 다녀왔습니다.",
-  },
-  {
-    NoticeId: "2",
-    type: "정기청소",
-    greeting:
-      "저희는 정기청소를 전문으로 하는 업체로써, 고객님들의 소중한 공간을 깨끗하게 청소해 드립니다. 정기청소는 저희에게 맡겨주세요! 이번엔 청주아파트 정기청소를 다녀왔습니다.",
-  },
-  {
-    NoticeId: "3",
-    type: "입주청소",
-    greeting:
-      "저희는 입주청소를 전문으로 하는 업체로써, 고객님들의 소중한 공간을 깨끗하게 청소해 드립니다. 입주청소는 저희에게 맡겨주세요! 이번엔 평거동 입주청소를 다녀왔습니다.",
-  },
-];
-
 export const QuestionDummy: ProjectDataType.QuestionType[] = [
   {
     ExpectionQnA: "청소는 언제 하나요?",

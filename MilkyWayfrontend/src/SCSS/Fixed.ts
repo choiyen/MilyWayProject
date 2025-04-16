@@ -51,7 +51,7 @@ export const LastButton = styled.button`
   color: white;
   font-size: 20px;
   text-align: center;
-  margin-top: 20px; /* Space above the button to separate from previous content */
+  margin-top: 50px; /* Space above the button to separate from previous content */
   margin-bottom: 40px;
   padding: 0; /* Remove extra padding */
 

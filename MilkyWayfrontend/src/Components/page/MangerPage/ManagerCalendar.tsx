@@ -141,7 +141,7 @@ export const ManagerCalendar = () => {
 
         <CalendarsWrapper>
           {/* 이전/다음 달 이동 */}
-          <Wapper className="flex justify-between items-center w-full px-4 m-10">
+          <Wapper className="flex justify-between items-center w-3/4 px-4 m-[45px]">
             <button
               onClick={() => {
                 calendar.setCurrentDate(subMonths(calendar.currentDate, 1));
@@ -165,7 +165,7 @@ export const ManagerCalendar = () => {
             </button>
           </Wapper>
           {/* 요일 헤더 */}
-          <div className="grid grid-cols-7 w-full text-center font-semibold text-gray-700 border border-gray-300">
+          <div className="grid grid-cols-7 w-3/4 text-center font-semibold text-gray-700 border border-gray-300">
             {WeekDay.map((item, index) => (
               <div
                 key={index}
@@ -179,7 +179,7 @@ export const ManagerCalendar = () => {
           {CALENDER_RESULT_LIST.map((week, weekIndex) => (
             <div
               key={weekIndex}
-              className={`grid grid-cols-7 w-full text-center m-0 ${
+              className={`grid grid-cols-7 w-3/4 text-center m-0 ${
                 weekIndex > 0 ? "border-t border-gray-300" : ""
               }`}
             >
@@ -242,7 +242,7 @@ export const ManagerCalendar = () => {
             </div>
           ))}
         </CalendarsWrapper>
-        <div className="flex flex-col items-center mt-4 bg-gray-100 p-4 rounded-lg shadow-md w-full">
+        <div className="flex flex-col justify-center items-center mt-4 bg-gray-100 p-4 rounded-lg shadow-md w-3/4 h-40">
           {/* 선택된 날짜에 대한 정보 표시 */}
           {date != null &&
           address.length > 0 &&
@@ -250,9 +250,9 @@ export const ManagerCalendar = () => {
             date.toDateString() ? (
             <div className="text-gray-700 text-lg font-semibold text-xl">
               {address.map((item, index) => (
-                <div key={index} className="bg-blue-100 w-full">
+                <div key={index} className="bg-blue-100">
                   {/* 데스크탑 테이블 (md 이상에서만 보이게) */}
-                  <table className="hidden md:table table-auto border-2 border-black border-collapse w-full">
+                  <table className="hidden md:table table-auto border-2 border-black border-collapse w-70">
                     <thead className="bg-blue-200">
                       <tr>
                         <th className="p-2 text-left border-2 border-black">
@@ -331,9 +331,7 @@ export const ManagerCalendar = () => {
           )}
         </div>
 
-        <LastButton onClick={ChangeClick} className="mt-120">
-          일정 추가
-        </LastButton>
+        <LastButton onClick={ChangeClick}>일정 추가</LastButton>
       </CalendarWapper>
       <Footer />
       {/* 모달 */}

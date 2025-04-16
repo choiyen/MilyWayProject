@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
 import { NoticeDetailType } from "@/types/ProjectDataType";
+import { InputTextBox } from "@/Components/Common/InputTextBox";
 
 const MainBox = styled.div`
   width: 100%;
@@ -45,8 +46,9 @@ export const ManagerAdvice = () => {
 
   const [type, setType] = useState<string>("");
   const [greeting, setgreeting] = useState("");
-
+  const [title, setTitle] = useState<string>("");
   const [cleanspot, setcleanspot] = useState<string[]>([""]);
+  const [titleimg, setTitleimg] = useState<File>(new File([], ""));
   const [beforefile, setbeforefile] = useState<File[][]>([[]]);
   const [afferfile, setAfferfile] = useState<File[][]>([[]]);
   const [Advice, SetAdvice] = useState<string[]>([""]);
@@ -80,8 +82,20 @@ export const ManagerAdvice = () => {
   };
 
   const handleOnclick = () => {
+    if (afferfile.length !== cleanspot.length) {
+      alert("청소 후 사진을 모두 등록해주세요.");
+      return;
+    } else {
+      console.log(
+        "청소 후 사진의 첫번째 파일이 자동으로 titleimg로 설정됩니다."
+      );
+      setTitleimg(afferfile[0][0]);
+    }
+
     dispatch(
       setNoticeData({
+        title: title,
+        titleimg: titleimg,
         type: type,
         greeting: greeting,
       })
@@ -106,6 +120,12 @@ export const ManagerAdvice = () => {
         <MainBox>
           <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
           <Wapper>
+            <InputTextBox
+              name={"제목"}
+              place={"후기 제목을 입력해주세요."}
+              Value={title}
+              setValue2={setTitle}
+            ></InputTextBox>
             <SelectBox
               name={"청소 유형"}
               append={cleanType}

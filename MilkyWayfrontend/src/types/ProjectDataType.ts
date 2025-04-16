@@ -56,8 +56,15 @@ export type NoticeDetailType = {
 
 export type NoticeType = {
   NoticeId?: string;
+  title: string;
+  titleimg: File;
   type: (typeof RoomType)[number];
   greeting: string;
+};
+
+export type NoticeFullType = {
+  Notice: NoticeType;
+  NoticeDetail: NoticeDetailType[];
 };
 
 export type ReservationType = {
