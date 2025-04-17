@@ -1,9 +1,12 @@
 export const GateWayType = {
-  ManagerMain: "/Manager/Login",
-  ManagerAdvice: "/Manager/Advice",
-  ManagerQuestion: "/Manager/Question",
   ManagerAddress: "/Manager/Sign",
-  ManagerJoin: "/Manager/Join",
+  ManagerAdvice: "/Manager/Advice",
+  ManagerAdviceInsert: "/Manager/Advice/Insert",
+  ManagerAfter: "/Manager/AfterService",
   ManagerCalendar: "/Manager/Calender",
+  ManagerJoin: "/Manager/Join",
+  ManagerMain: "/Manager/Login",
+  ManagerQuestion: "/Manager/Question",
+  ManagerQuestionInsert: "/Manager/Question/Insert",
   ManagerSignUp: "/Manager/SignUp",
 };
