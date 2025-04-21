@@ -22,7 +22,6 @@ import { InputTextBox } from "@/Components/Common/InputTextBox";
 
 const MainBox = styled.div`
   width: 100%;
-  height: calc(60vh - 30px); /* Increased height to make space */
   background-color: white;
   display: flex;
   flex-direction: column;

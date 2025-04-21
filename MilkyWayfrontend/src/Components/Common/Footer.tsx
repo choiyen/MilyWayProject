@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const FooterBox = styled.div`
-  height: calc(20vh);
   width: 100%;
   background-color: #ffedfa;
   display: flex;

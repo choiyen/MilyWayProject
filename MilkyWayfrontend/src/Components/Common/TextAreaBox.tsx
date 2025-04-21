@@ -60,10 +60,6 @@ export const TextAreaBox = ({
     }
   }, [Value, index, setValue]);
 
-  useEffect(() => {
-    console.log(Value);
-  }, [Value]);
-
   function SetChange(
     e: ChangeEvent<HTMLTextAreaElement>,
     index?: number

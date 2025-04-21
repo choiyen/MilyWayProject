@@ -1,9 +1,9 @@
+import { ChangeEvent } from "react";
 import styled from "styled-components";
 
 interface SelectBoxProps {
   name: string;
   append: string[];
-  value: string;
   setValue: (value: string) => void;
 }
 

@@ -56,10 +56,6 @@ export const InputTextBox = ({
     }
   }, [Value, index, setValue]);
 
-  useEffect(() => {
-    console.log(Value);
-  }, [Value]);
-
   function SetChange(e: ChangeEvent<HTMLInputElement>, index?: number): void {
     if (index !== undefined && setValue !== undefined) {
       const NewValue = [...Value];

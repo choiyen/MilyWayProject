@@ -21,7 +21,7 @@ export const Fontname = styled.div`
 `;
 
 export const Wapper = styled.div`
-  width: 70%;
+  width: 50%;
   height: auto; /* Allow Wapper to grow dynamically */
   background-color: gainsboro;
   display: flex;

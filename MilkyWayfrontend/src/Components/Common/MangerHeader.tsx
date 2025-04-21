@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import "../../SCSS/header.scss";
 import homeImage from "@/Components/img/home.png";
@@ -218,20 +218,20 @@ export const MangerHeader = () => {
             예약 관리
           </ChangeButton>
           <ChangeButton
-            $isActive={activeButton === "QestionMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerQuestion)}
+            $isActive={activeButton === "QuestionMangeMent"}
+            onClick={() => FuncClick(GateWayType.ManagerQuestionSelect)}
           >
             Q & A 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "ReviewMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerAdvice)}
+            onClick={() => FuncClick(GateWayType.ManagerAdviceSelect)}
           >
             후기 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "AfterServiceMangeMent"}
-            onClick={() => handleButtonClick("AfterServiceMangeMent")}
+            onClick={() => FuncClick(GateWayType.ManagerAfter)}
           >
             A/S관리
           </ChangeButton>
@@ -281,7 +281,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "QestionMangeMent"}
-                  onClick={() => FuncClick(GateWayType.ManagerQuestion)}
+                  onClick={() => FuncClick(GateWayType.ManagerQuestionSelect)}
                 >
                   Q & A 관리
                 </ChangeButton>
@@ -289,7 +289,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ReviewMangeMent"}
-                  onClick={() => FuncClick(GateWayType.ManagerAdvice)}
+                  onClick={() => FuncClick(GateWayType.ManagerAdviceSelect)}
                 >
                   후기 관리
                 </ChangeButton>
@@ -297,7 +297,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "AfterServiceMangeMent"}
-                  onClick={() => handleButtonClick("AfterServiceMangeMent")}
+                  onClick={() => FuncClick(GateWayType.ManagerAfter)}
                 >
                   A/S 관리
                 </ChangeButton>

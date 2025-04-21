@@ -19,7 +19,6 @@ const MainWapper = styled.div`
 `;
 const MainBox = styled.div`
   width: 100%;
-  height: calc(60vh - 30px); /* Increased height to make space */
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -32,7 +31,6 @@ const MainBox = styled.div`
 
 const Wapper = styled.div`
   width: auto;
-  height: auto; /* Allow Wapper to grow dynamically */
   background-color: #d3f8ff;
   display: flex;
   flex-direction: column;

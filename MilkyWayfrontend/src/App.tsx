@@ -12,10 +12,11 @@ import { ManagerCalendar } from "./Components/page/MangerPage/ManagerCalendar";
 import { Provider } from "react-redux";
 import store from "./DefaultRedux/reduxstore";
 import { ManagerSignUp } from "./Components/page/MangerPage/ManagerSignUp";
-import { ManagerAdviceInsert } from "./Components/page/MangerPage/ManagerAdviceInsert";
 import { ManagerAfterService } from "./Components/page/MangerPage/ManagerAfterService";
-import { ManagerQuestionInsert } from "./Components/page/MangerPage/ManagerQuestionInsert";
 import { ManagerNotFoundPage } from "./Components/page/MangerPage/ManagerNotFoundPage";
+import { ManagerAdviceSelect } from "./Components/page/MangerPage/ManagerAdviceSelect";
+import { ManagerQuestionSelect } from "./Components/page/MangerPage/ManagerQuestionSelect";
+import ManagerAdviceedit from "./Components/page/MangerPage/ManagerAdviceedit";
 
 const App = () => {
   return (
@@ -32,8 +33,8 @@ const App = () => {
               element={<ManagerAdvice />}
             />
             <Route
-              path={GateWayType.ManagerAdviceInsert}
-              element={<ManagerAdviceInsert />}
+              path={GateWayType.ManagerAdviceSelect}
+              element={<ManagerAdviceSelect />}
             />
             <Route
               path={GateWayType.ManagerAfter}
@@ -42,8 +43,8 @@ const App = () => {
 
             <Route path={GateWayType.ManagerMain} element={<ManagerMain />} />
             <Route
-              path={GateWayType.ManagerQuestionInsert}
-              element={<ManagerQuestionInsert />}
+              path={GateWayType.ManagerQuestionSelect}
+              element={<ManagerQuestionSelect />}
             />
             <Route
               path={GateWayType.ManagerQuestion}
@@ -58,6 +59,11 @@ const App = () => {
               path={GateWayType.ManagerCalendar}
               element={<ManagerCalendar />}
             />
+            <Route
+              path={GateWayType.ManagerAdviceedit}
+              element={<ManagerAdviceedit />}
+            />
+
             <Route path="*" element={<ManagerNotFoundPage />} />
           </Routes>
         </BrowserRouter>

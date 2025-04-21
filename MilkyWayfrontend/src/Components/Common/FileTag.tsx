@@ -61,9 +61,6 @@ export const FileTag = ({ name, Value, setValue, index }: SelectBoxProps) => {
       setValue(copiedArray);
     }
   }, [Value, index, setValue]);
-  useEffect(() => {
-    console.log(Value);
-  }, [Value]);
 
   return (
     <FileContainer
