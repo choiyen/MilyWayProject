@@ -1,4 +1,4 @@
-import { loginType } from "@/types/ProjectDataType";
+import { loginType } from "@/types/Feature/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialStateValue: loginType = { userID: "", Password: "" };

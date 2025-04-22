@@ -9,7 +9,7 @@ import { TextAreaBox } from "@/Components/Common/TextAreaBox";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { setQuestionData } from "@/DefaultRedux/ReduxList/QuestionsReducer";
 import { useDispatch } from "react-redux";
-import { QuestionDummy } from "@/types/ManagerDummydata";
+import { QuestionDummy } from "@/types/Feature/ManagerDummydata";
 
 const MainWapper = styled.div`
   display: flex;

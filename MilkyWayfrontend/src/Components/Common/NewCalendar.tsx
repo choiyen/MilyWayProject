@@ -1,5 +1,5 @@
 import { StyledCalendar, StyledCalendarWrapper } from "@/SCSS/Fixed";
-import { Value } from "@/types/date";
+import { Value } from "@/types/Date/date";
 import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 

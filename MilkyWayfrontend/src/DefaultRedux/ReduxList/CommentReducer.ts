@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CommentValueType } from "@/types/ProjectDataType";
+import { CommentValueType } from "@/types/Feature/ProjectDataType";
 
 const initialCommentValue: CommentValueType = {
   boardId: "",

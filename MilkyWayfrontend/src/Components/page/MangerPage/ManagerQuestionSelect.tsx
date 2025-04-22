@@ -1,12 +1,12 @@
 import { Footer } from "@/Components/Common/Footer";
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { QuestionDummy } from "@/types/ManagerDummydata";
-import { QuestionType } from "@/types/ProjectDataType";
+import { QuestionDummy } from "@/types/Feature/ManagerDummydata";
+import { QuestionType } from "@/types/Feature/ProjectDataType";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
-import { GateWayType } from "@/types/GateWayType";
+import { GateWayType } from "@/types/GateWay/GateWayType";
 
 // 페이지 전체 wrapper - 화면 꽉 차게 하면서도 내용에 따라 유연하게
 const MainWapper = styled.div`

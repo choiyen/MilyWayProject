@@ -3,11 +3,17 @@ import { Footer } from "@/Components/Common/Footer";
 import { RadioBox } from "@/Components/Common/RadioBox";
 import { SelectDate } from "@/Components/Common/SelectDate";
 import { setAdministrationData } from "@/DefaultRedux/ReduxList/AdministrationReducer";
-import { adminstrationSelect } from "@/types/adminstrationType";
-import { Value, WeekDay } from "@/types/date";
-import { AddressDummy, AdministrationDummy } from "@/types/ManagerDummydata";
-import { ModelWrapper, Overlay } from "@/types/ModelWapperType";
-import { AddressType, AdministrationType } from "@/types/ProjectDataType";
+import { adminstrationSelect } from "@/types/appointment/adminstrationType";
+import { Value, WeekDay } from "@/types/Date/date";
+import {
+  AddressDummy,
+  AdministrationDummy,
+} from "@/types/Feature/ManagerDummydata";
+import { ModelWrapper, Overlay } from "@/types/Conmon/ModelWapperType";
+import {
+  AddressType,
+  AdministrationType,
+} from "@/types/Feature/ProjectDataType";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
@@ -17,7 +23,7 @@ import {
   LastButton,
   StyledCalendarWrapper,
 } from "@/SCSS/Fixed";
-import userCalendar from "@/types/useCalendar";
+import userCalendar from "@/types/hooks/useCalendar";
 import { subMonths } from "date-fns";
 import "@/SCSS/tailwind.scss";
 

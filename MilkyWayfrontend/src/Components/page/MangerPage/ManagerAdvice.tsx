@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { SelectBox } from "@/Components/Common/SelectBox";
 import { TextAreaBox } from "@/Components/Common/TextAreaBox";
-import { cleanType } from "@/types/cleanType";
-import { RoomType } from "@/types/RoomType";
+import { cleanType } from "@/types/cleanspace/cleanType";
+import { RoomType } from "@/types/Room/RoomType";
 import { FileTag } from "@/Components/Common/FileTag";
 import { useState, useRef, useEffect } from "react";
 import { Footer } from "@/Components/Common/Footer";
@@ -17,7 +17,7 @@ import {
 import { useDispatch } from "react-redux";
 import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
-import { NoticeDetailType } from "@/types/ProjectDataType";
+import { NoticeDetailType } from "@/types/Feature/ProjectDataType";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 
 const MainBox = styled.div`

@@ -10,17 +10,17 @@ import {
   LastButton,
   Wapper,
 } from "@/SCSS/Fixed";
-import { cleanType } from "@/types/cleanType";
-import { RoomType } from "@/types/RoomType";
+import { cleanType } from "@/types/cleanspace/cleanType";
+import { RoomType } from "@/types/Room/RoomType";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import plus from "@/Components/img/plus.png";
 import { useDispatch } from "react-redux";
-import { NoticeDetailType } from "@/types/ProjectDataType";
+import { NoticeDetailType } from "@/types/Feature/ProjectDataType";
 import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
-import { NoticeFulldummy } from "@/types/MemberDummydate";
+import { NoticeFulldummy } from "@/types/Feature/MemberDummydate";
 
 const MainBox = styled.div`
   width: 100%;

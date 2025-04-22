@@ -1,4 +1,4 @@
-import { NoticeType } from "@/types/ProjectDataType";
+import { NoticeType } from "@/types/Feature/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialNoticeStateValue: NoticeType = {

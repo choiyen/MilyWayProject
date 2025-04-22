@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { NoticeFullType } from "@/types/ProjectDataType";
-import { NoticeFulldummy } from "@/types/MemberDummydate";
+import { NoticeFullType } from "@/types/Feature/ProjectDataType";
+import { NoticeFulldummy } from "@/types/Feature/MemberDummydate";
 import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
 import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
 import { Footer } from "@/Components/Common/Footer";
-import { GateWayType } from "@/types/GateWayType";
+import { GateWayType } from "@/types/GateWay/GateWayType";
 
 export const ManagerAdviceSelect = () => {
   const [Advicedummy, setAdvicedummy] = useState<NoticeFullType[]>([]);

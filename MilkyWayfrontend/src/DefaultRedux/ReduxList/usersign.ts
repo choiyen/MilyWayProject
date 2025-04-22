@@ -1,4 +1,4 @@
-import { signupType } from "@/types/ProjectDataType";
+import { signupType } from "@/types/Feature/ProjectDataType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialSignStateValue: signupType = {

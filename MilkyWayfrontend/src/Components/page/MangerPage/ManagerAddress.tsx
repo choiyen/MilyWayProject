@@ -3,9 +3,9 @@ import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { NewCalendar } from "@/Components/Common/NewCalendar";
 import { SelectBox } from "@/Components/Common/SelectBox";
 import { setAddressData } from "@/DefaultRedux/ReduxList/addressReducer";
-import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { cleanType } from "@/types/cleanType";
-import { Value } from "@/types/date";
+import { FixedManagerHeader, Fontname, LastButton, Wapper } from "@/SCSS/Fixed";
+import { cleanType } from "@/types/cleanspace/cleanType";
+import { Value } from "@/types/Date/date";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
@@ -18,7 +18,6 @@ const MainWapper = styled.div`
 `;
 const MainBox = styled.div`
   width: 100%;
-  height: calc(60vh - 30px); /* Increased height to make space */
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -56,7 +55,7 @@ export const ManagerAddress = () => {
       <MainWapper>
         <MainBox>
           <Fontname>온라인 예약 관리 </Fontname>
-          <MainWapper>
+          <Wapper>
             <SelectBox name={"서비스명"} append={cleanType}></SelectBox>
             <InputTextBox
               name={"이름"}
@@ -89,9 +88,9 @@ export const ManagerAddress = () => {
               setValue={SetReservation}
             ></NewCalendar>
             {/* 아직 캘린더 CSS 적용 안됨, 디자인 검토 후 추가할 예정 */}
-          </MainWapper>
+          </Wapper>
+          <LastButton onClick={handleReservation}>예약 등록</LastButton>
         </MainBox>
-        <LastButton onClick={handleReservation}>예약 등록</LastButton>
       </MainWapper>
       <Footer />
     </div>

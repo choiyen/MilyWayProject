@@ -6,7 +6,7 @@ import { FixedManagerHeader, Fontname } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
 import { login } from "@/DefaultRedux/ReduxList/userlogin";
 import { Link } from "react-router-dom";
-import { GateWayType } from "@/types/GateWayType";
+import { GateWayType } from "@/types/GateWay/GateWayType";
 
 // Wrapper styled component
 const Wrapper = styled.div`

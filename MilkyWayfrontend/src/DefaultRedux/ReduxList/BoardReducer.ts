@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BoardType } from "@/types/ProjectDataType";
+import { BoardType } from "@/types/Feature/ProjectDataType";
 
 const initialBoardValue: BoardType = {
   title: "",

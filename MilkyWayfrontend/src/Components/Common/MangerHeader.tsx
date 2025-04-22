@@ -3,7 +3,7 @@ import styled from "styled-components";
 import "../../SCSS/header.scss";
 import homeImage from "@/Components/img/home.png";
 import hamburger from "@/Components/img/hamburger.png";
-import { GateWayType } from "@/types/GateWayType";
+import { GateWayType } from "@/types/GateWay/GateWayType";
 import { useNavigate } from "react-router-dom";
 // Header styles
 const HeaderBox = styled.div`
@@ -195,7 +195,7 @@ export const MangerHeader = () => {
   const handleHomeButtonClick = () => {
     const isConfirmed = window.confirm("메인 페이지로 이동하시겠습니까?");
     if (isConfirmed) {
-      window.location.href = "/admin"; // 관리자 페이지 URL로 이동
+      window.location.href = GateWayType.MainPage; // 관리자 페이지 URL로 이동
     }
   };
   const navigate = useNavigate();
@@ -230,12 +230,6 @@ export const MangerHeader = () => {
             후기 관리
           </ChangeButton>
           <ChangeButton
-            $isActive={activeButton === "AfterServiceMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerAfter)}
-          >
-            A/S관리
-          </ChangeButton>
-          <ChangeButton
             $isActive={activeButton === "ScheduleMangeMent"}
             onClick={() => FuncClick(GateWayType.ManagerCalendar)}
           >
@@ -249,10 +243,15 @@ export const MangerHeader = () => {
           </ChangeButton>
         </HeaderLarge>
         <div style={{ backgroundColor: "#F4DFB6" }}>
-          <HomeButton src={hamburger} onClick={handleImageClick} />
+          <HomeButton
+            src={hamburger}
+            onClick={handleImageClick}
+            style={{ width: "50px", height: "50px" }}
+          />
           <MangerButton
             src={homeImage}
             onClick={handleHomeButtonClick} // 관리자 버튼 클릭 시 확인
+            style={{ width: "50px", height: "50px" }}
           />
         </div>
       </HeaderBox>
@@ -292,14 +291,6 @@ export const MangerHeader = () => {
                   onClick={() => FuncClick(GateWayType.ManagerAdviceSelect)}
                 >
                   후기 관리
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  $isActive={activeButton === "AfterServiceMangeMent"}
-                  onClick={() => FuncClick(GateWayType.ManagerAfter)}
-                >
-                  A/S 관리
                 </ChangeButton>
               </li>
               <li>

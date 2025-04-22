@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { InqurieType } from "@/types/ProjectDataType";
+import { InqurieType } from "@/types/Feature/ProjectDataType";
 
 const initialInqurieValue: InqurieType = {
   Address: "",

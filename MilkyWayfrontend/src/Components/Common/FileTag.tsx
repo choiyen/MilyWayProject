@@ -5,7 +5,9 @@ interface SelectBoxProps {
   name: string;
   Value: File[][];
   setValue: Dispatch<SetStateAction<File[][]>>;
-  index: number;
+  setValue2?: Dispatch<SetStateAction<File[]>>;
+
+  index?: number;
 }
 
 // The file input itself
@@ -54,9 +56,15 @@ const FileContainer = styled.div`
   margin-top: 20px;
 `;
 
-export const FileTag = ({ name, Value, setValue, index }: SelectBoxProps) => {
+export const FileTag = ({
+  name,
+  Value,
+  setValue,
+  index,
+  setValue2,
+}: SelectBoxProps) => {
   useEffect(() => {
-    if (Value.length < index) {
+    if (index && Value.length < index) {
       const copiedArray = [...Value.map((row) => [...row]), []];
       setValue(copiedArray);
     }
@@ -81,8 +89,14 @@ export const FileTag = ({ name, Value, setValue, index }: SelectBoxProps) => {
         onChange={(e) => {
           const files = Array.from(e.target.files || []);
           const newValue = [...Value];
-          newValue[index] = files;
-          setValue(newValue);
+          if (index !== undefined) {
+            newValue[index] = files;
+            setValue(newValue);
+          } else {
+            if (setValue2) {
+              setValue2(e.target.files ? Array.from(e.target.files) : []);
+            }
+          }
         }}
       />
     </FileContainer>

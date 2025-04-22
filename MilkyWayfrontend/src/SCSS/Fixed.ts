@@ -2,8 +2,18 @@ import { MangerHeader } from "@/Components/Common/MangerHeader";
 import styled from "styled-components";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { ClientHeader } from "@/Components/Common/ClientHeader";
 
 export const FixedManagerHeader = styled(MangerHeader)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1000; /* Make sure it stays on top */
+`;
+
+export const FixedClientHeader = styled(ClientHeader)`
   position: fixed;
   top: 0;
   left: 0;
@@ -21,7 +31,7 @@ export const Fontname = styled.div`
 `;
 
 export const Wapper = styled.div`
-  width: 50%;
+  width: 60%;
   height: auto; /* Allow Wapper to grow dynamically */
   background-color: gainsboro;
   display: flex;

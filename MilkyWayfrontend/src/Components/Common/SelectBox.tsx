@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface SelectBoxProps {
@@ -50,14 +50,16 @@ export const SelectBox = ({
   Cleancount,
   setValue,
 }: SelectBoxProps) => {
+  const [change, setchange] = useState<string>("");
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // 선택된 값을 부모에게 전달
-
     if (updateCleanspot != null && Cleancount != null) {
       console.log(Cleancount);
       updateCleanspot(event.target.value, Cleancount);
+      setchange(event.target.value);
     } else if (setValue != null) {
       setValue(event.target.value);
+      setchange(event.target.value);
     }
   };
   useEffect(() => {
@@ -65,12 +67,17 @@ export const SelectBox = ({
     if (Cleancount != null && updateCleanspot) {
       updateCleanspot("부엌", Cleancount);
     }
+    if (match) {
+      setchange(match[1]);
+    } else {
+      console.log("No match found");
+    }
   }, []); // Cleancount나 updateCleanspot이 변경될 때만 실행
-
+  const match = name.match(/\(([^)]+)\)/);
   return (
     <SelectContainer>
       <Label>{name}</Label>
-      <Select name={name} onChange={handleChange}>
+      <Select name={name} onChange={handleChange} value={change}>
         {append.map((item) => (
           <option key={item} value={item} style={{ textAlign: "center" }}>
             {item}
