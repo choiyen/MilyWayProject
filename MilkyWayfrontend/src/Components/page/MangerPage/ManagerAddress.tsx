@@ -1,9 +1,8 @@
-import { Footer } from "@/Components/Common/Footer";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { NewCalendar } from "@/Components/Common/NewCalendar";
 import { SelectBox } from "@/Components/Common/SelectBox";
 import { setAddressData } from "@/DefaultRedux/ReduxList/addressReducer";
-import { FixedManagerHeader, Fontname, LastButton, Wapper } from "@/SCSS/Fixed";
+import { Fontname, LastButton, Wapper } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { Value } from "@/types/Date/date";
 import { useState } from "react";
@@ -51,7 +50,6 @@ export const ManagerAddress = () => {
 
   return (
     <div>
-      <FixedManagerHeader />
       <MainWapper>
         <MainBox>
           <Fontname>온라인 예약 관리 </Fontname>
@@ -92,7 +90,6 @@ export const ManagerAddress = () => {
           <LastButton onClick={handleReservation}>예약 등록</LastButton>
         </MainBox>
       </MainWapper>
-      <Footer />
     </div>
   );
 };

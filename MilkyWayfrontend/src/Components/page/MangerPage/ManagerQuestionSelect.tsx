@@ -1,12 +1,10 @@
-import { Footer } from "@/Components/Common/Footer";
-import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { QuestionDummy } from "@/types/Feature/ManagerDummydata";
-import { QuestionType } from "@/types/Feature/ProjectDataType";
+import { Fontname, LastButton } from "@/SCSS/Fixed";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
-import { GateWayType } from "@/types/GateWay/GateWayType";
+import { QuestionDummy, QuestionType } from "@/types/Feature/Question/Question";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 // 페이지 전체 wrapper - 화면 꽉 차게 하면서도 내용에 따라 유연하게
 const MainWapper = styled.div`
@@ -35,7 +33,6 @@ export const ManagerQuestionSelect = () => {
 
   return (
     <>
-      <FixedManagerHeader />
       <MainWapper>
         <Fontname>후기 관리</Fontname>
         {/* 테이블 섹션 */}
@@ -75,13 +72,16 @@ export const ManagerQuestionSelect = () => {
 
           {/* 버튼 */}
           <LastButton
-            onClick={() => QuestionButtonClick(GateWayType.ManagerQuestion)}
+            onClick={() =>
+              QuestionButtonClick(
+                GateWayNumber.Manager + ManagerGateWayType.Question
+              )
+            }
           >
             예상 질문 추가
           </LastButton>
         </div>
       </MainWapper>
-      <Footer />
     </>
   );
 };

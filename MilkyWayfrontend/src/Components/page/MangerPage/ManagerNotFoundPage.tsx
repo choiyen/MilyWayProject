@@ -1,5 +1,3 @@
-import { Footer } from "@/Components/Common/Footer";
-import { FixedManagerHeader } from "@/SCSS/Fixed";
 import styled from "styled-components";
 
 // 스타일 설정
@@ -47,7 +45,6 @@ const NotFoundButton = styled.a`
 export const ManagerNotFoundPage = () => {
   return (
     <>
-      <FixedManagerHeader />
       <NotFoundWapper>
         <NotFoundContent>
           <NotFoundMessage>404 - Not Found</NotFoundMessage>
@@ -57,7 +54,6 @@ export const ManagerNotFoundPage = () => {
           <NotFoundButton href="/">홈으로 돌아가기</NotFoundButton>
         </NotFoundContent>
       </NotFoundWapper>
-      <Footer />
     </>
   );
 };

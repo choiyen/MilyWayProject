@@ -1,12 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
-import { Footer } from "@/Components/Common/Footer";
-import { FixedManagerHeader, Fontname } from "@/SCSS/Fixed";
+import { Fontname } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
 import { login } from "@/DefaultRedux/ReduxList/userlogin";
 import { Link } from "react-router-dom";
-import { GateWayType } from "@/types/GateWay/GateWayType";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -88,7 +87,6 @@ export const ManagerMain = () => {
 
   return (
     <div>
-      <FixedManagerHeader />
       <Wrapper>
         <MangerPage>
           <Fontname>관리자 로그인</Fontname>
@@ -105,12 +103,14 @@ export const ManagerMain = () => {
             onChange={(e) => setPasswordState(e.target.value)}
           />
           <MangerButton onClick={handleLogin}>로그인</MangerButton>
-          <Link style={{ marginTop: "30px" }} to={GateWayType.ManagerSignUp}>
+          <Link
+            style={{ marginTop: "30px" }}
+            to={GateWayNumber.Manager + "/" + ManagerGateWayType.SignUp}
+          >
             아직 서버를 관리하는 사람이 없나요? 없다면 눌러주세요
           </Link>
         </MangerPage>
       </Wrapper>
-      <Footer />
     </div>
   );
 };

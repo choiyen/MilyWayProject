@@ -1,9 +1,6 @@
-import { Footer } from "@/Components/Common/Footer";
-
-import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { AddressDummy } from "@/types/Feature/ManagerDummydata"; // Assuming signDummy is a value
-import { GateWayType } from "@/types/GateWay/GateWayType";
-import { AddressType } from "@/types/Feature/ProjectDataType";
+import { Fontname, LastButton } from "@/SCSS/Fixed";
+import { AddressDummy, AddressType } from "@/types/Feature/Address/AddressType";
+import { ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { Key, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -51,7 +48,6 @@ export const ManagerJoin = () => {
 
   return (
     <div>
-      <FixedManagerHeader />
       <MainWapper>
         <MainBox>
           <Fontname>온라인 예약 관리 </Fontname>
@@ -100,11 +96,10 @@ export const ManagerJoin = () => {
             </table>
           </MainWapper>
         </MainBox>
-        <LastButton onClick={() => FuncClick(GateWayType.ManagerAddress)}>
+        <LastButton onClick={() => FuncClick(ManagerGateWayType.Address)}>
           정보 추가
         </LastButton>
       </MainWapper>
-      <Footer />
     </div>
   );
 };

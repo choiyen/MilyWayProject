@@ -5,20 +5,13 @@ import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
 import { FileTag } from "@/Components/Common/FileTag";
 import { useState, useRef, useEffect } from "react";
-import { Footer } from "@/Components/Common/Footer";
 import plus from "@/Components/img/plus.png";
-import {
-  FixedManagerHeader,
-  Fontname,
-  ImgTag,
-  LastButton,
-  Wapper,
-} from "@/SCSS/Fixed";
+import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
 import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
-import { NoticeDetailType } from "@/types/Feature/ProjectDataType";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
+import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
 
 const MainBox = styled.div`
   width: 100%;
@@ -114,7 +107,6 @@ export const ManagerAdvice = () => {
 
   return (
     <div style={{ overflow: "Visble" }}>
-      <FixedManagerHeader />
       <MainWapper>
         <MainBox>
           <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
@@ -173,7 +165,6 @@ export const ManagerAdvice = () => {
         </MainBox>
         <LastButton onClick={handleOnclick}>업로드</LastButton>
       </MainWapper>
-      <Footer />
     </div>
   );
 };

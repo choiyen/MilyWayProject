@@ -5,27 +5,19 @@ import { SelectDate } from "@/Components/Common/SelectDate";
 import { setAdministrationData } from "@/DefaultRedux/ReduxList/AdministrationReducer";
 import { adminstrationSelect } from "@/types/appointment/adminstrationType";
 import { Value, WeekDay } from "@/types/Date/date";
-import {
-  AddressDummy,
-  AdministrationDummy,
-} from "@/types/Feature/ManagerDummydata";
 import { ModelWrapper, Overlay } from "@/types/Conmon/ModelWapperType";
-import {
-  AddressType,
-  AdministrationType,
-} from "@/types/Feature/ProjectDataType";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import {
-  FixedManagerHeader,
-  Fontname,
-  LastButton,
-  StyledCalendarWrapper,
-} from "@/SCSS/Fixed";
+import { Fontname, LastButton, StyledCalendarWrapper } from "@/SCSS/Fixed";
 import userCalendar from "@/types/hooks/useCalendar";
 import { subMonths } from "date-fns";
 import "@/SCSS/tailwind.scss";
+import {
+  AdministrationDummy,
+  AdministrationType,
+} from "@/types/Feature/Address/Adminstration";
+import { AddressDummy, AddressType } from "@/types/Feature/Address/AddressType";
 
 // styled-components 정의
 const CalendarWapper = styled.div`
@@ -140,7 +132,6 @@ export const ManagerCalendar = () => {
 
   return (
     <>
-      <FixedManagerHeader />
       <CalendarWapper>
         <Fontname>청소 예약 관리</Fontname>
         <Label2>청소 날짜가 지난 데이터는 자동 삭제됩니다.</Label2>
@@ -339,7 +330,6 @@ export const ManagerCalendar = () => {
 
         <LastButton onClick={ChangeClick}>일정 추가</LastButton>
       </CalendarWapper>
-      <Footer />
       {/* 모달 */}
       {change && <Overlay />}
       <ModelWrapper $istrue={`${change}`}>

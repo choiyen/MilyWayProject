@@ -2,8 +2,6 @@ import "./App.css";
 import { Provider } from "react-redux";
 import store from "./DefaultRedux/reduxstore";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { GateWayType } from "./types/GateWay/GateWayType";
-
 import { ManagerMain } from "./Components/page/MangerPage/ManagerMain";
 import { ManagerAdvice } from "./Components/page/MangerPage/ManagerAdvice";
 import { ManagerQuestion } from "./Components/page/MangerPage/ManagerQuestion";
@@ -16,6 +14,11 @@ import { ManagerAdviceSelect } from "./Components/page/MangerPage/ManagerAdviceS
 import { ManagerQuestionSelect } from "./Components/page/MangerPage/ManagerQuestionSelect";
 import ManagerAdviceedit from "./Components/page/MangerPage/ManagerAdviceedit";
 import { ManagerCommonPage } from "./Components/page/ManagerComonPage";
+import {
+  ClientGateWayType,
+  GateWayNumber,
+  ManagerGateWayType,
+} from "./types/GateWay/GateWayType";
 
 const router = createBrowserRouter([
   {
@@ -23,47 +26,43 @@ const router = createBrowserRouter([
     element: <ManagerCommonPage />,
     children: [
       {
-        path: GateWayType.ManagerAddress,
+        path: ManagerGateWayType.Address,
         element: <ManagerAddress />,
       },
       {
-        path: GateWayType.ManagerAdvice,
+        path: ManagerGateWayType.Advice,
         element: <ManagerAdvice />,
       },
       {
-        path: GateWayType.ManagerAdviceSelect,
+        path: ManagerGateWayType.AdviceSelect,
         element: <ManagerAdviceSelect />,
       },
       {
-        path: GateWayType.ManagerMain,
+        path: ManagerGateWayType.Main,
         element: <ManagerMain />,
       },
       {
-        path: GateWayType.ManagerMain,
-        element: <ManagerMain />,
-      },
-      {
-        path: GateWayType.ManagerQuestionSelect,
+        path: ManagerGateWayType.QuestionSelect,
         element: <ManagerQuestionSelect />,
       },
       {
-        path: GateWayType.ManagerQuestion,
+        path: ManagerGateWayType.Question,
         element: <ManagerQuestion />,
       },
       {
-        path: GateWayType.ManagerJoin,
+        path: ManagerGateWayType.Join,
         element: <ManagerJoin />,
       },
       {
-        path: GateWayType.ManagerSignUp,
+        path: ManagerGateWayType.SignUp,
         element: <ManagerSignUp />,
       },
       {
-        path: GateWayType.ManagerCalendar,
+        path: ManagerGateWayType.Calendar,
         element: <ManagerCalendar />,
       },
       {
-        path: GateWayType.ManagerAdviceedit,
+        path: ManagerGateWayType.Adviceedit,
         element: <ManagerAdviceedit />,
       },
       {
@@ -73,11 +72,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/Client",
+    path: GateWayNumber.Client,
     element: <ManagerCommonPage />,
     children: [
       {
-        path: GateWayType.MainPage,
+        path: ClientGateWayType.home,
         element: <ManagerMain />,
       },
     ],

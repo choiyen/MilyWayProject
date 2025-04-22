@@ -3,8 +3,12 @@ import styled from "styled-components";
 import "../../SCSS/header.scss";
 import homeImage from "@/Components/img/home.png";
 import hamburger from "@/Components/img/hamburger.png";
-import { GateWayType } from "@/types/GateWay/GateWayType";
 import { useNavigate } from "react-router-dom";
+import {
+  ClientGateWayType,
+  GateWayNumber,
+  ManagerGateWayType,
+} from "@/types/GateWay/GateWayType";
 // Header styles
 const HeaderBox = styled.div`
   width: 100%;
@@ -195,12 +199,13 @@ export const MangerHeader = () => {
   const handleHomeButtonClick = () => {
     const isConfirmed = window.confirm("메인 페이지로 이동하시겠습니까?");
     if (isConfirmed) {
-      window.location.href = GateWayType.MainPage; // 관리자 페이지 URL로 이동
+      window.location.href =
+        GateWayNumber.Client + "/" + ClientGateWayType.home; // 관리자 페이지 URL로 이동
     }
   };
   const navigate = useNavigate();
   const FuncClick = (name: string) => {
-    navigate(name);
+    navigate(GateWayNumber.Manager + "/" + name);
   };
 
   return (
@@ -213,31 +218,31 @@ export const MangerHeader = () => {
         <HeaderLarge>
           <ChangeButton
             $isActive={activeButton === "ReservationMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerJoin)}
+            onClick={() => FuncClick(ManagerGateWayType.Join)}
           >
             예약 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "QuestionMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerQuestionSelect)}
+            onClick={() => FuncClick(ManagerGateWayType.QuestionSelect)}
           >
             Q & A 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "ReviewMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerAdviceSelect)}
+            onClick={() => FuncClick(ManagerGateWayType.AdviceSelect)}
           >
             후기 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "ScheduleMangeMent"}
-            onClick={() => FuncClick(GateWayType.ManagerCalendar)}
+            onClick={() => FuncClick(ManagerGateWayType.Calendar)}
           >
             일정 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "Login"}
-            onClick={() => FuncClick(GateWayType.ManagerMain)}
+            onClick={() => FuncClick(ManagerGateWayType.Main)}
           >
             Login
           </ChangeButton>
@@ -272,7 +277,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ReservationMangeMent"}
-                  onClick={() => FuncClick(GateWayType.ManagerJoin)}
+                  onClick={() => FuncClick(ManagerGateWayType.Join)}
                 >
                   예약 관리
                 </ChangeButton>
@@ -280,7 +285,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "QestionMangeMent"}
-                  onClick={() => FuncClick(GateWayType.ManagerQuestionSelect)}
+                  onClick={() => FuncClick(ManagerGateWayType.QuestionSelect)}
                 >
                   Q & A 관리
                 </ChangeButton>
@@ -288,7 +293,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ReviewMangeMent"}
-                  onClick={() => FuncClick(GateWayType.ManagerAdviceSelect)}
+                  onClick={() => FuncClick(ManagerGateWayType.AdviceSelect)}
                 >
                   후기 관리
                 </ChangeButton>
@@ -296,7 +301,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ScheduleMangeMent"}
-                  onClick={() => FuncClick(GateWayType.ManagerCalendar)}
+                  onClick={() => FuncClick(ManagerGateWayType.Calendar)}
                 >
                   일정 관리
                 </ChangeButton>
@@ -304,7 +309,7 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "Login"}
-                  onClick={() => FuncClick(GateWayType.ManagerMain)}
+                  onClick={() => FuncClick(ManagerGateWayType.Main)}
                 >
                   Login
                 </ChangeButton>

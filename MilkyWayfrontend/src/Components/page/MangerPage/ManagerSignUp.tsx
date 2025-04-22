@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
-import { Footer } from "@/Components/Common/Footer";
-import { FixedManagerHeader, Fontname } from "@/SCSS/Fixed";
+
 import { useDispatch } from "react-redux";
 import { setSignData } from "@/DefaultRedux/ReduxList/usersign";
+import { Fontname } from "@/SCSS/Fixed";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -99,7 +99,6 @@ export const ManagerSignUp = () => {
   };
   return (
     <div>
-      <FixedManagerHeader />
       <Wrapper>
         <MangerPage>
           <Fontname>관리자 회원가입</Fontname>
@@ -127,7 +126,6 @@ export const ManagerSignUp = () => {
           <MangerButton onClick={handleSignup}>회원가입</MangerButton>
         </MangerPage>
       </Wrapper>
-      <Footer />
     </div>
   );
 };

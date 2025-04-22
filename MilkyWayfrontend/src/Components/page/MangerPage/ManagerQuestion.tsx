@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
-import { MangerHeader } from "@/Components/Common/MangerHeader";
-import { Footer } from "@/Components/Common/Footer";
+
 import { Fontname, ImgTag, LastButton } from "@/SCSS/Fixed";
 import plus from "@/Components/img/plus.png";
 import { TextAreaBox } from "@/Components/Common/TextAreaBox";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { setQuestionData } from "@/DefaultRedux/ReduxList/QuestionsReducer";
 import { useDispatch } from "react-redux";
-import { QuestionDummy } from "@/types/Feature/ManagerDummydata";
+import { QuestionDummy } from "@/types/Feature/Question/Question";
 
 const MainWapper = styled.div`
   display: flex;
@@ -85,7 +84,6 @@ export const ManagerQuestion = () => {
 
   return (
     <div>
-      <MangerHeader />
       <MainWapper>
         <MainBox>
           <Fontname> Q&A 관리</Fontname>
@@ -117,7 +115,6 @@ export const ManagerQuestion = () => {
         </MainBox>
         <LastButton onClick={handleEX}> 재업로드</LastButton>
       </MainWapper>
-      <Footer />
     </div>
   );
 };

@@ -1,15 +1,8 @@
 import { FileTag } from "@/Components/Common/FileTag";
-import { Footer } from "@/Components/Common/Footer";
 import { InputTextBox } from "@/Components/Common/InputTextBox";
 import { SelectBox } from "@/Components/Common/SelectBox";
 import { TextAreaBox } from "@/Components/Common/TextAreaBox";
-import {
-  FixedManagerHeader,
-  Fontname,
-  ImgTag,
-  LastButton,
-  Wapper,
-} from "@/SCSS/Fixed";
+import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
 import { useEffect, useRef, useState } from "react";
@@ -17,10 +10,10 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import plus from "@/Components/img/plus.png";
 import { useDispatch } from "react-redux";
-import { NoticeDetailType } from "@/types/Feature/ProjectDataType";
 import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
-import { NoticeFulldummy } from "@/types/Feature/MemberDummydate";
+import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
+import { NoticeFulldummy } from "@/types/Feature/Notice/NoFull";
 
 const MainBox = styled.div`
   width: 100%;
@@ -147,7 +140,6 @@ const ManagerAdviceedit = () => {
 
   return (
     <div style={{ overflow: "Visble" }}>
-      <FixedManagerHeader />
       <MainWapper>
         <MainBox>
           <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
@@ -211,7 +203,6 @@ const ManagerAdviceedit = () => {
         </MainBox>
         <LastButton onClick={handleOnclick}>업로드</LastButton>
       </MainWapper>
-      <Footer />
     </div>
   );
 };

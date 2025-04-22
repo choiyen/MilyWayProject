@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { NoticeFullType } from "@/types/Feature/ProjectDataType";
-import { NoticeFulldummy } from "@/types/Feature/MemberDummydate";
 import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
-import { FixedManagerHeader, Fontname, LastButton } from "@/SCSS/Fixed";
-import { Footer } from "@/Components/Common/Footer";
-import { GateWayType } from "@/types/GateWay/GateWayType";
+import { Fontname, LastButton } from "@/SCSS/Fixed";
+import { NoticeFulldummy, NoticeFullType } from "@/types/Feature/Notice/NoFull";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 export const ManagerAdviceSelect = () => {
   const [Advicedummy, setAdvicedummy] = useState<NoticeFullType[]>([]);
@@ -21,8 +19,7 @@ export const ManagerAdviceSelect = () => {
   };
 
   return (
-    <div className="m-0 h-80">
-      <FixedManagerHeader />
+    <div className="m-0 h-70">
       <div className="flex flex-col justify-start items-center min-h-screen bg-gray-100">
         <Fontname>온라인 후기 관리</Fontname>
         <div className="w-full flex flex-col px-4 py-4 overflow-y-auto">
@@ -59,7 +56,7 @@ export const ManagerAdviceSelect = () => {
               <LastButton
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
                 onClick={() => {
-                  navigate(GateWayType.ManagerAdvice);
+                  navigate(GateWayNumber.Manager + ManagerGateWayType.Advice);
                 }}
               >
                 후기 추가
@@ -68,7 +65,6 @@ export const ManagerAdviceSelect = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
