@@ -19,11 +19,13 @@ import { ManagerSignUp } from "@/Components/page/ManagerPage/Connected/ManagerSi
 import { ManagerQuestion } from "@/Components/page/ManagerPage/Question/ManagerQuestion";
 import { ManagerQuestionSelect } from "@/Components/page/ManagerPage/Question/ManagerQuestionSelect";
 import store from "@/config/reduxstore";
+import GlobalErrorBoundary from "@/Components/Common/errors/GlobalErrorBoundary";
 
 const router = createBrowserRouter([
   {
     path: "/Manager",
     element: <ManagerCommonPage />,
+    errorElement: <GlobalErrorBoundary />,
     children: [
       {
         path: ManagerGateWayType.Address,
@@ -74,6 +76,7 @@ const router = createBrowserRouter([
   {
     path: GateWayNumber.Client,
     element: <ManagerCommonPage />,
+    errorElement: <GlobalErrorBoundary />,
     children: [
       {
         path: ClientGateWayType.home,
@@ -81,6 +84,16 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "*",
+    element: <ManagerCommonPage />,
+    children: [
+      {
+        path: "*",
+        element: <ManagerNotFoundPage />,
+      },
+    ],
+  }, // 클라이언트 쪽 페이지로 변경되어 함
 ]);
 
 const App = () => {

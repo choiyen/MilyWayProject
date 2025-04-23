@@ -3,7 +3,7 @@ import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 
 import { Fontname, ImgTag, LastButton } from "@/SCSS/Fixed";
-import plus from "@/Components/img/plus.png";
+import plus from "@/Components/Common/assets/plus.png";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { useDispatch } from "react-redux";

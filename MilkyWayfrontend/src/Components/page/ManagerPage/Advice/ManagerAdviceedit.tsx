@@ -8,7 +8,7 @@ import { RoomType } from "@/types/Room/RoomType";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import plus from "@/Components/img/plus.png";
+import plus from "@/Components/Common/assets/plus.png";
 import { useDispatch } from "react-redux";
 
 import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";

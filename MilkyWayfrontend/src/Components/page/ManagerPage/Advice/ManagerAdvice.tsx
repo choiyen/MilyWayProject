@@ -5,7 +5,7 @@ import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
 import { FileTag } from "@/Components/Common/ui/File/FileTag";
 import { useState, useRef, useEffect } from "react";
-import plus from "@/Components/img/plus.png";
+import plus from "@/Components/Common/assets/plus.png";
 import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
 

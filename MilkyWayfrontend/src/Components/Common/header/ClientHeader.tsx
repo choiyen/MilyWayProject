@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import "../../SCSS/header.scss";
+import "@/SCSS/header.scss";
 
 // Header styles
 const HeaderBox = styled.div`

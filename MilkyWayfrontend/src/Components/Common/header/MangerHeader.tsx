@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import "../../SCSS/header.scss";
-import homeImage from "@/Components/img/home.png";
-import hamburger from "@/Components/img/hamburger.png";
+import "@/SCSS/header.scss";
+import homeImage from "@/Components/Common/assets/home.png";
+import hamburger from "@/Components/Common/assets/hamburger.png";
 import { useNavigate } from "react-router-dom";
 import {
   ClientGateWayType,

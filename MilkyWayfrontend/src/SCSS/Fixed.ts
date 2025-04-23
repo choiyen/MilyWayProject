@@ -1,8 +1,8 @@
-import { MangerHeader } from "@/Components/Common/MangerHeader";
 import styled from "styled-components";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { ClientHeader } from "@/Components/Common/header/ClientHeader";
+import { MangerHeader } from "@/Components/Common/header/MangerHeader";
 
 export const FixedManagerHeader = styled(MangerHeader)`
   position: fixed;

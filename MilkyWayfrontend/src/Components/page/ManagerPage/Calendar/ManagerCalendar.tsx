@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Footer } from "@/Components/Common/Footer";
-import { RadioBox } from "@/Components/Common/RadioBox";
-import { SelectDate } from "@/Components/Common/SelectDate";
-import { setAdministrationData } from "@/DefaultRedux/ReduxList/AdministrationReducer";
+import { SelectDate } from "@/Components/Common/ui/Select/SelectDate";
 import { adminstrationSelect } from "@/types/appointment/adminstrationType";
 import { Value, WeekDay } from "@/types/Date/date";
 import { ModelWrapper, Overlay } from "@/types/Conmon/ModelWapperType";
@@ -18,6 +15,8 @@ import {
   AdministrationType,
 } from "@/types/Feature/Address/Adminstration";
 import { AddressDummy, AddressType } from "@/types/Feature/Address/AddressType";
+import { setAdministrationData } from "@/config/request/ReduxList/AdministrationReducer";
+import { RadioBox } from "@/Components/Common/ui/Radio/RadioBox";
 
 // styled-components 정의
 const CalendarWapper = styled.div`

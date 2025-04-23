@@ -3,9 +3,9 @@ import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 import { Fontname } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
-import { login } from "@/DefaultRedux/ReduxList/userlogin";
 import { Link } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { login } from "@/config/request/ReduxList/userlogin";
 
 // Wrapper styled component
 const Wrapper = styled.div`
