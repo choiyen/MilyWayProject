@@ -1,24 +1,24 @@
+import { ManagerCommonPage } from "@/Components/Common/layouts/ManagerComonPage";
 import "./App.css";
 import { Provider } from "react-redux";
-import store from "./DefaultRedux/reduxstore";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ManagerMain } from "./Components/page/MangerPage/ManagerMain";
-import { ManagerAdvice } from "./Components/page/MangerPage/ManagerAdvice";
-import { ManagerQuestion } from "./Components/page/MangerPage/ManagerQuestion";
-import { ManagerAddress } from "./Components/page/MangerPage/ManagerAddress";
-import { ManagerJoin } from "./Components/page/MangerPage/ManagerJoin";
-import { ManagerCalendar } from "./Components/page/MangerPage/ManagerCalendar";
-import { ManagerSignUp } from "./Components/page/MangerPage/ManagerSignUp";
-import { ManagerNotFoundPage } from "./Components/page/MangerPage/ManagerNotFoundPage";
-import { ManagerAdviceSelect } from "./Components/page/MangerPage/ManagerAdviceSelect";
-import { ManagerQuestionSelect } from "./Components/page/MangerPage/ManagerQuestionSelect";
-import ManagerAdviceedit from "./Components/page/MangerPage/ManagerAdviceedit";
-import { ManagerCommonPage } from "./Components/page/ManagerComonPage";
+import { ManagerAddress } from "@/Components/page/ManagerPage/Address/ManagerAddress";
 import {
   ClientGateWayType,
   GateWayNumber,
   ManagerGateWayType,
-} from "./types/GateWay/GateWayType";
+} from "@/types/GateWay/GateWayType";
+import { ManagerAdvice } from "@/Components/page/ManagerPage/Advice/ManagerAdvice";
+import { ManagerAdviceSelect } from "@/Components/page/ManagerPage/Advice/ManagerAdviceSelect";
+import { ManagerMain } from "@/Components/page/ManagerPage/Connected/ManagerMain";
+import { ManagerJoin } from "@/Components/page/ManagerPage/Address/ManagerJoin";
+import ManagerAdviceedit from "@/Components/page/ManagerPage/Advice/ManagerAdviceedit";
+import { ManagerCalendar } from "@/Components/page/ManagerPage/Calendar/ManagerCalendar";
+import { ManagerNotFoundPage } from "@/Components/page/ManagerPage/NotFound/ManagerNotFoundPage";
+import { ManagerSignUp } from "@/Components/page/ManagerPage/Connected/ManagerSignUp";
+import { ManagerQuestion } from "@/Components/page/ManagerPage/Question/ManagerQuestion";
+import { ManagerQuestionSelect } from "@/Components/page/ManagerPage/Question/ManagerQuestionSelect";
+import store from "@/config/reduxstore";
 
 const router = createBrowserRouter([
   {

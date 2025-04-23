@@ -1,7 +1,7 @@
-import { InputTextBox } from "@/Components/Common/InputTextBox";
-import { NewCalendar } from "@/Components/Common/NewCalendar";
-import { SelectBox } from "@/Components/Common/SelectBox";
-import { setAddressData } from "@/DefaultRedux/ReduxList/addressReducer";
+import { NewCalendar } from "@/Components/Common/ui/Calendar/NewCalendar";
+import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
+import { SelectBox } from "@/Components/Common/ui/Select/SelectBox";
+import { setAddressData } from "@/config/request/ReduxList/addressReducer";
 import { Fontname, LastButton, Wapper } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { Value } from "@/types/Date/date";

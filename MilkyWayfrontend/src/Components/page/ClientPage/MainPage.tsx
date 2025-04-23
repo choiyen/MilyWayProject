@@ -1,4 +1,4 @@
-import { ClientHeader } from "@/Components/Common/ClientHeader";
+import { ClientHeader } from "@/Components/Common/header/ClientHeader";
 
 export const MainPage = () => {
   return (

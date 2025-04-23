@@ -4,11 +4,11 @@ import styled from "styled-components";
 
 import { Fontname, ImgTag, LastButton } from "@/SCSS/Fixed";
 import plus from "@/Components/img/plus.png";
-import { TextAreaBox } from "@/Components/Common/TextAreaBox";
-import { InputTextBox } from "@/Components/Common/InputTextBox";
-import { setQuestionData } from "@/DefaultRedux/ReduxList/QuestionsReducer";
+import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
+import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { useDispatch } from "react-redux";
 import { QuestionDummy } from "@/types/Feature/Question/Question";
+import { setQuestionData } from "@/config/request/ReduxList/QuestionsReducer";
 
 const MainWapper = styled.div`
   display: flex;

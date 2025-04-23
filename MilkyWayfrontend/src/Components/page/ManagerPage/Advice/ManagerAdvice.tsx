@@ -1,19 +1,18 @@
-import { FileTag } from "@/Components/Common/FileTag";
-import { InputTextBox } from "@/Components/Common/InputTextBox";
-import { SelectBox } from "@/Components/Common/SelectBox";
-import { TextAreaBox } from "@/Components/Common/TextAreaBox";
-import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
+import styled from "styled-components";
+import { SelectBox } from "@/Components/Common/ui/Select/SelectBox";
+import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
+import { FileTag } from "@/Components/Common/ui/File/FileTag";
+import { useState, useRef, useEffect } from "react";
 import plus from "@/Components/img/plus.png";
+import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
-import { setNoticeData } from "@/DefaultRedux/ReduxList/NoticeReducer";
-import { setNoticeDetailData } from "@/DefaultRedux/ReduxList/NoticeDetailReducer";
+
+import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
-import { NoticeFulldummy } from "@/types/Feature/Notice/NoFull";
+import { setNoticeData } from "@/config/request/ReduxList/NoticeReducer";
+import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailReducer";
 
 const MainBox = styled.div`
   width: 100%;
@@ -34,22 +33,24 @@ const MainWapper = styled.div`
   flex-direction: column;
   min-height: 100vh;
 `;
-const ManagerAdviceedit = () => {
-  const { noticeId } = useParams(); // URL 파라미터로 noticeId를 가져옵니다.
+
+export const ManagerAdvice = () => {
   const [count, setCount] = useState(1);
+
   const [type, setType] = useState<string>("");
   const [greeting, setgreeting] = useState("");
   const [title, setTitle] = useState<string>("");
-
   const [cleanspot, setcleanspot] = useState<string[]>([""]);
   const [titleimg, setTitleimg] = useState<File>(new File([], ""));
   const [beforefile, setbeforefile] = useState<File[][]>([[]]);
   const [afferfile, setAfferfile] = useState<File[][]>([[]]);
   const [Advice, SetAdvice] = useState<string[]>([""]);
+
   const AdviceData: NoticeDetailType[] = [];
 
   // 마지막 항목을 가리키기 위한 ref
   const lastItemRef = useRef<HTMLDivElement | null>(null);
+
   const dispatch = useDispatch();
 
   // 컴포넌트가 처음 렌더링될 때와, 추가할 때마다 스크롤을 내리기 위해 useEffect 사용
@@ -58,38 +59,6 @@ const ManagerAdviceedit = () => {
       lastItemRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [count]);
-
-  useEffect(() => {
-    const AdviceFull = NoticeFulldummy[noticeId ? Number(noticeId) - 1 : 0];
-    setCount(AdviceFull.NoticeDetail.length);
-    setType(AdviceFull.Notice.type);
-    setTitle(AdviceFull.Notice.title);
-    setTitleimg(AdviceFull.Notice.titleimg);
-    setgreeting(AdviceFull.Notice.greeting);
-    updateCleanspot("", AdviceFull.NoticeDetail.length);
-    const Cleanspots: string[] = [];
-    const Advices: string[] = [];
-    const beforeURL: File[][] = [];
-    const afterURL: File[][] = [];
-
-    console.log(AdviceFull.NoticeDetail.length);
-    for (let i = 0; i < AdviceFull.NoticeDetail.length; i++) {
-      AdviceData.push({
-        direction: AdviceFull.NoticeDetail[i].direction,
-        beforeURL: AdviceFull.NoticeDetail[i].beforeURL,
-        afterURL: AdviceFull.NoticeDetail[i].afterURL,
-        Advice: AdviceFull.NoticeDetail[i].Advice,
-      });
-      Advices.push(AdviceFull.NoticeDetail[i].Advice);
-      beforeURL.push(AdviceFull.NoticeDetail[i].beforeURL);
-      afterURL.push(AdviceFull.NoticeDetail[i].afterURL);
-      Cleanspots.push(AdviceFull.NoticeDetail[i].direction);
-    }
-    setcleanspot(Cleanspots);
-    SetAdvice(Advices);
-    setAfferfile(afterURL);
-    setbeforefile(afferfile);
-  }, []);
 
   const cleanCount = () => {
     setCount(count + 1);
@@ -104,7 +73,6 @@ const ManagerAdviceedit = () => {
     }
     setcleanspot(newcleanspot);
   };
-  // 이 부분에서 해당 noticeId를 기반으로 데이터를 가져오고, 수정할 수 있는 폼 등을 렌더링합니다.
 
   const handleOnclick = () => {
     if (afferfile.length !== cleanspot.length) {
@@ -150,11 +118,6 @@ const ManagerAdviceedit = () => {
               Value={title}
               setValue2={setTitle}
             ></InputTextBox>
-            <FileTag
-              name={"대표 이미지"}
-              Value={beforefile}
-              setValue={setbeforefile}
-            />
             <SelectBox
               name={"청소 유형"}
               append={cleanType}
@@ -206,5 +169,3 @@ const ManagerAdviceedit = () => {
     </div>
   );
 };
-
-export default ManagerAdviceedit;
