@@ -51,7 +51,7 @@ public class CommentController
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> Insert(HttpServletRequest httpServletRequest, @Valid @RequestBody CommentDTO commentDTO)
     {
         try
@@ -125,7 +125,7 @@ public class CommentController
                     )
             }
     )
-    @PutMapping("/Update")
+    @PutMapping
     public ResponseEntity<?> Update(HttpServletRequest request, @Valid @RequestBody CommentDTO commentDTO)
     {
         try
@@ -171,7 +171,7 @@ public class CommentController
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam Long CommentId)
     {
         try
@@ -208,7 +208,7 @@ public class CommentController
                     @ApiResponse(responseCode = "404", description = "Comment not found")
             }
     )
-    @PostMapping("/Find")
+    @PostMapping("/search")
     public ResponseEntity<?> FindByCommentId(@RequestParam Long CommentId)
     {
         try
@@ -239,7 +239,7 @@ public class CommentController
                     @ApiResponse(responseCode = "404", description = "Comment not found")
             }
     )
-    @PostMapping("/Select")
+    @PostMapping("/search/panel")
     public ResponseEntity<?> SelectByBoardId(@RequestParam String BoardId)
     {
         try

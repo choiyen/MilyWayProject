@@ -58,7 +58,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> Insert(HttpServletRequest request, @RequestBody NoticeJsonDTO noticeJsonDTO)
     {
         try
@@ -120,7 +120,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     )
             }
     )
-    @PutMapping("/Update")
+    @PutMapping
     public ResponseEntity<?> Update(HttpServletRequest request, @RequestBody NoticeJsonDTO noticeJsonDTO)
     {
         try
@@ -183,7 +183,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String noticeId)
     {
         try
@@ -241,7 +241,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     @ApiResponse(responseCode = "404", description = "Notice and Notice Detail List not found")
             }
     )
-    @PostMapping("/findall")
+    @PostMapping("/search")
     public ResponseEntity<?> FindALl()
     {
         try
@@ -283,7 +283,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     @ApiResponse(responseCode = "404", description = "NoticeDTO and NoticeDetail List not found")
             }
     )
-    @PostMapping("/find")
+    @GetMapping("/search")
     public ResponseEntity<?> FindByNoticeId(@RequestParam String NoticeId)
     {
         try

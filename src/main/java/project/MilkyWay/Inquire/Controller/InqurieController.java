@@ -43,7 +43,7 @@ public class InqurieController
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> Insert(HttpServletRequest request, @Valid @RequestBody InquireDTO inquireDTO)
     {
         try
@@ -82,7 +82,7 @@ public class InqurieController
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String inqurieId)
     {
         try
@@ -120,7 +120,7 @@ public class InqurieController
                     @ApiResponse(responseCode = "404", description = "Inqurie List not found")
             }
     )
-    @GetMapping("/ALL")
+    @PostMapping("/search")
     public ResponseEntity<?> FindALL(HttpServletRequest request)
     {
         try
@@ -155,7 +155,7 @@ public class InqurieController
                     @ApiResponse(responseCode = "404", description = "Inquire not found")
             }
     )
-    @GetMapping("/select")
+    @GetMapping("/search")
     public ResponseEntity<?> FindById(HttpServletRequest request, @RequestParam String InquireId)
     {
         try

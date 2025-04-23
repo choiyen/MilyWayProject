@@ -51,7 +51,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                     )
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public  ResponseEntity<?> QuestionInsert(HttpServletRequest request, @RequestBody @Valid QuestionsDTO questionsDTO)
     {
         try
@@ -86,7 +86,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                     )
             }
     )
-    @PutMapping("/Update")
+    @PutMapping
     public ResponseEntity<?> QuestionUpdate(HttpServletRequest request,@RequestBody @Valid QuestionsDTO newquestionsDTO)
     {
         try
@@ -131,7 +131,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> QuestionDelete(HttpServletRequest request, @RequestParam Long QuestionId)
     {
         try
@@ -170,7 +170,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "Question not found")
             }
     )
-    @PostMapping("/Find")
+    @GetMapping("/search")
     public ResponseEntity<?> QuestionFind(@RequestParam Long QuestionId)
     {
         try
@@ -200,7 +200,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "Questions List not found")
             }
     )
-    @PostMapping("/FindALL")
+    @PostMapping("/search")
     public ResponseEntity<?> QuestionFindAll()
     {
         try

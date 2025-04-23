@@ -45,7 +45,7 @@ public class AdministrationController
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> Insert(HttpServletRequest request, @Valid @RequestBody AdministrationDTO administrationDTO)
     {
         try
@@ -102,7 +102,7 @@ public class AdministrationController
                     )
             }
     )
-    @PutMapping("/Update")
+    @PutMapping
     public ResponseEntity<?> Update(HttpServletRequest request, @Valid @RequestBody AdministrationDTO administrationDTO)
     {
         try
@@ -146,7 +146,7 @@ public class AdministrationController
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String administrationId)
     {
         try
@@ -185,7 +185,7 @@ public class AdministrationController
                     @ApiResponse(responseCode = "404", description = "Address not found")
             }
     )
-    @PostMapping("/Find")
+    @PostMapping("/search")
     public ResponseEntity<?> FindAdministration(HttpServletRequest request, @RequestParam String AdministrationId)
     {
         try
@@ -223,7 +223,7 @@ public class AdministrationController
                     @ApiResponse(responseCode = "404", description = "administration List not found")
             }
     )
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> FindAll()
     {
         try

@@ -74,7 +74,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                     )
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> UserInsert(@RequestBody @Valid UserDTO userDTO)
     {
         try
@@ -99,7 +99,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping("/Login")
+    @PostMapping("/login")
     public ResponseEntity<?> UserLogin(@RequestBody @Valid LoginDTO loginDTO) {
         try {
             // 사용자 존재 여부 확인
@@ -136,7 +136,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                     @ApiResponse(responseCode = "400", description = "Error during logout")
             }
     )
-    @PostMapping("/Logout")
+    @PostMapping("/logout")
     public ResponseEntity<?> userLogout(HttpServletRequest request) {
         try {
             // 세션 무효화
@@ -180,7 +180,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                     )
             }
     )
-    @PutMapping("/Update")
+    @PutMapping
     public ResponseEntity<?> UserUpdate(HttpServletRequest request, @RequestBody @Valid UserDTO NewuserDTO)
     {
         try
@@ -219,7 +219,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> UserDelete(HttpServletRequest request, @RequestParam String userId)
     {
         try
@@ -257,7 +257,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                     @ApiResponse(responseCode = "404", description = "User not found")
             }
     )
-    @PostMapping("/Find")
+    @PostMapping("/search")
     public ResponseEntity<?> Userfind(@RequestParam String email)
     {
         try

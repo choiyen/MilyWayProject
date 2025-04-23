@@ -26,7 +26,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("/reserve")
 @Tag(name = "reservation 정보를 제공하는 Controller")
 public class ReservationController //고객의 예약을 관리하기 위한 DTO
 {
@@ -51,7 +51,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     )
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> Insert(@RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
@@ -86,7 +86,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     )
             }
     )
-    @PutMapping("/Update")
+    @PutMapping
     public ResponseEntity<?> Update(HttpServletRequest request, @RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
@@ -129,7 +129,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String ReservationId)
     {
         try
@@ -165,7 +165,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "Reservation List not found")
             }
     )
-    @GetMapping("/Find")
+    @GetMapping
     public ResponseEntity<?> FindAll(HttpServletRequest request)
     {
         try
@@ -202,7 +202,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "ReservationDTO not found")
             }
     )
-    @GetMapping("/FindBy")
+    @GetMapping("/search")
     public ResponseEntity<?> FindBy(HttpServletRequest request, @RequestParam String ReservationId)
     {
 
@@ -236,7 +236,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "ReservationDTO not found")
             }
     )
-    @GetMapping("/FindByAdmin")
+    @GetMapping("/search")
     ResponseEntity<?> FindByAdmin(HttpServletRequest request, @RequestParam String AdminstrationId)
     {
         try

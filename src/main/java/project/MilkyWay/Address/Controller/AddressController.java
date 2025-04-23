@@ -45,7 +45,7 @@ public class AddressController
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> Insert(HttpServletRequest request, @Valid @RequestBody AddressDTO addressDTO)
     {
         try
@@ -85,7 +85,7 @@ public class AddressController
                     @ApiResponse(responseCode = "400", description = "Invalid Change data")
             }
     )
-    @PutMapping("/Update")
+    @PutMapping
     public ResponseEntity<?> Update(HttpServletRequest request, @Valid @RequestBody AddressDTO addressDTO)
     {
         try
@@ -125,7 +125,7 @@ public class AddressController
                     @ApiResponse(responseCode = "404", description = "Address not found")
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String AddressId)
     {
         try
@@ -162,7 +162,7 @@ public class AddressController
                     @ApiResponse(responseCode = "404", description = "Address List not found")
             }
     )
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> FindAll(HttpServletRequest request)
     {
         try
@@ -203,7 +203,7 @@ public class AddressController
                     @ApiResponse(responseCode = "404", description = "Address not found")
             }
     )
-    @PostMapping("/Find")
+    @PostMapping("/search")
     public ResponseEntity<?> FindById(HttpServletRequest request, @RequestParam String AddressId)
     {
         try

@@ -43,7 +43,7 @@ public class BoardController
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping("/Insert")
+    @PostMapping
     public ResponseEntity<?> Insert(@Valid @RequestBody BoardDTO boardDTO)
     {
         try
@@ -116,7 +116,7 @@ public class BoardController
                     )
             }
     )
-    @DeleteMapping("/Delete")
+    @DeleteMapping
     public ResponseEntity<?> Delete(@RequestParam String BoardId)
     {
         try
@@ -147,7 +147,7 @@ public class BoardController
                     @ApiResponse(responseCode = "404", description = "Board List not found")
             }
     )
-    @GetMapping
+    @PostMapping("/search")
     public ResponseEntity<?> FindALl()
     {
         try
@@ -180,7 +180,7 @@ public class BoardController
                     @ApiResponse(responseCode = "404", description = "Board not found")
             }
     )
-    @PostMapping("/Find")
+    @GetMapping("/search")
     public ResponseEntity<?> FindByBoardId(@RequestParam String BoardId)
     {
         try 
