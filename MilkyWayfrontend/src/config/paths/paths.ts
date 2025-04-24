@@ -1,6 +1,3 @@
-import path from "path";
-import { login } from "../request/ReduxList/userlogin";
-
 export const paths = {
   Address: {
     search: {

@@ -6,11 +6,12 @@ import QuestionReducer from "./request/ReduxList/QuestionsReducer";
 import NoticeReducer from "./request/ReduxList/NoticeReducer";
 import NoticeDetailReducer from "./request/ReduxList/NoticeDetailReducer";
 import ModelReducer from "./request/ReduxList/modelaction";
-import InqurleReducer from "./request/ReduxList/InqurieReducer";
-import BoardReducer from "./request/ReduxList/BoardReducer";
-import CommentReducer from "./request/ReduxList/CommentReducer";
-import AdministrationReducer from "./request/ReduxList/AdministrationReducer";
-import AddressReducer from "./request/ReduxList/addressReducer";
+import InqurleReducer from "@/config/request/ReduxList/InqurieReducer";
+import BoardReducer from "@/config/request/ReduxList/BoardReducer";
+import CommentReducer from "@/config/request/ReduxList/CommentReducer";
+import AdministrationReducer from "@/config/request/ReduxList/AdministrationReducer";
+import AddressReducer from "@/config/request/ReduxList/addressReducer";
+import authReducer from "@/config/request/ReduxList/useauthSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     Comment: CommentReducer,
     Administration: AdministrationReducer,
     Address: AddressReducer,
+    auth: authReducer,
   },
 });
 
