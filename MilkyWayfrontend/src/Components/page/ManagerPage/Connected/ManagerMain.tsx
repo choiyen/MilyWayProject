@@ -3,9 +3,12 @@ import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 import { Fontname } from "@/SCSS/Fixed";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { login } from "@/config/request/ReduxList/userlogin";
+import { GET } from "@/config/request/axios/axiosInstance";
+import { paths } from "@/config/paths/paths";
+import { setSession } from "@/config/request/ReduxList/useauthSlice";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -80,9 +83,26 @@ export const ManagerMain = () => {
 
   const [IdState, setIdState] = useState("");
   const [PasswordState, setPasswordState] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     dispatch(login({ userID: IdState, Password: PasswordState }));
+    await GET({
+      url: paths.Certification.login.path,
+      params: {
+        userID: IdState,
+        Password: PasswordState,
+      },
+    })
+      .then((res) => {
+        console.log("로그인 성공:", res);
+        dispatch(setSession({ userId: res.userId, isAuthenticated: true })); // Redux에 저장
+        navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Address); // 페이지 이동
+      })
+      .catch((error) => {
+        console.error("로그인 실패:", error);
+        alert("로그인에 실패했습니다.");
+      });
   };
 
   return (

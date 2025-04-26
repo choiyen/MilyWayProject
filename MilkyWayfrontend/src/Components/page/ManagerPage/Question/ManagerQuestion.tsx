@@ -9,6 +9,11 @@ import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { useDispatch } from "react-redux";
 import { QuestionDummy } from "@/types/Feature/Question/Question";
 import { setQuestionData } from "@/config/request/ReduxList/QuestionsReducer";
+import { DELETE, POST } from "@/config/request/axios/axiosInstance";
+import { paths } from "@/config/paths/paths";
+import path from "path";
+import { useNavigate } from "react-router-dom";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 const MainWapper = styled.div`
   display: flex;
@@ -53,7 +58,9 @@ export const ManagerQuestion = () => {
     setCount(count + 1);
   };
   const lastItemRef = useRef<HTMLDivElement | null>(null);
-  const handleEX = () => {
+  const navigate = useNavigate();
+
+  const handleQuestion = async () => {
     for (let i = 0; i < count; i++) {
       questionData.push({
         ExpectionQnA: Question[i],
@@ -61,6 +68,43 @@ export const ManagerQuestion = () => {
       });
     }
     dispatch(setQuestionData(questionData));
+
+    await DELETE({
+      url: paths.Question.basic.path,
+    })
+      .then(async (res) => {
+        if (res.data === "삭제 완료!") {
+          console.log("삭제 완료! Question List 재등록 작업 시작");
+
+          try {
+            for (let i = 0; i < Question.length; i++) {
+              const postRes = await POST({
+                url: paths.Question.basic.path,
+                data: {
+                  ExpectionQnA: Question[i],
+                  ExpectedComment: Comment[i],
+                },
+              });
+
+              if (postRes.data !== "데이터 작성!") {
+                throw new Error(`질문 ${i + 1} 등록 실패`);
+              }
+            }
+
+            console.log("질문 Q&A 변경 작업 완료!");
+            navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Question);
+          } catch (err) {
+            console.error("재등록 중 에러:", err);
+            console.log("일부 질문 등록에 실패했습니다. 다시 시도해주세요.");
+          }
+        } else {
+          console.log("삭제에 실패했습니다. 작업을 중단합니다.");
+        }
+      })
+      .catch((err) => {
+        console.error("삭제 요청 실패:", err);
+        console.log("삭제 요청에 실패했습니다. 네트워크 상태를 확인해주세요.");
+      });
   };
   const lastQuestion = (
     questionDataRef: string[],
@@ -113,7 +157,7 @@ export const ManagerQuestion = () => {
             <ImgTag src={plus} onClick={cleanCount} />
           </Wapper>
         </MainBox>
-        <LastButton onClick={handleEX}> 재업로드</LastButton>
+        <LastButton onClick={handleQuestion}> 재업로드</LastButton>
       </MainWapper>
     </div>
   );

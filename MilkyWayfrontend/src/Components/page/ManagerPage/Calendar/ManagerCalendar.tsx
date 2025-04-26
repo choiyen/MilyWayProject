@@ -17,6 +17,10 @@ import {
 import { AddressDummy, AddressType } from "@/types/Feature/Address/AddressType";
 import { setAdministrationData } from "@/config/request/ReduxList/AdministrationReducer";
 import { RadioBox } from "@/Components/Common/ui/Radio/RadioBox";
+import { POST } from "@/config/request/axios/axiosInstance";
+import path from "path";
+import { paths } from "@/config/paths/paths";
+import { error } from "console";
 
 // styled-components 정의
 const CalendarWapper = styled.div`
@@ -111,7 +115,7 @@ export const ManagerCalendar = () => {
     }
   }, [date]);
 
-  const ChangeDate = () => {
+  const ChangeDate = async () => {
     if (!date) {
       alert("날짜를 선택해주세요");
       return;
@@ -126,6 +130,23 @@ export const ManagerCalendar = () => {
         })
       );
       setChange(false);
+      await POST({
+        url: paths.Administration.basic.path,
+        data: {
+          administrationType: type,
+          administrationDate: date,
+        },
+      })
+        .then((res) => {
+          if (res.data === "전송 완료") {
+            alert("전송 처리 완료!");
+            setChange(false);
+          }
+        })
+        .catch((error) => {
+          console.error("일정 저장 실패:", error);
+          alert("일정 저장에 실패했습니다.");
+        });
     }
   };
 
