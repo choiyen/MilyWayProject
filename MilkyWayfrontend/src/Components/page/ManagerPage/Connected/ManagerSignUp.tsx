@@ -2,10 +2,13 @@ import { useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Fontname } from "@/SCSS/Fixed";
 import { setSignData } from "@/config/request/ReduxList/usersign";
-import { RootState } from "@/config/reduxstore";
+import { POST } from "@/config/request/axios/axiosInstance";
+import { paths } from "@/config/paths/paths";
+import { useNavigate } from "react-router-dom";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -88,8 +91,9 @@ export const ManagerSignUp = () => {
   const [IdState, setIdState] = useState("");
   const [PasswordState, setPasswordState] = useState("");
   const [emailState, setEmailState] = useState("");
+  const navigate = useNavigate();
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     dispatch(
       setSignData({
         userID: IdState,
@@ -97,6 +101,22 @@ export const ManagerSignUp = () => {
         email: emailState,
       })
     );
+
+    try {
+      await POST({
+        url: paths.Certification.basic.path,
+        data: {
+          userID: IdState,
+          Password: PasswordState,
+          email: emailState,
+        },
+      });
+      alert("회원가입 성공!");
+      navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main);
+    } catch (error) {
+      console.error("회원가입 실패!", error);
+      alert("회원가입에 실패했습니다. 다시 시도해주세요");
+    }
   };
   return (
     <div>
