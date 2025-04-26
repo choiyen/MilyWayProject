@@ -5,7 +5,6 @@ import ReservationReducer from "./request/ReduxList/ReservationReducer";
 import QuestionReducer from "./request/ReduxList/QuestionsReducer";
 import NoticeReducer from "./request/ReduxList/NoticeReducer";
 import NoticeDetailReducer from "./request/ReduxList/NoticeDetailReducer";
-import ModelReducer from "./request/ReduxList/modelaction";
 import InqurleReducer from "@/config/request/ReduxList/InqurieReducer";
 import BoardReducer from "@/config/request/ReduxList/BoardReducer";
 import CommentReducer from "@/config/request/ReduxList/CommentReducer";
@@ -21,7 +20,6 @@ const store = configureStore({
     Question: QuestionReducer,
     Notice: NoticeReducer,
     NoticeDetail: NoticeDetailReducer,
-    Model: ModelReducer,
     Inqurle: InqurleReducer,
     Board: BoardReducer,
     Comment: CommentReducer,

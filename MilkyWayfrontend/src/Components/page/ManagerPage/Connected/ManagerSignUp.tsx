@@ -2,9 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Fontname } from "@/SCSS/Fixed";
 import { setSignData } from "@/config/request/ReduxList/usersign";
+import { RootState } from "@/config/reduxstore";
 
 // Wrapper styled component
 const Wrapper = styled.div`

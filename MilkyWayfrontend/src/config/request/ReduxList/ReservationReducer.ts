@@ -1,4 +1,4 @@
-import { ReservationType } from "@/types/Feature/ProjectDataType";
+import { ReservationType } from "@/types/Feature/Address/Reservation";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialReservationValue: ReservationType = {

@@ -1,4 +1,4 @@
-import { QuestionType } from "@/types/Feature/ProjectDataType";
+import { QuestionType } from "@/types/Feature/Question/Question";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialQuestionValue: QuestionType[] = [

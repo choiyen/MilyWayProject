@@ -17,8 +17,3 @@ export type NoticeDetailType = {
   afterURL: File[];
   Advice: string;
 };
-
-export type NoticeFullType = {
-  Notice: NoticeType;
-  NoticeDetail: NoticeDetailType[];
-};

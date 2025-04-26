@@ -1,4 +1,4 @@
-import { AddressType } from "@/types/Feature/ProjectDataType";
+import { AddressType } from "@/types/Feature/Address/AddressType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialAddressStateValue: AddressType = {

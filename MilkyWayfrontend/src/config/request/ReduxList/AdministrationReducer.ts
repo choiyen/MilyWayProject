@@ -1,4 +1,4 @@
-import { AdministrationType } from "@/types/Feature/ProjectDataType";
+import { AdministrationType } from "@/types/Feature/Address/Adminstration";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialAdministrationData: AdministrationType = {

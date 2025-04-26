@@ -1,4 +1,4 @@
-import { loginType } from "@/types/Feature/ProjectDataType";
+import { loginType } from "@/types/Feature/Join/Join";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialStateValue: loginType = { userID: "", Password: "" };
@@ -17,5 +17,4 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 export const { login, logout } = userSlice.actions;
-
-//login 정보에 관한 redux로 ManagerMainPage에서 사용되고 있음
+//로그인을 위한 세션 정보를 담는 redux

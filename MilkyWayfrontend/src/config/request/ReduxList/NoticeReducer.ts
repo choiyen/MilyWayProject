@@ -1,9 +1,11 @@
-import { NoticeType } from "@/types/Feature/ProjectDataType";
+import { NoticeType } from "@/types/Feature/Notice/NoticeAll";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialNoticeStateValue: NoticeType = {
   type: "",
   greeting: "",
+  title: "",
+  titleimg: new File([], ""),
 };
 
 export const NoticeSave = createSlice({

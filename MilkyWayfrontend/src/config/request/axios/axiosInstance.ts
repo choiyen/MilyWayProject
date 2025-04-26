@@ -1,40 +1,36 @@
-import store from "@/config/reduxstore";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import axios, {
   AxiosError,
-  AxiosResponse,
-  Method,
-  InternalAxiosRequestConfig,
   AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+  Method,
 } from "axios";
-import { handleTokenExpiration } from "./handleTokenExpiration";
-import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import dotenv from "dotenv";
 
-// 환경설정
-const AUTH_MODE: "JWT" | "SESSION" = process.env.REACT_APP_AUTH_MODE as
-  | "JWT"
-  | "SESSION";
-const MEDIUM_REQUEST_TIMEOUT = 5000;
+// 환경 변수 로드
+dotenv.config();
 
-// 요청 인터셉터
+// 환경 변수 사용
+const TIMEOUT = process.env.MEDIUM_REQUEST_TIMEOUT
+  ? parseInt(process.env.MEDIUM_REQUEST_TIMEOUT, 10)
+  : undefined;
+
+//요청 인터셉터
 const requestInterceptor = {
-  onFulfilled: (
-    config: InternalAxiosRequestConfig
-  ): InternalAxiosRequestConfig => {
-    if (AUTH_MODE === "JWT") {
-      const { accessToken } = store.getState().auth;
-      if (accessToken) {
-        config.headers?.set("Authorization", `Bearer ${accessToken}`);
-      }
-    }
-    return config;
-  },
+  onFulfilled: (config: AxiosRequestConfig): InternalAxiosRequestConfig => {
+    config.withCredentials = true;
 
+    // config를 InternalAxiosRequestConfig으로 캐스팅
+    const internalConfig = config as InternalAxiosRequestConfig;
+
+    return internalConfig;
+  },
   onRejected: (error: AxiosError) => Promise.reject(error),
 };
 
-// 응답 인터셉터
-const responseInterceptor = {
-  onFulfilled: (response: AxiosResponse) => {
+const ResponseInterceptor = {
+  ouFulfilled: (response: AxiosResponse) => {
     const contentType = response.headers["content-type"]?.toString();
     const isJson = contentType?.includes("application/json");
 
@@ -48,7 +44,7 @@ const responseInterceptor = {
           throw new Error("Invalid JSON response");
         }
       } catch {
-        throw new Error("Axios Parse Error");
+        throw new Error("AXIOS Parse ERROR");
       }
     }
 
@@ -76,78 +72,52 @@ const responseInterceptor = {
 
     return response;
   },
-
   onRejected: async (error: AxiosError) => {
-    const { response, config } = error;
+    const { response } = error;
 
+    // response가 없을 경우 네트워크 오류나 CORS 문제 등으로 처리
     if (!response) {
       console.error("No response received:", error);
       alert("서버와의 연결에 문제가 발생했습니다. 인터넷 연결을 확인해주세요.");
       return Promise.reject(error);
     }
 
-    // 401 에러 처리
+    // 401 에러 처리 (세션 만료 시)
     if (response.status === 401) {
-      if (AUTH_MODE === "JWT") {
-        // 응답 데이터 구조 점검 후 'error' 속성이 존재하는지 확인
-        const tokenExpired =
-          (response.data as { error?: { error?: string } })?.error?.error ===
-          "TOKEN_EXPIRED";
-        const { refreshToken } = store.getState().auth;
-
-        if (tokenExpired) {
-          if (!refreshToken) {
-            window.location.href =
-              GateWayNumber.Manager + "/" + ManagerGateWayType.Main;
-            return;
-          }
-
-          return handleTokenExpiration(refreshToken, config!);
-        }
-      }
-
-      if (AUTH_MODE === "SESSION") {
-        window.location.href =
-          GateWayNumber.Manager + "/" + ManagerGateWayType.Main;
-        return;
-      }
+      window.location.href =
+        GateWayNumber.Manager + "/" + ManagerGateWayType.Main; // 세션 만료되면 로그인 페이지로 리디렉션
+      return;
     }
 
     return Promise.reject(error);
   },
 };
 
-// Axios 인스턴스 생성
+//Axios 인스턴스 생성
 const axiosInstance = axios.create({
-  baseURL: "/api", // 기본 API 경로
-  timeout: MEDIUM_REQUEST_TIMEOUT, // 타임아웃 설정
-  withCredentials: AUTH_MODE === "SESSION", // 세션 인증 방식 시 쿠키 포함
+  baseURL: process.env.REACT_DEFAULT_URL,
+  timeout: TIMEOUT,
+  withCredentials: true,
 });
 
-// 인터셉터 연결
 axiosInstance.interceptors.request.use(
   requestInterceptor.onFulfilled,
   requestInterceptor.onRejected
 );
 
 axiosInstance.interceptors.response.use(
-  responseInterceptor.onFulfilled,
-  responseInterceptor.onRejected
+  ResponseInterceptor.ouFulfilled,
+  ResponseInterceptor.onRejected
 );
 
-// 메서드 헬퍼
 const curringMethod =
   (method: Method) =>
-  async ({
-    timeout = MEDIUM_REQUEST_TIMEOUT,
-    ...requestConfig
-  }: Omit<AxiosRequestConfig, "method">) => {
+  async (requestConfig: Omit<AxiosRequestConfig, "method">) => {
     return axiosInstance
-      .request({ ...requestConfig, timeout, method })
+      .request({ ...requestConfig, method })
       .then((response) => response.data);
   };
 
-// 요청 메서드 별로 export
 export const GET = curringMethod("get");
 export const POST = curringMethod("post");
 export const PUT = curringMethod("put");
@@ -156,3 +126,21 @@ export const OPTIONS = curringMethod("options");
 export const PATCH = curringMethod("patch");
 
 export default axiosInstance;
+
+/***
+ * 
+ * import { GET } from "@/api/axiosInstance";
+
+const fetchUserData = async () => {
+  try {
+    const data = await GET({
+      url: "/user/info", // 실제 API 경로
+      params: { userId: "1234" },
+    });
+
+    console.log("User Info:", data);
+  } catch (error) {
+    console.error("GET 요청 실패:", error);
+  }
+};
+ */
