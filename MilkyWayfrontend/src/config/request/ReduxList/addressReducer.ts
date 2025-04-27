@@ -5,7 +5,7 @@ const initialAddressStateValue: AddressType = {
   customer: "",
   Address: "",
   phoneNumber: "",
-  SubmissionDate: new Date(),
+  SubmissionDate: "",
 };
 
 export const addressreducer = createSlice({

@@ -42,7 +42,7 @@ export const ManagerAddress = () => {
         customer: Name,
         phoneNumber: Phone,
         Address: Address + " " + AddressDetail,
-        SubmissionDate: Reservation instanceof Date ? Reservation : new Date(),
+        SubmissionDate: Reservation?.toString() || "",
         acreage: Saleable,
       })
     );

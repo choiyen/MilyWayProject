@@ -96,8 +96,8 @@ export const ManagerSignUp = () => {
   const handleSignup = async () => {
     dispatch(
       setSignData({
-        userID: IdState,
-        Password: PasswordState,
+        userId: IdState,
+        password: PasswordState,
         email: emailState,
       })
     );
@@ -106,8 +106,8 @@ export const ManagerSignUp = () => {
       await POST({
         url: paths.Certification.basic.path,
         data: {
-          userID: IdState,
-          Password: PasswordState,
+          userId: IdState,
+          password: PasswordState,
           email: emailState,
         },
       });

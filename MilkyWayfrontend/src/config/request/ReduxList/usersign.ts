@@ -2,8 +2,8 @@ import { signupType } from "@/types/Feature/Join/Join";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialSignStateValue: signupType = {
-  userID: "",
-  Password: "",
+  userId: "",
+  password: "",
   email: "",
 };
 export const userSignSlice = createSlice({

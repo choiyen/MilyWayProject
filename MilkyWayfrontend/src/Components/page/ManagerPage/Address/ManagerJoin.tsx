@@ -1,6 +1,6 @@
 import { Fontname, LastButton } from "@/SCSS/Fixed";
 import { AddressDummy, AddressType } from "@/types/Feature/Address/AddressType";
-import { ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { Key, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -96,7 +96,11 @@ export const ManagerJoin = () => {
             </table>
           </MainWapper>
         </MainBox>
-        <LastButton onClick={() => FuncClick(ManagerGateWayType.Address)}>
+        <LastButton
+          onClick={() =>
+            FuncClick(GateWayNumber.Manager + "/" + ManagerGateWayType.Address)
+          }
+        >
           정보 추가
         </LastButton>
       </MainWapper>

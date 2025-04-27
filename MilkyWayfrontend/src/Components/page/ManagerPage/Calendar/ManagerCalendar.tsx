@@ -125,15 +125,15 @@ export const ManagerCalendar = () => {
     } else {
       dispatch(
         setAdministrationData({
-          administrationType: type,
-          administrationDate: date,
+          adminstrationType: type,
+          administrationDate: date.toString(),
         })
       );
       setChange(false);
       await POST({
         url: paths.Administration.basic.path,
         data: {
-          administrationType: type,
+          adminstrationType: type,
           administrationDate: date,
         },
       })

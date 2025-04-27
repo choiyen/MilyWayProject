@@ -110,14 +110,9 @@ public class UserController //관리자 아이디를 관리하는 DTO
                 throw new AuthenticationException("Invalid username or password");
             }
 
-            // 인증 토큰 생성
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginDTO.getUserId(), loginDTO.getPassword());
-
-            // 인증 성공 후, Spring Security에서 자동으로 세션 관리
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
+            session.setAttribute("userId", loginDTO.getUserId()); // session에 'member' 속성값 저장
             // 사용자 정보를 DTO로 변환하여 응답
+
             UserDTO user1 = ConvertToDTO(user);
             return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 로그인 성공", Collections.singletonList(user1)));
 
@@ -137,10 +132,10 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PostMapping("/logout")
-    public ResponseEntity<?> userLogout(HttpServletRequest request) {
+    public ResponseEntity<?> userLogout(@SessionAttribute(name = "userId", required = false) Long userId) {
         try {
             // 세션 무효화
-            if(loginSuccess.isSessionExist(request))
+            if(userId != null)
             {
                 session.invalidate();
                 // 쿠키 삭제 (JSESSIONID)
@@ -181,11 +176,11 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PutMapping
-    public ResponseEntity<?> UserUpdate(HttpServletRequest request, @RequestBody @Valid UserDTO NewuserDTO)
+    public ResponseEntity<?> UserUpdate(@SessionAttribute(name = "userId", required = false) Long userId, @RequestBody @Valid UserDTO NewuserDTO)
     {
         try
         {
-            if(loginSuccess.isSessionExist(request))
+            if(userId != null)
             {
                 UserEntity userEntity = ConvertToEntity(NewuserDTO, passwordEncoder);
                 UserEntity userEntity2 = userService.UpdateUser(userEntity.getUserId(), userEntity);
@@ -276,7 +271,9 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     } //데이터 CRUD 정상 동작 확인
-    
+
+
+
     private UserEntity ConvertToEntity(UserDTO userDTO, PasswordEncoder passwordEncoder)
     {
         System.out.println(userDTO.getPassword());

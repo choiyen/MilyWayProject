@@ -24,16 +24,25 @@ public class UserService //관리자 아이디를 관리하는 DTO
 
   public UserEntity createUser(UserEntity user)
   {
-      userMapper.Insert(user);
-      UserEntity newUser = userMapper.FindByUserId(user.getUserId());
-      if(newUser != null)
+      UserEntity user2 = userMapper.FindByUserId(user.getUserId());
+      if(user2 == null)
       {
-          return newUser;
+          userMapper.Insert(user);
+          UserEntity newUser = userMapper.FindByUserId(user.getUserId());
+          if(newUser != null)
+          {
+              return newUser;
+          }
+          else
+          {
+              throw new InsertFailedException("관리자 아이디 생성에 실패하였습니다.");
+          }
       }
       else
       {
-          throw new InsertFailedException("관리자 아이디 생성에 실패하였습니다.");
+          throw new FindFailedException("이미 존재하는 관리자 아이디라 실패하였습니다.");
       }
+
   }
   public UserEntity existUser(LoginDTO loginDTO)
   {

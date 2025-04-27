@@ -236,7 +236,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "ReservationDTO not found")
             }
     )
-    @GetMapping("/search")
+    @PostMapping("/search")
     ResponseEntity<?> FindByAdmin(HttpServletRequest request, @RequestParam String AdminstrationId)
     {
         try

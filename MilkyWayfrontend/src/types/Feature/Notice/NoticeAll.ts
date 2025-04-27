@@ -4,7 +4,7 @@ import { RoomType } from "@/types/Room/RoomType";
 export type NoticeType = {
   NoticeId?: string;
   title: string;
-  titleimg: File;
+  titleimg: string;
   type: (typeof RoomType)[number];
   greeting: string;
 };

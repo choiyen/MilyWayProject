@@ -1,10 +1,10 @@
 export type loginType = {
-  userID: string;
-  Password: string;
+  userId: string;
+  password: string;
 };
 
 export type signupType = {
-  userID: string;
-  Password: string;
+  userId: string;
+  password: string;
   email: string;
 };

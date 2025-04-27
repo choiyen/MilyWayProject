@@ -5,7 +5,7 @@ const initialNoticeStateValue: NoticeType = {
   type: "",
   greeting: "",
   title: "",
-  titleimg: new File([], ""),
+  titleimg: "",
 };
 
 export const NoticeSave = createSlice({

@@ -1,7 +1,7 @@
 import { loginType } from "@/types/Feature/Join/Join";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialStateValue: loginType = { userID: "", Password: "" };
+const initialStateValue: loginType = { userId: "", password: "" };
 export const userSlice = createSlice({
   name: "user",
   initialState: { value: initialStateValue },

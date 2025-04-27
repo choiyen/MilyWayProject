@@ -6,9 +6,10 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { login } from "@/config/request/ReduxList/userlogin";
-import { GET } from "@/config/request/axios/axiosInstance";
+import { GET, POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { setSession } from "@/config/request/ReduxList/useauthSlice";
+import { checkSession } from "@/config/request/axios/util";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -86,18 +87,23 @@ export const ManagerMain = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    dispatch(login({ userID: IdState, Password: PasswordState }));
-    await GET({
+    dispatch(login({ userId: IdState, password: PasswordState }));
+    await POST({
       url: paths.Certification.login.path,
-      params: {
-        userID: IdState,
-        Password: PasswordState,
+      data: {
+        userId: IdState,
+        password: PasswordState,
       },
     })
       .then((res) => {
-        console.log("로그인 성공:", res);
-        dispatch(setSession({ userId: res.userId, isAuthenticated: true })); // Redux에 저장
-        navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Address); // 페이지 이동
+        if (res !== undefined) {
+          console.log("로그인 성공:", res);
+          checkSession();
+          dispatch(setSession({ userId: res.userId, isAuthenticated: true })); // Redux에 저장
+          navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Join); // 페이지 이동
+        } else {
+          console.log("로그인 실패, 서버에 오류가 존재합니다.");
+        }
       })
       .catch((error) => {
         console.error("로그인 실패:", error);

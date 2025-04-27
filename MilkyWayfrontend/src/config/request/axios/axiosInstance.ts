@@ -6,15 +6,10 @@ import axios, {
   InternalAxiosRequestConfig,
   Method,
 } from "axios";
-import dotenv from "dotenv";
-
-// 환경 변수 로드
-dotenv.config();
+import { baseURL, timeout } from "./util";
 
 // 환경 변수 사용
-const TIMEOUT = process.env.MEDIUM_REQUEST_TIMEOUT
-  ? parseInt(process.env.MEDIUM_REQUEST_TIMEOUT, 10)
-  : undefined;
+const TIMEOUT = timeout ? parseInt(timeout, 10) : undefined;
 
 //요청 인터셉터
 const requestInterceptor = {
@@ -95,7 +90,7 @@ const ResponseInterceptor = {
 
 //Axios 인스턴스 생성
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_DEFAULT_URL,
+  baseURL: baseURL,
   timeout: TIMEOUT,
   withCredentials: true,
 });
@@ -113,6 +108,7 @@ axiosInstance.interceptors.response.use(
 const curringMethod =
   (method: Method) =>
   async (requestConfig: Omit<AxiosRequestConfig, "method">) => {
+    console.log(requestConfig);
     return axiosInstance
       .request({ ...requestConfig, method })
       .then((response) => response.data);
