@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
+import project.MilkyWay.Inquire.Entity.InquireEntity;
 import project.MilkyWay.Question.DTO.QuestionsDTO;
 import project.MilkyWay.Reservation.Entity.ReservationEntity;
 import project.MilkyWay.Administration.Service.AdministrationService;
@@ -55,8 +56,18 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     public ResponseEntity<?> Insert(@RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
-
-                ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
+            String uniqueId = "";
+            LoginSuccess loginSuccess = new LoginSuccess();
+            do
+            {
+                uniqueId = loginSuccess.generateRandomId(15);
+                ReservationEntity reservationEntity = reservationService.SelectAdminstrationID(uniqueId);
+                if(reservationEntity == null)
+                {
+                    break;
+                }
+            }while (true);
+                ReservationEntity reservationEntity = ConvertToEntity(reservationDTO, uniqueId);
                 ReservationEntity reservationEntity2 = reservationService.InsertReservation(reservationEntity);
                 if (reservationEntity2 != null)
                 {
@@ -280,6 +291,17 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     {
         return ReservationEntity.builder()
                 .reservationId(reservationDTO.getReservationId())
+                .administrationId(reservationDTO.getAdministrationId())
+                .phone(reservationDTO.getPhone())
+                .address(reservationDTO.getAddress())
+                .name(reservationDTO.getName())
+                .acreage(reservationDTO.getAcreage())
+                .subissionDate(reservationDTO.getSubissionDate())
+                .build();
+    }
+    private ReservationEntity ConvertToEntity(ReservationDTO reservationDTO, String uniqueId) {
+        return ReservationEntity.builder()
+                .reservationId(uniqueId)
                 .administrationId(reservationDTO.getAdministrationId())
                 .phone(reservationDTO.getPhone())
                 .address(reservationDTO.getAddress())

@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.Address.Entity.AddressEntity;
 import project.MilkyWay.BoardMain.Board.DTO.BoardDTO;
 
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
@@ -48,8 +49,19 @@ public class BoardController
     {
         try
         {
+            String uniqueId = "";
+            LoginSuccess loginSuccess = new LoginSuccess();
+            do
+            {
+                uniqueId = loginSuccess.generateRandomId(15);
+                BoardEntity boardEntity = boardService.FindByBoardId(uniqueId);
+                if(boardEntity == null)
+                {
+                    break;
+                }
+            }while (true);
 
-            BoardEntity boardEntity = ConvertToBoardEntity(boardDTO);
+            BoardEntity boardEntity = ConvertToBoardEntity(boardDTO, uniqueId);
             BoardEntity boardEntity1 = boardService.Insert(boardEntity);
             if(boardEntity1 != null)
             {
@@ -211,7 +223,7 @@ public class BoardController
                 .build();
     }
 
-    private BoardEntity ConvertToBoardEntity(@Valid BoardDTO boardDTO)
+    private BoardEntity ConvertToBoardEntity(BoardDTO boardDTO)
     {
         return BoardEntity.builder()
                 .boardId(boardDTO.getBoardId())
@@ -219,4 +231,13 @@ public class BoardController
                 .title(boardDTO.getTitle())
                 .build();
     }
+    private BoardEntity ConvertToBoardEntity(BoardDTO boardDTO, String uniqueId)
+    {
+        return BoardEntity.builder()
+                .boardId(uniqueId)
+                .content(boardDTO.getContent())
+                .title(boardDTO.getTitle())
+                .build();
+    }
+
 }

@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
 import project.MilkyWay.BoardMain.Board.Service.BoardService;
 import project.MilkyWay.BoardMain.Comment.DTO.CommentDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;

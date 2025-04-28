@@ -50,9 +50,21 @@ public class AddressController
     {
         try
         {
+
             if(loginSuccess.isSessionExist(request))
             {
-                AddressEntity addressEntity = ConvertToEntity(addressDTO);
+                String uniqueId = "";
+                do
+                {
+                    uniqueId = loginSuccess.generateRandomId(15);
+                    AddressEntity addressEntity = addressService.findByAddressId(uniqueId);
+                    if(addressEntity == null)
+                    {
+                        break;
+                    }
+                }while (true);
+
+                AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
                 AddressEntity addressEntity1 = addressService.insert(addressEntity);
                 if(addressEntity1 != null)
                 {
@@ -244,6 +256,17 @@ public class AddressController
                 .build();
     }
 
+    private AddressEntity ConvertToEntity(AddressDTO addressDTO, String uniqueId)
+    {
+        return AddressEntity.builder()
+                .addressId(uniqueId)
+                .address(addressDTO.getAddress())
+                .customer(addressDTO.getCustomer())
+                .phoneNumber(addressDTO.getPhoneNumber())
+                .submissionDate(addressDTO.getSubmissionDate())
+                .acreage(addressDTO.getAcreage())
+                .build();
+    }
     private AddressEntity ConvertToEntity(AddressDTO addressDTO)
     {
         return AddressEntity.builder()

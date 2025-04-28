@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Inquire.DTO.InquireDTO;
@@ -48,7 +49,19 @@ public class InqurieController
     {
         try
         {
-            InquireEntity inquireEntity1 = ConvertToEntity(inquireDTO);
+            String uniqueId = "";
+            LoginSuccess loginSuccess = new LoginSuccess();
+            do
+            {
+                uniqueId = loginSuccess.generateRandomId(15);
+                InquireEntity inquireEntity = inquireService.FindByInquireId(uniqueId);
+                if(inquireEntity == null)
+                {
+                    break;
+                }
+            }while (true);
+
+            InquireEntity inquireEntity1 = ConvertToEntity(inquireDTO, uniqueId);
             InquireEntity inquireEntity2 = inquireService.Insert(inquireEntity1);
             if (inquireEntity2 != null)
             {
@@ -193,6 +206,17 @@ public class InqurieController
                 .inquire(inquireDTO.getInquire())
                 .build();
     }
+    //uniqueId
+    private InquireEntity ConvertToEntity(InquireDTO inquireDTO, String uniqueId)
+    {
+        return InquireEntity.builder()
+                .inquireId(uniqueId)
+                .address(inquireDTO.getAddress())
+                .phoneNumber(inquireDTO.getPhoneNumber())
+                .inquire(inquireDTO.getInquire())
+                .build();
+    }
+
     private InquireDTO ConvertToDTO(InquireEntity inquireEntity)
     {
         return InquireDTO.builder()

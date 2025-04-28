@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.DTO.AddressDTO;
+import project.MilkyWay.Address.Entity.AddressEntity;
 import project.MilkyWay.Administration.DTO.AdministrationDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.Administration.Entity.AdministrationEntity;
@@ -64,7 +65,17 @@ public class AdministrationController
                     }
                     else
                     {
-                        AdministrationEntity administration = ConvertToEntity(administrationDTO);
+                        String uniqueId = "";
+                        do
+                        {
+                            uniqueId = loginSuccess.generateRandomId(15);
+                            AdministrationEntity administrationEntity = administrationService.FindByAdministration(uniqueId);
+                            if(administrationEntity == null)
+                            {
+                                break;
+                            }
+                        }while (true);
+                        AdministrationEntity administration = ConvertToEntity(administrationDTO, uniqueId);
                         AdministrationEntity administrationEntity = administrationService.insert(administration);
                         if(administrationEntity != null)
                         {
@@ -261,6 +272,14 @@ public class AdministrationController
     {
         return AdministrationEntity.builder()
                 .administrationId(administrationDTO.getAdministrationId())
+                .adminstrationType(administrationDTO.getAdminstrationType())
+                .administrationDate(administrationDTO.getAdministrationDate())
+                .build();
+    }
+    private AdministrationEntity ConvertToEntity(AdministrationDTO administrationDTO, String uniqueId)
+    {
+        return AdministrationEntity.builder()
+                .administrationId(uniqueId)
                 .adminstrationType(administrationDTO.getAdminstrationType())
                 .administrationDate(administrationDTO.getAdministrationDate())
                 .build();

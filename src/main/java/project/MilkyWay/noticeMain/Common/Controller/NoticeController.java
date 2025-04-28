@@ -15,6 +15,7 @@ import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Inquire.DTO.InquireDTO;
+import project.MilkyWay.Inquire.Entity.InquireEntity;
 import project.MilkyWay.Question.DTO.QuestionsDTO;
 import project.MilkyWay.noticeMain.Common.DTO.NoticeJsonDTO;
 import project.MilkyWay.noticeMain.Notice.DTO.NoticeDTO;
@@ -63,9 +64,21 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     {
         try
         {
+
             if(loginSuccess.isSessionExist(request))
             {
-                NoticeEntity noticeEntity = ConvertToNotice(noticeJsonDTO.getNoticeDTO());
+                String uniqueId = "";
+                LoginSuccess loginSuccess = new LoginSuccess();
+                do
+                {
+                    uniqueId = loginSuccess.generateRandomId(15);
+                    NoticeEntity notice1 = noticeService.findNoticeId(uniqueId);
+                    if(notice1 == null)
+                    {
+                        break;
+                    }
+                }while (true);
+                NoticeEntity noticeEntity = ConvertToNotice(noticeJsonDTO.getNoticeDTO(), uniqueId);
                 NoticeEntity notice1 = noticeService.InsertNotice(noticeEntity);
                 if(notice1 != null)
                 {
@@ -329,6 +342,14 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     {
         return NoticeEntity.builder()
                 .noticeId(noticeDTO.getNoticeId())
+                .type(noticeDTO.getType())
+                .greeting(noticeDTO.getGreeting())
+                .build();
+    }
+    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO, String uniqueId)
+    {
+        return NoticeEntity.builder()
+                .noticeId(uniqueId)
                 .type(noticeDTO.getType())
                 .greeting(noticeDTO.getGreeting())
                 .build();
