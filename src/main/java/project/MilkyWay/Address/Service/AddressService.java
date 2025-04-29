@@ -31,7 +31,14 @@ public class AddressService
         }
         else
         {
-            return addressRepository.save(newAddressEntity);
+            if(addressRepository.existsBySubmissionDate(newAddressEntity.getSubmissionDate()))
+            {
+                throw new InsertFailedException("같은 날짜를 가진 일정이 존재합니다. 변경 후 시도해주세요.");
+            }
+            else
+            {
+                return addressRepository.save(newAddressEntity);
+            }
         }
     }
     public AddressEntity update(AddressEntity newAddressEntity)
@@ -86,13 +93,7 @@ public class AddressService
     public List<AddressEntity> findALL()
     {
         List<AddressEntity> addressEntities = addressRepository.findAll();
-        if(addressEntities.isEmpty())
-        {
-            throw new FindFailedException("데이터를 찾으려고 시도했으나, 비어 있어요.");
-        }
-        else {
-            return addressEntities;
-        }
+        return addressEntities;
     }
     private AddressEntity ConvertToEntity(AddressEntity oldAddressEntity, AddressEntity newAddressEntity)
     {
@@ -103,6 +104,7 @@ public class AddressService
                 .customer(newAddressEntity.getCustomer())
                 .submissionDate(newAddressEntity.getSubmissionDate())
                 .acreage(newAddressEntity.getAcreage())
+                .cleanType(newAddressEntity.getCleanType())
                 .build();
     }
 }

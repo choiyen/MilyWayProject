@@ -51,23 +51,62 @@ export const ImgTag = styled.img`
   margin-top: 50px;
 `;
 
-export const LastButton = styled.button`
-  width: 100%;
-  max-width: 250px;
-  height: 50px; /* Height를 줄여서 더 균형 있게 조정 */
-  border: 1px solid #e195ab;
-  border-radius: 10px;
-  background-color: #e195ab;
-  color: white;
-  font-size: 20px;
-  text-align: center;
-  margin-top: 50px; /* Space above the button to separate from previous content */
-  margin-bottom: 40px;
-  padding: 0; /* Remove extra padding */
+export const SmallButton = styled.button`
+  width: auto;
+  min-width: 100px;
+  height: 36px;
+  padding: 0 16px;
+  margin-top: 50px;
+  border: none;
+  border-radius: 6px;
+  background-color: #6c63ff;
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
   &:hover {
-    background-color: #461baa;
-    color: white;
+    background-color: #574fd6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+`;
+
+export const LastButton = styled.button`
+  width: 100%;
+  max-width: 240px;
+  height: 48px;
+  padding: 0 20px;
+  margin: 48px auto 40px auto;
+
+  border: none;
+  border-radius: 8px;
+  background-color: #6c63ff; /* 세련된 보라톤 */
+  color: #fff;
+
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #574fd6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
   }
 `;
 

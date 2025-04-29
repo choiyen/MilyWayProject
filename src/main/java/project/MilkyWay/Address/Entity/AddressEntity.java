@@ -29,6 +29,10 @@ public class AddressEntity
     @Column(name = "acreage", nullable = false)
     private String acreage;
 
+    @Column(name = "cleanType", nullable = false)
+    private String cleanType; // 관리자인지, 사용자인지?
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,7 +42,7 @@ public class AddressEntity
                 Objects.equals(customer, AddressEntity.customer) &&
                 Objects.equals(address, AddressEntity.address) &&
                 Objects.equals(phoneNumber, AddressEntity.phoneNumber) &&
-                Objects.equals(submissionDate, AddressEntity.submissionDate) && Objects.equals(acreage, AddressEntity.acreage);
+                Objects.equals(submissionDate, AddressEntity.submissionDate) && Objects.equals(acreage, AddressEntity.acreage)&& Objects.equals(cleanType, AddressEntity.cleanType);
     }
 
     @Override

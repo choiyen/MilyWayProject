@@ -2,10 +2,14 @@ package project.MilkyWay.Address.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import project.MilkyWay.ComonType.Enum.CleanType;
+import project.MilkyWay.ComonType.Enum.EnumValue;
+import project.MilkyWay.ComonType.Enum.UserType;
 
 import java.time.LocalDate;
 
@@ -45,6 +49,13 @@ public class AddressDTO
     @NotBlank(message = "acreage cannot be empty")
     @Pattern(regexp = "^[0-9]+평$", message = "평수는 숫자와 '평'만 입력 가능합니다.")
     private String acreage;
+
+
+    @NotNull(message = "type cannot be empty")
+    @Schema(description = "어떤 주거 요청 타입인가?", example = "주거청소")
+    @EnumValue(enumClass = CleanType.class, message = "허용되지 않은 CleanType 타입입니다.")
+    private CleanType cleanType; // 청소 유형을 판단함
+
 }
 //- 현재 날짜보다 고객의 의뢰 날짜가 뒷날일 떄 데이터를 파기하는 함수 필요
 //고객 관리를 위한 목적의 DTO

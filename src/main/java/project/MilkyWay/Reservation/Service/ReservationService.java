@@ -45,7 +45,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         if(bool)
         {
             AdministrationEntity administrationEntity = administrationService.FindByAdministration(reservationEntity.getAdministrationId());
-            if(administrationEntity.getAdminstrationType() == DateType.일하는날 ||administrationEntity.getAdminstrationType() == DateType.연가)
+            if(administrationEntity.getAdminstrationType() == DateType.업무 ||administrationEntity.getAdminstrationType() == DateType.연가)
             {
                 throw new FindFailedException("다른 일정이 있어서 일정 추가가 반려되었습니다.");
             }
@@ -59,7 +59,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
                 {
                     AdministrationEntity administrationEntity2 = AdministrationEntity.builder()
                             .administrationId(reservationEntity.getAdministrationId())
-                            .adminstrationType(DateType.일하는날)
+                            .adminstrationType(DateType.업무)
                             .administrationDate(reservationEntity.getSubissionDate())
                             .build();
                     administrationService.Update(administrationEntity2);
@@ -70,7 +70,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         {
             AdministrationEntity administrationEntity = AdministrationEntity.builder()
                     .administrationId(reservationEntity.getAdministrationId())
-                    .adminstrationType(DateType.일하는날)
+                    .adminstrationType(DateType.업무)
                     .administrationDate(reservationEntity.getSubissionDate())
                     .build();
             administrationService.insert(administrationEntity);
@@ -125,7 +125,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             AdministrationEntity administrationEntity = administrationService.FindByAdministrationDate(reservationEntity.getSubissionDate());
             //Id에 해당하는 날짜는 기존 날짜를 가르킬 테니 뺴고, 변경할 날짜에 일정이 일하는 일정이 있는지 여부를 확인
 
-            if(administrationEntity.getAdminstrationType() == DateType.일하는날)
+            if(administrationEntity.getAdminstrationType() == DateType.업무)
             {
                 throw new InsertFailedException("해당 날짜에는 일정이 존재하기에 변경할 수 없습니다.");
             }
@@ -142,7 +142,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
                     AdministrationEntity administrationEntity2 = AdministrationEntity
                             .builder()
                             .administrationId(Oldreservation.getAdministrationId())
-                            .adminstrationType(DateType.일하는날)
+                            .adminstrationType(DateType.업무)
                             .administrationDate(reservationEntity.getSubissionDate())
                             .build();
                     AdministrationEntity administration = administrationService.Update(administrationEntity2);

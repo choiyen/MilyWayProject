@@ -11,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.DTO.AddressDTO;
+import project.MilkyWay.Address.DTO.AddressVO;
+import project.MilkyWay.Administration.Entity.AdministrationEntity;
+import project.MilkyWay.Administration.Service.AdministrationService;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.Address.Entity.AddressEntity;
+import project.MilkyWay.ComonType.Enum.CleanType;
+import project.MilkyWay.ComonType.Enum.DateType;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
 import project.MilkyWay.Address.Service.AddressService;
 import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
@@ -31,6 +36,10 @@ public class AddressController
 {
     @Autowired
     AddressService addressService;
+
+    @Autowired
+    AdministrationService administrationService;
+
 
     ResponseDTO<AddressDTO> responseDTO = new ResponseDTO<>();
 
@@ -58,23 +67,42 @@ public class AddressController
                 {
                     uniqueId = loginSuccess.generateRandomId(15);
                     AddressEntity addressEntity = addressService.findByAddressId(uniqueId);
-                    if(addressEntity == null)
+                    Boolean bool = administrationService.FindByAdministrationBool(uniqueId);
+                    if(addressEntity == null && bool != true)
                     {
                         break;
                     }
                 }while (true);
 
-                AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
-                AddressEntity addressEntity1 = addressService.insert(addressEntity);
-                if(addressEntity1 != null)
+                AdministrationEntity administration = administrationService.FindByAdministrationDate(addressDTO.getSubmissionDate());
+                if(administration.getAdminstrationType().equals(DateType.휴일))
                 {
-                    AddressDTO addressDTO1 = ConvertToDTO(addressEntity1);
-                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 추가", Collections.singletonList(addressDTO1)));
+                    administrationService.Delete(administration.getAdministrationId());
+
+                    AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
+                    AddressEntity addressEntity1 = addressService.insert(addressEntity);
+                    if(addressEntity1 != null)
+                    {
+                        AdministrationEntity administrationEntity = AdministrationEntity.builder()
+                                .administrationId(uniqueId)
+                                .adminstrationType(DateType.업무)
+                                .administrationDate(addressDTO.getSubmissionDate())
+                                .build();
+                        administrationService.insert(administrationEntity);
+                        AddressDTO addressDTO1 = ConvertToDTO(addressEntity1);
+                        return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 추가", Collections.singletonList(addressDTO1)));
+                    }
+                    else
+                    {
+                        throw new RuntimeException("예기치 못한 오류로 런타임 오류 발생!!");
+                    }
                 }
                 else
                 {
-                    throw new RuntimeException("예기치 못한 오류로 런타임 오류 발생!!");
+                    throw new FindFailedException("이미 일하는 일정이라 추가할 수 없어요. 일정부터 지워주세요.");
                 }
+
+
             }
             else
             {
@@ -138,13 +166,14 @@ public class AddressController
             }
     )
     @DeleteMapping
-    public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam String AddressId)
+    public ResponseEntity<?> Delete(HttpServletRequest request,@RequestParam(name = "addressId") String addressId)
     {
         try
         {
             if(loginSuccess.isSessionExist(request))
             {
-                boolean bool = addressService.Delete(AddressId);
+                System.out.println(addressId);
+                boolean bool = addressService.Delete(addressId);
                 if(bool)
                 {
                     return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 삭제 성공"));
@@ -184,7 +213,7 @@ public class AddressController
                 List<AddressEntity> addressEntityList = addressService.findALL();
                 if(addressEntityList.isEmpty())
                 {
-                    throw new FindFailedException("데이터베이스를 조회하긴 했으나, 비어있습니다.");
+                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 내용은 비어있음"));
                 }
                 else {
                     List<AddressDTO> addressDTOS = new ArrayList<>();
@@ -253,6 +282,7 @@ public class AddressController
                 .phoneNumber(addressEntity1.getPhoneNumber())
                 .submissionDate(addressEntity1.getSubmissionDate())
                 .acreage(addressEntity1.getAcreage())
+                .cleanType(CleanType.valueOf(addressEntity1.getCleanType()))
                 .build();
     }
 
@@ -265,6 +295,7 @@ public class AddressController
                 .phoneNumber(addressDTO.getPhoneNumber())
                 .submissionDate(addressDTO.getSubmissionDate())
                 .acreage(addressDTO.getAcreage())
+                .cleanType(String.valueOf(addressDTO.getCleanType()))
                 .build();
     }
     private AddressEntity ConvertToEntity(AddressDTO addressDTO)
@@ -276,6 +307,7 @@ public class AddressController
                 .phoneNumber(addressDTO.getPhoneNumber())
                 .submissionDate(addressDTO.getSubmissionDate())
                 .acreage(addressDTO.getAcreage())
+                .cleanType(String.valueOf(addressDTO.getCleanType()))
                 .build();
     }
 

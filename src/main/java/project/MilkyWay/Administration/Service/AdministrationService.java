@@ -113,6 +113,18 @@ public class AdministrationService
             throw new FindFailedException("일정 데이터를 찾을 수 없었어요.");
         }
     }
+    public Boolean FindByAdministrationBool(String EncodingAdministrationId)
+    {
+        AdministrationEntity AdministrationEntity = administrationRepository.findByAdministrationId(EncodingAdministrationId);
+        if(AdministrationEntity != null)
+        {
+            return  true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     private AdministrationEntity ConVertToEntity(AdministrationEntity oldAdmin, AdministrationEntity administration)
     {
         return AdministrationEntity.builder()

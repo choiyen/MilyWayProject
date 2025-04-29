@@ -4,6 +4,7 @@ import styled from "styled-components";
 interface SelectBoxProps {
   name: string;
   change: string; // Date string format passed as prop (e.g., "2025-03-09")
+  setValue: (date: Date) => void;
 }
 
 const RadioBoxContainer = styled.div`
@@ -28,7 +29,7 @@ const DateInput = styled.input`
   height: 50px;
 `;
 
-export const SelectDate = ({ name, change }: SelectBoxProps) => {
+export const SelectDate = ({ name, change, setValue }: SelectBoxProps) => {
   const [date, setDate] = useState<Date>(new Date()); // 초기 상태를 현재 날짜로 설정
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export const SelectDate = ({ name, change }: SelectBoxProps) => {
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDate(new Date(e.target.value)); // 날짜가 변경되면 상태 업데이트
+    setValue(new Date(e.target.value));
   };
 
   return (

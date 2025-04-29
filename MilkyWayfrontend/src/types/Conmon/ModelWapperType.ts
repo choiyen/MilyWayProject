@@ -15,7 +15,7 @@ export const ModelWrapper = styled.div<{ $istrue?: string | undefined }>`
   width: auto;
   padding: 40px;
   text-align: center;
-  background-color: beige;
+  background-color: Linen;
   border-radius: 10px;
   box-shadow: 0 2px 3px 0 rebeccapurple;
   align-items: center;

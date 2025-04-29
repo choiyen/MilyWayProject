@@ -7,13 +7,13 @@ import plus from "@/Components/Common/assets/plus.png";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { useDispatch } from "react-redux";
-import { QuestionDummy } from "@/types/Feature/Question/Question";
+import { QuestionDummy, QuestionType } from "@/types/Feature/Question/Question";
 import { setQuestionData } from "@/config/request/ReduxList/QuestionsReducer";
 import { DELETE, POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
-import path from "path";
 import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { getQuestion } from "./api/util";
 
 const MainWapper = styled.div`
   display: flex;
@@ -52,7 +52,8 @@ export const ManagerQuestion = () => {
   const [count, setCount] = useState(1);
   const [Question, SetQuestion] = useState<string[]>([]);
   const [Comment, SetComment] = useState<string[]>([]);
-  const questionData: { ExpectionQnA: string; ExpectedComment: string }[] = [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const questionData: QuestionType[] = [];
   const dispatch = useDispatch();
   const cleanCount = () => {
     setCount(count + 1);
@@ -60,7 +61,7 @@ export const ManagerQuestion = () => {
   const lastItemRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
 
-  const handleQuestion = async () => {
+  useEffect(() => {
     for (let i = 0; i < count; i++) {
       questionData.push({
         ExpectionQnA: Question[i],
@@ -68,7 +69,9 @@ export const ManagerQuestion = () => {
       });
     }
     dispatch(setQuestionData(questionData));
+  }, [Comment, Question, count, dispatch, questionData]);
 
+  const handleQuestion = async () => {
     await DELETE({
       url: paths.Question.basic.path,
     })

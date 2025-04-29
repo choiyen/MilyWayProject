@@ -5,6 +5,7 @@ import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
 import { QuestionDummy, QuestionType } from "@/types/Feature/Question/Question";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { PostQuestionALL } from "./api/util";
 
 // 페이지 전체 wrapper - 화면 꽉 차게 하면서도 내용에 따라 유연하게
 const MainWapper = styled.div`
@@ -24,6 +25,11 @@ export const ManagerQuestionSelect = () => {
 
   useEffect(() => {
     // 더미 데이터 세팅 (API로 대체 가능)
+
+    PostQuestionALL().then((res) => {
+      console.log(res);
+    });
+
     SetQuestionDummy(QuestionDummy);
   }, []);
 
@@ -34,7 +40,7 @@ export const ManagerQuestionSelect = () => {
   return (
     <>
       <MainWapper>
-        <Fontname>후기 관리</Fontname>
+        <Fontname> Q & A 관리</Fontname>
         {/* 테이블 섹션 */}
         <div className="w-full px-4 overflow-x-auto flex flex-col items-center py-10">
           <table className="table-auto border-collapse bg-white shadow-lg min-w-[600px] rounded-lg overflow-hidden">
@@ -74,7 +80,7 @@ export const ManagerQuestionSelect = () => {
           <LastButton
             onClick={() =>
               QuestionButtonClick(
-                GateWayNumber.Manager + ManagerGateWayType.Question
+                GateWayNumber.Manager + "/" + ManagerGateWayType.Question
               )
             }
           >

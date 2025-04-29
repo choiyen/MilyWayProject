@@ -51,6 +51,7 @@ public class AdministrationController
     {
         try
         {
+            System.out.println(administrationDTO);
             if(loginSuccess.isSessionExist(request))
             {
                 if(administrationDTO.getAdminstrationType().equals("일하는날") == true)
@@ -69,8 +70,8 @@ public class AdministrationController
                         do
                         {
                             uniqueId = loginSuccess.generateRandomId(15);
-                            AdministrationEntity administrationEntity = administrationService.FindByAdministration(uniqueId);
-                            if(administrationEntity == null)
+                            boolean bool = administrationService.FindByAdministrationBool(uniqueId);
+                            if(!bool)
                             {
                                 break;
                             }
@@ -240,18 +241,12 @@ public class AdministrationController
         try
         {
             List<AdministrationEntity> administrationEntities = administrationService.FindAll();
-            
-            if(administrationEntities.isEmpty())
+            List<AdministrationDTO> administrationDTOS = new ArrayList<>();
+            for (AdministrationEntity administrationEntity : administrationEntities)
             {
-                throw new FindFailedException("데이터를 조회하는데는 성공했으나, 데이터베이스가 비어있음");
-            }
-            else {
-                List<AdministrationDTO> administrationDTOS = new ArrayList<>();
-                for (AdministrationEntity administrationEntity : administrationEntities) {
                     administrationDTOS.add(ConvertToDTO(administrationEntity));
-                }
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 일정데이터 전체조회 성공",  administrationDTOS));
             }
+            return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 일정데이터 전체조회 성공",  administrationDTOS));
         }
         catch (Exception e)
         {

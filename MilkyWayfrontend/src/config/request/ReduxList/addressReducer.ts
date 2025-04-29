@@ -3,9 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialAddressStateValue: AddressType = {
   customer: "",
-  Address: "",
+  address: "",
   phoneNumber: "",
-  SubmissionDate: "",
+  submissionDate: "",
+  acreage: "",
+  cleanType: "",
+  AddressId: "",
 };
 
 export const addressreducer = createSlice({

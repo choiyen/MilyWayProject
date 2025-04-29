@@ -1,5 +1,6 @@
 package project.MilkyWay.Question.Controller;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -205,10 +206,12 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
     {
         try
         {
+            System.out.println("quesfsdf");
             List<QuestionsEntity> questionsEntities = questionsService.findAll();
             List<QuestionsDTO> questionsDTOS = new ArrayList<>();
             for(QuestionsEntity questionsEntity : questionsEntities)
             {
+                System.out.println(questionsEntity);
                 questionsDTOS.add(ConVertToDTO(questionsEntity));
             }
             if(questionsDTOS.isEmpty())

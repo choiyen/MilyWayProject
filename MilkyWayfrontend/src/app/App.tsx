@@ -2,7 +2,7 @@ import { ManagerCommonPage } from "@/Components/Common/layouts/ManagerComonPage"
 import "./App.css";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ManagerAddress } from "@/Components/page/ManagerPage/Address/ManagerAddress";
+import { ManagerAddress } from "@/Components/page/ManagerPage/Address/Components/ManagerAddress";
 import {
   ClientGateWayType,
   GateWayNumber,
@@ -11,9 +11,9 @@ import {
 import { ManagerAdvice } from "@/Components/page/ManagerPage/Advice/ManagerAdvice";
 import { ManagerAdviceSelect } from "@/Components/page/ManagerPage/Advice/ManagerAdviceSelect";
 import { ManagerMain } from "@/Components/page/ManagerPage/Connected/ManagerMain";
-import { ManagerJoin } from "@/Components/page/ManagerPage/Address/ManagerJoin";
+import { ManagerJoin } from "@/Components/page/ManagerPage/Address/Components/ManagerJoin";
 import ManagerAdviceedit from "@/Components/page/ManagerPage/Advice/ManagerAdviceedit";
-import { ManagerCalendar } from "@/Components/page/ManagerPage/Calendar/ManagerCalendar";
+import { ManagerCalendar } from "@/Components/page/ManagerPage/Calendar/Components/ManagerCalendar";
 import { ManagerNotFoundPage } from "@/Components/page/ManagerPage/NotFound/ManagerNotFoundPage";
 import { ManagerSignUp } from "@/Components/page/ManagerPage/Connected/ManagerSignUp";
 import { ManagerQuestion } from "@/Components/page/ManagerPage/Question/ManagerQuestion";
