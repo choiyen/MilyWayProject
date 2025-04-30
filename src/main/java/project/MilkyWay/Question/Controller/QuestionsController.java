@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
@@ -60,9 +61,13 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             if(loginSuccess.isSessionExist(request))
             {
                 QuestionsEntity questionsEntity = ConVertToEntity(questionsDTO);
-                QuestionsEntity questionsEntity1 = questionsService.Insertquestion(questionsEntity);
-                QuestionsDTO questionsDTO1 = ConVertToDTO(questionsEntity1);
-                return ResponseEntity.badRequest().body(responseDTO.Response("success", "질문 등록에 성공하였습니다." , Collections.singletonList(questionsDTO1)));
+                List<QuestionsEntity> questionsEntity1 = questionsService.Insertquestion(questionsEntity);
+                List<QuestionsDTO> questionsDTOS = new ArrayList<>();
+                for(QuestionsEntity questionsEntity2 : questionsEntity1)
+                {
+                    questionsDTOS.add(ConVertToDTO(questionsEntity2));
+                }
+                return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success", "질문 등록에 성공하였습니다." , questionsDTOS));
             }
             else
             {
@@ -80,7 +85,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
             summary =  "Change a QuestionsDTO by QuestionsId , but only if the user is an administrator.",  // Provide a brief summary
             description = "This API Change a Questions and returns QuestionsDTO as response",  // Provide detailed description
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Questions Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = QuestionsDTO.class))),
+                    @ApiResponse(responseCode = "200", description = "Questions Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = QuestionsDTO.class))),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Invalid Change data"
@@ -189,7 +194,7 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
         }
         catch (Exception e)
         {
-            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage() ));
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }
 
@@ -206,20 +211,20 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
     {
         try
         {
-            System.out.println("quesfsdf");
             List<QuestionsEntity> questionsEntities = questionsService.findAll();
-            List<QuestionsDTO> questionsDTOS = new ArrayList<>();
-            for(QuestionsEntity questionsEntity : questionsEntities)
+
+            if(questionsEntities.isEmpty())
             {
-                System.out.println(questionsEntity);
-                questionsDTOS.add(ConVertToDTO(questionsEntity));
-            }
-            if(questionsDTOS.isEmpty())
-            {
-                throw new FindFailedException("질문 조회를 시도했으나, 데이터가 비어있습니다.");
+                return ResponseEntity.ok().body(responseDTO.Response("findnot","질문 조회를 시도했으나, 데이터가 비어있습니다."));
             }
             else
             {
+                List<QuestionsDTO> questionsDTOS = new ArrayList<>();
+                for(QuestionsEntity questionsEntity : questionsEntities)
+                {
+                    System.out.println(questionsEntity);
+                    questionsDTOS.add(ConVertToDTO(questionsEntity));
+                }
                 return ResponseEntity.ok().body(responseDTO.Response("success","질문 데이터 조회에 성공했습니다.",questionsDTOS));
             }
         }

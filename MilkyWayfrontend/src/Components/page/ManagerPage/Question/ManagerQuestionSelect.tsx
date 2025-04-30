@@ -54,21 +54,21 @@ export const ManagerQuestionSelect = () => {
               {QuestionDummys?.map((data, idx) => {
                 const isLast = QuestionDummys.length - 1 === idx;
                 return (
-                  <tr key={data.questionId} className="hover:bg-slate-100">
+                  <tr key={data.id} className="hover:bg-slate-100">
                     <td
                       className={`border px-4 py-2 align-top break-words max-w-xs ${
                         isLast ? "rounded-bl-lg" : ""
                       }`}
                     >
-                      {data.ExpectionQnA}
+                      {data.exceptionQA}
                     </td>
                     <td
                       className={`border px-4 py-2 align-top break-words max-w-md truncate ${
                         isLast ? "rounded-br-lg" : ""
                       }`}
-                      title={data.ExpectedComment}
+                      title={data.expectedComment}
                     >
-                      {data.ExpectedComment}
+                      {data.expectedComment}
                     </td>
                   </tr>
                 );

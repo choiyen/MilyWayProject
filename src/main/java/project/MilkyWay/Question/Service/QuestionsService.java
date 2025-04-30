@@ -19,10 +19,10 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     @Autowired
     QuestionsMapper questionsMapper;
 
-    public QuestionsEntity Insertquestion(QuestionsEntity newQuestionEntity)
+    public List<QuestionsEntity> Insertquestion(QuestionsEntity newQuestionEntity)
     {
         questionsMapper.Insert(newQuestionEntity);
-        QuestionsEntity questionsEntity = questionsMapper.findById(newQuestionEntity.getId());
+        List<QuestionsEntity> questionsEntity = questionsMapper.findAll();
         if(questionsEntity != null)
         {
             return  questionsEntity;
@@ -80,18 +80,7 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
     public List<QuestionsEntity> findAll()
     {
         List<QuestionsEntity> list = questionsMapper.findAll();
-        if(!(list.isEmpty()))
-        {
-            return list;
-        }
-        else if(list.isEmpty())
-        {
-            throw new FindFailedException("전체 회원정보를 찾긴 찾았는데 리스트가 비어있어요.");
-        }
-        else
-        {
-            throw new FindFailedException("회원정보를 찾다가 오류가 발생했어요!! 관리자님한테 문의하세요");
-        }
+        return list;
     }
     public QuestionsEntity SelectQuestion(Long encodingquestionId)
     {

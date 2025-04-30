@@ -1,5 +1,5 @@
 import { paths } from "@/config/paths/paths";
-import { GET, POST } from "@/config/request/axios/axiosInstance";
+import { POST } from "@/config/request/axios/axiosInstance";
 
 export const PostQuestionALL = async () => {
   const response = await POST({

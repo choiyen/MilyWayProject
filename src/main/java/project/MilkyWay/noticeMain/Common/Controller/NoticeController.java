@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
@@ -103,7 +104,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     List<Object> list = new ArrayList<>();
                     list.add(notice1);
                     list.add(noticeDetailEntities);
-                    return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
+                    return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success","후기 데이터 등록에 성공했습니다.", list));
 
                 }
                 else

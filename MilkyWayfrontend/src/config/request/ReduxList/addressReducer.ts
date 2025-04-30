@@ -8,7 +8,7 @@ const initialAddressStateValue: AddressType = {
   submissionDate: "",
   acreage: "",
   cleanType: "",
-  AddressId: "",
+  addressId: "",
 };
 
 export const addressreducer = createSlice({

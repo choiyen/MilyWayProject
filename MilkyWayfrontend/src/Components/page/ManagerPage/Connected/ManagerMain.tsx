@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { login } from "@/config/request/ReduxList/userlogin";
-import { GET, POST } from "@/config/request/axios/axiosInstance";
+import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { setSession } from "@/config/request/ReduxList/useauthSlice";
 import { checkSession } from "@/config/request/axios/util";

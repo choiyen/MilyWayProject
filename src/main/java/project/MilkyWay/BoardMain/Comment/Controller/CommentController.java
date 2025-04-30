@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
@@ -68,7 +69,7 @@ public class CommentController
                     if(comment != null)
                     {
                         CommentDTO commentDTO1 = ConvertToCommentDTO(comment);
-                        return ResponseEntity.ok().body(responseDTO.Response("success", "게시판에 댓글 등록 완료!", Collections.singletonList(commentDTO1)));
+                        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success", "게시판에 댓글 등록 완료!", Collections.singletonList(commentDTO1)));
                     }
                     else
                     {

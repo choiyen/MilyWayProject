@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.DTO.AddressDTO;
@@ -90,7 +91,7 @@ public class AddressController
                                 .build();
                         administrationService.insert(administrationEntity);
                         AddressDTO addressDTO1 = ConvertToDTO(addressEntity1);
-                        return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 추가", Collections.singletonList(addressDTO1)));
+                        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success","데이터베이스에 주소 데이터 추가", Collections.singletonList(addressDTO1)));
                     }
                     else
                     {
@@ -121,7 +122,7 @@ public class AddressController
             description = "This API changes an Address and returns AddressDTO as response, but only if the user is an administrator.",
             responses = {
                     @
-                    ApiResponse(responseCode = "201", description = "Address Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
+                    ApiResponse(responseCode = "200", description = "Address Changed successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid Change data")
             }
     )

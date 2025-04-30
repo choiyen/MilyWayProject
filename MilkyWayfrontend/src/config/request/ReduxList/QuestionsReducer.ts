@@ -3,8 +3,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialQuestionValue: QuestionType[] = [
   {
-    ExpectionQnA: "",
-    ExpectedComment: "",
+    exceptionQA: "",
+    expectedComment: "",
   },
 ];
 

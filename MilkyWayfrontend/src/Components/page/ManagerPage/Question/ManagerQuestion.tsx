@@ -6,14 +6,14 @@ import { Fontname, ImgTag, LastButton } from "@/SCSS/Fixed";
 import plus from "@/Components/Common/assets/plus.png";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
-import { useDispatch } from "react-redux";
-import { QuestionDummy, QuestionType } from "@/types/Feature/Question/Question";
+import { useDispatch, useSelector } from "react-redux";
 import { setQuestionData } from "@/config/request/ReduxList/QuestionsReducer";
-import { DELETE, POST } from "@/config/request/axios/axiosInstance";
+import { PostQuestionALL } from "./api/util";
+import { RootState } from "@/config/reduxstore";
+import { POST, PUT } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
-import { useNavigate } from "react-router-dom";
-import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
-import { getQuestion } from "./api/util";
+import { url } from "inspector";
+import path from "path";
 
 const MainWapper = styled.div`
   display: flex;
@@ -52,83 +52,123 @@ export const ManagerQuestion = () => {
   const [count, setCount] = useState(1);
   const [Question, SetQuestion] = useState<string[]>([]);
   const [Comment, SetComment] = useState<string[]>([]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const questionData: QuestionType[] = [];
+  const [id, SetID] = useState<number[]>([]);
+
   const dispatch = useDispatch();
   const cleanCount = () => {
     setCount(count + 1);
   };
   const lastItemRef = useRef<HTMLDivElement | null>(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const QuestionDatas = useSelector((state: RootState) => state.Question.value);
 
   useEffect(() => {
-    for (let i = 0; i < count; i++) {
-      questionData.push({
-        ExpectionQnA: Question[i],
-        ExpectedComment: Comment[i],
-      });
-    }
-    dispatch(setQuestionData(questionData));
-  }, [Comment, Question, count, dispatch, questionData]);
-
-  const handleQuestion = async () => {
-    await DELETE({
-      url: paths.Question.basic.path,
-    })
-      .then(async (res) => {
-        if (res.data === "삭제 완료!") {
-          console.log("삭제 완료! Question List 재등록 작업 시작");
-
-          try {
-            for (let i = 0; i < Question.length; i++) {
-              const postRes = await POST({
-                url: paths.Question.basic.path,
-                data: {
-                  ExpectionQnA: Question[i],
-                  ExpectedComment: Comment[i],
-                },
-              });
-
-              if (postRes.data !== "데이터 작성!") {
-                throw new Error(`질문 ${i + 1} 등록 실패`);
-              }
-            }
-
-            console.log("질문 Q&A 변경 작업 완료!");
-            navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Question);
-          } catch (err) {
-            console.error("재등록 중 에러:", err);
-            console.log("일부 질문 등록에 실패했습니다. 다시 시도해주세요.");
-          }
-        } else {
-          console.log("삭제에 실패했습니다. 작업을 중단합니다.");
+    PostQuestionALL().then((res) => {
+      console.log(res);
+      if (res.resultType === "findnot") {
+        alert("현제 데이터베이스 내 Q&A 정보 비어있음");
+      } else if (res.resultType === "success") {
+        const newQuestions: string[] = [];
+        const newComments: string[] = [];
+        const newID: number[] = [];
+        for (let i = 0; i < res.data.length; i++) {
+          console.log(res.data[i]);
+          newQuestions.push(res.data[i].exceptionQA);
+          newComments.push(res.data[i].expectedComment);
+          newID.push(res.data[i].id);
         }
-      })
-      .catch((err) => {
-        console.error("삭제 요청 실패:", err);
-        console.log("삭제 요청에 실패했습니다. 네트워크 상태를 확인해주세요.");
-      });
-  };
-  const lastQuestion = (
-    questionDataRef: string[],
-    CommentDataRef: string[]
-  ) => {
-    SetQuestion([...questionDataRef, ""]);
-    SetComment([...CommentDataRef, ""]);
-    setCount(questionDataRef.length + 1);
-  };
-  useEffect(() => {
-    const questionDataRef: string[] = [];
-    const CommentDataRef: string[] = [];
-    QuestionDummy.forEach((data) => {
-      questionDataRef.push(data.ExpectionQnA);
-      CommentDataRef.push(data.ExpectedComment);
-    });
-    SetQuestion(questionDataRef);
-    SetComment(CommentDataRef);
-    lastQuestion(questionDataRef, CommentDataRef);
-  }, []);
 
+        SetQuestion(newQuestions);
+        SetComment(newComments);
+        SetID(newID);
+        console.log(newQuestions);
+
+        const combinedData = newQuestions.map((q, idx) => ({
+          id: newID[idx],
+          exceptionQA: q,
+          expectedComment: newComments[idx],
+        }));
+
+        dispatch(setQuestionData(combinedData));
+        console.log(combinedData);
+      }
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    const combinedData = Question.map((q, idx) => ({
+      exceptionQA: q,
+      expectedComment: Comment[idx],
+      id: id[idx],
+    }));
+    dispatch(setQuestionData(combinedData));
+  }, [Comment, Question, dispatch]);
+
+  const handleQuestion = () => {
+    PostQuestionALL().then(async (res) => {
+      if (res.resultType === "findnot") {
+        for (let i = 0; i < QuestionDatas.length; i++) {
+          await POST({
+            url: paths.Question.basic.path,
+            data: {
+              exceptionQA: QuestionDatas[i].exceptionQA,
+              expectedComment: QuestionDatas[i].expectedComment,
+            },
+          });
+        }
+      } else if (res.resultType === "success") {
+        console.log(QuestionDatas);
+
+        const newOrUpdatedList = QuestionDatas.filter((q) => {
+          const match = res.data.find(
+            (e: { id: number; exceptionQA: string; expectedComment: string }) =>
+              e.id === q.id
+          );
+
+          // 신규 데이터 (id 없음) → 추가
+          if (!q.id) return true;
+
+          // id는 같지만 내용이 다르면 → 수정 대상
+          if (
+            match &&
+            (match.exceptionQA !== q.exceptionQA ||
+              match.expectedComment !== q.expectedComment)
+          ) {
+            return true;
+          }
+
+          // 그 외는 기존과 동일 → 제외
+          return false;
+        });
+
+        for (const DataList of newOrUpdatedList) {
+          if (!DataList.id) {
+            // 신규 데이터 → POST
+            await POST({
+              url: paths.Question.basic.path,
+              data: {
+                exceptionQA: DataList.exceptionQA,
+                expectedComment: DataList.expectedComment,
+              },
+            });
+          } else {
+            // 수정된 데이터 → PUT
+            console.log(DataList);
+            await PUT({
+              url: paths.Question.basic.path,
+              data: {
+                id: DataList.id,
+                exceptionQA: DataList.exceptionQA,
+                expectedComment: DataList.expectedComment,
+              },
+            }).then((res) => {
+              console.log(res.data);
+            });
+          }
+        }
+      }
+    });
+  };
   return (
     <div>
       <MainWapper>

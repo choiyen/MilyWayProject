@@ -30,13 +30,16 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults())
-                .csrf(CsrfConfigurer::disable)
-                .sessionManagement(
-                        sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // 세션을 사용하도록 설정
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/auth/**", "/address/**", "/time/**", "/board/**", "/comment/**", "/inqurie/**", "/notice/**", "/reservation/**").permitAll()  // 해당 경로는 모두 허용
-                        .anyRequest().authenticated());  // 나머지 요청은 인증 필요
+        http
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .formLogin(Customizer.withDefaults()) // 필터 활성화 목적
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/auth/**", "/address/**", "/time/**", "/board/**", "/comment/**", "/inqurie/**", "/notice/**", "/reservation/**").permitAll()
+                        .anyRequest().authenticated()
+                );
 
         return http.build();
     }

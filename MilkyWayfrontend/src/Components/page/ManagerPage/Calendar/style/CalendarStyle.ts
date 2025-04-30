@@ -32,3 +32,12 @@ export const Wapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const isSameDate = (d1: Date, d2: Date | string) => {
+  const targetDate = new Date(d2);
+  return (
+    d1.getFullYear() === targetDate.getFullYear() &&
+    d1.getMonth() === targetDate.getMonth() &&
+    d1.getDate() === targetDate.getDate()
+  );
+};

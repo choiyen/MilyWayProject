@@ -12,10 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -100,25 +102,42 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PostMapping("/login")
-    public ResponseEntity<?> UserLogin(@RequestBody @Valid LoginDTO loginDTO) {
-        try {
-            // 사용자 존재 여부 확인
+    public ResponseEntity<?> UserLogin(@RequestBody @Valid LoginDTO loginDTO, HttpServletRequest request) {
+        try
+        {
             UserEntity user = userService.existUser(loginDTO);
 
-            // 비밀번호 확인 (평문 비밀번호 대신 PasswordEncoder 사용)
             if (user == null || !passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
                 throw new AuthenticationException("Invalid username or password");
             }
 
-            session.setAttribute("userId", loginDTO.getUserId()); // session에 'member' 속성값 저장
-            // 사용자 정보를 DTO로 변환하여 응답
+            // Spring Security 인증 객체 생성
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(user.getUserId(), null, List.of());
 
+            // SecurityContext 설정
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+
+            // 세션에 SecurityContext 저장
+            request.getSession().setAttribute(
+                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    context
+            );
+
+            session.setAttribute("userId", user.getUserId());
+
+            // 사용자 DTO 반환
             UserDTO user1 = ConvertToDTO(user);
-            return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 로그인 성공", Collections.singletonList(user1)));
-
-        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success", "관리자 로그인 성공", Collections.singletonList(user1)));
+        }
+        catch (AuthenticationException e)
+        {
             return ResponseEntity.badRequest().body(responseDTO.Response("error", "Invalid username or password"));
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     }

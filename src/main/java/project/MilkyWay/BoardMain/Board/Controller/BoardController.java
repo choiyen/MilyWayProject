@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.Entity.AddressEntity;
@@ -66,7 +67,7 @@ public class BoardController
             if(boardEntity1 != null)
             {
                 BoardDTO boardDTO1 = ConvertToBoardDTO(boardEntity1);
-                return ResponseEntity.ok().body(responseDTO.Response("success","게시판 데이터 추가 완료", Collections.singletonList(boardDTO1)));
+                return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success","게시판 데이터 추가 완료", Collections.singletonList(boardDTO1)));
             }
             else
             {
