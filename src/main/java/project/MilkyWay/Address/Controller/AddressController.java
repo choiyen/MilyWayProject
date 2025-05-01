@@ -19,6 +19,7 @@ import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.Address.Entity.AddressEntity;
 import project.MilkyWay.ComonType.Enum.CleanType;
 import project.MilkyWay.ComonType.Enum.DateType;
+import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
 import project.MilkyWay.Address.Service.AddressService;
 import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
@@ -76,10 +77,9 @@ public class AddressController
                 }while (true);
 
                 AdministrationEntity administration = administrationService.FindByAdministrationDate(addressDTO.getSubmissionDate());
-                if(administration.getAdminstrationType().equals(DateType.휴일))
-                {
-                    administrationService.Delete(administration.getAdministrationId());
 
+                if(administration == null)
+                {
                     AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
                     AddressEntity addressEntity1 = addressService.insert(addressEntity);
                     if(addressEntity1 != null)
@@ -100,9 +100,32 @@ public class AddressController
                 }
                 else
                 {
-                    throw new FindFailedException("이미 일하는 일정이라 추가할 수 없어요. 일정부터 지워주세요.");
+                    switch (administration.getAdminstrationType())
+                    {
+                        case 업무 -> throw new FindFailedException("이미 일하는 일정이라 추가할 수 없어요. 일정부터 지워주세요.");
+                        case 연가 -> throw new FindFailedException("중요한 일이 있어서 꼭 쉬어야 하는 날이에요. 잘못 설정했다면 일정부터 지워주세요.");
+                        case 휴일 -> administrationService.Delete(administration.getAdministrationId());
+                        default -> {
+                            AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
+                            AddressEntity addressEntity1 = addressService.insert(addressEntity);
+                            if(addressEntity1 != null)
+                            {
+                                AdministrationEntity administrationEntity = AdministrationEntity.builder()
+                                        .administrationId(uniqueId)
+                                        .adminstrationType(DateType.업무)
+                                        .administrationDate(addressDTO.getSubmissionDate())
+                                        .build();
+                                administrationService.insert(administrationEntity);
+                                AddressDTO addressDTO1 = ConvertToDTO(addressEntity1);
+                                return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success","데이터베이스에 주소 데이터 추가", Collections.singletonList(addressDTO1)));
+                            }
+                            else
+                            {
+                                throw new RuntimeException("예기치 못한 오류로 런타임 오류 발생!!");
+                            }
+                        }
+                    }
                 }
-
 
             }
             else
@@ -115,6 +138,9 @@ public class AddressController
         {
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
+
+        return ResponseEntity.internalServerError()
+                .body(responseDTO.Response("error", "알 수 없는 흐름 오류"));
     }
 
     @Operation(
@@ -177,7 +203,15 @@ public class AddressController
                 boolean bool = addressService.Delete(addressId);
                 if(bool)
                 {
-                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 삭제 성공"));
+                    boolean bool2 = administrationService.Delete(addressId);
+                    if(bool2)
+                    {
+                        return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 삭제 성공"));
+                    }
+                    else
+                    {
+                        throw new DeleteFailedException("일정 삭제는 성공, 하지만 관리 테이블 삭제에 실패했습니다. 수동으로 삭제해주시고, 관리자에게 문의하세요.");
+                    }
                 }
                 else
                 {

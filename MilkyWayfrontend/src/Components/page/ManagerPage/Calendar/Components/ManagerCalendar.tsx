@@ -38,6 +38,14 @@ export const ManagerCalendar = () => {
     };
     fetchData();
   }, []);
+  const fetchData = async () => {
+    const [adminRes, addressRes] = await Promise.all([
+      GET({ url: paths.Administration.search.path }),
+      GET({ url: paths.Address.search.path }),
+    ]);
+    setAdmintration(adminRes.data);
+    setAddress(addressRes.data);
+  };
 
   useEffect(() => {
     console.log(admintration); // admintration 값이 업데이트될 때마다 실행됨
@@ -61,6 +69,7 @@ export const ManagerCalendar = () => {
           date={date}
           address={address}
           admintration={admintration}
+          fetchData={fetchData}
         />
         <LastButton onClick={() => setChange(true)}>일정 추가</LastButton>
       </CalendarWapper>
@@ -72,6 +81,7 @@ export const ManagerCalendar = () => {
           type={type}
           dispatch={dispatch}
           setDate={setDate}
+          fetchData={fetchData}
         />
       )}
     </>

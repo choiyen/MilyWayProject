@@ -222,7 +222,6 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                 List<QuestionsDTO> questionsDTOS = new ArrayList<>();
                 for(QuestionsEntity questionsEntity : questionsEntities)
                 {
-                    System.out.println(questionsEntity);
                     questionsDTOS.add(ConVertToDTO(questionsEntity));
                 }
                 return ResponseEntity.ok().body(responseDTO.Response("success","질문 데이터 조회에 성공했습니다.",questionsDTOS));

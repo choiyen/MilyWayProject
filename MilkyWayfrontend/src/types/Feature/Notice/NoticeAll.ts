@@ -13,7 +13,7 @@ export type NoticeDetailType = {
   NoticeDetailId?: string;
   NoticeId?: string;
   direction: (typeof cleanType)[number];
-  beforeURL: File[];
-  afterURL: File[];
+  beforeURL: string[];
+  afterURL: string[];
   Advice: string;
 };

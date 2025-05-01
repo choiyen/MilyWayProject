@@ -1,13 +1,4 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-
-interface SelectBoxProps {
-  name: string;
-  append: string[];
-  updateCleanspot?: (newMessage: string, count: number) => void;
-  Cleancount?: number;
-  setValue?: (value: string) => void;
-}
 
 const Select = styled.select`
   width: 300px;
@@ -42,44 +33,38 @@ const Label = styled.span`
   line-height: 16px;
   font-weight: bolder;
 `;
+interface SelectBoxProps {
+  name: string;
+  append: string[];
+  value?: string; // ✅ 선택된 값을 부모에서 직접 관리
+  setValue?: (value: string) => void;
+  updateCleanspot?: (newMessage: string, index: number) => void;
+  Cleancount?: number;
+}
 
 export const SelectBox = ({
   name,
   append,
+  value,
+  setValue,
   updateCleanspot,
   Cleancount,
-  setValue,
 }: SelectBoxProps) => {
-  const [change, setchange] = useState<string>("");
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    // 선택된 값을 부모에게 전달
-    if (updateCleanspot != null && Cleancount != null) {
-      console.log(Cleancount);
-      updateCleanspot(event.target.value, Cleancount);
-      setchange(event.target.value);
-    } else if (setValue != null) {
-      setValue(event.target.value);
-      setchange(event.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newVal = e.target.value;
+    if (updateCleanspot && Cleancount !== undefined) {
+      updateCleanspot(newVal, Cleancount);
+    } else if (setValue) {
+      setValue(newVal);
     }
   };
-  useEffect(() => {
-    // Cleancount가 변할 때만 updateCleanspot 호출
-    if (Cleancount != null && updateCleanspot) {
-      updateCleanspot("부엌", Cleancount);
-    }
-    if (match) {
-      setchange(match[1]);
-    } else {
-      console.log("No match found");
-    }
-  }, []); // Cleancount나 updateCleanspot이 변경될 때만 실행
-  const match = name.match(/\(([^)]+)\)/);
+
   return (
     <SelectContainer>
       <Label>{name}</Label>
-      <Select name={name} onChange={handleChange} value={change}>
+      <Select onChange={handleChange} value={value ?? ""}>
         {append.map((item) => (
-          <option key={item} value={item} style={{ textAlign: "center" }}>
+          <option key={item} value={item}>
             {item}
           </option>
         ))}

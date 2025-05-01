@@ -12,8 +12,6 @@ import { PostQuestionALL } from "./api/util";
 import { RootState } from "@/config/reduxstore";
 import { POST, PUT } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
-import { url } from "inspector";
-import path from "path";
 
 const MainWapper = styled.div`
   display: flex;
@@ -49,7 +47,8 @@ const Wapper = styled.div`
 `;
 
 export const ManagerQuestion = () => {
-  const [count, setCount] = useState(1);
+  const QuestionDatas = useSelector((state: RootState) => state.Question.value);
+  const [count, setCount] = useState(QuestionDatas.length);
   const [Question, SetQuestion] = useState<string[]>([]);
   const [Comment, SetComment] = useState<string[]>([]);
   const [id, SetID] = useState<number[]>([]);
@@ -60,7 +59,6 @@ export const ManagerQuestion = () => {
   };
   const lastItemRef = useRef<HTMLDivElement | null>(null);
   // const navigate = useNavigate();
-  const QuestionDatas = useSelector((state: RootState) => state.Question.value);
 
   useEffect(() => {
     PostQuestionALL().then((res) => {
@@ -88,8 +86,9 @@ export const ManagerQuestion = () => {
           exceptionQA: q,
           expectedComment: newComments[idx],
         }));
-
         dispatch(setQuestionData(combinedData));
+        console.log(QuestionDatas);
+        setCount(combinedData.length);
         console.log(combinedData);
       }
     });

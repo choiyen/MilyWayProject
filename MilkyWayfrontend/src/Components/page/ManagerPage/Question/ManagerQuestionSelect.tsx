@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
-import { QuestionDummy, QuestionType } from "@/types/Feature/Question/Question";
+import { QuestionType } from "@/types/Feature/Question/Question";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { PostQuestionALL } from "./api/util";
 
@@ -25,12 +25,9 @@ export const ManagerQuestionSelect = () => {
 
   useEffect(() => {
     // 더미 데이터 세팅 (API로 대체 가능)
-
     PostQuestionALL().then((res) => {
-      console.log(res);
+      SetQuestionDummy(res.data);
     });
-
-    SetQuestionDummy(QuestionDummy);
   }, []);
 
   const QuestionButtonClick = (path: string) => {
@@ -67,6 +64,11 @@ export const ManagerQuestionSelect = () => {
                         isLast ? "rounded-br-lg" : ""
                       }`}
                       title={data.expectedComment}
+                      style={{
+                        whiteSpace: "normal", // 여러 줄로 텍스트 표시
+                        overflowWrap: "break-word", // 텍스트가 긴 경우 줄 바꿈
+                        wordWrap: "break-word", // 긴 단어도 줄 바꿈
+                      }}
                     >
                       {data.expectedComment}
                     </td>

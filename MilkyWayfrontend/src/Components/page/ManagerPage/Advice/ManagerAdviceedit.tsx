@@ -1,4 +1,3 @@
-import { FileTag } from "@/Components/Common/ui/File/FileTag";
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { SelectBox } from "@/Components/Common/ui/Select/SelectBox";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
@@ -15,6 +14,7 @@ import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
 import { NoticeFulldummy } from "@/types/Feature/Notice/NoFull";
 import { setNoticeData } from "@/config/request/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailReducer";
+import { FileTage } from "@/Components/Common/ui/File/FileTage";
 
 const MainBox = styled.div`
   width: 100%;
@@ -65,7 +65,7 @@ const ManagerAdviceedit = () => {
     setCount(AdviceFull.NoticeDetail.length);
     setType(AdviceFull.Notice.type);
     setTitle(AdviceFull.Notice.title);
-    setTitleimg(AdviceFull.Notice.titleimg);
+    setTitleimg(new File([], AdviceFull.Notice.titleimg));
     setgreeting(AdviceFull.Notice.greeting);
     updateCleanspot("", AdviceFull.NoticeDetail.length);
     const Cleanspots: string[] = [];
@@ -82,20 +82,25 @@ const ManagerAdviceedit = () => {
         Advice: AdviceFull.NoticeDetail[i].Advice,
       });
       Advices.push(AdviceFull.NoticeDetail[i].Advice);
-      beforeURL.push(AdviceFull.NoticeDetail[i].beforeURL);
-      afterURL.push(AdviceFull.NoticeDetail[i].afterURL);
+      beforeURL.push(
+        AdviceFull.NoticeDetail[i].beforeURL.map((url) => new File([], url))
+      );
+      afterURL.push(
+        AdviceFull.NoticeDetail[i].afterURL.map((url) => new File([], url))
+      );
       Cleanspots.push(AdviceFull.NoticeDetail[i].direction);
     }
     setcleanspot(Cleanspots);
     SetAdvice(Advices);
     setAfferfile(afterURL);
     setbeforefile(afferfile);
-  }, []);
+  }, [AdviceData, afferfile, noticeId]);
 
   const cleanCount = () => {
     setCount(count + 1);
     updateCleanspot("", count);
   };
+
   const updateCleanspot = (newMessage: string, count: number) => {
     const newcleanspot = [...cleanspot];
     if (!newcleanspot[count]) {
@@ -121,7 +126,7 @@ const ManagerAdviceedit = () => {
     dispatch(
       setNoticeData({
         title: title,
-        titleimg: titleimg,
+        titleimg: titleimg.name,
         type: type,
         greeting: greeting,
       })
@@ -130,8 +135,8 @@ const ManagerAdviceedit = () => {
     for (let i = 0; i < count + 1; i++) {
       AdviceData.push({
         direction: cleanspot[i],
-        beforeURL: beforefile[i],
-        afterURL: afferfile[i],
+        beforeURL: beforefile[i].map((file) => file.name),
+        afterURL: afferfile[i].map((file) => file.name),
         Advice: Advice[i],
       });
     }
@@ -151,7 +156,7 @@ const ManagerAdviceedit = () => {
               Value={title}
               setValue2={setTitle}
             ></InputTextBox>
-            <FileTag
+            <FileTage
               name={"대표 이미지"}
               Value={beforefile}
               setValue={setbeforefile}
@@ -178,16 +183,10 @@ const ManagerAdviceedit = () => {
                   updateCleanspot={updateCleanspot}
                   Cleancount={i}
                 />
-                <FileTag
+                <FileTage
                   name={"청소 이전 (" + cleanspot[i] + ")"}
                   Value={beforefile}
-                  setValue={setbeforefile}
-                  index={i}
-                />
-                <FileTag
-                  name={"청소 이후 (" + cleanspot[i] + ")"}
-                  Value={afferfile}
-                  setValue={setAfferfile}
+                  setBeforeValue={setbeforefile}
                   index={i}
                 />
                 <TextAreaBox
@@ -196,6 +195,12 @@ const ManagerAdviceedit = () => {
                   index={i}
                   Value={Advice}
                   setValue={SetAdvice}
+                />
+                <FileTage
+                  name={"청소 이후 (" + cleanspot[i] + ")"}
+                  Value={afferfile}
+                  setAfferValue={setAfferfile}
+                  index={i}
                 />
               </div>
             ))}

@@ -7,12 +7,14 @@ interface ScheduleInfoProps {
   date: Date | null;
   address: AddressType[];
   admintration: AdministrationType[];
+  fetchData: () => Promise<void>;
 }
 
 export const ScheduleInfo = ({
   date,
   address,
   admintration,
+  fetchData,
 }: ScheduleInfoProps) => {
   const matched =
     address?.filter((item) => {
@@ -36,6 +38,11 @@ export const ScheduleInfo = ({
         item.adminstrationType === "휴일"
       );
     }) || [];
+
+  const handleAdminDelete = async (id: string) => {
+    await administrationDeletefetchData(id);
+    await fetchData(); // 상태 갱신
+  };
 
   return (
     <div className="mt-6 w-full">
@@ -80,9 +87,7 @@ export const ScheduleInfo = ({
               관리자 님께서 {item.adminstrationType}로 지정해놓으신 날입니다.
             </p>
             <SmallButton
-              onClick={() =>
-                administrationDeletefetchData(item.administrationId ?? "")
-              }
+              onClick={() => handleAdminDelete(item.administrationId ?? "")}
             >
               휴일 삭제
             </SmallButton>

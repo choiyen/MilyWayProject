@@ -38,7 +38,7 @@ export const ManagerAddress = () => {
   const [AddressDetail, SetAddressDetail] = useState("");
   const today = new Date();
   const [Reservation, SetReservation] = useState<Value>(today);
-  const [cleaning, setcleaning] = useState("");
+  const [cleaning, setcleaning] = useState("주거청소");
   const dispatch = useDispatch();
   const native = useNavigate();
   const AddressData = useSelector((state: RootState) => {
@@ -46,25 +46,6 @@ export const ManagerAddress = () => {
   });
 
   const handleReservation = () => {
-    // const fetchData = async () => {
-    //   await POST({
-    //     url: paths.Address.basic.path,
-    //     data: {
-    //       customer: Name,
-    //       phoneNumber: Phone,
-    //       address: Address + " " + AddressDetail,
-    //       submissionDate:
-    //         Reservation instanceof Date
-    //           ? Reservation.toISOString().split("T")[0]
-    //           : "",
-    //       acreage: Saleable,
-    //       cleanType: cleaning,
-    //     },
-    //   }).then((res) => {
-    //     console.log(res);
-    //     native(GateWayNumber.Manager + "/" + ManagerGateWayType.Join);
-    //   });
-    // };
     AddressInsertfetchData(AddressData)
       .then((res) => {
         if (res.resultType === "success") {

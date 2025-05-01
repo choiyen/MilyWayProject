@@ -1,18 +1,19 @@
 import styled from "styled-components";
 import { SelectBox } from "@/Components/Common/ui/Select/SelectBox";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
-import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
-import { FileTag } from "@/Components/Common/ui/File/FileTag";
 import { useState, useRef, useEffect } from "react";
 import plus from "@/Components/Common/assets/plus.png";
 import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
 import { setNoticeData } from "@/config/request/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailReducer";
+import { RootState } from "@/config/reduxstore";
+import { cleanType } from "@/types/cleanspace/cleanType";
+import { FileTage } from "@/Components/Common/ui/File/FileTage";
 
 const MainBox = styled.div`
   width: 100%;
@@ -37,13 +38,13 @@ const MainWapper = styled.div`
 export const ManagerAdvice = () => {
   const [count, setCount] = useState(1);
 
-  const [type, setType] = useState<string>("");
+  const [type, setType] = useState<string>("주거청소");
   const [greeting, setgreeting] = useState("");
   const [title, setTitle] = useState<string>("");
-  const [cleanspot, setcleanspot] = useState<string[]>([""]);
+  const [cleanspot, setcleanspot] = useState<string[]>(["부엌"]);
   const [titleimg, setTitleimg] = useState<File>(new File([], ""));
-  const [beforefile, setbeforefile] = useState<File[][]>([[]]);
-  const [afferfile, setAfferfile] = useState<File[][]>([[]]);
+  const [beforefile, setbeforefile] = useState<File[][]>([]);
+  const [afferfile, setAfferfile] = useState<File[][]>([]);
   const [Advice, SetAdvice] = useState<string[]>([""]);
 
   const AdviceData: NoticeDetailType[] = [];
@@ -52,6 +53,10 @@ export const ManagerAdvice = () => {
   const lastItemRef = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useDispatch();
+  const Adviceselector = useSelector((state: RootState) => state.Notice.value);
+  const AdviceDetailselector = useSelector(
+    (state: RootState) => state.NoticeDetail.value
+  );
 
   // 컴포넌트가 처음 렌더링될 때와, 추가할 때마다 스크롤을 내리기 위해 useEffect 사용
   useEffect(() => {
@@ -60,50 +65,74 @@ export const ManagerAdvice = () => {
     }
   }, [count]);
 
-  const cleanCount = () => {
-    setCount(count + 1);
-    updateCleanspot("", count);
-  };
-  const updateCleanspot = (newMessage: string, count: number) => {
-    const newcleanspot = [...cleanspot];
-    if (!newcleanspot[count]) {
-      newcleanspot[count] = newMessage;
-    } else {
-      newcleanspot[count] = newMessage;
-    }
-    setcleanspot(newcleanspot);
-  };
-
-  const handleOnclick = () => {
-    if (afferfile.length !== cleanspot.length) {
-      alert("청소 후 사진을 모두 등록해주세요.");
-      return;
-    } else {
-      console.log(
-        "청소 후 사진의 첫번째 파일이 자동으로 titleimg로 설정됩니다."
-      );
-      setTitleimg(afferfile[0][0]);
-    }
+  useEffect(() => {
+    // if (beforefile.length !== 0) {
+    //   if (typeof beforefile[0][0] === "string") {
+    //     setTitleimg(
+    //       new File([beforefile[0][0]], "filename.txt", { type: "text/plain" })
+    //     );
+    //   }
+    // }
 
     dispatch(
       setNoticeData({
         title: title,
-        titleimg: titleimg,
+        titleimg: titleimg.name,
         type: type,
         greeting: greeting,
       })
     );
+  }, [dispatch, greeting, title, type]);
 
-    for (let i = 0; i < count + 1; i++) {
-      AdviceData.push({
-        direction: cleanspot[i],
-        beforeURL: beforefile[i],
-        afterURL: afferfile[i],
-        Advice: Advice[i],
-      });
-    }
+  // console.log(cleanspot);
+  // for (let i = 0; i < cleanspot.length; i++) {
+  //   AdviceData.push({
+  //     direction: cleanspot[i],
+  //     beforeURL: beforefile[i],
+  //     afterURL: afferfile[i],
+  //     Advice: Advice[i],
+  //   });
+  // }
 
-    dispatch(setNoticeDetailData(AdviceData));
+  // console.log("AdviceData", AdviceData);
+  // // dispatch(setNoticeDetailData(AdviceData));
+
+  useEffect(() => {
+    console.log("beforefile 상태:", beforefile);
+    console.log("afferfile 상태:", afferfile);
+    const beforefileNameMatrix: string[][] = beforefile.map((row) =>
+      row.map((file) => file.name)
+    );
+
+    const affterfileNameMatrix: string[][] = afferfile.map((row) =>
+      row.map((file) => file.name)
+    );
+
+    const combinedData = cleanspot.map((q, idx) => ({
+      direction: q,
+      beforeURL: beforefileNameMatrix[idx] || "",
+      afterURL: affterfileNameMatrix[idx] || "",
+      Advice: Advice[idx],
+    }));
+    dispatch(setNoticeDetailData(combinedData));
+  }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
+
+  useEffect(() => {
+    console.log("업데이트된 Advice 값:", AdviceDetailselector);
+  }, [Adviceselector, AdviceDetailselector]);
+
+  const cleanCount = () => {
+    setCount(count + 1);
+    updateCleanspot("", count);
+  };
+
+  const handleOnclick = () => {};
+  const updateCleanspot = (newMessage: string, index: number) => {
+    setcleanspot((prev) => {
+      const updated = [...prev];
+      updated[index] = newMessage;
+      return updated;
+    });
   };
 
   return (
@@ -121,6 +150,7 @@ export const ManagerAdvice = () => {
             <SelectBox
               name={"청소 유형"}
               append={cleanType}
+              value={type}
               setValue={setType}
             />
             <TextAreaBox
@@ -137,20 +167,23 @@ export const ManagerAdvice = () => {
                 <SelectBox
                   name={"청소 위치 (" + cleanspot[i] + ")"}
                   append={RoomType}
+                  value={cleanspot[i]}
                   updateCleanspot={updateCleanspot}
                   Cleancount={i}
                 />
-                <FileTag
+                <FileTage
                   name={"청소 이전 (" + cleanspot[i] + ")"}
                   Value={beforefile}
-                  setValue={setbeforefile}
+                  setBeforeValue={setbeforefile}
                   index={i}
+                  type="before"
                 />
-                <FileTag
+                <FileTage
                   name={"청소 이후 (" + cleanspot[i] + ")"}
                   Value={afferfile}
-                  setValue={setAfferfile}
+                  setAfferValue={setAfferfile}
                   index={i}
+                  type="after"
                 />
                 <TextAreaBox
                   name={"청소 후기 (" + cleanspot[i] + ")"}

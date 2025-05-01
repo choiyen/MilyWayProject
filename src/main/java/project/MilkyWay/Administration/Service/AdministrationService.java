@@ -138,13 +138,6 @@ public class AdministrationService
     public AdministrationEntity FindByAdministrationDate(LocalDate subissionDate)
     {
         AdministrationEntity AdministrationEntity = administrationRepository.findByAdministrationDate(subissionDate);
-        if(AdministrationEntity != null)
-        {
-            return  AdministrationEntity;
-        }
-        else
-        {
-            throw new FindFailedException("일정 데이터를 찾을 수 없었어요.");
-        }
+        return  AdministrationEntity;
     }
 }
