@@ -8,7 +8,7 @@ export type NoticeFullType = {
 export const NoticeFulldummy: NoticeFullType[] = [
   {
     Notice: {
-      NoticeId: "1",
+      noticeId: "1",
       type: "이사청소",
       title: "한보아파트 이사청소",
       titleimg: "/userID",
@@ -22,7 +22,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "부엌",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "부엌은 식기가 들어있는 공간이므로 청결이 중요합니다. 그래서 저희는 부엌 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -31,7 +31,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "욕실",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "욕실은 물이 많이 사용되는 공간이므로 청결이 중요합니다. 그래서 저희는 욕실 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -40,14 +40,14 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "거실",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "거실은 집안의 중심이므로 청결이 중요합니다. 그래서 저희는 거실 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
     ],
   },
   {
     Notice: {
-      NoticeId: "2",
+      noticeId: "2",
       title: "청주아파트 정기청소",
       titleimg: "titleimg",
       type: "정기청소",
@@ -61,7 +61,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "부엌",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "부엌은 식기가 들어있는 공간이므로 청결이 중요합니다. 그래서 저희는 부엌 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -70,7 +70,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "욕실",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "욕실은 물이 많이 사용되는 공간이므로 청결이 중요합니다. 그래서 저희는 욕실 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -79,7 +79,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "거실",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "거실은 집안의 중심이므로 청결이 중요합니다. 그래서 저희는 거실 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -88,7 +88,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "침실",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "침실은 잠을 자는 공간이므로 청결이 중요합니다. 그래서 저희는 침실 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -97,7 +97,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "베란다",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "발코니는 외부와 연결된 공간이므로 청결이 중요합니다. 그래서 저희는 발코니 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -106,14 +106,14 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "창문",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "창문은 외부와 연결된 공간이므로 청결이 중요합니다. 그래서 저희는 창문 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
     ],
   },
   {
     Notice: {
-      NoticeId: "3",
+      noticeId: "3",
       title: "평거동 입주청소",
       titleimg: "titleimg",
       type: "입주청소",
@@ -127,7 +127,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "부엌",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "부엌은 식기가 들어있는 공간이므로 청결이 중요합니다. 그래서 저희는 부엌 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
 
@@ -137,7 +137,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "욕실",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "욕실은 물이 많이 사용되는 공간이므로 청결이 중요합니다. 그래서 저희는 욕실 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
       {
@@ -146,7 +146,7 @@ export const NoticeFulldummy: NoticeFullType[] = [
         direction: "거실",
         beforeURL: [],
         afterURL: [],
-        Advice:
+        comment:
           "거실은 집안의 중심이므로 청결이 중요합니다. 그래서 저희는 거실 청소를 할 때에는 좀더 신경써서 진행을 하는 편입니다.",
       },
     ],

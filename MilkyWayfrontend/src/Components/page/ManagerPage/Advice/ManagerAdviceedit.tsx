@@ -15,6 +15,8 @@ import { NoticeFulldummy } from "@/types/Feature/Notice/NoFull";
 import { setNoticeData } from "@/config/request/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailReducer";
 import { FileTage } from "@/Components/Common/ui/File/FileTage";
+import { GET, POST } from "@/config/request/axios/axiosInstance";
+import { paths } from "@/config/paths/paths";
 
 const MainBox = styled.div`
   width: 100%;
@@ -61,40 +63,44 @@ const ManagerAdviceedit = () => {
   }, [count]);
 
   useEffect(() => {
-    const AdviceFull = NoticeFulldummy[noticeId ? Number(noticeId) - 1 : 0];
-    setCount(AdviceFull.NoticeDetail.length);
-    setType(AdviceFull.Notice.type);
-    setTitle(AdviceFull.Notice.title);
-    setTitleimg(new File([], AdviceFull.Notice.titleimg));
-    setgreeting(AdviceFull.Notice.greeting);
-    updateCleanspot("", AdviceFull.NoticeDetail.length);
+    const AdviceFull = NoticeFulldummy[0];
     const Cleanspots: string[] = [];
     const Advices: string[] = [];
     const beforeURL: File[][] = [];
     const afterURL: File[][] = [];
-
-    console.log(AdviceFull.NoticeDetail.length);
-    for (let i = 0; i < AdviceFull.NoticeDetail.length; i++) {
-      AdviceData.push({
-        direction: AdviceFull.NoticeDetail[i].direction,
-        beforeURL: AdviceFull.NoticeDetail[i].beforeURL,
-        afterURL: AdviceFull.NoticeDetail[i].afterURL,
-        Advice: AdviceFull.NoticeDetail[i].Advice,
+    const fetchData = async () => {
+      await GET({
+        url: paths.Notice.serach.path,
+        params: { NoticeId: noticeId },
+      }).then((res) => {
+        console.log(res.data[0]);
+        setCount(res.data[0].noticeDetailEntities.length);
+        setType(res.data[0].type);
+        setTitle(res.data[0].title);
+        setTitleimg(new File([], res.data[0].titleimg));
+        setgreeting(res.data[0].greeting);
+        updateCleanspot("", res.data[0].noticeDetailEntities.length);
+        for (let i = 0; i < res.data[0].noticeDetailEntities.length; i++) {
+          Cleanspots.push(res.data[0].noticeDetailEntities[i].direction);
+          Advices.push(res.data[0].noticeDetailEntities[i].comment);
+          beforeURL.push(
+            res.data[0].noticeDetailEntities[i].beforeURL.map(
+              (url: string) => new File([], url)
+            )
+          );
+          afterURL.push(
+            res.data[0].noticeDetailEntities[i].afterURL.map(
+              (url: string) => new File([], url)
+            )
+          );
+        }
       });
-      Advices.push(AdviceFull.NoticeDetail[i].Advice);
-      beforeURL.push(
-        AdviceFull.NoticeDetail[i].beforeURL.map((url) => new File([], url))
-      );
-      afterURL.push(
-        AdviceFull.NoticeDetail[i].afterURL.map((url) => new File([], url))
-      );
-      Cleanspots.push(AdviceFull.NoticeDetail[i].direction);
-    }
+    };
     setcleanspot(Cleanspots);
     SetAdvice(Advices);
     setAfferfile(afterURL);
-    setbeforefile(afferfile);
-  }, [AdviceData, afferfile, noticeId]);
+    fetchData();
+  }, []);
 
   const cleanCount = () => {
     setCount(count + 1);
@@ -137,7 +143,7 @@ const ManagerAdviceedit = () => {
         direction: cleanspot[i],
         beforeURL: beforefile[i].map((file) => file.name),
         afterURL: afferfile[i].map((file) => file.name),
-        Advice: Advice[i],
+        comment: Advice[i],
       });
     }
 
@@ -156,11 +162,7 @@ const ManagerAdviceedit = () => {
               Value={title}
               setValue2={setTitle}
             ></InputTextBox>
-            <FileTage
-              name={"대표 이미지"}
-              Value={beforefile}
-              setValue={setbeforefile}
-            />
+            <FileTage name={"대표 이미지"} setValue2={setTitleimg} />
             <SelectBox
               name={"청소 유형"}
               append={cleanType}

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.MilkyWay.Address.Entity.AddressEntity;
 import project.MilkyWay.BoardMain.Board.DTO.BoardDTO;
 
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
@@ -50,7 +49,7 @@ public class BoardController
     {
         try
         {
-            String uniqueId = "";
+            String uniqueId;
             LoginSuccess loginSuccess = new LoginSuccess();
             do
             {
@@ -198,7 +197,6 @@ public class BoardController
     {
         try 
         {
-            System.out.println(BoardId);
             BoardEntity boardEntity = boardService.FindByBoardId(BoardId);
             if(boardEntity != null)
             {

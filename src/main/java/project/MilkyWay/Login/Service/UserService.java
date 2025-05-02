@@ -1,10 +1,6 @@
 package project.MilkyWay.Login.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import project.MilkyWay.Login.DTO.LoginDTO;
 import project.MilkyWay.Login.Entity.UserEntity;
@@ -84,7 +80,6 @@ public class UserService //관리자 아이디를 관리하는 DTO
   }
   public boolean DeleteUser(String userId)
   {
-      System.out.println("ddddd " + userId );
       UserEntity user = userMapper.FindByUserId(userId);
       if(user != null)
       {
@@ -98,8 +93,6 @@ public class UserService //관리자 아이디를 관리하는 DTO
   }
   public List<UserEntity> findEmail(String email)
   {
-      System.out.println(email);
-        System.out.println("DDDDD" + userMapper.FindByEmail(email));
         List<UserEntity> user = userMapper.FindByEmail(email);
         if(user != null)
         {
@@ -112,13 +105,11 @@ public class UserService //관리자 아이디를 관리하는 DTO
   }
   private UserEntity ChangeUserEntity(UserEntity previousUser, UserEntity newUser)
   {
-      UserEntity user = UserEntity.builder()
+      return UserEntity.builder()
               .userId(previousUser.getUserId())
               .password(newUser.getPassword())
               .email(newUser.getEmail())
               .build();
-
-      return user;
   }
 
 

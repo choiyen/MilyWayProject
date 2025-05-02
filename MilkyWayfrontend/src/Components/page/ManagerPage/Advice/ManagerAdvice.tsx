@@ -8,12 +8,13 @@ import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { useDispatch, useSelector } from "react-redux";
 
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
-import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
 import { setNoticeData } from "@/config/request/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailReducer";
 import { RootState } from "@/config/reduxstore";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { FileTage } from "@/Components/Common/ui/File/FileTage";
+import { POST } from "@/config/request/axios/axiosInstance";
+import { paths } from "@/config/paths/paths";
 
 const MainBox = styled.div`
   width: 100%;
@@ -46,8 +47,6 @@ export const ManagerAdvice = () => {
   const [beforefile, setbeforefile] = useState<File[][]>([]);
   const [afferfile, setAfferfile] = useState<File[][]>([]);
   const [Advice, SetAdvice] = useState<string[]>([""]);
-
-  const AdviceData: NoticeDetailType[] = [];
 
   // 마지막 항목을 가리키기 위한 ref
   const lastItemRef = useRef<HTMLDivElement | null>(null);
@@ -112,7 +111,7 @@ export const ManagerAdvice = () => {
       direction: q,
       beforeURL: beforefileNameMatrix[idx] || "",
       afterURL: affterfileNameMatrix[idx] || "",
-      Advice: Advice[idx],
+      comment: Advice[idx],
     }));
     dispatch(setNoticeDetailData(combinedData));
   }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
@@ -126,7 +125,17 @@ export const ManagerAdvice = () => {
     updateCleanspot("", count);
   };
 
-  const handleOnclick = () => {};
+  const handleOnclick = async () => {
+    await POST({
+      url: paths.Notice.basic.path,
+      data: {
+        noticeDTO: Adviceselector,
+        noticeDetailDTO: AdviceDetailselector,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
+  };
   const updateCleanspot = (newMessage: string, index: number) => {
     setcleanspot((prev) => {
       const updated = [...prev];
@@ -147,6 +156,7 @@ export const ManagerAdvice = () => {
               Value={title}
               setValue2={setTitle}
             ></InputTextBox>
+            <FileTage name={"대표 이미지"} setValue2={setTitleimg} />
             <SelectBox
               name={"청소 유형"}
               append={cleanType}

@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.DTO.AddressDTO;
-import project.MilkyWay.Address.DTO.AddressVO;
 import project.MilkyWay.Administration.Entity.AdministrationEntity;
 import project.MilkyWay.Administration.Service.AdministrationService;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
@@ -64,13 +63,13 @@ public class AddressController
 
             if(loginSuccess.isSessionExist(request))
             {
-                String uniqueId = "";
+                String uniqueId;
                 do
                 {
                     uniqueId = loginSuccess.generateRandomId(15);
                     AddressEntity addressEntity = addressService.findByAddressId(uniqueId);
                     Boolean bool = administrationService.FindByAdministrationBool(uniqueId);
-                    if(addressEntity == null && bool != true)
+                    if(addressEntity == null && !bool)
                     {
                         break;
                     }
@@ -104,7 +103,9 @@ public class AddressController
                     {
                         case 업무 -> throw new FindFailedException("이미 일하는 일정이라 추가할 수 없어요. 일정부터 지워주세요.");
                         case 연가 -> throw new FindFailedException("중요한 일이 있어서 꼭 쉬어야 하는 날이에요. 잘못 설정했다면 일정부터 지워주세요.");
-                        case 휴일 -> administrationService.Delete(administration.getAdministrationId());
+                        case 휴일 -> {
+                            administrationService.Delete(administration.getAdministrationId());
+                        }
                         default -> {
                             AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
                             AddressEntity addressEntity1 = addressService.insert(addressEntity);
@@ -199,7 +200,6 @@ public class AddressController
         {
             if(loginSuccess.isSessionExist(request))
             {
-                System.out.println(addressId);
                 boolean bool = addressService.Delete(addressId);
                 if(bool)
                 {

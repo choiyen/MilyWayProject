@@ -2,7 +2,7 @@ import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
 
 export type NoticeType = {
-  NoticeId?: string;
+  noticeId?: string;
   title: string;
   titleimg: string;
   type: (typeof RoomType)[number];
@@ -15,5 +15,5 @@ export type NoticeDetailType = {
   direction: (typeof cleanType)[number];
   beforeURL: string[];
   afterURL: string[];
-  Advice: string;
+  comment: string;
 };

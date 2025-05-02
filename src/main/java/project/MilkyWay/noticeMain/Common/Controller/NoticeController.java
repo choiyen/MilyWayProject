@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
-import project.MilkyWay.Inquire.DTO.InquireDTO;
-import project.MilkyWay.Inquire.Entity.InquireEntity;
-import project.MilkyWay.Question.DTO.QuestionsDTO;
 import project.MilkyWay.noticeMain.Common.DTO.NoticeJsonDTO;
 import project.MilkyWay.noticeMain.Notice.DTO.NoticeDTO;
 import project.MilkyWay.noticeMain.NoticeDetail.DTO.NoticeDetailDTO;
@@ -68,7 +65,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
 
             if(loginSuccess.isSessionExist(request))
             {
-                String uniqueId = "";
+                String uniqueId;
                 LoginSuccess loginSuccess = new LoginSuccess();
                 do
                 {
@@ -83,12 +80,11 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 NoticeEntity notice1 = noticeService.InsertNotice(noticeEntity);
                 if(notice1 != null)
                 {
-                    System.out.println(notice1);
                     int i = 0;
                     List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
                     while (i < noticeJsonDTO.getNoticeDetailDTO().size() )
                     {
-                        NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i));
+                        NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i),noticeEntity.getNoticeId() );
                         NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
                         if(noticeDetailEntity1 != null)
                         {
@@ -270,6 +266,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                             .noticeId(notice1.getNoticeId())
                             .greeting(notice1.getGreeting())
                             .type(notice1.getType())
+                            .title(notice1.getTitle())
                             .noticeDetailEntities(noticeDetailService.ListNoticeDetail(notice1.getNoticeId()))
                             .build());
                 }
@@ -310,6 +307,8 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                                 .type(notice.getType())
                                 .noticeId(notice.getNoticeId())
                                 .greeting(notice.getGreeting())
+                                .title(notice.getTitle())
+                                .titleimg(notice.getTitleimg())
                                 .noticeDetailEntities(noticeDetailService.ListNoticeDetail(notice.getNoticeId()))
                         .build());
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
@@ -325,6 +324,18 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
 
         }
+    }
+
+    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO, String noticeId)
+    {
+        return NoticeDetailEntity.builder()
+                .noticeId(noticeId)
+                .noticeDetailId(noticeDetailDTO.getNoticeDetailId())
+                .direction(noticeDetailDTO.getDirection())
+                .beforeURL(noticeDetailDTO.getBeforeURL())
+                .afterURL(noticeDetailDTO.getAfterURL())
+                .comment(noticeDetailDTO.getComment())
+                .build();
     }
 
     private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO)
@@ -345,6 +356,8 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 .noticeId(noticeDTO.getNoticeId())
                 .type(noticeDTO.getType())
                 .greeting(noticeDTO.getGreeting())
+                .titleimg(noticeDTO.getTitleimg())
+                .title(noticeDTO.getTitle())
                 .build();
     }
     private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO, String uniqueId)
@@ -353,6 +366,8 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 .noticeId(uniqueId)
                 .type(noticeDTO.getType())
                 .greeting(noticeDTO.getGreeting())
+                .titleimg(noticeDTO.getTitleimg())
+                .title(noticeDTO.getTitle())
                 .build();
     }
 }

@@ -4,7 +4,7 @@
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.noticeMain.Notice.mapper.NoticeMapper">
     <select id="findAll" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
-        SELECT * FROM Notice
+        SELECT noticeId, type, title FROM Notice
     </select>
     <select id="findByNoticeId" parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
         SELECT * FROM Notice WHERE noticeId = #{noticeId}
@@ -13,9 +13,9 @@
         DELETE FROM Notice WHERE noticeId = #{noticeId}
     </delete>
     <insert id="Insert" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
-        INSERT INTO Notice(noticeId, type, greeting) VALUES(#{noticeId}, #{type}, #{greeting})
+        INSERT INTO Notice(noticeId, type, greeting, title, titleimg) VALUES(#{noticeId}, #{type}, #{greeting}, #{title}, #{titleimg})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
-        UPDATE Notice SET type = #{type}, greeting = #{greeting} WHERE noticeId = #{noticeId}
+        UPDATE Notice SET type = #{type}, title = #{title}, greeting = #{greeting}, titleimg = #{titleimg} WHERE noticeId = #{noticeId}
     </update>
 </mapper>

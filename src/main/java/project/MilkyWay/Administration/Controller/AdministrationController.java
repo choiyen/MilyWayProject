@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.DTO.AddressDTO;
-import project.MilkyWay.Address.Entity.AddressEntity;
 import project.MilkyWay.Administration.DTO.AdministrationDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.Administration.Entity.AdministrationEntity;
@@ -52,7 +51,6 @@ public class AdministrationController
     {
         try
         {
-            System.out.println(administrationDTO);
             if(loginSuccess.isSessionExist(request))
             {
                 if(administrationDTO.getAdminstrationType().equals("일하는날") == true)
@@ -67,7 +65,7 @@ public class AdministrationController
                     }
                     else
                     {
-                        String uniqueId = "";
+                        String uniqueId;
                         do
                         {
                             uniqueId = loginSuccess.generateRandomId(15);

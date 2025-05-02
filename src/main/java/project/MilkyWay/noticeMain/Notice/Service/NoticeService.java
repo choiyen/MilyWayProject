@@ -12,6 +12,7 @@ import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.noticeMain.Notice.mapper.NoticeMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,7 +56,7 @@ public class NoticeService
            throw new FindFailedException("해당 리뷰 정보에 해당하는 메인데이터를 못찾겠어요. 관리자에게 문의해줘요");
        }
    }
-    public boolean DeleteByNoticeId(String encodingNoticeId) throws IOException {
+    public boolean DeleteByNoticeId(String encodingNoticeId) {
         NoticeEntity noticeEntity = noticeMapper.findByNoticeId(encodingNoticeId);
         if(noticeEntity != null)
         {
@@ -77,17 +78,17 @@ public class NoticeService
     }
     public List<NoticeEntity> findAll()
     {
-        List<NoticeEntity> list = noticeMapper.findAll();
+        List<NoticeEntity> list = new ArrayList<>(noticeMapper.findAll());
         for(NoticeEntity notice : list)
         {
             Hibernate.initialize(notice.getNoticeDetailEntities());
         }
 
-        if(!list.isEmpty())
+        if(list.isEmpty() != true)
         {
             return list;
         }
-        else if(list.isEmpty())
+        else if(list.isEmpty() == true)
         {
             throw new FindFailedException("list를 찾긴 찾았는데, 비어있어요");
         }
@@ -97,29 +98,25 @@ public class NoticeService
         }
     }
 
+    public NoticeEntity findNoticeId(String noticeId)
+    {
+        NoticeEntity noticeEntity = noticeMapper.findByNoticeId(noticeId);
+        return noticeEntity;
 
+    }
     private NoticeEntity ChangeToNotice(NoticeEntity oldNoticeEntity, NoticeEntity newNoticeEntity)
     {
         NoticeEntity notice = NoticeEntity.builder()
                 .noticeId(oldNoticeEntity.getNoticeId())
                 .type(newNoticeEntity.getType())
                 .greeting(newNoticeEntity.getGreeting())
+                .titleimg(newNoticeEntity.getTitleimg())
+                .title(newNoticeEntity.getTitle())
                 .build();
 
         return notice;
     }
 
 
-    public NoticeEntity findNoticeId(String noticeId)
-    {
-        NoticeEntity noticeEntity = noticeMapper.findByNoticeId(noticeId);
-        if(noticeEntity == null)
-        {
-            throw new FindFailedException("NoticeId에 맞는 정보를 찾지 못했습니다.");
-        }
-        else
-        {
-            return noticeEntity;
-        }
-    }
+
 }

@@ -2,20 +2,53 @@ import { useEffect, useState } from "react";
 import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
 import { Fontname, LastButton } from "@/SCSS/Fixed";
-import { NoticeFulldummy, NoticeFullType } from "@/types/Feature/Notice/NoFull";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { paths } from "@/config/paths/paths";
+import { POST } from "@/config/request/axios/axiosInstance";
+import { NoticeType } from "@/types/Feature/Notice/NoticeAll";
 
 export const ManagerAdviceSelect = () => {
-  const [Advicedummy, setAdvicedummy] = useState<NoticeFullType[]>([]);
+  const [Advicedummy, setAdvicedummy] = useState<NoticeType[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setAdvicedummy(NoticeFulldummy);
+    const fetchData = async () => {
+      try {
+        const res = await POST({
+          url: paths.Notice.serach.path,
+        });
+
+        // ✅ 중복 방지를 위해 지역 변수로 선언
+        const Notice: NoticeType[] = [];
+
+        if (Array.isArray(res.data[0])) {
+          for (let i = 0; i < res.data[0].length; i++) {
+            Notice.push({
+              noticeId: res.data[0][i].noticeId,
+              title: res.data[0][i].title,
+              type: res.data[0][i].type,
+              titleimg: "",
+              greeting: "",
+            });
+          }
+          setAdvicedummy(Notice); // 상태 업데이트
+        } else {
+          console.warn("Unexpected data format:", res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch advice data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // 클릭된 테이블 행의 데이터를 기반으로 수정 페이지로 이동하는 함수
+  useEffect(() => {
+    console.log("Advicedummy", Advicedummy);
+  }, [Advicedummy]);
+
   const handleRowClick = (noticeId: string) => {
-    navigate(`/editNotice/${noticeId}`); // 수정 페이지로 이동, `noticeId`를 URL 파라미터로 전달
+    navigate(GateWayNumber.Manager + `/editNotice/${noticeId}`);
   };
 
   return (
@@ -33,20 +66,20 @@ export const ManagerAdviceSelect = () => {
                 </tr>
               </thead>
               <tbody className="text-gray-700 text-sm">
-                {Advicedummy.map((item) => (
+                {Advicedummy.map((item, index) => (
                   <tr
-                    key={item.Notice.NoticeId}
-                    onClick={() => handleRowClick(item.Notice.NoticeId ?? "")} // 클릭 시 해당 행으로 이동
-                    className="cursor-pointer hover:bg-gray-100" // 클릭 시 배경색 변경
+                    key={item.noticeId}
+                    onClick={() => handleRowClick(item.noticeId ?? "")}
+                    className="cursor-pointer hover:bg-gray-100"
                   >
                     <td className="border px-6 py-3 whitespace-nowrap">
-                      {item.Notice.NoticeId}
+                      {index + 1}
                     </td>
                     <td className="border px-6 py-3 whitespace-nowrap">
-                      {item.Notice.title}
+                      {item.title}
                     </td>
                     <td className="border px-6 py-3 whitespace-nowrap">
-                      {item.Notice.type}
+                      {item.type}
                     </td>
                   </tr>
                 ))}

@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
-import project.MilkyWay.Inquire.Entity.InquireEntity;
-import project.MilkyWay.Question.DTO.QuestionsDTO;
 import project.MilkyWay.Reservation.Entity.ReservationEntity;
 import project.MilkyWay.Administration.Service.AdministrationService;
 import project.MilkyWay.Reservation.DTO.ReservationDTO;
@@ -57,7 +55,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     public ResponseEntity<?> Insert(@RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
-            String uniqueId = "";
+            String uniqueId;
             LoginSuccess loginSuccess = new LoginSuccess();
             do
             {
@@ -106,7 +104,6 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             {
                 ReservationEntity reservationEntity = ConvertToEntity(reservationDTO);
                 ReservationEntity reservationEntity2 = reservationService.SaveReservation(reservationEntity);
-                System.out.println(reservationEntity2);
                 if (reservationEntity2 != null) {
                     ReservationDTO reservationDTO1 = ConvertToDTO(reservationEntity2);
                     return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 수정에 성공하였습니다.", Collections.singletonList(reservationDTO1)));

@@ -14,9 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,7 +82,6 @@ public class UserController //관리자 아이디를 관리하는 DTO
             UserEntity userEntity = ConvertToEntity(userDTO, passwordEncoder);
             UserEntity newUserEntity = userService.createUser(userEntity);
             UserDTO userDTO1 = ConvertToDTO(newUserEntity);
-            System.out.println(userDTO1);
             return ResponseEntity.ok().body(responseDTO.Response("success", "관리자 권한 등록 성공", Collections.singletonList(userDTO1)));
         }
         catch (Exception e)
@@ -277,7 +274,6 @@ public class UserController //관리자 아이디를 관리하는 DTO
         try
         {
             List<UserEntity> userEntity = userService.findEmail(email);
-            System.out.println(userEntity);
             List<UserDTO> userDTOS = new ArrayList<>();
             for(UserEntity user : userEntity)
             {
@@ -295,7 +291,6 @@ public class UserController //관리자 아이디를 관리하는 DTO
 
     private UserEntity ConvertToEntity(UserDTO userDTO, PasswordEncoder passwordEncoder)
     {
-        System.out.println(userDTO.getPassword());
         return UserEntity.builder()
                 .userId(userDTO.getUserId())
                 .email(userDTO.getEmail())
