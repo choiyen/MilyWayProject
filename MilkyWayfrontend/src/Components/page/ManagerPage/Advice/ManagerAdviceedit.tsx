@@ -5,7 +5,7 @@ import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import plus from "@/Components/Common/assets/plus.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,7 @@ import { GET, PUT } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { RootState } from "@/config/reduxstore";
 import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 const MainBox = styled.div`
   width: 100%;
@@ -74,6 +75,7 @@ const ManagerAdviceedit = () => {
 
   const lastItemRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
+  const navigator = useNavigate();
 
   useEffect(() => {
     if (lastItemRef.current && count !== 1) {
@@ -100,14 +102,16 @@ const ManagerAdviceedit = () => {
         const beforeURL: File[][] = [];
         const afterURL: File[][] = [];
         const NoticeDetailId: number[] = [];
-        data.noticeDetailEntities.forEach((item) => {
+        data.noticeDetailEntities.forEach((item: NoticeDetailType) => {
           Cleanspots.push(item.direction);
           Advices.push(item.comment);
           beforeURL.push(
             item.beforeURL.map((url: string) => new File([], url))
           );
           afterURL.push(item.afterURL.map((url: string) => new File([], url)));
-          NoticeDetailId.push(item.noticeDetailId);
+          if (item.noticeDetailId !== undefined) {
+            NoticeDetailId.push(item.noticeDetailId);
+          }
         });
 
         setcleanspot(Cleanspots);
@@ -194,6 +198,14 @@ const ManagerAdviceedit = () => {
       },
     }).then((res) => {
       console.log(res);
+      if (res.resultType === "success") {
+        alert("수정 완료");
+        navigator(
+          GateWayNumber.Manager + "/" + ManagerGateWayType.AdviceSelect
+        );
+      } else {
+        alert("수정 실패");
+      }
     });
   };
 

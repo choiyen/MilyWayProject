@@ -4,8 +4,26 @@ import { useNavigate } from "react-router-dom";
 import { Fontname, LastButton } from "@/SCSS/Fixed";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { paths } from "@/config/paths/paths";
-import { POST } from "@/config/request/axios/axiosInstance";
+import { DELETE, POST } from "@/config/request/axios/axiosInstance";
 import { NoticeType } from "@/types/Feature/Notice/NoticeAll";
+import styled from "styled-components";
+
+const DeleteButton = styled.button`
+  width: 100%;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  margin: 0;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:hover {
+    background: #c0392b;
+  }
+`;
 
 export const ManagerAdviceSelect = () => {
   const [Advicedummy, setAdvicedummy] = useState<NoticeType[]>([]);
@@ -18,7 +36,6 @@ export const ManagerAdviceSelect = () => {
           url: paths.Notice.serach.path,
         });
 
-        // ✅ 중복 방지를 위해 지역 변수로 선언
         const Notice: NoticeType[] = [];
 
         if (Array.isArray(res.data[0])) {
@@ -31,7 +48,7 @@ export const ManagerAdviceSelect = () => {
               greeting: "",
             });
           }
-          setAdvicedummy(Notice); // 상태 업데이트
+          setAdvicedummy(Notice);
         } else {
           console.warn("Unexpected data format:", res.data);
         }
@@ -43,12 +60,33 @@ export const ManagerAdviceSelect = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log("Advicedummy", Advicedummy);
-  }, [Advicedummy]);
-
   const handleRowClick = (noticeId: string) => {
     navigate(GateWayNumber.Manager + `/editNotice/${noticeId}`);
+  };
+
+  const handleDeleteClick = (noticeId: string) => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      DELETE({
+        url: paths.Notice.basic.path,
+        params: {
+          noticeId: noticeId,
+        },
+      })
+        .then((res) => {
+          if (res.resultType === "success") {
+            alert("삭제 완료");
+            setAdvicedummy((prev) =>
+              prev.filter((item) => item.noticeId !== noticeId)
+            );
+          } else {
+            alert("삭제 실패");
+          }
+        })
+        .catch((error) => {
+          console.error("Error deleting advice:", error);
+          alert("삭제 실패");
+        });
+    }
   };
 
   return (
@@ -63,6 +101,7 @@ export const ManagerAdviceSelect = () => {
                   <th className="px-6 py-3 text-left">관리번호</th>
                   <th className="px-6 py-3 text-left">제목</th>
                   <th className="px-6 py-3 text-left">청소유형</th>
+                  <th className="px-6 py-3 text-left">삭제</th>
                 </tr>
               </thead>
               <tbody className="text-gray-700 text-sm">
@@ -81,10 +120,31 @@ export const ManagerAdviceSelect = () => {
                     <td className="border px-6 py-3 whitespace-nowrap">
                       {item.type}
                     </td>
+                    <td className="border px-6 py-3 whitespace-nowrap text-center">
+                      <DeleteButton
+                        onClick={(e) => {
+                          e.stopPropagation(); // ✅ 행 클릭 이벤트 차단
+                          handleDeleteClick(item.noticeId ?? "");
+                        }}
+                      >
+                        🗑 삭제
+                      </DeleteButton>
+                    </td>
                   </tr>
                 ))}
+                {Advicedummy.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="text-center text-gray-500 py-6 border-t"
+                    >
+                      등록된 후기 데이터가 없습니다.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
+
             <div className="flex justify-center items-center mt-2">
               <LastButton
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"

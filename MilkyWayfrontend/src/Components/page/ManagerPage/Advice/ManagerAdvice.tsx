@@ -15,6 +15,8 @@ import { cleanType } from "@/types/cleanspace/cleanType";
 import { FileTage } from "@/Components/Common/ui/File/FileTage";
 import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
+import { useNavigate } from "react-router-dom";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 const MainBox = styled.div`
   width: 100%;
@@ -50,7 +52,7 @@ export const ManagerAdvice = () => {
 
   // 마지막 항목을 가리키기 위한 ref
   const lastItemRef = useRef<HTMLDivElement | null>(null);
-
+  const navigator = useNavigate();
   const dispatch = useDispatch();
   const Adviceselector = useSelector((state: RootState) => state.Notice.value);
   const AdviceDetailselector = useSelector(
@@ -135,6 +137,15 @@ export const ManagerAdvice = () => {
       },
     }).then((res) => {
       console.log(res);
+      console.log(res);
+      if (res.resultType === "success") {
+        alert("수정 완료");
+        navigator(
+          GateWayNumber.Manager + "/" + ManagerGateWayType.AdviceSelect
+        );
+      } else {
+        alert("수정 실패");
+      }
     });
   };
   const updateCleanspot = (newMessage: string, index: number) => {
