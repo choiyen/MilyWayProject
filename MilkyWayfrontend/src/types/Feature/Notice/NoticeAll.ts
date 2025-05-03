@@ -10,10 +10,19 @@ export type NoticeType = {
 };
 
 export type NoticeDetailType = {
-  NoticeDetailId?: string;
+  noticeDetailId?: number;
   NoticeId?: string;
   direction: (typeof cleanType)[number];
   beforeURL: string[];
   afterURL: string[];
+  comment: string;
+};
+
+export type NoticeDetailFileType = {
+  noticeDetailId?: number;
+  NoticeId?: string;
+  direction: (typeof cleanType)[number];
+  beforeURL: File[];
+  afterURL: File[];
   comment: string;
 };

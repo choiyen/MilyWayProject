@@ -117,6 +117,7 @@ export const ManagerAdvice = () => {
   }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
 
   useEffect(() => {
+    console.log("업데이트된 selectAdvice 값:", Adviceselector);
     console.log("업데이트된 Advice 값:", AdviceDetailselector);
   }, [Adviceselector, AdviceDetailselector]);
 

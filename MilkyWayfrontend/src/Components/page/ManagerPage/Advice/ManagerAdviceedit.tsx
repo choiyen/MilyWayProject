@@ -8,26 +8,25 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import plus from "@/Components/Common/assets/plus.png";
-import { useDispatch } from "react-redux";
-
-import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
-import { NoticeFulldummy } from "@/types/Feature/Notice/NoFull";
+import { useDispatch, useSelector } from "react-redux";
 import { setNoticeData } from "@/config/request/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailReducer";
 import { FileTage } from "@/Components/Common/ui/File/FileTage";
-import { GET, POST } from "@/config/request/axios/axiosInstance";
+import { GET, PUT } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
+import { RootState } from "@/config/reduxstore";
+import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
 
 const MainBox = styled.div`
   width: 100%;
   background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Ensures space between content */
+  justify-content: space-between;
   align-items: center;
-  padding-top: 50px; /* Space at the top */
-  padding-bottom: 50px; /* Space at the bottom */
-  overflow-y: auto; /* Scroll only within the MainBox */
+  padding-top: 50px;
+  padding-bottom: 50px;
+  overflow-y: auto;
 `;
 
 const MainWapper = styled.div`
@@ -37,25 +36,45 @@ const MainWapper = styled.div`
   flex-direction: column;
   min-height: 100vh;
 `;
+
+const DeleteButton = styled.button`
+  width: 100%;
+  margin-top: 10px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:hover {
+    background: #c0392b;
+  }
+`;
+
 const ManagerAdviceedit = () => {
-  const { noticeId } = useParams(); // URL 파라미터로 noticeId를 가져옵니다.
+  const { noticeId } = useParams();
   const [count, setCount] = useState(1);
+  const [noticeDetailId, setNoticeDetailId] = useState<number[]>([]);
   const [type, setType] = useState<string>("");
   const [greeting, setgreeting] = useState("");
   const [title, setTitle] = useState<string>("");
-
-  const [cleanspot, setcleanspot] = useState<string[]>([""]);
+  const [cleanspot, setcleanspot] = useState<string[]>([]);
   const [titleimg, setTitleimg] = useState<File>(new File([], ""));
-  const [beforefile, setbeforefile] = useState<File[][]>([[]]);
-  const [afferfile, setAfferfile] = useState<File[][]>([[]]);
+  const [beforefile, setbeforefile] = useState<File[][]>([]);
+  const [afferfile, setAfferfile] = useState<File[][]>([]);
   const [Advice, SetAdvice] = useState<string[]>([""]);
-  const AdviceData: NoticeDetailType[] = [];
 
-  // 마지막 항목을 가리키기 위한 ref
+  const Adviceselector = useSelector((state: RootState) => state.Notice.value);
+  const AdviceDetailselector = useSelector(
+    (state: RootState) => state.NoticeDetail.value
+  );
+
   const lastItemRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
 
-  // 컴포넌트가 처음 렌더링될 때와, 추가할 때마다 스크롤을 내리기 위해 useEffect 사용
   useEffect(() => {
     if (lastItemRef.current && count !== 1) {
       lastItemRef.current.scrollIntoView({ behavior: "smooth" });
@@ -63,72 +82,61 @@ const ManagerAdviceedit = () => {
   }, [count]);
 
   useEffect(() => {
-    const AdviceFull = NoticeFulldummy[0];
-    const Cleanspots: string[] = [];
-    const Advices: string[] = [];
-    const beforeURL: File[][] = [];
-    const afterURL: File[][] = [];
     const fetchData = async () => {
-      await GET({
-        url: paths.Notice.serach.path,
-        params: { NoticeId: noticeId },
-      }).then((res) => {
-        console.log(res.data[0]);
-        setCount(res.data[0].noticeDetailEntities.length);
-        setType(res.data[0].type);
-        setTitle(res.data[0].title);
-        setTitleimg(new File([], res.data[0].titleimg));
-        setgreeting(res.data[0].greeting);
-        updateCleanspot("", res.data[0].noticeDetailEntities.length);
-        for (let i = 0; i < res.data[0].noticeDetailEntities.length; i++) {
-          Cleanspots.push(res.data[0].noticeDetailEntities[i].direction);
-          Advices.push(res.data[0].noticeDetailEntities[i].comment);
+      try {
+        const res = await GET({
+          url: paths.Notice.serach.path,
+          params: { NoticeId: noticeId },
+        });
+        const data = res.data[0];
+        setCount(data.noticeDetailEntities.length);
+        setType(data.type);
+        setTitle(data.title);
+        setTitleimg(new File([], data.titleimg));
+        setgreeting(data.greeting);
+
+        const Cleanspots: string[] = [];
+        const Advices: string[] = [];
+        const beforeURL: File[][] = [];
+        const afterURL: File[][] = [];
+        const NoticeDetailId: number[] = [];
+        data.noticeDetailEntities.forEach((item) => {
+          Cleanspots.push(item.direction);
+          Advices.push(item.comment);
           beforeURL.push(
-            res.data[0].noticeDetailEntities[i].beforeURL.map(
-              (url: string) => new File([], url)
-            )
+            item.beforeURL.map((url: string) => new File([], url))
           );
-          afterURL.push(
-            res.data[0].noticeDetailEntities[i].afterURL.map(
-              (url: string) => new File([], url)
-            )
-          );
-        }
-      });
+          afterURL.push(item.afterURL.map((url: string) => new File([], url)));
+          NoticeDetailId.push(item.noticeDetailId);
+        });
+
+        setcleanspot(Cleanspots);
+        SetAdvice(Advices);
+        setAfferfile(afterURL);
+        setbeforefile(beforeURL);
+        setNoticeDetailId(NoticeDetailId);
+      } catch (error) {
+        console.error("Data fetching failed", error);
+      }
     };
-    setcleanspot(Cleanspots);
-    SetAdvice(Advices);
-    setAfferfile(afterURL);
+
     fetchData();
-  }, []);
+  }, [noticeId]);
 
   const cleanCount = () => {
     setCount(count + 1);
     updateCleanspot("", count);
   };
 
-  const updateCleanspot = (newMessage: string, count: number) => {
-    const newcleanspot = [...cleanspot];
-    if (!newcleanspot[count]) {
-      newcleanspot[count] = newMessage;
-    } else {
-      newcleanspot[count] = newMessage;
-    }
-    setcleanspot(newcleanspot);
+  const updateCleanspot = (newMessage: string, index: number) => {
+    setcleanspot((prev) => {
+      const updated = [...prev];
+      updated[index] = newMessage;
+      return updated;
+    });
   };
-  // 이 부분에서 해당 noticeId를 기반으로 데이터를 가져오고, 수정할 수 있는 폼 등을 렌더링합니다.
 
-  const handleOnclick = () => {
-    if (afferfile.length !== cleanspot.length) {
-      alert("청소 후 사진을 모두 등록해주세요.");
-      return;
-    } else {
-      console.log(
-        "청소 후 사진의 첫번째 파일이 자동으로 titleimg로 설정됩니다."
-      );
-      setTitleimg(afferfile[0][0]);
-    }
-
+  useEffect(() => {
     dispatch(
       setNoticeData({
         title: title,
@@ -137,24 +145,71 @@ const ManagerAdviceedit = () => {
         greeting: greeting,
       })
     );
+  }, [dispatch, greeting, title, type]);
 
-    for (let i = 0; i < count + 1; i++) {
+  useEffect(() => {
+    const beforefileNameMatrix: string[][] = beforefile.map((row) =>
+      row.map((file) => file.name)
+    );
+    const affterfileNameMatrix: string[][] = afferfile.map((row) =>
+      row.map((file) => file.name)
+    );
+    const combinedData = cleanspot.map((q, idx) => ({
+      noticeDetailId: noticeDetailId[idx],
+      direction: q,
+      beforeURL: beforefileNameMatrix[idx] || "",
+      afterURL: affterfileNameMatrix[idx] || "",
+      comment: Advice[idx],
+    }));
+    dispatch(setNoticeDetailData(combinedData));
+  }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
+
+  useEffect(() => {
+    console.log("업데이트된 Advice 값:", AdviceDetailselector);
+  }, [AdviceDetailselector]);
+
+  const handleOnclick = async () => {
+    const AdviceData: NoticeDetailType[] = [];
+    for (let i = 0; i < count; i++) {
       AdviceData.push({
-        direction: cleanspot[i],
+        noticeDetailId: noticeDetailId[i],
+        NoticeId: noticeId,
+        direction: AdviceDetailselector[i].direction,
         beforeURL: beforefile[i].map((file) => file.name),
         afterURL: afferfile[i].map((file) => file.name),
-        comment: Advice[i],
+        comment: AdviceDetailselector[i].comment,
       });
     }
+    await PUT({
+      url: paths.Notice.basic.path,
+      data: {
+        noticeDTO: {
+          noticeId: noticeId,
+          title: Adviceselector.title,
+          titleimg: titleimg.name,
+          type: Adviceselector.type,
+          greeting: Adviceselector.greeting,
+        },
+        noticeDetailDTO: AdviceData,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
+  };
 
-    dispatch(setNoticeDetailData(AdviceData));
+  const deleteCleanItem = (index: number) => {
+    setcleanspot((prev) => prev.filter((_, idx) => idx !== index));
+    setbeforefile((prev) => prev.filter((_, idx) => idx !== index));
+    setAfferfile((prev) => prev.filter((_, idx) => idx !== index));
+    SetAdvice((prev) => prev.filter((_, idx) => idx !== index));
+    setCount(count - 1); // Decrease the count after removal
   };
 
   return (
-    <div style={{ overflow: "Visble" }}>
+    <div style={{ overflow: "visible" }}>
       <MainWapper>
         <MainBox>
-          <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
+          <Fontname>후기 관리</Fontname>
           <Wapper>
             <InputTextBox
               name={"제목"}
@@ -166,6 +221,7 @@ const ManagerAdviceedit = () => {
             <SelectBox
               name={"청소 유형"}
               append={cleanType}
+              value={type}
               setValue={setType}
             />
             <TextAreaBox
@@ -180,30 +236,42 @@ const ManagerAdviceedit = () => {
                 style={{ gap: "20px" }}
               >
                 <SelectBox
-                  name={"청소 위치 (" + cleanspot[i] + ")"}
+                  name={`청소 위치 (${cleanspot[i]})`}
                   append={RoomType}
-                  updateCleanspot={updateCleanspot}
+                  value={cleanspot[i]}
+                  updateCleanspot={(val: string) =>
+                    setcleanspot((prev) =>
+                      prev.map((item, idx) => (idx === i ? val : item))
+                    )
+                  }
                   Cleancount={i}
                 />
                 <FileTage
-                  name={"청소 이전 (" + cleanspot[i] + ")"}
+                  name={`청소 이전 (${cleanspot[i]})`}
                   Value={beforefile}
                   setBeforeValue={setbeforefile}
                   index={i}
+                  type="before"
+                />
+                <FileTage
+                  name={`청소 이후 (${cleanspot[i]})`}
+                  Value={afferfile}
+                  setAfferValue={setAfferfile}
+                  index={i}
+                  type="after"
                 />
                 <TextAreaBox
-                  name={"청소 후기 (" + cleanspot[i] + ")"}
+                  name={`청소 후기 (${cleanspot[i]})`}
                   place={"청소할 때 힘들었던 점이나 후기 글을 작성해주세요."}
                   index={i}
                   Value={Advice}
                   setValue={SetAdvice}
                 />
-                <FileTage
-                  name={"청소 이후 (" + cleanspot[i] + ")"}
-                  Value={afferfile}
-                  setAfferValue={setAfferfile}
-                  index={i}
-                />
+                {count > 1 && (
+                  <DeleteButton onClick={() => deleteCleanItem(i)}>
+                    🗑 삭제
+                  </DeleteButton>
+                )}
               </div>
             ))}
             <ImgTag src={plus} onClick={cleanCount} />

@@ -24,7 +24,10 @@ import project.MilkyWay.noticeMain.NoticeDetail.Service.NoticeDetailService;
 import project.MilkyWay.noticeMain.Notice.Service.NoticeService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/notice")
@@ -141,26 +144,65 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO()));
                 if(notice1 != null)
                 {
+                    System.out.println(noticeJsonDTO.getNoticeDetailDTO());
                     int i = 0;
                     List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
+                    Set<Number> excludeIds = new HashSet<>();  // ArrayList를 Set으로 변환
                     while (i < noticeJsonDTO.getNoticeDetailDTO().size())
                     {
-                        NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId(), ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i)));
-                        if(noticeDetailEntity1 != null)
+                        if(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId() != null )
                         {
-                            noticeDetailEntities.add(noticeDetailEntity1);
+                            NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId(), ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i)));
+                            if(noticeDetailEntity1 != null)
+                            {
+                                noticeDetailEntities.add(noticeDetailEntity1);
+                                excludeIds.add(noticeDetailEntity1.getNoticeDetailId());
+                            }
+                            else
+                            {
+                                noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), oldnotice);
+                                throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                            }
                         }
                         else
                         {
-                            noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), oldnotice);
-                            throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                            NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i),noticeJsonDTO.getNoticeDTO().getNoticeId());
+                            NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
+                            if(noticeDetailEntity1 != null)
+                            {
+                                noticeDetailEntities.add(noticeDetailEntity1);
+                                excludeIds.add(noticeDetailEntity1.getNoticeDetailId());
+                            }
+                            else
+                            {
+                                noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), oldnotice);
+                                throw new InsertFailedException("데이터 저장에 실패했습니다.");
+                            }
                         }
                         i++;
                     }
                     List<Object> list = new ArrayList<>();
                     list.add(notice1);
                     list.add(noticeDetailEntities);
-                    return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 수정에 성공했습니다.", list));
+                    List<NoticeDetailEntity> noticeDetailEntity = noticeDetailService.ListNoticeDetail(notice1.getNoticeId())
+                            .stream()
+                            .filter(entity -> !excludeIds.contains(entity.getNoticeDetailId()))  // 제외 조건
+                        .collect(Collectors.toList());  // 필터링 후 새로운 리스트 생성;
+                    boolean bool = false;
+                    for(NoticeDetailEntity noticeDetail : noticeDetailEntity)
+                    {
+                       bool= noticeDetailService.DeleteToNoticeDetail(noticeDetail.getNoticeDetailId());
+                    }
+
+                    if(bool)
+                    {
+                        return ResponseEntity.ok().body(responseDTO.Response("success","후기 데이터 수정에 성공했습니다.", list));
+                    }
+                    else
+                    {
+                        throw new RuntimeException("알 수 없는 런타임 오류가 발생하였습니다. 다시 시도해주세요");
+                    }
+
                 }
                 else
                 {
