@@ -62,7 +62,6 @@ export const ManagerQuestion = () => {
 
   useEffect(() => {
     PostQuestionALL().then((res) => {
-      console.log(res);
       if (res.resultType === "findnot") {
         alert("현제 데이터베이스 내 Q&A 정보 비어있음");
       } else if (res.resultType === "success") {

@@ -21,7 +21,7 @@ const MainWapper = styled.div`
 `;
 const MainBox = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #f3f4f6;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -76,7 +76,6 @@ export const ManagerAddress = () => {
         addressId: "",
       })
     );
-    console.log(Reservation);
   }, [
     Address,
     AddressDetail,

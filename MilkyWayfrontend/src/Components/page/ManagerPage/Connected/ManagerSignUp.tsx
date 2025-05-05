@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 
@@ -9,6 +9,7 @@ import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -92,7 +93,9 @@ export const ManagerSignUp = () => {
   const [PasswordState, setPasswordState] = useState("");
   const [emailState, setEmailState] = useState("");
   const navigate = useNavigate();
-
+  useEffect(() => {
+    LoginCheck();
+  }, []);
   const handleSignup = async () => {
     dispatch(
       setSignData({

@@ -111,6 +111,10 @@ export const ManagerMain = () => {
       });
   };
 
+  // useEffect(() => {
+  //   LoginCheck();
+  // }, []);
+
   return (
     <div>
       <Wrapper>

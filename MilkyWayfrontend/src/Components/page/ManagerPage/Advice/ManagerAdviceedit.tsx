@@ -78,6 +78,10 @@ const ManagerAdviceedit = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
+    LoginCheck();
+  }, []);
+
+  useEffect(() => {
     if (lastItemRef.current && count !== 1) {
       lastItemRef.current.scrollIntoView({ behavior: "smooth" });
     }

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { SelectBox } from "@/Components/Common/ui/Select/SelectBox";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
 import { RoomType } from "@/types/Room/RoomType";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import plus from "@/Components/Common/assets/plus.png";
 import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,7 @@ import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
 
 const MainBox = styled.div`
   width: 100%;
@@ -65,6 +66,10 @@ export const ManagerAdvice = () => {
       lastItemRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [count]);
+
+  useEffect(() => {
+    LoginCheck();
+  }, []);
 
   useEffect(() => {
     // if (beforefile.length !== 0) {

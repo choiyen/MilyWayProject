@@ -9,12 +9,26 @@ import { PostQuestionALL } from "./api/util";
 
 // 페이지 전체 wrapper - 화면 꽉 차게 하면서도 내용에 따라 유연하게
 const MainWapper = styled.div`
-  min-height: 100vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: blanchedalmond;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const MainBox = styled.div`
+  width: 100%;
+  background-color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures space between content */
+  align-items: center;
+  padding-top: 50px; /* Space at the top */
+  padding-bottom: 50px; /* Space at the bottom */
+  overflow-y: auto; /* Scroll only within the MainBox */
 `;
 
 export const ManagerQuestionSelect = () => {
@@ -25,6 +39,7 @@ export const ManagerQuestionSelect = () => {
 
   useEffect(() => {
     // 더미 데이터 세팅 (API로 대체 가능)
+
     PostQuestionALL().then((res) => {
       SetQuestionDummy(res.data);
     });
@@ -36,60 +51,73 @@ export const ManagerQuestionSelect = () => {
 
   return (
     <>
-      <MainWapper>
-        <Fontname> Q & A 관리</Fontname>
-        {/* 테이블 섹션 */}
-        <div className="w-full px-4 overflow-x-auto flex flex-col items-center py-10">
-          <table className="table-auto border-collapse bg-white shadow-lg min-w-[600px] rounded-lg overflow-hidden">
-            <thead>
-              <tr className="bg-slate-300">
-                <th className="border px-4 py-2 w-1/3 rounded-tl-lg">제목</th>
-                <th className="border px-4 py-2 w-2/3 rounded-tr-lg">내용</th>
-              </tr>
-            </thead>
-            <tbody>
-              {QuestionDummys?.map((data, idx) => {
-                const isLast = QuestionDummys.length - 1 === idx;
-                return (
-                  <tr key={data.id} className="hover:bg-slate-100">
+      <MainBox>
+        <MainWapper>
+          <Fontname>Q & A 관리</Fontname>
+          {/* 테이블 섹션 */}
+          <div className="w-full px-4 overflow-x-auto flex flex-col items-center py-10">
+            <table className="table-auto border-collapse bg-white shadow-lg min-w-[600px] rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-slate-300">
+                  <th className="border px-4 py-2 w-1/3 rounded-tl-lg">제목</th>
+                  <th className="border px-4 py-2 w-2/3 rounded-tr-lg">내용</th>
+                </tr>
+              </thead>
+              <tbody>
+                {QuestionDummys && QuestionDummys.length > 0 ? (
+                  QuestionDummys.map((data, idx) => {
+                    const isLast = QuestionDummys.length - 1 === idx;
+                    return (
+                      <tr key={data.id} className="hover:bg-slate-100">
+                        <td
+                          className={`border px-4 py-2 align-top break-words max-w-xs ${
+                            isLast ? "rounded-bl-lg" : ""
+                          }`}
+                        >
+                          {data.exceptionQA}
+                        </td>
+                        <td
+                          className={`border px-4 py-2 align-top break-words max-w-md truncate ${
+                            isLast ? "rounded-br-lg" : ""
+                          }`}
+                          title={data.expectedComment}
+                          style={{
+                            whiteSpace: "normal",
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {data.expectedComment}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
                     <td
-                      className={`border px-4 py-2 align-top break-words max-w-xs ${
-                        isLast ? "rounded-bl-lg" : ""
-                      }`}
+                      colSpan={2}
+                      className="text-center py-10 text-blue-600 font-bold text-lg border-t"
                     >
-                      {data.exceptionQA}
-                    </td>
-                    <td
-                      className={`border px-4 py-2 align-top break-words max-w-md truncate ${
-                        isLast ? "rounded-br-lg" : ""
-                      }`}
-                      title={data.expectedComment}
-                      style={{
-                        whiteSpace: "normal", // 여러 줄로 텍스트 표시
-                        overflowWrap: "break-word", // 텍스트가 긴 경우 줄 바꿈
-                        wordWrap: "break-word", // 긴 단어도 줄 바꿈
-                      }}
-                    >
-                      {data.expectedComment}
+                      고객 예상 Q&A는 등록되지 않았습니다.
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
 
-          {/* 버튼 */}
-          <LastButton
-            onClick={() =>
-              QuestionButtonClick(
-                GateWayNumber.Manager + "/" + ManagerGateWayType.Question
-              )
-            }
-          >
-            예상 질문 추가
-          </LastButton>
-        </div>
-      </MainWapper>
+            {/* 버튼 */}
+            <LastButton
+              onClick={() =>
+                QuestionButtonClick(
+                  GateWayNumber.Manager + "/" + ManagerGateWayType.Question
+                )
+              }
+            >
+              예상 질문 추가
+            </LastButton>
+          </div>
+        </MainWapper>
+      </MainBox>
     </>
   );
 };

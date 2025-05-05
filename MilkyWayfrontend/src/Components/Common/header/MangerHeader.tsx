@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import "@/SCSS/header.scss";
 import homeImage from "@/Components/Common/assets/home.png";
@@ -9,6 +9,16 @@ import {
   GateWayNumber,
   ManagerGateWayType,
 } from "@/types/GateWay/GateWayType";
+import { logout } from "@/config/request/ReduxList/userlogin";
+import { LoginCheck } from "./api/Logincheck";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/config/reduxstore";
+import {
+  Sessionout,
+  setSession,
+} from "@/config/request/ReduxList/useauthSlice";
+import { POST } from "@/config/request/axios/axiosInstance";
+import { paths } from "@/config/paths/paths";
 // Header styles
 const HeaderBox = styled.div`
   width: 100%;
@@ -184,10 +194,40 @@ const HeaderLarge = styled.div`
 export const MangerHeader = () => {
   const [isListVisible, setListVisible] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("");
-
   const handleImageClick = () => {
     setListVisible(!isListVisible);
   };
+
+  useEffect(() => {
+    LoginCheck()
+      .then((res) => {
+        if (res.resultType === "success") {
+          console.log("로그인 성공:", res);
+          dispatch(logout()); // 세션 상태를 false로 설정
+          dispatch(
+            setSession({
+              isAuthenticated: true,
+              userId: res.data.userId,
+            })
+          ); // 세션 상태를 true로 설정
+        } else {
+          console.log("로그인 실패:", res.message);
+          alert("로그인 후 이용해주세요.");
+          setActiveButton("Login");
+          dispatch(logout()); // 세션 상태를 false로 설정
+          dispatch(Sessionout()); // 세션 상태를 false로 설정
+          navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main); // 로그인 페이지로 이동
+        }
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
+        alert("로그인 후 이용해주세요.");
+        setActiveButton("Login");
+        dispatch(logout()); // 세션 상태를 false로 설정
+        dispatch(Sessionout()); // 세션 상태를 false로 설정
+        navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main); // 로그인 페이지로 이동
+      }); // 로그인 체크
+  }, []);
 
   const handleButtonClick = (buttonName: string) => {
     setActiveButton(buttonName);
@@ -204,8 +244,44 @@ export const MangerHeader = () => {
     }
   };
   const navigate = useNavigate();
-  const FuncClick = (name: string) => {
-    navigate(GateWayNumber.Manager + "/" + name);
+  const dispatch = useDispatch();
+  const auth = useSelector((state: RootState) => state.auth.value);
+
+  const FuncClick = async (name: string, buttonName: string) => {
+    try {
+      setActiveButton(buttonName);
+      await LoginCheck();
+      navigate(GateWayNumber.Manager + "/" + name);
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("로그인 후 이용해주세요.");
+      setActiveButton("Login");
+      dispatch(logout()); // 세션 상태를 false로 설정
+      dispatch(Sessionout()); // 세션 상태를 false로 설정
+      navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main); // 로그인 페이지로 이동
+    }
+  };
+
+  const Logout = async () => {
+    const isConfirmed = window.confirm("로그아웃 하시겠습니까?");
+    if (isConfirmed) {
+      setActiveButton("Logout");
+      await POST({
+        url: paths.Certification.logout.path,
+      }).then((res) => {
+        if (res.resultType === "success") {
+          console.log("로그아웃 성공:", res);
+          alert("로그아웃 되었습니다.");
+          dispatch(logout()); // 세션 상태를 false로 설정
+          dispatch(Sessionout()); // 세션 상태를 false로 설정
+          navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main); // 로그인 페이지로 이동
+        } else {
+          console.log("로그아웃 실패:", res.message);
+          alert("로그아웃에 실패했습니다.");
+          return;
+        }
+      });
+    }
   };
 
   return (
@@ -218,34 +294,51 @@ export const MangerHeader = () => {
         <HeaderLarge>
           <ChangeButton
             $isActive={activeButton === "ReservationMangeMent"}
-            onClick={() => FuncClick(ManagerGateWayType.Join)}
+            onClick={() =>
+              FuncClick(ManagerGateWayType.Join, "ReservationMangeMent")
+            }
           >
             예약 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "QuestionMangeMent"}
-            onClick={() => FuncClick(ManagerGateWayType.QuestionSelect)}
+            onClick={() =>
+              FuncClick(ManagerGateWayType.QuestionSelect, "QuestionMangeMent")
+            }
           >
             Q & A 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "ReviewMangeMent"}
-            onClick={() => FuncClick(ManagerGateWayType.AdviceSelect)}
+            onClick={() =>
+              FuncClick(ManagerGateWayType.AdviceSelect, "ReviewMangeMent")
+            }
           >
             후기 관리
           </ChangeButton>
           <ChangeButton
             $isActive={activeButton === "ScheduleMangeMent"}
-            onClick={() => FuncClick(ManagerGateWayType.Calendar)}
+            onClick={() =>
+              FuncClick(ManagerGateWayType.Calendar, "ScheduleMangeMent")
+            }
           >
             일정 관리
           </ChangeButton>
-          <ChangeButton
-            $isActive={activeButton === "Login"}
-            onClick={() => FuncClick(ManagerGateWayType.Main)}
-          >
-            Login
-          </ChangeButton>
+          {auth.isAuthenticated ? (
+            <ChangeButton
+              $isActive={activeButton === "Logout"}
+              onClick={() => Logout()}
+            >
+              Logout
+            </ChangeButton>
+          ) : (
+            <ChangeButton
+              $isActive={activeButton === "Login"}
+              onClick={() => FuncClick(ManagerGateWayType.Main, "Login")}
+            >
+              Login
+            </ChangeButton>
+          )}
         </HeaderLarge>
         <div style={{ backgroundColor: "#F4DFB6" }}>
           <HomeButton
@@ -277,15 +370,22 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ReservationMangeMent"}
-                  onClick={() => FuncClick(ManagerGateWayType.Join)}
+                  onClick={() =>
+                    FuncClick(ManagerGateWayType.Join, "ReservationMangeMent")
+                  }
                 >
                   예약 관리
                 </ChangeButton>
               </li>
               <li>
                 <ChangeButton
-                  $isActive={activeButton === "QestionMangeMent"}
-                  onClick={() => FuncClick(ManagerGateWayType.QuestionSelect)}
+                  $isActive={activeButton === "QuestionMangeMent"}
+                  onClick={() =>
+                    FuncClick(
+                      ManagerGateWayType.QuestionSelect,
+                      "QuestionMangeMent"
+                    )
+                  }
                 >
                   Q & A 관리
                 </ChangeButton>
@@ -293,7 +393,12 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ReviewMangeMent"}
-                  onClick={() => FuncClick(ManagerGateWayType.AdviceSelect)}
+                  onClick={() =>
+                    FuncClick(
+                      ManagerGateWayType.AdviceSelect,
+                      "ReviewMangeMent"
+                    )
+                  }
                 >
                   후기 관리
                 </ChangeButton>
@@ -301,18 +406,29 @@ export const MangerHeader = () => {
               <li>
                 <ChangeButton
                   $isActive={activeButton === "ScheduleMangeMent"}
-                  onClick={() => FuncClick(ManagerGateWayType.Calendar)}
+                  onClick={() =>
+                    FuncClick(ManagerGateWayType.Calendar, "ScheduleMangeMent")
+                  }
                 >
                   일정 관리
                 </ChangeButton>
               </li>
               <li>
-                <ChangeButton
-                  $isActive={activeButton === "Login"}
-                  onClick={() => FuncClick(ManagerGateWayType.Main)}
-                >
-                  Login
-                </ChangeButton>
+                {auth.isAuthenticated ? (
+                  <ChangeButton
+                    $isActive={activeButton === "LogOut"}
+                    onClick={() => Logout()}
+                  >
+                    Logout
+                  </ChangeButton>
+                ) : (
+                  <ChangeButton
+                    $isActive={activeButton === "Login"}
+                    onClick={() => FuncClick(ManagerGateWayType.Main, "Login")}
+                  >
+                    Login
+                  </ChangeButton>
+                )}
               </li>
             </ul>
           </ListBox>

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -148,10 +149,10 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PostMapping("/logout")
-    public ResponseEntity<?> userLogout(@SessionAttribute(name = "userId", required = false) Long userId) {
+    public ResponseEntity<?> userLogout(HttpServletRequest request) {
         try {
             // 세션 무효화
-            if(userId != null)
+            if(loginSuccess.isSessionExist(request))
             {
                 session.invalidate();
                 // 쿠키 삭제 (JSESSIONID)
@@ -164,7 +165,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                 SecurityContextHolder.clearContext();
 
                 // 로그아웃 성공 메시지
-                return ResponseEntity.ok().body("Logout successful.");
+                return ResponseEntity.ok().body(responseDTO.Response("success", "Logout successful."));
             }
             else
             {
@@ -174,7 +175,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
 
         } catch (Exception e) {
             // 로그아웃 실패 시 처리
-            return ResponseEntity.badRequest().body("Logout failed: " + e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO.Response("error","Logout failed: " + e.getMessage()));
         }
     }
 
@@ -192,11 +193,11 @@ public class UserController //관리자 아이디를 관리하는 DTO
             }
     )
     @PutMapping
-    public ResponseEntity<?> UserUpdate(@SessionAttribute(name = "userId", required = false) Long userId, @RequestBody @Valid UserDTO NewuserDTO)
+    public ResponseEntity<?> UserUpdate(HttpServletRequest request, @RequestBody @Valid UserDTO NewuserDTO)
     {
         try
         {
-            if(userId != null)
+            if(loginSuccess.isSessionExist(request))
             {
                 UserEntity userEntity = ConvertToEntity(NewuserDTO, passwordEncoder);
                 UserEntity userEntity2 = userService.UpdateUser(userEntity.getUserId(), userEntity);
@@ -286,6 +287,33 @@ public class UserController //관리자 아이디를 관리하는 DTO
             return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
         }
     } //데이터 CRUD 정상 동작 확인
+    @PostMapping("/check")
+    public ResponseEntity<?> UserCheck(HttpServletRequest request)
+    {
+        try
+        {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (loginSuccess.isSessionExist(request) && authentication != null && authentication.isAuthenticated())
+            {
+                // 익명 사용자가 아닌지 확인
+                String username = authentication.getName();
+                System.out.println("현재 로그인한 사용자 ID: " + username);
+                List sData = new ArrayList();
+                sData.add(username);
+                return ResponseEntity.ok().body(responseDTO.Response("success", "현재 로그인이 이뤄진 상태입니다.", sData));
+            }
+            else
+            {
+               throw new RuntimeException("현재 로그인이 되지 않은 상태입니다. 로그인 페이지로 보내주세요");
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+        }
+
+    }
 
 
 

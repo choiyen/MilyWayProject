@@ -2,7 +2,6 @@ import { Fontname, LastButton } from "@/SCSS/Fixed";
 import { AddressType } from "@/types/Feature/Address/AddressType";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { Key, useEffect, useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { AddressDeletefetchData, AddressSelectfetchData } from "../api/util";
@@ -12,119 +11,278 @@ const MainWapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-const MainBox = styled.div`
   width: 100%;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 1rem;
+`;
+
+const MainBox = styled.div`
+  width: 75%;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px; /* Space at the top */
-  padding-bottom: 50px; /* Space at the bottom */
-  overflow-y: auto; /* Scroll only within the MainBox */
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 1rem;
+  }
 `;
+
 const Label = styled.span`
   font-size: 20px;
-  line-height: 16px;
-  font-weight: bolder;
-  text-align: left;
-  margin-bottom: 50px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    margin-bottom: 1rem;
+  }
+`;
+
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  td {
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    display: none; /* 모바일에서는 테이블 숨김 */
+  }
+`;
+
+const CardList = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+`;
+
+const Card = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+`;
+
+const CardRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 2px solid #ccc; /* 더 두껍고 진하게 */
+
+  span.label {
+    font-weight: 600;
+    color: #222;
+    width: 40%;
+  }
+
+  span.value {
+    text-align: right;
+    color: #444;
+    width: 60%;
+    word-break: break-word;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const DeleteButton = styled.button`
+  margin-top: 1rem;
+  padding: 0.5rem 0.8rem;
+  border: none;
+  background-color: #ff4d4f;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  align-self: flex-end;
+
+  &:hover {
+    background-color: #d9363e;
+  }
 `;
 
 export const ManagerJoin = () => {
   const [Sign, setSign] = useState<null | AddressType[]>(null);
   const navigate = useNavigate();
+
   const FuncClick = (name: string) => {
     navigate(name);
   };
 
   useEffect(() => {
-    // 여기서 Sign에 들어갈 데이터를 가져오는 API 호출을 수행하고, setSign으로 상태를 업데이트합니다.
-    // 예시로 더미 데이터를 사용하고 있습니다.
-
     AddressSelectfetchData().then((res) => {
-      console.log(res.data);
-      setSign(res.data); // signDummy는 더미 데이터입니다.
+      setSign(res.data);
     });
   }, []);
 
   const handleClick = (AddressId: string) => {
-    console.log(AddressId);
-
     AddressDeletefetchData(AddressId)
       .then((res) => {
-        if (res.resultType == "success") {
+        if (res.resultType === "success") {
           AddressSelectfetchData().then((res) => {
-            console.log(res.data);
-            setSign(res.data); // signDummy는 더미 데이터입니다.
+            setSign(res.data);
           });
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.log);
   };
 
-  useEffect(() => {
-    console.log(Sign);
-  }, [Sign]);
-
   return (
-    <div>
-      <MainWapper>
-        <MainBox>
-          <Fontname>온라인 예약 관리 </Fontname>
-          <Label>청소 날짜가 지난 데이터는 자동 삭제 됩니다.</Label>
-          <MainWapper>
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md text-sm text-left">
-              <thead className="bg-gray-200 text-gray-600 uppercase font-semibold">
-                <tr>
-                  <th className="px-4 py-2 border">청소유형</th>
-                  <th className="px-4 py-2 border">고객명</th>
-                  <th className="px-4 py-2 border">주소</th>
-                  <th className="px-4 py-2 border">전화번호</th>
-                  <th className="px-4 py-2 border">날짜</th>
-                  <th className="px-4 py-2 border">평수</th>
-                  <th className="px-4 py-4 border">삭제</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Sign != null && Sign.length !== 0 ? (
-                  Sign.map((date: AddressType, index: Key) => (
-                    <tr key={index} className="hover:bg-gray-100">
-                      <td className="px-4 py-2 border">{date.cleanType}</td>
-                      <td className="px-4 py-2 border">{date.customer}</td>
-                      <td className="px-4 py-2 border">{date.address}</td>
-                      <td className="px-4 py-2 border">{date.phoneNumber}</td>
-                      <td className="px-4 py-2 border">
-                        {date.submissionDate}
-                      </td>
-                      <td className="px-4 py-2 border">{date.acreage}</td>
-                      <td className="px-4 py-2 border">
-                        <button
-                          onClick={() =>
-                            date.addressId && handleClick(date.addressId)
-                          }
-                        >
-                          삭제
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={5}
-                      className="text-center px-4 py-6 text-gray-500"
-                    >
-                      최근 한달에 해당하는 데이터가 없습니다.
+    <MainWapper>
+      <MainBox>
+        <Fontname>온라인 예약 관리</Fontname>
+        <Label>청소 날짜가 지난 데이터는 자동 삭제 됩니다.</Label>
+
+        {/* 데스크탑 테이블 */}
+        <TableWrapper>
+          <table>
+            <thead>
+              <tr>
+                <th>청소유형</th>
+                <th>고객명</th>
+                <th>주소</th>
+                <th>전화번호</th>
+                <th>날짜</th>
+                <th>평수</th>
+                <th>삭제</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Sign && Sign.length !== 0 ? (
+                Sign.map((date: AddressType, index: Key) => (
+                  <tr key={index}>
+                    <td>{date.cleanType}</td>
+                    <td>{date.customer}</td>
+                    <td>{date.address}</td>
+                    <td>{date.phoneNumber}</td>
+                    <td>{date.submissionDate}</td>
+                    <td>{date.acreage}</td>
+                    <td>
+                      <button
+                        onClick={() =>
+                          date.addressId && handleClick(date.addressId)
+                        }
+                      >
+                        삭제
+                      </button>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </MainWapper>
-        </MainBox>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={7}
+                    style={{
+                      textAlign: "center",
+                      padding: "2rem",
+                      color: "#2563eb",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    최근 한달에 해당하는 데이터가 없습니다.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </TableWrapper>
+
+        {/* 모바일 카드형 뷰 */}
+        <CardList>
+          {Sign && Sign.length !== 0 ? (
+            Sign.map((date: AddressType, index: Key) => (
+              <Card key={index}>
+                <CardRow>
+                  <span className="label">청소유형</span>
+                  <span className="value">{date.cleanType}</span>
+                </CardRow>
+                <CardRow>
+                  <span className="label">고객명</span>
+                  <span className="value">{date.customer}</span>
+                </CardRow>
+                <CardRow>
+                  <span className="label">주소</span>
+                  <span className="value">{date.address}</span>
+                </CardRow>
+                <CardRow>
+                  <span className="label">전화번호</span>
+                  <span className="value">{date.phoneNumber}</span>
+                </CardRow>
+                <CardRow>
+                  <span className="label">날짜</span>
+                  <span className="value">{date.submissionDate}</span>
+                </CardRow>
+                <CardRow>
+                  <span className="label">평수</span>
+                  <span className="value">{date.acreage}</span>
+                </CardRow>
+                <DeleteButton
+                  onClick={() => date.addressId && handleClick(date.addressId)}
+                >
+                  삭제
+                </DeleteButton>
+              </Card>
+            ))
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                backgroundColor: "#6ecf7e",
+                lineHeight: "50px",
+                height: "100px",
+              }}
+            >
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "1rem",
+                  color: "#2563eb",
+                  fontWeight: "bold",
+                }}
+              >
+                최근 한달에 해당하는 데이터가 없습니다.
+              </div>
+            </div>
+          )}
+        </CardList>
+
         <LastButton
           onClick={() =>
             FuncClick(GateWayNumber.Manager + "/" + ManagerGateWayType.Address)
@@ -132,7 +290,7 @@ export const ManagerJoin = () => {
         >
           정보 추가
         </LastButton>
-      </MainWapper>
-    </div>
+      </MainBox>
+    </MainWapper>
   );
 };

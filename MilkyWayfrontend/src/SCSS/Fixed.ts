@@ -21,9 +21,8 @@ export const FixedClientHeader = styled(ClientHeader)`
   background-color: white;
   z-index: 1000; /* Make sure it stays on top */
 `;
-
 export const Fontname = styled.div`
-  color: rgb(149, 151, 225);
+  color: darkviolet; /* 세련된 다크 퍼플 */
   font-size: 40px;
   margin-bottom: 30px; /* Add space below the title to separate from the next content */
   margin-top: 30px;
