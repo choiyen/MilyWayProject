@@ -3,6 +3,8 @@ import styled from "styled-components";
 import "@/SCSS/header.scss";
 import homeImage from "@/Components/Common/assets/home.png";
 import hamburger from "@/Components/Common/assets/hamburger.png";
+import broom from "@/Components/Common/assets/broom.png";
+
 import { useNavigate } from "react-router-dom";
 import {
   ClientGateWayType,
@@ -193,12 +195,13 @@ const HeaderLarge = styled.div`
 
 export const MangerHeader = () => {
   const [isListVisible, setListVisible] = useState(false);
-  const [activeButton, setActiveButton] = useState<string>("");
+  const [activeButton, setActiveButton] = useState<string>("Login");
   const handleImageClick = () => {
     setListVisible(!isListVisible);
   };
 
   useEffect(() => {
+    if (activeButton === "Login" || activeButton === "Home") return; // activeButton이 "Login"일 때는 로그인 체크를 하지 않음
     LoginCheck()
       .then((res) => {
         if (res.resultType === "success") {
@@ -207,7 +210,7 @@ export const MangerHeader = () => {
           dispatch(
             setSession({
               isAuthenticated: true,
-              userId: res.data.userId,
+              userId: res.data.userid,
             })
           ); // 세션 상태를 true로 설정
         } else {
@@ -287,9 +290,20 @@ export const MangerHeader = () => {
   return (
     <div>
       <HeaderBox>
-        <div>
-          <HeaderButton>경상도 청소 전문업체</HeaderButton>
-          <HeaderButton1>은하수 홈케어</HeaderButton1>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={broom}
+            alt="logo"
+            style={{
+              width: "40px",
+              height: "40px",
+              marginRight: "0px",
+            }}
+          />
+          <div>
+            <HeaderButton>경상도 청소 전문업체</HeaderButton>
+            <HeaderButton1>은하수 홈케어</HeaderButton1>
+          </div>
         </div>
         <HeaderLarge>
           <ChangeButton

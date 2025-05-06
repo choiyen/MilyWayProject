@@ -12,6 +12,12 @@ export const ManagerGateWayType = {
 };
 export const ClientGateWayType = {
   home: "home",
+  Question: "Question",
+  Reservation: "Reservation",
+  Service: "Service",
+  Info: "Info",
+  Serviceedit: "editService/:BoardId",
+  ServiceInsert: "ServiceInsert",
 };
 
 export const GateWayNumber = {

@@ -5,7 +5,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ManagerAddress } from "@/Components/page/ManagerPage/Address/Components/ManagerAddress";
 import {
   ClientGateWayType,
-  GateWayNumber,
   ManagerGateWayType,
 } from "@/types/GateWay/GateWayType";
 import { ManagerAdvice } from "@/Components/page/ManagerPage/Advice/ManagerAdvice";
@@ -20,6 +19,12 @@ import { ManagerQuestion } from "@/Components/page/ManagerPage/Question/ManagerQ
 import { ManagerQuestionSelect } from "@/Components/page/ManagerPage/Question/ManagerQuestionSelect";
 import store from "@/config/reduxstore";
 import GlobalErrorBoundary from "@/Components/Common/errors/GlobalErrorBoundary";
+import { ClientComonPage } from "@/Components/Common/layouts/ClientComonPage";
+import { MainPage } from "@/Components/page/ClientPage/Main/MainPage";
+import ServiceProFile from "@/Components/page/ClientPage/Service/ServiceProFile";
+import ClientReservation from "@/Components/page/ClientPage/Reservation/ClientReservation";
+import ServiceIntroduction from "@/Components/page/ClientPage/Introduction/ServiceIntroduction";
+import { ClientQuestion } from "@/Components/page/ClientPage/Question/page/ClientQuestion";
 
 const router = createBrowserRouter([
   {
@@ -74,13 +79,33 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: GateWayNumber.Client,
-    element: <ManagerCommonPage />,
+    path: "/Client",
+    element: <ClientComonPage />,
     errorElement: <GlobalErrorBoundary />,
     children: [
       {
         path: ClientGateWayType.home,
-        element: <ManagerMain />,
+        element: <MainPage />,
+      },
+      {
+        path: ClientGateWayType.Reservation,
+        element: <ClientReservation />,
+      },
+      {
+        path: ClientGateWayType.Info,
+        element: <ServiceIntroduction />,
+      },
+      {
+        path: ClientGateWayType.Service,
+        element: <ServiceProFile />,
+      },
+      {
+        path: ClientGateWayType.Question,
+        element: <ClientQuestion />,
+      },
+      {
+        path: "*",
+        element: <ManagerNotFoundPage />,
       },
     ],
   },

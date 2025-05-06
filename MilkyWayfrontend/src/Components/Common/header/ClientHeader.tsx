@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import "@/SCSS/header.scss";
+import AdminImage from "@/Components/Common/assets/administrator.png";
+import hamburger from "@/Components/Common/assets/hamburger.png";
+import { useNavigate } from "react-router-dom";
+import {
+  ClientGateWayType,
+  GateWayNumber,
+  ManagerGateWayType,
+} from "@/types/GateWay/GateWayType";
+import broom from "@/Components/Common/assets/broom.png";
+import { ComonProfile } from "@/Components/page/ClientPage/Comon/ComonProfile";
 
 // Header styles
 const HeaderBox = styled.div`
@@ -32,7 +42,7 @@ const HeaderButton = styled.div`
   align-items: left;
   color: #000000;
   background-color: #fffeee;
-  margin-top: 20px;
+  margin-top: 15px;
 
   @media (max-width: 1044px) {
     font-size: 12px;
@@ -59,7 +69,7 @@ const HeaderButton1 = styled.div`
   margin: 0px;
 
   @media (max-width: 1044px) {
-    font-size: 8px;
+    font-size: 15px;
   }
 `;
 
@@ -177,72 +187,88 @@ const HeaderLarge = styled.div`
 export const ClientHeader = () => {
   const [isListVisible, setListVisible] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("");
-
+  const nativeGate = useNavigate();
   const handleImageClick = () => {
     setListVisible(!isListVisible);
   };
 
-  const handleButtonClick = (buttonName: string) => {
+  const FuncClick = async (name: string, buttonName: string) => {
     setActiveButton(buttonName);
-    if (buttonName == "관리자 로그인") {
-      handleManagerButtonClick();
-    }
+    nativeGate(GateWayNumber.Client + "/" + name);
   };
 
   const handleManagerButtonClick = () => {
     const isConfirmed = window.confirm("관리자 페이지로 이동하시겠습니까?");
+    setActiveButton("AdminPage");
     if (isConfirmed) {
-      window.location.href = "/admin"; // 관리자 페이지 URL로 이동
+      nativeGate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main);
     }
   };
 
   return (
     <div>
       <HeaderBox>
-        <div>
-          <HeaderButton>경상도 청소 전문업체</HeaderButton>
-          <HeaderButton1>은하수 홈케어</HeaderButton1>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={broom}
+            alt="logo"
+            style={{
+              width: "40px",
+              height: "40px",
+              marginRight: "0px",
+            }}
+          />
+          <div>
+            <HeaderButton>경상도 청소 전문업체</HeaderButton>
+            <HeaderButton1>은하수 홈케어</HeaderButton1>
+          </div>
         </div>
         <HeaderLarge>
           <ChangeButton
             isActive={activeButton === "Main"}
-            onClick={() => handleButtonClick("Main")}
+            onClick={() => FuncClick(ClientGateWayType.home, "Main")}
           >
             Main
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "서비스 소개"}
-            onClick={() => handleButtonClick("서비스 소개")}
+            isActive={activeButton === "ServiceIntroduction"}
+            onClick={() =>
+              FuncClick(ClientGateWayType.Info, "ServiceIntroduction")
+            }
           >
             서비스 소개
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "서비스 가격"}
-            onClick={() => handleButtonClick("서비스 가격")}
+            isActive={activeButton === "Jobfeedback"}
+            onClick={() => FuncClick(ClientGateWayType.Service, "Jobfeedback")}
           >
-            서비스 가격
+            작업 후기
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "Q&A"}
-            onClick={() => handleButtonClick("Q&A")}
+            isActive={activeButton === "Question"}
+            onClick={() => FuncClick(ClientGateWayType.Question, "Question")}
           >
             Q&A
           </ChangeButton>
           <ChangeButton
-            isActive={activeButton === "고객센터"}
-            onClick={() => handleButtonClick("고객센터")}
+            isActive={activeButton === "Reservation"}
+            onClick={() =>
+              FuncClick(ClientGateWayType.Reservation, "Reservation")
+            }
           >
-            고객센터
+            예약하기
           </ChangeButton>
         </HeaderLarge>
         <div style={{ backgroundColor: "#F4DFB6" }}>
           <HomeButton
-            src="src/Componments/img/hamburger.png"
+            src={hamburger}
             onClick={handleImageClick}
+            style={{ width: "50px", height: "50px" }}
           />
           <MangerButton
-            src="src/Componments/img/administrator.png"
+            src={AdminImage}
             onClick={handleManagerButtonClick} // 관리자 버튼 클릭 시 확인
+            style={{ width: "50px", height: "50px" }}
           />
         </div>
       </HeaderBox>
@@ -255,7 +281,7 @@ export const ClientHeader = () => {
               <li>
                 <ChangeButton
                   isActive={activeButton === "관리자 로그인"}
-                  onClick={() => handleButtonClick("관리자 로그인")}
+                  onClick={handleManagerButtonClick} // 관리자 버튼 클릭 시 확인
                 >
                   관리자 로그인
                 </ChangeButton>
@@ -263,47 +289,47 @@ export const ClientHeader = () => {
               <li>
                 <ChangeButton
                   isActive={activeButton === "Main"}
-                  onClick={() => handleButtonClick("Main")}
+                  onClick={() => FuncClick(ClientGateWayType.home, "Main")}
                 >
                   Main
                 </ChangeButton>
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "서비스 소개"}
-                  onClick={() => handleButtonClick("서비스 소개")}
+                  isActive={activeButton === "ServiceIntroduction"}
+                  onClick={() =>
+                    FuncClick(ClientGateWayType.Info, "ServiceIntroduction")
+                  }
                 >
                   서비스 소개
                 </ChangeButton>
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "서비스 가격"}
-                  onClick={() => handleButtonClick("서비스 가격")}
+                  isActive={activeButton === "Jobfeedback"}
+                  onClick={() =>
+                    FuncClick(ClientGateWayType.Service, "Jobfeedback")
+                  }
                 >
                   서비스 가격
                 </ChangeButton>
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "Q&A"}
-                  onClick={() => handleButtonClick("Q&A")}
+                  isActive={activeButton === "Question"}
+                  onClick={() =>
+                    FuncClick(ClientGateWayType.Question, "Question")
+                  }
                 >
                   Q&A
                 </ChangeButton>
               </li>
               <li>
                 <ChangeButton
-                  isActive={activeButton === "고객센터"}
-                  onClick={() => handleButtonClick("고객센터")}
-                >
-                  고객센터
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  isActive={activeButton === "온라인 예약하기"}
-                  onClick={() => handleButtonClick("온라인 예약하기")}
+                  isActive={activeButton === "Reservation"}
+                  onClick={() =>
+                    FuncClick(ClientGateWayType.Reservation, "Reservation")
+                  }
                 >
                   온라인 예약하기
                 </ChangeButton>
@@ -312,6 +338,7 @@ export const ClientHeader = () => {
           </ListBox>
         )}
       </HeaderSmall>
+      <ComonProfile />
     </div>
   );
 };
