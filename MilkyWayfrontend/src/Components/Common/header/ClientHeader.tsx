@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import "@/SCSS/header.scss";
 import AdminImage from "@/Components/Common/assets/administrator.png";
@@ -73,7 +73,9 @@ const HeaderButton1 = styled.div`
   }
 `;
 
-const ChangeButton = styled.button<{ isActive: boolean }>`
+const ChangeButton = styled.button.withConfig({
+  shouldForwardProp: (prop) => prop !== "isActive",
+})<{ isActive: boolean }>`
   width: 100%;
   border: none;
   background-color: #fffeee;
@@ -95,15 +97,14 @@ const ChangeButton = styled.button<{ isActive: boolean }>`
   ${({ isActive }) =>
     isActive &&
     `
-    color : #f6f6fa;
-    background-color: rgb(60, 32, 143); /* Add a background color to the active button */
+    color: #f6f6fa;
+    background-color: rgb(60, 32, 143);
     font-weight: bold;
   `}
 
-  /* Mouse hover effect */
   &:hover {
-    background-color: #f1f1f1; /* Change the background color on hover */
-    cursor: pointer; /* Change the cursor to a pointer */
+    background-color: #f1f1f1;
+    cursor: pointer;
     border-bottom: 2px double #000000;
     color: black;
   }

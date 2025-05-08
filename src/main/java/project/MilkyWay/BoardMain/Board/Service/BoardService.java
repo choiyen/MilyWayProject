@@ -98,14 +98,7 @@ public class BoardService
     public BoardEntity FindByBoardId(String EncodingBoardId)
     {
         BoardEntity boardEntity = boardRepository.findByBoardId(EncodingBoardId);
-        if(boardEntity != null)
-        {
             return boardEntity;
-        }
-        else
-        {
-            throw new FindFailedException("게시판 Id에 따른 게시판 정보를 찾을 수 없습니다.");
-        }
     }
     public boolean Bool(String EncodingBoardId)
     {
@@ -117,6 +110,7 @@ public class BoardService
                 .boardId(beforeBoardEntity.getBoardId())
                 .title(boardEntity.getTitle())
                 .content(boardEntity.getContent())
+                .password(boardEntity.getPassword())
                 .build();
     }
 }

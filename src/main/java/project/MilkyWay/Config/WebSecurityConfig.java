@@ -37,7 +37,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/**", "/address/**", "/time/**", "/board/**", "/comment/**", "/inqurie/**", "/notice/**", "/reservation/**").permitAll()
+                        .requestMatchers("/", "/auth/**", "/board/**", "/comment/**", "/inqurie/**", "/notice/**", "/question/**" ,"/reservation/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

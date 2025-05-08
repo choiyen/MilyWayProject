@@ -23,6 +23,8 @@ public class BoardEntity
     private String title; // 게시판 질문의 제목을 저장하는 변수
     @Column(name = "content", nullable = false)
    private String content; // 게시판의 내용을 저장하는 변수
+    @Column(name = "password")
+    private String password; //비밀번호
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "boardId", referencedColumnName = "boardId", insertable = false, updatable = false)

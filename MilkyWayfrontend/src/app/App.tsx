@@ -25,6 +25,8 @@ import ServiceProFile from "@/Components/page/ClientPage/Service/ServiceProFile"
 import ClientReservation from "@/Components/page/ClientPage/Reservation/ClientReservation";
 import ServiceIntroduction from "@/Components/page/ClientPage/Introduction/ServiceIntroduction";
 import { ClientQuestion } from "@/Components/page/ClientPage/Question/page/ClientQuestion";
+import ServiceInsert from "@/Components/page/ClientPage/Question/Board/ServiceInsert";
+import ServiceBoard from "@/Components/page/ClientPage/Question/Board/ServiceBoard";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +104,14 @@ const router = createBrowserRouter([
       {
         path: ClientGateWayType.Question,
         element: <ClientQuestion />,
+      },
+      {
+        path: ClientGateWayType.ServiceInsert,
+        element: <ServiceInsert />,
+      },
+      {
+        path: ClientGateWayType.Serviceedit,
+        element: <ServiceBoard />,
       },
       {
         path: "*",

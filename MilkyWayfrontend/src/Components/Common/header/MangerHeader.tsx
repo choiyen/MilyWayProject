@@ -242,8 +242,7 @@ export const MangerHeader = () => {
   const handleHomeButtonClick = () => {
     const isConfirmed = window.confirm("메인 페이지로 이동하시겠습니까?");
     if (isConfirmed) {
-      window.location.href =
-        GateWayNumber.Client + "/" + ClientGateWayType.home; // 관리자 페이지 URL로 이동
+      navigate(GateWayNumber.Client + "/" + ClientGateWayType.home); // 관리자 페이지 URL로 이동
     }
   };
   const navigate = useNavigate();

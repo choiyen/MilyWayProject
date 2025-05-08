@@ -175,7 +175,7 @@ public class BoardController
                 throw new FindFailedException("데이터베이스에서 데이터를 찾았는데 비어있어요!!");
             }
             else {
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 데이터를 못찾겠어요. 다시 시도해주세요!!", boardDTOS));
+                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 조회 완료!", boardDTOS));
             }
         }
         catch (Exception e)
@@ -219,6 +219,7 @@ public class BoardController
                 .boardId(boardEntity1.getBoardId())
                 .content(boardEntity1.getContent())
                 .title(boardEntity1.getTitle())
+                .password(boardEntity1.getPassword())
                 .build();
     }
 
@@ -228,6 +229,7 @@ public class BoardController
                 .boardId(boardDTO.getBoardId())
                 .content(boardDTO.getContent())
                 .title(boardDTO.getTitle())
+                .password(boardDTO.getPassword())
                 .build();
     }
     private BoardEntity ConvertToBoardEntity(BoardDTO boardDTO, String uniqueId)
@@ -236,6 +238,7 @@ public class BoardController
                 .boardId(uniqueId)
                 .content(boardDTO.getContent())
                 .title(boardDTO.getTitle())
+                .password(boardDTO.getPassword())
                 .build();
     }
 
