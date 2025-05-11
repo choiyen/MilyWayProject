@@ -87,10 +87,6 @@ export const ClientQuestion = () => {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(Question);
-  }, [Question]);
-
   return (
     <PageContainer>
       <QuestionCampaign>

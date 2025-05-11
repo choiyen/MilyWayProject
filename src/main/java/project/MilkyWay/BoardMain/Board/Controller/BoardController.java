@@ -9,7 +9,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.BoardMain.Board.DTO.BoardCheckDTO;
 import project.MilkyWay.BoardMain.Board.DTO.BoardDTO;
 
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
@@ -129,18 +132,28 @@ public class BoardController
             }
     )
     @DeleteMapping
-    public ResponseEntity<?> Delete(@RequestParam String BoardId)
+    public ResponseEntity<?> Delete(@RequestBody BoardCheckDTO boardCheckDTO)
     {
         try
         {
-            boolean bool = boardService.Delete(BoardId);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();  // 사용자 이름
+            System.out.println("현재 인증된 사용자: " + username);
+
+            BoardEntity boardEntity = boardService.FindByBoardId(boardCheckDTO.getBoardId());
+            if(username == "anonymousUser" && boardEntity.getPassword().equals(boardEntity.getPassword()) == false)
+            {
+                throw new RuntimeException("삭제를 위한 비밀번호를 다시 입력해주세요");
+            }
+
+            boolean bool = boardService.Delete(boardCheckDTO.getBoardId());
             if(bool)
             {
                 return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제 완료! 못미더우시면 DB를 확인해봐요!"));
             }
             else
             {
-               throw new DeleteFailedException("데이터 삭제에 알 수 없는 오류로 실패했어요!!"); 
+               throw new DeleteFailedException("데이터 삭제에 알 수 없는 오류로 실패했어요!!");
             }
         }
         catch (Exception e)

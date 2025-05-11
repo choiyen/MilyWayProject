@@ -10,10 +10,14 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.BoardMain.Board.DTO.BoardDTO;
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
 import project.MilkyWay.BoardMain.Board.Service.BoardService;
 import project.MilkyWay.BoardMain.Comment.DTO.CommentDTO;
+import project.MilkyWay.BoardMain.Comment.DTO.CommentDeteteDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.BoardMain.Comment.Entity.CommentEntity;
 import project.MilkyWay.ComonType.Enum.UserType;
@@ -60,8 +64,8 @@ public class CommentController
         {
             if(loginSuccess.isSessionExist(httpServletRequest))
             {
-                boolean bool = boardService.Bool(commentDTO.getBoardId());
-                if(bool)
+                BoardEntity boardEntity = boardService.FindByBoardId(commentDTO.getBoardId());
+                if(boardEntity != null)
                 {
                     CommentEntity commentEntity = ConvertToCommentEntity(commentDTO, "관리자");
 
@@ -83,9 +87,12 @@ public class CommentController
             }
             else
             {
-                boolean bool = boardService.Bool(commentDTO.getBoardId());
-                if(bool)
+                BoardEntity boardEntity = boardService.FindByBoardId(commentDTO.getBoardId());
+                if(boardEntity != null)
                 {
+                    if(boardEntity.getPassword().equals(commentDTO.getPassword()) == false)
+                        throw new RuntimeException("무단 댓글 입력 방지용 비번 오류");
+
                     CommentEntity commentEntity = ConvertToCommentEntity(commentDTO);
 
                     CommentEntity comment = commentService.Insert(commentEntity);
@@ -174,26 +181,31 @@ public class CommentController
             }
     )
     @DeleteMapping
-    public ResponseEntity<?> Delete(HttpServletRequest request, @RequestParam Long CommentId)
+    public ResponseEntity<?> Delete(HttpServletRequest request, @Valid @RequestBody CommentDeteteDTO commentDeteteDTO)
     {
         try
         {
-            if(loginSuccess.isSessionExist(request))
-            {
-                boolean bool = commentService.Delete(CommentId);
-                if(bool)
+            System.out.println(commentDeteteDTO);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                String username = authentication.getName();  // 사용자 이름
+                BoardEntity boardEntity = boardService.FindByBoardId(commentDeteteDTO.getBoardId());
+                if(username != "anonymousUser" || boardEntity.getPassword().equals(commentDeteteDTO.getPassword()))
                 {
-                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제!"));
+                    boolean bool = commentService.Delete(commentDeteteDTO.getCommentId());
+                    if(bool)
+                    {
+                        return ResponseEntity.ok().body(responseDTO.Response("success","데이터 삭제!"));
+                    }
+                    else
+                    {
+                        throw new DeleteFailedException("데이터 삭제 실패ㅠㅠㅠ");
+                    }
                 }
                 else
                 {
-                    throw new DeleteFailedException("데이터 삭제 실패ㅠㅠㅠ");
+                    throw new DeleteFailedException("게시판 비밀번호가 아닙니다.");
                 }
-            }
-            else
-            {
-                throw new SessionNotFoundExpection("관리자 로그인 X, 댓글의 삭제는 관리자에게 문의하세요");
-            }
+
 
         }
         catch (Exception e)
@@ -241,7 +253,7 @@ public class CommentController
                     @ApiResponse(responseCode = "404", description = "Comment not found")
             }
     )
-    @PostMapping("/search/panel")
+    @GetMapping("/search/panel")
     public ResponseEntity<?> SelectByBoardId(@RequestParam String BoardId)
     {
         try

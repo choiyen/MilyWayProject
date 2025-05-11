@@ -39,8 +39,19 @@ const QuestionSubtitle = styled.div`
 export const BoardQuestion = () => {
   return (
     <QuestionCampaign>
-      <QuestionTitle2>궁금한 점이 혹시 더 있으신가요?</QuestionTitle2>
+      <QuestionTitle2>궁금한 점이 더 있으신가요?</QuestionTitle2>
+      <span
+        style={{
+          fontSize: "25px",
+          marginBottom: "15px",
+          fontWeight: "bold",
+          color: "#b8e3bf",
+        }}
+      >
+        고객센터로 문의주시면 친절히 답변해드리겠습니다.
+      </span>
       <QuestionSubtitle>
+        <br />
         <span
           style={{
             fontSize: "25px",
@@ -52,7 +63,6 @@ export const BoardQuestion = () => {
           전화: 010-6513-1458
         </span>
         <br />
-        고객센터로 문의주시면 친절히 답변해드리겠습니다.
       </QuestionSubtitle>
     </QuestionCampaign>
   );
