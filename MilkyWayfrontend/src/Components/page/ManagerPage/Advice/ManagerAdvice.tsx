@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { SelectBox } from "@/Components/Common/ui/Select/SelectBox";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
 import { RoomType } from "@/types/Room/RoomType";
-import { useState, useRef, useEffect, use } from "react";
+import { useState, useRef, useEffect } from "react";
 import plus from "@/Components/Common/assets/plus.png";
 import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,11 +17,10 @@ import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
-import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
 
 const MainBox = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #f3f4f6;
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Ensures space between content */
@@ -66,10 +65,6 @@ export const ManagerAdvice = () => {
       lastItemRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [count]);
-
-  useEffect(() => {
-    LoginCheck();
-  }, []);
 
   useEffect(() => {
     // if (beforefile.length !== 0) {
@@ -192,28 +187,28 @@ export const ManagerAdvice = () => {
                 style={{ gap: "20px" }}
               >
                 <SelectBox
-                  name={"청소 위치 (" + cleanspot[i] + ")"}
+                  name={"청소 위치(" + cleanspot[i] + ")"}
                   append={RoomType}
                   value={cleanspot[i]}
                   updateCleanspot={updateCleanspot}
                   Cleancount={i}
                 />
                 <FileTage
-                  name={"청소 이전 (" + cleanspot[i] + ")"}
+                  name={"청소 이전(" + cleanspot[i] + ")"}
                   Value={beforefile}
                   setBeforeValue={setbeforefile}
                   index={i}
                   type="before"
                 />
                 <FileTage
-                  name={"청소 이후 (" + cleanspot[i] + ")"}
+                  name={"청소 이후(" + cleanspot[i] + ")"}
                   Value={afferfile}
                   setAfferValue={setAfferfile}
                   index={i}
                   type="after"
                 />
                 <TextAreaBox
-                  name={"청소 후기 (" + cleanspot[i] + ")"}
+                  name={"청소 후기(" + cleanspot[i] + ")"}
                   place={"청소할 때 힘들었던 점이나 후기 글을 작성해주세요."}
                   index={i}
                   Value={Advice}

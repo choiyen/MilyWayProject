@@ -6,17 +6,18 @@ interface SelectBoxProps {
   place?: string;
   Value: string[] | string;
   setValue?: Dispatch<SetStateAction<string[]>>; // 수정된 부분
-  setValue2?: Dispatch<SetStateAction<string>>;
+  setValue2?: Dispatch<SetStateAction<string>> | ((value: string) => void);
   index?: number;
 }
 
 const InputText = styled.input`
-  width: 270px;
+  width: 300px;
   resize: none;
   padding: 12px 13px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   line-height: 16px;
+  border: 1px solid black;
 `;
 
 const TextAreaContainer = styled.div`

@@ -185,7 +185,6 @@ public class CommentController
     {
         try
         {
-            System.out.println(commentDeteteDTO);
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 String username = authentication.getName();  // 사용자 이름
                 BoardEntity boardEntity = boardService.FindByBoardId(commentDeteteDTO.getBoardId());
@@ -258,7 +257,7 @@ public class CommentController
     {
         try
         {
-            List<CommentEntity> commentEntities = commentService.FindByBoardId(BoardId);
+            List<CommentEntity> commentEntities = commentService.FindByBoardId(BoardId,true);
             List<CommentDTO> commentDTOS = new ArrayList<>();
             for(CommentEntity comment : commentEntities)
             {

@@ -88,15 +88,16 @@ public class CommentService
         }
 
     }
-    public List<CommentEntity> FindByBoardId(String EnCodingBoardId)
+    public List<CommentEntity> FindByBoardId(String EnCodingBoardId, boolean bool)
     {
         List<CommentEntity> commentEntities = new ArrayList<>(commentRepository.findByBoardId(EnCodingBoardId));
 
-        if(commentEntities.isEmpty())
+        if(bool == true && commentEntities.isEmpty())
         {
             throw new FindFailedException("데이터 조회에는 성공하였으나, 조회 결과가 없습니다.");
         }
-        else if(commentEntities != null)
+
+        if(commentEntities != null)
         {
             return commentEntities;
         }

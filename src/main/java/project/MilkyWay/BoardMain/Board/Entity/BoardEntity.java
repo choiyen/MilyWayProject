@@ -14,6 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
+@ToString
 public class BoardEntity
 {
     @Id

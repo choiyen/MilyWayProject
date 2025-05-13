@@ -17,6 +17,8 @@ import project.MilkyWay.BoardMain.Board.DTO.BoardDTO;
 
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
 import project.MilkyWay.BoardMain.Board.Service.BoardService;
+import project.MilkyWay.BoardMain.Comment.Entity.CommentEntity;
+import project.MilkyWay.BoardMain.Comment.Service.CommentService;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
@@ -35,6 +37,9 @@ public class BoardController
 {//1차 Test 완료
     @Autowired
     BoardService boardService;
+
+    @Autowired
+    CommentService commentService;
 
     private final ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<>();
 
@@ -141,9 +146,18 @@ public class BoardController
             System.out.println("현재 인증된 사용자: " + username);
 
             BoardEntity boardEntity = boardService.FindByBoardId(boardCheckDTO.getBoardId());
-            if(username == "anonymousUser" && boardEntity.getPassword().equals(boardEntity.getPassword()) == false)
+            if(username.equals("anonymousUser") && !boardEntity.getPassword().equals(boardCheckDTO.getPassword()))
             {
                 throw new RuntimeException("삭제를 위한 비밀번호를 다시 입력해주세요");
+            }
+            System.out.println(boardEntity);
+            List<CommentEntity> list = new ArrayList<>(commentService.FindByBoardId(boardEntity.getBoardId(), false));
+            if(!list.isEmpty())
+            {
+                for(CommentEntity comment : list)
+                {
+                    commentService.Delete(comment.getCommentId());
+                }
             }
 
             boolean bool = boardService.Delete(boardCheckDTO.getBoardId());

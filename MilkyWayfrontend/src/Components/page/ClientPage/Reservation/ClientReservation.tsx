@@ -1,9 +1,11 @@
-const ClientReservation = () => {
+import { BoardQuestion } from "../Question/page/ui/BoardQuestion";
+import ReservationMain from "./ReservationMain";
+
+export const ClientReservation = () => {
   return (
-    <>
-      <div>청소 에약과 관련된 페이지입니다.</div>
-    </>
+    <div>
+      <ReservationMain />
+      <BoardQuestion />
+    </div>
   );
 };
-
-export default ClientReservation;

@@ -1,7 +1,11 @@
 import { ManagerCommonPage } from "@/Components/Common/layouts/ManagerComonPage";
 import "./App.css";
 import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { ManagerAddress } from "@/Components/page/ManagerPage/Address/Components/ManagerAddress";
 import {
   ClientGateWayType,
@@ -22,13 +26,17 @@ import GlobalErrorBoundary from "@/Components/Common/errors/GlobalErrorBoundary"
 import { ClientComonPage } from "@/Components/Common/layouts/ClientComonPage";
 import { MainPage } from "@/Components/page/ClientPage/Main/MainPage";
 import ServiceProFile from "@/Components/page/ClientPage/Service/ServiceProFile";
-import ClientReservation from "@/Components/page/ClientPage/Reservation/ClientReservation";
 import ServiceIntroduction from "@/Components/page/ClientPage/Introduction/ServiceIntroduction";
 import { ClientQuestion } from "@/Components/page/ClientPage/Question/page/ClientQuestion";
 import ServiceInsert from "@/Components/page/ClientPage/Question/Board/ServiceInsert";
 import ServiceBoard from "@/Components/page/ClientPage/Question/Board/ServiceBoard";
+import { ClientReservation } from "@/Components/page/ClientPage/Reservation/ClientReservation";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigate to="/Client/home" replace />,
+  },
   {
     path: "/Manager",
     element: <ManagerCommonPage />,

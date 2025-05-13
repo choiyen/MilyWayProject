@@ -7,6 +7,7 @@ const initialReservationValue: ReservationType = {
   phone: "",
   Address: "",
   SubssionDate: "",
+  usableArea: "",
 };
 
 export const ReservationSlice = createSlice({

@@ -196,7 +196,7 @@ public class AdministrationController
                     @ApiResponse(responseCode = "404", description = "Address not found")
             }
     )
-    @PostMapping("/search")
+    @GetMapping("/search")
     public ResponseEntity<?> FindAdministration(HttpServletRequest request, @RequestParam String AdministrationId)
     {
         try
@@ -234,7 +234,7 @@ public class AdministrationController
                     @ApiResponse(responseCode = "404", description = "administration List not found")
             }
     )
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<?> FindAll()
     {
         try

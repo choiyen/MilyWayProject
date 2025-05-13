@@ -1,60 +1,100 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { DatePickerProps } from "react-datepicker";
+import "./path-to-your-css-file.css";
 
 interface SelectBoxProps {
   name: string;
-  change: string; // Date string format passed as prop (e.g., "2025-03-09")
+  change: string;
   setValue: (date: Date) => void;
+  bookedDates?: string[]; // 예약된 날짜 배열
 }
 
 const RadioBoxContainer = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  align-items: center; /* 수직 정렬 */
+  align-items: center;
   width: 500px;
   height: auto;
   margin-top: 20px;
 `;
 
 const Label = styled.span`
-  font-size: 20px; /* 글씨 크기 조정 */
+  font-size: 20px;
   line-height: 16px;
   font-weight: bolder;
   margin-right: 80px;
 `;
 
-const DateInput = styled.input`
-  width: 200px;
+const DateInput = styled(
+  DatePicker as unknown as React.ComponentType<DatePickerProps>
+)`
+  width: 300px;
   height: 50px;
+  border: 1px solid black;
 `;
 
-export const SelectDate = ({ name, change, setValue }: SelectBoxProps) => {
-  const [date, setDate] = useState<Date>(new Date()); // 초기 상태를 현재 날짜로 설정
+export const SelectDate = ({
+  name,
+  change,
+  setValue,
+  bookedDates = [],
+}: SelectBoxProps) => {
+  const [date, setDate] = useState<Date | null>(null);
+
+  // 예약된 날짜 문자열을 Date 객체 배열로 변환
+  const disabledDates = bookedDates.map((dateStr) => {
+    const d = new Date(dateStr);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d;
+  });
 
   useEffect(() => {
     if (change) {
       const dateObj = new Date(change);
-
-      // 날짜가 로컬 시간대로 설정되도록 시간대 차이를 조정
-      dateObj.setMinutes(dateObj.getMinutes() - dateObj.getTimezoneOffset()); // 로컬 시간대로 맞추기
-
-      setDate(dateObj); // 변경된 날짜를 state로 설정
+      dateObj.setMinutes(dateObj.getMinutes() - dateObj.getTimezoneOffset());
+      setDate(dateObj);
     }
-  }, [change]); // 'change' prop이 변경될 때마다 effect 실행
+  }, [change]);
 
-  // 날짜를 YYYY-MM-DD 형식으로 변환
-  const dateString = date.toISOString().split("T")[0];
+  // ✅ 단일 날짜만 받도록 타입 정의
+  const handleDateChange = (date: Date | null) => {
+    if (date && !Array.isArray(date)) {
+      setDate(date);
+      setValue(date);
+    }
+  };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(new Date(e.target.value)); // 날짜가 변경되면 상태 업데이트
-    setValue(new Date(e.target.value));
+  // 날짜의 색상 클래스 이름을 설정하는 함수
+  const getDayClassName = (date: Date) => {
+    const day = date.getDay();
+
+    // 일요일은 빨강, 토요일은 파랑, 평일은 녹색
+    if (day === 0) {
+      return "react-datepicker__day--sunday"; // 일요일 빨강
+    } else if (day === 6) {
+      return "react-datepicker__day--saturday"; // 토요일 파랑
+    } else {
+      return "react-datepicker__day--available"; // 평일 녹색
+    }
   };
 
   return (
     <RadioBoxContainer>
       <Label>{name}</Label>
-      <DateInput type="date" value={dateString} onChange={handleDateChange} />
+      <DateInput
+        selected={date}
+        onChange={handleDateChange}
+        excludeDates={disabledDates}
+        dateFormat="yyyy-MM-dd"
+        placeholderText="날짜를 선택하세요"
+        popperPlacement="bottom-start"
+        portalId="root-portal"
+        dayClassName={(date) => getDayClassName(date)} // 날짜에 따른 색상 설정
+      />
     </RadioBoxContainer>
   );
 };

@@ -21,11 +21,11 @@ const Select = styled.select`
 const SelectContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 20px;
   align-items: center; /* 수직 정렬 */
   width: 500px;
   height: auto;
   margin-top: 20px;
+  gap: 52px;
 `;
 
 const Label = styled.span`
