@@ -1,0 +1,19 @@
+/* 일요일 밝은 빨강 */
+.react-datepicker__day--sunday {
+  color: red !important; /* 밝은 빨강 */
+}
+
+/* 토요일 밝은 파랑 */
+.react-datepicker__day--saturday {
+  color: blue !important; /* 밝은 파랑 */
+}
+
+/* 선택 가능한 날짜는 밝은 녹색 */
+.react-datepicker__day--available {
+  color: #98fb98 !important; /* 밝은 녹색 */
+}
+
+/* 선택 불가능한 날짜는 밝은 회색 */
+.react-datepicker__day--disabled {
+  color: blueviolet !important; /* 밝은 회색 */
+}
