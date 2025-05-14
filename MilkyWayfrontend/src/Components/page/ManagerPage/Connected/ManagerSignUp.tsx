@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Fontname } from "@/SCSS/Fixed";
 import { setSignData } from "@/config/request/ReduxList/usersign";
 import { POST } from "@/config/request/axios/axiosInstance";
@@ -10,6 +10,7 @@ import { paths } from "@/config/paths/paths";
 import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
+import { RootState } from "@/config/reduxstore";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -32,7 +33,7 @@ const MangerPage = styled.div`
   width: 100%;
   max-width: 600px;
   height: 500px;
-  background-color: #f7f5dc;
+  background-color: #f3f4f6;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
@@ -88,30 +89,19 @@ const MangerButton = styled.button`
 
 export const ManagerSignUp = () => {
   const dispatch = useDispatch();
-
-  const [IdState, setIdState] = useState("");
-  const [PasswordState, setPasswordState] = useState("");
-  const [emailState, setEmailState] = useState("");
   const navigate = useNavigate();
+  const SignUPData = useSelector((state: RootState) => state.usersign.value);
   useEffect(() => {
     LoginCheck();
   }, []);
   const handleSignup = async () => {
-    dispatch(
-      setSignData({
-        userId: IdState,
-        password: PasswordState,
-        email: emailState,
-      })
-    );
-
     try {
       await POST({
         url: paths.Certification.basic.path,
         data: {
-          userId: IdState,
-          password: PasswordState,
-          email: emailState,
+          userId: SignUPData.userId,
+          password: SignUPData.password,
+          email: SignUPData.email,
         },
       });
       alert("회원가입 성공!");
@@ -133,20 +123,26 @@ export const ManagerSignUp = () => {
           <MangerInput
             type="text"
             placeholder="아이디를 입력해주세요"
-            value={IdState}
-            onChange={(e) => setIdState(e.target.value)}
+            value={SignUPData.userId}
+            onChange={(e) =>
+              dispatch(setSignData({ ...SignUPData, userId: e.target.value }))
+            }
           />
           <MangerInput
             type="password"
             placeholder="비밀번호를 입력해주세요"
-            value={PasswordState}
-            onChange={(e) => setPasswordState(e.target.value)}
+            value={SignUPData.password}
+            onChange={(e) =>
+              dispatch(setSignData({ ...SignUPData, password: e.target.value }))
+            }
           />
           <MangerInput
             type="email"
             placeholder="이메일을 입력해주세요"
-            value={emailState}
-            onChange={(e) => setEmailState(e.target.value)}
+            value={SignUPData.email}
+            onChange={(e) =>
+              dispatch(setSignData({ ...SignUPData, email: e.target.value }))
+            }
           />
           <MangerButton onClick={handleSignup}>회원가입</MangerButton>
         </MangerPage>

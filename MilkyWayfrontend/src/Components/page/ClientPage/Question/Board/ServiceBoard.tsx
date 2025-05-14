@@ -10,7 +10,6 @@ import { setSession } from "@/config/request/ReduxList/useauthSlice";
 import { DELETE, GET, POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { CommentValueType } from "@/types/Feature/Boards/Comment";
-import path from "path";
 
 interface Commit {
   commentId: number;
@@ -74,6 +73,7 @@ const ServiceBoard = () => {
           boardId: res.data[0].boardId,
           title: res.data[0].title,
           content: res.data[0].content,
+          password: res.data[0].password,
         });
       });
 

@@ -31,14 +31,10 @@ const MainBox = styled.div`
 `;
 
 export const ManagerAddress = () => {
-  const [Saleable, SetSaleable] = useState("");
-  const [Name, SetName] = useState("");
-  const [Phone, SetPhone] = useState("");
   const [Address, SetAddress] = useState("");
   const [AddressDetail, SetAddressDetail] = useState("");
   const today = new Date();
   const [Reservation, SetReservation] = useState<Value>(today);
-  const [cleaning, setcleaning] = useState("주거청소");
   const dispatch = useDispatch();
   const native = useNavigate();
   const AddressData = useSelector((state: RootState) => {
@@ -64,28 +60,11 @@ export const ManagerAddress = () => {
   useEffect(() => {
     dispatch(
       setAddressData({
-        customer: Name,
-        phoneNumber: Phone,
+        ...AddressData,
         address: Address + " " + AddressDetail,
-        submissionDate:
-          Reservation instanceof Date
-            ? Reservation.toLocaleDateString("sv-SE").split("T")[0]
-            : "",
-        acreage: Saleable,
-        cleanType: cleaning,
-        addressId: "",
       })
     );
-  }, [
-    Address,
-    AddressDetail,
-    Name,
-    Phone,
-    Reservation,
-    Saleable,
-    cleaning,
-    dispatch,
-  ]);
+  }, [Address, AddressDetail, dispatch]);
 
   return (
     <div>
@@ -96,17 +75,25 @@ export const ManagerAddress = () => {
             <SelectBox
               name={"서비스명"}
               append={cleanType}
-              setValue={setcleaning}
+              setValue={(value: string) => {
+                dispatch(setAddressData({ ...AddressData, cleanType: value }));
+              }}
             ></SelectBox>
             <InputTextBox
               name={"이름"}
-              Value={Name}
-              setValue2={SetName}
+              Value={AddressData.customer}
+              setValue2={(value: string) => {
+                dispatch(setAddressData({ ...AddressData, customer: value }));
+              }}
             ></InputTextBox>
             <InputTextBox
               name={"연락처"}
-              Value={Phone}
-              setValue2={SetPhone}
+              Value={AddressData.phoneNumber}
+              setValue2={(value: string) => {
+                dispatch(
+                  setAddressData({ ...AddressData, phoneNumber: value })
+                );
+              }}
             ></InputTextBox>
             <InputTextBox
               name={"주소"}
@@ -120,13 +107,28 @@ export const ManagerAddress = () => {
             ></InputTextBox>
             <InputTextBox
               name={"분양실평수"}
-              Value={Saleable}
-              setValue2={SetSaleable}
+              Value={AddressData.acreage || ""}
+              setValue2={(value: string) => {
+                dispatch(setAddressData({ ...AddressData, acreage: value }));
+              }}
             ></InputTextBox>
             <NewCalendar
               name={"예약 날짜"}
               Value={Reservation}
-              setValue={SetReservation}
+              setValue={(value: Value | ((prevState: Value) => Value)) => {
+                const newValue =
+                  value instanceof Function ? value(Reservation) : value;
+                SetReservation(newValue);
+                dispatch(
+                  setAddressData({
+                    ...AddressData,
+                    submissionDate:
+                      newValue instanceof Date
+                        ? newValue.toLocaleDateString("sv-SE").split("T")[0]
+                        : "",
+                  })
+                );
+              }}
             ></NewCalendar>
             {/* 아직 캘린더 CSS 적용 안됨, 디자인 검토 후 추가할 예정 */}
           </Wapper>

@@ -22,7 +22,6 @@ const store = configureStore({
     NoticeDetail: NoticeDetailReducer,
     Inqurle: InqurleReducer,
     Board: BoardReducer,
-    Comment: CommentReducer,
     Administration: AdministrationReducer,
     Address: AddressReducer,
     auth: authReducer,

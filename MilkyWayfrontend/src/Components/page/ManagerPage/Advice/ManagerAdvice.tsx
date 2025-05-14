@@ -67,14 +67,6 @@ export const ManagerAdvice = () => {
   }, [count]);
 
   useEffect(() => {
-    // if (beforefile.length !== 0) {
-    //   if (typeof beforefile[0][0] === "string") {
-    //     setTitleimg(
-    //       new File([beforefile[0][0]], "filename.txt", { type: "text/plain" })
-    //     );
-    //   }
-    // }
-
     dispatch(
       setNoticeData({
         title: title,
@@ -84,19 +76,6 @@ export const ManagerAdvice = () => {
       })
     );
   }, [dispatch, greeting, title, type]);
-
-  // console.log(cleanspot);
-  // for (let i = 0; i < cleanspot.length; i++) {
-  //   AdviceData.push({
-  //     direction: cleanspot[i],
-  //     beforeURL: beforefile[i],
-  //     afterURL: afferfile[i],
-  //     Advice: Advice[i],
-  //   });
-  // }
-
-  // console.log("AdviceData", AdviceData);
-  // // dispatch(setNoticeDetailData(AdviceData));
 
   useEffect(() => {
     console.log("beforefile 상태:", beforefile);

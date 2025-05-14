@@ -1,21 +1,26 @@
-import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
-import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
 import { paths } from "@/config/paths/paths";
+import { RootState } from "@/config/reduxstore";
 import { POST } from "@/config/request/axios/axiosInstance";
+import { setBoardData } from "@/config/request/ReduxList/BoardReducer";
 import "@/SCSS/tailwind.scss";
 import { GateWayNumber } from "@/types/GateWay/GateWayType";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const ServiceInsert = () => {
-  const [title, settitle] = useState<string>("");
-  const [commit, setcommit] = useState<string>("");
   const [password, setpassword] = useState<string>("");
   const [Check, setCheck] = useState<string>("");
   const nativeGate = useNavigate();
-
+  const dispatch = useDispatch();
+  const BoardData = useSelector((state: RootState) => state.Board.value);
   const checkEmptyFields = () => {
-    if (title === "" || commit === "" || password === "" || Check === "") {
+    if (
+      BoardData.title === "" ||
+      BoardData.content === "" ||
+      password === "" ||
+      Check === ""
+    ) {
       alert("입력되지 않은 데이터가 존재합니다. 다시 확인해주세요.");
       return false;
     }
@@ -26,12 +31,13 @@ const ServiceInsert = () => {
   const handleBoard = async () => {
     if (checkEmptyFields()) {
       if (password === Check) {
+        dispatch(setBoardData({ ...BoardData, password: password }));
         await POST({
           url: paths.forum.Board.basic.path,
           data: {
-            title: title,
-            content: commit,
-            password: password,
+            title: BoardData.title,
+            content: BoardData.content,
+            password: BoardData.password,
           },
         }).then((res) => {
           if (res.resultType === "success") {
@@ -77,10 +83,12 @@ const ServiceInsert = () => {
             <input
               id="title"
               type="text"
-              value={title}
+              value={BoardData.title}
               placeholder="제목을 입력하세요"
               className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onChange={(e) => settitle(e.target.value)}
+              onChange={(e) =>
+                dispatch(setBoardData({ ...BoardData, title: e.target.value }))
+              }
             />
           </div>
           <div className="flex items-center">
@@ -125,10 +133,14 @@ const ServiceInsert = () => {
             </label>
             <textarea
               id="commit"
-              value={commit}
+              value={BoardData.content}
               placeholder="질문 내용을 입력하세요"
               className="flex-1 h-60 border border-gray-300 rounded-md px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onChange={(e) => setcommit(e.target.value)}
+              onChange={(e) =>
+                dispatch(
+                  setBoardData({ ...BoardData, content: e.target.value })
+                )
+              }
             />
           </div>
         </div>

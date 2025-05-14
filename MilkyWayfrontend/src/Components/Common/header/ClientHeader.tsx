@@ -11,6 +11,7 @@ import {
 } from "@/types/GateWay/GateWayType";
 import broom from "@/Components/Common/assets/broom.png";
 import { ComonProfile } from "@/Components/page/ClientPage/Comon/ComonProfile";
+import { Head } from "../frame/header";
 
 // Header styles
 const HeaderBox = styled.div`
@@ -208,6 +209,7 @@ export const ClientHeader = () => {
 
   return (
     <div>
+      <Head title={activeButton} description="은하수 홈케어" />
       <HeaderBox>
         <div style={{ display: "flex", alignItems: "center" }}>
           <img

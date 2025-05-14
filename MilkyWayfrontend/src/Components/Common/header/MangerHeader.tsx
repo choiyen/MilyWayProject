@@ -21,6 +21,7 @@ import {
 } from "@/config/request/ReduxList/useauthSlice";
 import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
+import { Head } from "../frame/header";
 // Header styles
 const HeaderBox = styled.div`
   width: 100%;
@@ -288,6 +289,7 @@ export const MangerHeader = () => {
 
   return (
     <div>
+      <Head title={activeButton} description="은하수 홈케어" />
       <HeaderBox>
         <div style={{ display: "flex", alignItems: "center" }}>
           <img

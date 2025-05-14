@@ -1,15 +1,15 @@
-import { useState } from "react";
 import styled from "styled-components";
 // 예시: MangerHeader를 named import 방식으로 가져오기
 import { Fontname } from "@/SCSS/Fixed";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
-import { login } from "@/config/request/ReduxList/userlogin";
 import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { setSession } from "@/config/request/ReduxList/useauthSlice";
 import { checkSession } from "@/config/request/axios/util";
+import { RootState } from "@/config/reduxstore";
+import { login } from "@/config/request/ReduxList/userlogin";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -25,7 +25,7 @@ const MangerPage = styled.div`
   width: 100%;
   max-width: 600px;
   height: 500px;
-  background-color: #f7f5dc;
+  background-color: #f3f4f6;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
@@ -82,17 +82,17 @@ const MangerButton = styled.button`
 export const ManagerMain = () => {
   const dispatch = useDispatch();
 
-  const [IdState, setIdState] = useState("");
-  const [PasswordState, setPasswordState] = useState("");
   const navigate = useNavigate();
+  const LoginSelector = useSelector(
+    (state: RootState) => state.userlogin.value
+  );
 
   const handleLogin = async () => {
-    dispatch(login({ userId: IdState, password: PasswordState }));
     await POST({
       url: paths.Certification.login.path,
       data: {
-        userId: IdState,
-        password: PasswordState,
+        userId: LoginSelector.userId,
+        password: LoginSelector.password,
       },
     })
       .then((res) => {
@@ -123,14 +123,18 @@ export const ManagerMain = () => {
           <MangerInput
             type="text"
             placeholder="아이디를 입력해주세요"
-            value={IdState}
-            onChange={(e) => setIdState(e.target.value)}
+            value={LoginSelector.userId}
+            onChange={(e) =>
+              dispatch(login({ ...LoginSelector, userId: e.target.value }))
+            }
           />
           <MangerInput
             type="password"
             placeholder="비밀번호를 입력해주세요"
-            value={PasswordState}
-            onChange={(e) => setPasswordState(e.target.value)}
+            value={LoginSelector.password}
+            onChange={(e) =>
+              dispatch(login({ ...LoginSelector, password: e.target.value }))
+            }
           />
           <MangerButton onClick={handleLogin}>로그인</MangerButton>
           <Link
