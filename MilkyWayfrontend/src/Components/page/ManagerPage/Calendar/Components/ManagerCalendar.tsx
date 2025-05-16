@@ -9,7 +9,7 @@ import { CalendarGrid } from "../ui/CalendarGrid";
 import { ScheduleInfo } from "../ui/ScheduleInfo";
 import { ScheduleModal } from "../ui/ScheduleModal";
 import { LastButton } from "@/SCSS/Fixed";
-import { GET } from "@/config/request/axios/axiosInstance";
+import { GET, POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 
 export const ManagerCalendar = () => {
@@ -25,7 +25,7 @@ export const ManagerCalendar = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await GET({
+      await POST({
         url: paths.Administration.search.path,
       }).then((res) => {
         setAdmintration(res.data);

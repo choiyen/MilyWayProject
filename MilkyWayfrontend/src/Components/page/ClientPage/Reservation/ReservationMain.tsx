@@ -97,9 +97,9 @@ const ReservationMain = () => {
   };
 
   const handleClickReservation = () => {
-    for (const [key, value] of Object.entries(consents)) {
+    for (const [, value] of Object.entries(consents)) {
       if (!value) {
-        alert(`${key} 항목에 대한 동의가 필요합니다.`);
+        alert(`개인정보에 대한 동의가 필요합니다.`);
         return;
       }
     }
@@ -107,13 +107,33 @@ const ReservationMain = () => {
     if (
       !reservationData.name ||
       !reservationData.phone ||
-      !reservationData.Address
+      !Address ||
+      !AddressDetail ||
+      !reservationData.SubssionDate ||
+      !reservationData.type ||
+      !reservationData.acreage
     ) {
       alert("필수 입력값이 누락되었습니다.");
       return;
     }
+  };
 
-    alert("예약이 완료되었습니다!");
+  const handlePost = async () => {
+    handleClickReservation();
+
+    POST({
+      url: paths.reserve.basic.path,
+      data: {
+        name: reservationData.name,
+        phone: reservationData.phone,
+        address: reservationData.Address,
+        subissionDate: reservationData.SubssionDate,
+        acreage: reservationData.acreage,
+        type: reservationData.type,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
   };
 
   return (
@@ -153,9 +173,9 @@ const ReservationMain = () => {
       <SelectBox
         name={"서비스명"}
         append={cleanType}
-        value={reservationData.acreage}
+        value={reservationData.type}
         setValue={(value: string) =>
-          dispatch(setReservationData({ ...reservationData, acreage: value }))
+          dispatch(setReservationData({ ...reservationData, type: value }))
         }
       />
       <InputTextBox
@@ -175,11 +195,9 @@ const ReservationMain = () => {
       <div>
         <InputTextBox
           name={"실제 평수"}
-          Value={reservationData.usableArea}
+          Value={reservationData.acreage}
           setValue2={(value: string) =>
-            dispatch(
-              setReservationData({ ...reservationData, usableArea: value })
-            )
+            dispatch(setReservationData({ ...reservationData, acreage: value }))
           }
         />
         <div className="text-red-600">[아파트 외 전용 및 실평수 기재]</div>
@@ -191,7 +209,7 @@ const ReservationMain = () => {
         Value={AddressDetail}
         setValue2={setAddressDetail}
       />
-      <LastButton onClick={handleClickReservation}>예약 신청</LastButton>
+      <LastButton onClick={handlePost}>예약 신청</LastButton>
 
       {isModalOpen && (
         <PrivacyConsentModal

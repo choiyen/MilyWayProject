@@ -6,6 +6,7 @@ export type CommentValueType = {
   type: (typeof commentType)[number];
   comment: string;
   password: string;
+  createdAt?: string; // 추가
 };
 export const CommentDummy: CommentValueType[] = [
   {

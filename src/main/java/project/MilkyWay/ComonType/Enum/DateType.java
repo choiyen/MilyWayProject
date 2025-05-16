@@ -2,7 +2,7 @@ package project.MilkyWay.ComonType.Enum;
 
 public enum DateType
 {
-    업무, 휴일, 연가
+    업무, 휴일, 연가, 예약
 }
 
 /*

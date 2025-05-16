@@ -2,6 +2,7 @@ package project.MilkyWay.BoardMain.Comment.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Objects;
 
@@ -24,6 +25,13 @@ public class CommentEntity
     private String type; // 관리자인지, 사용자인지?
     @Column(name = "comment", nullable = false)
     private String comment; // 댓글을 저장하기 위한 변수
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private java.util.Date createdAt;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

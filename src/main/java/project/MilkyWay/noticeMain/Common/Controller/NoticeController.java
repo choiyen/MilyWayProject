@@ -138,6 +138,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     {
         try
         {
+            System.out.println(noticeJsonDTO);
             if(loginSuccess.isSessionExist(request))
             {
                 NoticeEntity oldnotice = noticeService.findNoticeId(noticeJsonDTO.getNoticeDTO().getNoticeId());
@@ -188,7 +189,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                             .stream()
                             .filter(entity -> !excludeIds.contains(entity.getNoticeDetailId()))  // 제외 조건
                         .collect(Collectors.toList());  // 필터링 후 새로운 리스트 생성;
-                    boolean bool = false;
+                    boolean bool = true;
                     for(NoticeDetailEntity noticeDetail : noticeDetailEntity)
                     {
                        bool= noticeDetailService.DeleteToNoticeDetail(noticeDetail.getNoticeDetailId());

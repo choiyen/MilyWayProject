@@ -1,5 +1,6 @@
 package project.MilkyWay.BoardMain.Comment.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,9 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import project.MilkyWay.ComonType.Enum.EnumValue;
 import project.MilkyWay.ComonType.Enum.UserType;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Getter
@@ -43,5 +47,9 @@ public class CommentDTO
     @Schema(description = "관리자를 제어하기 위한 비밀번호", example = "asdZXC@123")
     @JsonProperty("password")
     private String password;
+
+    @Schema(description = "댓글 작성 시간", example = "2024-05-15T14:30:00")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private Date createdAt;
 
 }

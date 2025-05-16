@@ -2,6 +2,8 @@ import { SmallButton } from "@/SCSS/Fixed";
 import { AddressType } from "@/types/Feature/Address/AddressType";
 import { AdministrationType } from "@/types/Feature/Address/Adminstration";
 import { administrationDeletefetchData } from "../api/Dayutil";
+import { useEffect } from "react";
+import ReservationFind from "../Components/ReservationFind";
 
 interface ScheduleInfoProps {
   date: Date | null;
@@ -35,7 +37,7 @@ export const ScheduleInfo = ({
 
       return (
         itemDate.toDateString() === date.toDateString() &&
-        item.adminstrationType === "휴일"
+        (item.adminstrationType === "휴일" || item.adminstrationType === "예약")
       );
     }) || [];
 
@@ -43,6 +45,10 @@ export const ScheduleInfo = ({
     await administrationDeletefetchData(id);
     await fetchData(); // 상태 갱신
   };
+
+  useEffect(() => {
+    console.log(matched);
+  }, []);
 
   return (
     <div className="mt-6 w-full">
@@ -83,14 +89,26 @@ export const ScheduleInfo = ({
                 {item.administrationDate}
               </span>
             </p>
-            <p className="text-md">
-              관리자 님께서 {item.adminstrationType}로 지정해놓으신 날입니다.
-            </p>
-            <SmallButton
-              onClick={() => handleAdminDelete(item.administrationId ?? "")}
-            >
-              휴일 삭제
-            </SmallButton>
+            {item.adminstrationType == "휴일" ? (
+              <div>
+                <p className="text-md">
+                  관리자 님께서 {item.adminstrationType}로 지정해놓으신
+                  날입니다.
+                </p>
+                <SmallButton
+                  onClick={() => handleAdminDelete(item.administrationId ?? "")}
+                >
+                  휴일 삭제
+                </SmallButton>
+              </div>
+            ) : (
+              <div>
+                <p className="text-md">
+                  고객 님의 예약이 들어온 날짜이니 확인 부탁드립니다.
+                </p>
+                <ReservationFind selectDate={item.administrationDate} />
+              </div>
+            )}
           </div>
         ))
       ) : (

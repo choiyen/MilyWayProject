@@ -16,6 +16,7 @@ interface Commit {
   type: string;
   comment: string;
   password: string;
+  createdAt?: string; // 추가
 }
 
 const ServiceBoard = () => {
@@ -65,8 +66,6 @@ const ServiceBoard = () => {
   useEffect(() => {
     const boardId = param.BoardId;
     if (boardId) {
-      // const filtered = BoardDummy.filter((state) => state.boardId === boardId);
-      // setDummy(filtered[0]);
       BoardPOST(boardId).then((res) => {
         console.log(res.data[0]);
         setDummy({
@@ -79,12 +78,25 @@ const ServiceBoard = () => {
 
       CommentPOST(boardId).then((res) => {
         console.log(res.data);
-        for (const data of res.data) {
-          setCommit((prev) => [...(prev || []), data]);
-        }
+        setCommit(res.data); // 전체 배열을 한 번에 상태에 넣음
       });
     }
   }, [param]);
+
+  const DateUpdate = (isoString: string) => {
+    const date = new Date(isoString);
+    console.log("현재 날짜 :" + isoString);
+    const formatted =
+      `${date.getFullYear()}년 ${String(date.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}월 ${String(date.getDate()).padStart(2, "0")}일 ` +
+      `${String(date.getHours()).padStart(2, "0")}시 ${String(
+        date.getMinutes()
+      ).padStart(2, "0")}분 ${String(date.getSeconds()).padStart(2, "0")}초`;
+
+    return formatted;
+  };
 
   const handleInput = () => {
     const inputCommit = ref1.current ? ref1.current.value : "";
@@ -92,8 +104,8 @@ const ServiceBoard = () => {
 
     console.log(authSlice.isAuthenticated);
     let comment: CommentValueType;
-    if (inputCommit != "" && password != "") {
-      if (authSlice.isAuthenticated == true) {
+    if (inputCommit !== "" && password !== "") {
+      if (authSlice.isAuthenticated === true) {
         comment = {
           boardId: param.BoardId || "",
           comment: inputCommit,
@@ -133,10 +145,11 @@ const ServiceBoard = () => {
         setCommit((prev) => [
           ...(prev || []),
           {
-            commentId: Number(input.commentId) || 0, // Ensure `comentid` is always a number
+            commentId: Number(input.commentId) || 0, // Ensure commentId is number
             type: input.type,
             comment: input.comment,
             password: input.password,
+            createdAt: new Date().toISOString(),
           },
         ]);
       } else {
@@ -150,6 +163,7 @@ const ServiceBoard = () => {
     console.log(code);
     setdeleteid(code);
   };
+
   const handleInputdelete = async () => {
     const password = ref1.current?.value;
     const password2 = ref2.current?.value;
@@ -261,21 +275,33 @@ const ServiceBoard = () => {
               {commit.map((item, index) => (
                 <div
                   key={index}
-                  className="border-b pb-3 last:border-none text-gray-700 flex gap-10"
+                  className={`group p-4 rounded-lg shadow-sm border relative ${
+                    item.type === "관리자"
+                      ? "bg-blue-50 border-blue-200"
+                      : "bg-gray-50 border-gray-200"
+                  }`}
                 >
-                  <div className="text-sm text-gray-500">{item.type}</div>
-                  <div className="text-sm">{item.comment}</div>
-                  <button
-                    onClick={() => {
-                      if (item.type === "고객") {
-                        handCommentDelete(item.commentId);
-                      } else {
-                        alert("관리자가 남긴 댓글을 삭제할 수 없습니다.");
-                      }
-                    }}
-                  >
-                    버튼
-                  </button>
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-sm font-semibold text-gray-700">
+                      {item.type}
+                    </span>
+                    {item.type === "고객" ? (
+                      <button
+                        onClick={() => handCommentDelete(item.commentId)}
+                        className="text-xs text-red-500 hover:underline opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      >
+                        삭제
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-400">삭제불가</span>
+                    )}
+                  </div>
+                  <div className="text-sm text-gray-800">{item.comment}</div>
+                  <div className="flex justify-end">
+                    <div className="text-sm text-gray-800">
+                      {item.createdAt ? DateUpdate(item.createdAt) : ""}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

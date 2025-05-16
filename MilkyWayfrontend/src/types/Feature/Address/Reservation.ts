@@ -5,5 +5,5 @@ export type ReservationType = {
   phone: string;
   Address: string;
   SubssionDate: string;
-  usableArea: string;
+  type: string;
 };

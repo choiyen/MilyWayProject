@@ -28,41 +28,49 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
     public ReservationEntity SelectAdminstrationID(String AdiminstrationId)
     {
         ReservationEntity reservationEntity = reservationMapper.findByAdministrationId(AdiminstrationId);
-        if(reservationEntity != null)
-        {
             return reservationEntity;
-        }
-        else
-        {
-            throw new FindFailedException("그 AdiminstrationId에 해당하는 예약 정보를 찾을 수 없습니다.");
-        }
+
     }
 
     public ReservationEntity InsertReservation(ReservationEntity reservationEntity)
     {
 
-        boolean bool = administrationService.exists(reservationEntity.getAdministrationId());
-        if(bool)
+        AdministrationEntity administration = administrationService.FindByAdministrationDate(reservationEntity.getSubissionDate());
+        ReservationEntity reservationEntity1;
+        if(administration!= null)
         {
-            AdministrationEntity administrationEntity = administrationService.FindByAdministration(reservationEntity.getAdministrationId());
-            if(administrationEntity.getAdminstrationType() == DateType.업무 ||administrationEntity.getAdminstrationType() == DateType.연가)
+            if(administration.getAdminstrationType() == DateType.업무 ||administration.getAdminstrationType() == DateType.연가)
             {
                 throw new FindFailedException("다른 일정이 있어서 일정 추가가 반려되었습니다.");
             }
+            else if(administration.getAdminstrationType() == DateType.예약)
+            {
+                throw new FindFailedException("이미 다른 사람이 예약한 날짜입니다. 다른 날짜를 선택해주세요");
+            }
             else
             {
-                if(!administrationEntity.getAdministrationDate().equals(reservationEntity.getSubissionDate()))
+                if(!administration.getAdministrationDate().equals(reservationEntity.getSubissionDate()))
                 {
-                    throw new FindFailedException("관련 일정 데이터를 찾았으나, 일정 데이터의 날짜인 " + administrationEntity.getAdministrationDate() + "와 예약하려는 날짜 데이터의 날짜인 " + reservationEntity.getSubissionDate() + "가 서로 다른 것 같습니다. 확인해주세요");
+                    throw new FindFailedException("관련 일정 데이터를 찾았으나, 일정 데이터의 날짜인 " + administration.getAdministrationDate() + "와 예약하려는 날짜 데이터의 날짜인 " + reservationEntity.getSubissionDate() + "가 서로 다른 것 같습니다. 확인해주세요");
                 }
                 else
                 {
                     AdministrationEntity administrationEntity2 = AdministrationEntity.builder()
-                            .administrationId(reservationEntity.getAdministrationId())
-                            .adminstrationType(DateType.업무)
-                            .administrationDate(reservationEntity.getSubissionDate())
+                            .administrationId(administration.getAdministrationId())
+                            .adminstrationType(DateType.예약)
+                            .administrationDate(administration.getAdministrationDate())
                             .build();
                     administrationService.Update(administrationEntity2);
+                    reservationEntity1 = ReservationEntity.builder()
+                            .type(reservationEntity.getType())
+                            .reservationId(reservationEntity.getReservationId())
+                            .acreage(reservationEntity.getReservationId())
+                            .administrationId(administration.getAdministrationId())
+                            .address(reservationEntity.getAddress())
+                            .name(reservationEntity.getName())
+                            .phone(reservationEntity.getPhone())
+                            .subissionDate(reservationEntity.getSubissionDate())
+                            .build();
                 }
             }
         }
@@ -70,24 +78,38 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         {
             AdministrationEntity administrationEntity = AdministrationEntity.builder()
                     .administrationId(reservationEntity.getAdministrationId())
-                    .adminstrationType(DateType.업무)
+                    .adminstrationType(DateType.예약)
                     .administrationDate(reservationEntity.getSubissionDate())
                     .build();
             administrationService.insert(administrationEntity);
+            reservationEntity1 = ReservationEntity.builder()
+                    .type(reservationEntity.getType())
+                    .reservationId(reservationEntity.getReservationId())
+                    .acreage(reservationEntity.getReservationId())
+                    .administrationId(reservationEntity.getAdministrationId())
+                    .address(reservationEntity.getAddress())
+                    .name(reservationEntity.getName())
+                    .phone(reservationEntity.getPhone())
+                    .subissionDate(reservationEntity.getSubissionDate())
+                    .build();
+
         }
-        try {
-            reservationMapper.Insert(reservationEntity);
+        try
+        {
+            System.out.println(administration);
+            System.out.println(reservationEntity1);
+            reservationMapper.Insert(reservationEntity1);
         }
         catch (Exception e)
         {
             administrationService.Delete(reservationEntity.getAdministrationId());
-            throw new FindFailedException("Insert 도중에 알 수 없는 오류가 발생함, 확인 바람");
+            throw new FindFailedException(e.getMessage() + reservationEntity.getType());
         }
 
-        ReservationEntity reservationEntity1 = reservationMapper.findByReservationId(reservationEntity.getReservationId());
-        if(reservationEntity1 != null)
+        ReservationEntity reservationEntity2 = reservationMapper.findByReservationId(reservationEntity.getReservationId());
+        if(reservationEntity2 != null)
         {
-            return reservationEntity1;
+            return reservationEntity2;
         }
         else
         {
@@ -193,6 +215,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
                 .address(newReservation.getAddress())
                 .phone(newReservation.getPhone())
                 .reservationId(OldReservation.getReservationId())
+                .type(newReservation.getType())
                 .build();
     }
 }

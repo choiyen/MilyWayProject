@@ -286,6 +286,7 @@ public class CommentController
                 .commentId(comment.getCommentId())
                 .boardId(comment.getBoardId())
                 .comment(comment.getComment())
+                .createdAt(comment.getCreatedAt())
                 .build();
     }
 
@@ -296,6 +297,7 @@ public class CommentController
                 .commentId(commentDTO.getCommentId())
                 .boardId(commentDTO.getBoardId())
                 .comment(commentDTO.getComment())
+                .createdAt(commentDTO.getCreatedAt())
                 .build();
     }
     private CommentEntity ConvertToCommentEntity(@Valid CommentDTO commentDTO, String provider)
@@ -305,6 +307,7 @@ public class CommentController
                 .commentId(commentDTO.getCommentId())
                 .boardId(commentDTO.getBoardId())
                 .comment(commentDTO.getComment())
+                .createdAt(commentDTO.getCreatedAt())
                 .build();
     }
 }

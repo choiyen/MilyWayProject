@@ -20,7 +20,7 @@ import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 
 const MainBox = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #f3f4f6;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -76,10 +76,6 @@ const ManagerAdviceedit = () => {
   const lastItemRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
   const navigator = useNavigate();
-
-  useEffect(() => {
-    LoginCheck();
-  }, []);
 
   useEffect(() => {
     if (lastItemRef.current && count !== 1) {
@@ -293,7 +289,7 @@ const ManagerAdviceedit = () => {
             <ImgTag src={plus} onClick={cleanCount} />
           </Wapper>
         </MainBox>
-        <LastButton onClick={handleOnclick}>업로드</LastButton>
+        <LastButton onClick={handleOnclick}>업로드 수정</LastButton>
       </MainWapper>
     </div>
   );

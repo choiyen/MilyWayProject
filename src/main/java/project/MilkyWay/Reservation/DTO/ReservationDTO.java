@@ -2,11 +2,16 @@ package project.MilkyWay.Reservation.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import project.MilkyWay.ComonType.Enum.CleanType;
+import project.MilkyWay.ComonType.Enum.EnumValue;
 
 import java.time.LocalDate;
 
@@ -22,9 +27,13 @@ public class ReservationDTO //고객의 예약을 관리하기 위한 DTO
     @Schema(description = "예약을 관리하기 위한 ID", example = "dfsfsfadf@!FSCVS")
     String reservationId; //예약을 관리하기 위한 ID
 
-    @NotBlank(message = "administrationId cannot be empty")
     @Schema(description = "예약일정을 관리하기 위한 Id", example = "2024-10-11") //예약 일정이 있어야 들어가는 게 아니라, 예약 일정이 없다면 생성하고, 데이터 추가 작업 수행
     String administrationId;
+
+    @Schema(description = "어떤 유형의 일?", example = "이사청소")
+    @EnumValue(enumClass = CleanType.class, message = "청소 리스트에 포함되지 않은 항목입니다.")
+    private CleanType type; // 어떤 유형의 일 : 이사청소, 입주청소, 주거청소.....
+
 
     @NotBlank(message = "acreage cannot be empty")
     @Size(max= 5, message = "acreage는 최소 다섯자리 이상 입력해야 함.")

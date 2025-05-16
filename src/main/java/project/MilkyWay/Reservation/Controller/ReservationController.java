@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.Administration.Entity.AdministrationEntity;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
+import project.MilkyWay.ComonType.Enum.DateType;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Reservation.Entity.ReservationEntity;
@@ -20,6 +22,7 @@ import project.MilkyWay.Administration.Service.AdministrationService;
 import project.MilkyWay.Reservation.DTO.ReservationDTO;
 import project.MilkyWay.Reservation.Service.ReservationService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +58,9 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
     public ResponseEntity<?> Insert(@RequestBody @Valid ReservationDTO reservationDTO) {
         try
         {
+
+
+
             String uniqueId;
             LoginSuccess loginSuccess = new LoginSuccess();
             do
@@ -66,6 +72,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     break;
                 }
             }while (true);
+
                 ReservationEntity reservationEntity = ConvertToEntity(reservationDTO, uniqueId);
                 ReservationEntity reservationEntity2 = reservationService.InsertReservation(reservationEntity);
                 if (reservationEntity2 != null)
@@ -245,23 +252,34 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     @ApiResponse(responseCode = "404", description = "ReservationDTO not found")
             }
     )
-    @PostMapping("/search")
-    ResponseEntity<?> FindByAdmin(HttpServletRequest request, @RequestParam String AdminstrationId)
+    @GetMapping("/search/admin")
+    ResponseEntity<?> FindByAdmin(HttpServletRequest request, @RequestParam LocalDate AdminstrationDate)
     {
         try
         {
             if(loginSuccess.isSessionExist(request))
             {
-                ReservationEntity reservationEntity = reservationService.SelectAdminstrationID(AdminstrationId);
-                if (reservationEntity == null)
+                AdministrationEntity administrationEntity = administrationService.FindByAdministrationDate(AdminstrationDate);
+                if(administrationEntity != null)
                 {
-                    throw new FindFailedException("결과를 찾을 수 없습니다.");
+                    System.out.println(administrationEntity);
+                    ReservationEntity reservationEntity = reservationService.SelectAdminstrationID(administrationEntity.getAdministrationId());
+                    System.out.println(reservationEntity);
+                    if (reservationEntity == null)
+                    {
+                        throw new FindFailedException("결과를 찾을 수 없습니다.");
+                    }
+                    else
+                    {
+                        ReservationDTO reservationDTO = ConvertToDTO(reservationEntity);
+                        return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료", Collections.singletonList(reservationDTO)));
+                    }
                 }
                 else
                 {
-                    ReservationDTO reservationDTO = ConvertToDTO(reservationEntity);
-                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료", Collections.singletonList(reservationDTO)));
+                    throw new  FindFailedException("해당 날짜의 일정을 못찾겠어요. 서버 관리자에게 문의 바람");
                 }
+
             }
             else
             {
@@ -282,6 +300,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 .name(reservationEntity2.getName())
                 .acreage(reservationEntity2.getAcreage())
                 .subissionDate(reservationEntity2.getSubissionDate())
+                .type(reservationEntity2.getType())
                 .build();
     }
 
@@ -295,17 +314,19 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 .name(reservationDTO.getName())
                 .acreage(reservationDTO.getAcreage())
                 .subissionDate(reservationDTO.getSubissionDate())
+                .type(reservationDTO.getType())
                 .build();
     }
     private ReservationEntity ConvertToEntity(ReservationDTO reservationDTO, String uniqueId) {
         return ReservationEntity.builder()
                 .reservationId(uniqueId)
-                .administrationId(reservationDTO.getAdministrationId())
+                .administrationId(uniqueId)
                 .phone(reservationDTO.getPhone())
                 .address(reservationDTO.getAddress())
                 .name(reservationDTO.getName())
                 .acreage(reservationDTO.getAcreage())
                 .subissionDate(reservationDTO.getSubissionDate())
+                .type(reservationDTO.getType())
                 .build();
     }
 }

@@ -113,6 +113,7 @@ public class CommentService
                 .commentId(Oldcomment.getCommentId())
                 .comment(newcomment.getComment())
                 .type(Oldcomment.getType())
+                .createdAt(newcomment.getCreatedAt())
                 .build();
     }
 

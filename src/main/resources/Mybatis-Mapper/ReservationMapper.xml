@@ -16,7 +16,7 @@
         DELETE FROM reservation WHERE reservationId = #{reservationId}
     </delete>
     <insert id="Insert" parameterType="project.MilkyWay.Reservation.Entity.ReservationEntity" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO reservation(reservationId, administrationId, acreage,name,phone,address,subissionDate) VALUES(#{reservationId}, #{administrationId}, #{acreage},#{name},#{phone},#{address},#{subissionDate})
+        INSERT INTO reservation(reservationId, administrationId, acreage,name,phone,address,subissionDate, type) VALUES(#{reservationId}, #{administrationId}, #{acreage},#{name},#{phone},#{address},#{subissionDate}, #{type})
     </insert>
     <update id="Update" parameterType="project.MilkyWay.Reservation.Entity.ReservationEntity">
         UPDATE reservation SET acreage = #{acreage}, name = #{name}, phone = #{phone}, address = #{address}, subissionDate = #{subissionDate} WHERE reservationId = #{reservationId}
