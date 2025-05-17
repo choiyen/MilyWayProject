@@ -267,7 +267,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                     System.out.println(reservationEntity);
                     if (reservationEntity == null)
                     {
-                        throw new FindFailedException("결과를 찾을 수 없습니다.");
+                        return ResponseEntity.ok().body(responseDTO.Response("empty", "결과 값이 비어 있습니다."));
                     }
                     else
                     {

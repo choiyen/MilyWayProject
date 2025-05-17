@@ -64,7 +64,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
                     reservationEntity1 = ReservationEntity.builder()
                             .type(reservationEntity.getType())
                             .reservationId(reservationEntity.getReservationId())
-                            .acreage(reservationEntity.getReservationId())
+                            .acreage(reservationEntity.getAcreage())
                             .administrationId(administration.getAdministrationId())
                             .address(reservationEntity.getAddress())
                             .name(reservationEntity.getName())
@@ -85,7 +85,7 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
             reservationEntity1 = ReservationEntity.builder()
                     .type(reservationEntity.getType())
                     .reservationId(reservationEntity.getReservationId())
-                    .acreage(reservationEntity.getReservationId())
+                    .acreage(reservationEntity.getAcreage())
                     .administrationId(reservationEntity.getAdministrationId())
                     .address(reservationEntity.getAddress())
                     .name(reservationEntity.getName())
@@ -96,8 +96,6 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
         }
         try
         {
-            System.out.println(administration);
-            System.out.println(reservationEntity1);
             reservationMapper.Insert(reservationEntity1);
         }
         catch (Exception e)
