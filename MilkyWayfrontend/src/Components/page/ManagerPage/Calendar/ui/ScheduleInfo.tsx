@@ -106,7 +106,12 @@ export const ScheduleInfo = ({
                 <p className="text-md">
                   고객 님의 예약이 들어온 날짜이니 확인 부탁드립니다.
                 </p>
-                <ReservationFind selectDate={item.administrationDate} />
+                <ReservationFind
+                  selectDate={item.administrationDate}
+                  handleCancel={() =>
+                    handleAdminDelete(item.administrationId ?? "")
+                  }
+                />
               </div>
             )}
           </div>

@@ -1,18 +1,19 @@
 import { paths } from "@/config/paths/paths";
 import { GET, POST } from "@/config/request/axios/axiosInstance";
-import { LastButton, SmallButton } from "@/SCSS/Fixed";
+import { LastButton } from "@/SCSS/Fixed";
 import { ReservationType } from "@/types/Feature/Address/Reservation";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 type ReservationProps = {
   selectDate: string;
+  handleCancel: (id: string) => void;
 };
 
-const ReservationFind = ({ selectDate }: ReservationProps) => {
-  const dispatch = useDispatch();
+const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
   const [Reservation, setReservation] = useState<ReservationType>();
-
+  const nativeGate = useNavigate();
   const FindReservation = async () => {
     await GET({
       url: paths.reserve.serach.path + "/admin",
@@ -65,13 +66,27 @@ const ReservationFind = ({ selectDate }: ReservationProps) => {
         data: {
           customer: Reservation?.name,
           address: Reservation?.Address,
-          phoneNumber: Reservation?.SubssionDate,
+          phoneNumber: Reservation?.phone,
           acreage: Reservation?.acreage,
           cleanType: Reservation?.type,
+          submissionDate: Reservation?.SubssionDate,
         },
+      }).then((res) => {
+        if (res.resultType == "error") {
+          alert(res.message);
+        } else {
+          nativeGate(GateWayNumber.Manager + "/" + ManagerGateWayType.Join);
+        }
       });
+      await fetchData(); // 상태 갱신
     }
   };
+
+  // const handleAddressCancel = () => {
+  //   await POST({
+  //     url: paths.Administration.search.path,
+  //   });
+  // };
 
   useEffect(() => {
     console.log(Reservation);
@@ -108,10 +123,18 @@ const ReservationFind = ({ selectDate }: ReservationProps) => {
             </table>
           </div>
         )}
-        <LastButton onClick={handleAddress}>예약 확정</LastButton>
+        <div className="flex items-center justify-between">
+          <LastButton onClick={handleAddress}>예약 확정</LastButton>
+          <LastButton onClick={() => handleCancel("some-id")}>
+            예약 취소
+          </LastButton>
+        </div>
       </div>
     </div>
   );
 };
 
 export default ReservationFind;
+function fetchData() {
+  throw new Error("Function not implemented.");
+}

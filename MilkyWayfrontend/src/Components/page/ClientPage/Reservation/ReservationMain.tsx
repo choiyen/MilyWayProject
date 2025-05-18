@@ -133,7 +133,10 @@ const ReservationMain = () => {
       },
     }).then((res) => {
       console.log(res);
+      setDateNot([...dateNOT, reservationData.SubssionDate]);
     });
+
+    await fetchData(); // 상태 갱신
   };
 
   return (
@@ -228,3 +231,6 @@ const ReservationMain = () => {
 };
 
 export default ReservationMain;
+function fetchData() {
+  throw new Error("Function not implemented.");
+}

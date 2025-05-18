@@ -60,6 +60,7 @@ public class AddressController
     {
         try
         {
+            System.out.println(addressDTO);
 
             if(loginSuccess.isSessionExist(request))
             {
@@ -99,32 +100,36 @@ public class AddressController
                 }
                 else
                 {
-                    switch (administration.getAdminstrationType())
-                    {
-                        case 업무 -> throw new FindFailedException("이미 일하는 일정이라 추가할 수 없어요. 일정부터 지워주세요.");
-                        case 연가 -> throw new FindFailedException("중요한 일이 있어서 꼭 쉬어야 하는 날이에요. 잘못 설정했다면 일정부터 지워주세요.");
-                        case 휴일 -> {
+                    switch (administration.getAdminstrationType()) {
+                        case 업무, 연가 -> {
+                            throw new FindFailedException(
+                                    administration.getAdminstrationType() == DateType.업무
+                                            ? "이미 일하는 일정이라 추가할 수 없어요. 일정부터 지워주세요."
+                                            : "중요한 일이 있어서 꼭 쉬어야 하는 날이에요. 잘못 설정했다면 일정부터 지워주세요."
+                            );
+                        }
+                        case 휴일, 예약 -> {
                             administrationService.Delete(administration.getAdministrationId());
+                            // 이후 처리 로직은 switch 바깥에서 계속 진행
                         }
-                        default -> {
-                            AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
-                            AddressEntity addressEntity1 = addressService.insert(addressEntity);
-                            if(addressEntity1 != null)
-                            {
-                                AdministrationEntity administrationEntity = AdministrationEntity.builder()
-                                        .administrationId(uniqueId)
-                                        .adminstrationType(DateType.업무)
-                                        .administrationDate(addressDTO.getSubmissionDate())
-                                        .build();
-                                administrationService.insert(administrationEntity);
-                                AddressDTO addressDTO1 = ConvertToDTO(addressEntity1);
-                                return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success","데이터베이스에 주소 데이터 추가", Collections.singletonList(addressDTO1)));
-                            }
-                            else
-                            {
-                                throw new RuntimeException("예기치 못한 오류로 런타임 오류 발생!!");
-                            }
-                        }
+                    }
+
+                    AddressEntity addressEntity = ConvertToEntity(addressDTO,uniqueId);
+                    AddressEntity addressEntity1 = addressService.insert(addressEntity);
+                    if(addressEntity1 != null)
+                    {
+                        AdministrationEntity administrationEntity = AdministrationEntity.builder()
+                                .administrationId(uniqueId)
+                                .adminstrationType(DateType.업무)
+                                .administrationDate(addressDTO.getSubmissionDate())
+                                .build();
+                        administrationService.insert(administrationEntity);
+                        AddressDTO addressDTO1 = ConvertToDTO(addressEntity1);
+                        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO.Response("success","데이터베이스에 주소 데이터 추가", Collections.singletonList(addressDTO1)));
+                    }
+                    else
+                    {
+                        throw new RuntimeException("예기치 못한 오류로 런타임 오류 발생!!");
                     }
                 }
 
@@ -139,9 +144,6 @@ public class AddressController
         {
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
-
-        return ResponseEntity.internalServerError()
-                .body(responseDTO.Response("error", "알 수 없는 흐름 오류"));
     }
 
     @Operation(
