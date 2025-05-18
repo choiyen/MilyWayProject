@@ -36,6 +36,7 @@ public class S3ImageService {
     @Value("${cloud.aws.s3.bucketName}")
     private String bucketName;
 
+    //실제로 업로드를 담당하는 기능 -> 파일이 없을 때 null을 반환함.
     public String upload(MultipartFile image) {
         if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new S3Exception(ErrorCode.EMPTY_FILE_EXCEPTION);
@@ -43,6 +44,8 @@ public class S3ImageService {
         return this.uploadImage(image);
     }
 
+
+    //하나의 함수는 하나의 기능만을 담당함.
     private String uploadImage(MultipartFile image) {
         this.validateImageFileExtention(image.getOriginalFilename());
         try {
@@ -52,6 +55,7 @@ public class S3ImageService {
         }
     }
 
+    //파일의 확장자가 규격에 맞는지 확인
     private void validateImageFileExtention(String filename) {
         int lastDotIndex = filename.lastIndexOf(".");
         if (lastDotIndex == -1) {
@@ -66,6 +70,7 @@ public class S3ImageService {
         }
     }
 
+    //S3에 파일을 업로드하고 url을 반환함
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String originalFilename = image.getOriginalFilename(); //원본 파일 명
         String extention = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
@@ -95,6 +100,7 @@ public class S3ImageService {
         return amazonS3.getUrl(bucketName, s3FileName).toString();
     }
 
+    //url을 넘겨받아,  s3에서 데이터를 삭제하는 기능
     public void deleteImageFromS3(String imageAddress) {
         String key = getKeyFromImageAddress(imageAddress);
         try {
@@ -104,6 +110,7 @@ public class S3ImageService {
         }
     }
 
+    //로컬 주소를 삭제하는 기능
     private String getKeyFromImageAddress(String imageAddress) {
         try {
             URL url = new URL(imageAddress);
