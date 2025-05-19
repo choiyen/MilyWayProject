@@ -27,9 +27,7 @@ import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
 import project.MilkyWay.noticeMain.NoticeDetail.Service.NoticeDetailService;
 import project.MilkyWay.noticeMain.Notice.Service.NoticeService;
 
-import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/notice")
@@ -253,7 +251,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     List<NoticeDetailEntity> noticeDetailEntity = noticeDetailService.ListNoticeDetail(notice1.getNoticeId())
                             .stream()
                             .filter(entity -> !excludeIds.contains(entity.getNoticeDetailId()))  // 제외 조건
-                        .collect(Collectors.toList());  // 필터링 후 새로운 리스트 생성;
+                        .toList();  // 필터링 후 새로운 리스트 생성;
                     boolean bool = true;
                     for(NoticeDetailEntity noticeDetail : noticeDetailEntity)
                     {
