@@ -13,10 +13,10 @@ import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailRedu
 import { RootState } from "@/config/reduxstore";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { FileTage } from "@/Components/Common/ui/File/FileTage";
-import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import { POST_FORM } from "@/config/request/axios/MutipartAxios";
 
 const MainBox = styled.div`
   width: 100%;
@@ -97,10 +97,10 @@ export const ManagerAdvice = () => {
     dispatch(setNoticeDetailData(combinedData));
   }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
 
-  useEffect(() => {
-    console.log("업데이트된 selectAdvice 값:", Adviceselector);
-    console.log("업데이트된 Advice 값:", AdviceDetailselector);
-  }, [Adviceselector, AdviceDetailselector]);
+  // useEffect(() => {
+  //   console.log("업데이트된 selectAdvice 값:", Adviceselector);
+  //   console.log("업데이트된 Advice 값:", AdviceDetailselector);
+  // }, [Adviceselector, AdviceDetailselector]);
 
   const cleanCount = () => {
     setCount(count + 1);
@@ -108,22 +108,48 @@ export const ManagerAdvice = () => {
   };
 
   const handleOnclick = async () => {
-    await POST({
-      url: paths.Notice.basic.path,
-      data: {
-        noticeDTO: Adviceselector,
-        noticeDetailDTO: AdviceDetailselector,
-      },
-    }).then((res) => {
-      console.log(res);
+    // FormData 준비
+    const formData = new FormData();
+
+    // JSON 본문은 파일 경로 없이 전송
+    formData.append(
+      "noticeJsonDTO",
+      new Blob(
+        [
+          JSON.stringify({
+            noticeDTO: Adviceselector,
+            noticeDetailDTO: AdviceDetailselector,
+          }),
+        ],
+        { type: "application/json" }
+      )
+    );
+
+    // 제목 이미지
+    formData.append("titleimg", titleimg);
+
+    // 각 noticeDetailDTO의 before/after에 index 붙이기
+    beforefile.forEach((files, index) => {
+      files.forEach((file) => {
+        formData.append(`before_${index}`, file);
+      });
+    });
+
+    afferfile.forEach((files, index) => {
+      files.forEach((file) => {
+        formData.append(`after_${index}`, file);
+      });
+    });
+
+    await POST_FORM(paths.Notice.basic.path, formData).then((res) => {
       console.log(res);
       if (res.resultType === "success") {
-        alert("수정 완료");
+        alert("후기 내역 등록 완료");
         navigator(
           GateWayNumber.Manager + "/" + ManagerGateWayType.AdviceSelect
         );
       } else {
-        alert("수정 실패");
+        alert("후기 내역 등록 실패");
       }
     });
   };

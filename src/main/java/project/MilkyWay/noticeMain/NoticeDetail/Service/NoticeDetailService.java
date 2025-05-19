@@ -49,6 +49,11 @@ public class NoticeDetailService {
         return ChangingNoticeDetailEntity;
     }
 
+    public NoticeDetailEntity noticeDetail(Long NoticeDetailId)
+    {
+        NoticeDetailEntity noticeDetailEntity = noticeDetailMapper.findByNoticeDetailId(NoticeDetailId);
+        return noticeDetailEntity;
+    }
     public List<NoticeDetailEntity> ListNoticeDetail(String encodingNoticeId)
     {
         List<NoticeDetailEntity> list = noticeDetailMapper.findByNoticeId(encodingNoticeId);

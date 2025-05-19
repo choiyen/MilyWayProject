@@ -10,11 +10,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
+import project.MilkyWay.S3ClientService.S3ImageService;
 import project.MilkyWay.noticeMain.Common.DTO.NoticeJsonDTO;
 import project.MilkyWay.noticeMain.Notice.DTO.NoticeDTO;
 import project.MilkyWay.noticeMain.NoticeDetail.DTO.NoticeDetailDTO;
@@ -23,10 +27,8 @@ import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
 import project.MilkyWay.noticeMain.NoticeDetail.Service.NoticeDetailService;
 import project.MilkyWay.noticeMain.Notice.Service.NoticeService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,6 +41,10 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
 
     @Autowired
     NoticeDetailService noticeDetailService;
+
+
+    @Autowired
+    S3ImageService s3ImageService;
 
     private final ResponseDTO<Object> responseDTO = new ResponseDTO<>();
 
@@ -60,11 +66,15 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     @ApiResponse(responseCode = "400", description = "Invalid input data")
             }
     )
-    @PostMapping
-    public ResponseEntity<?> Insert(HttpServletRequest request, @RequestBody NoticeJsonDTO noticeJsonDTO)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> Insert(HttpServletRequest request,     @RequestPart("noticeJsonDTO") NoticeJsonDTO noticeJsonDTO,
+                                    @RequestPart("titleimg") MultipartFile titleimg,
+                                    MultipartHttpServletRequest multiRequest )  // after_0, after_1...
     {
         try
         {
+
+
 
             if(loginSuccess.isSessionExist(request))
             {
@@ -79,15 +89,41 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                         break;
                     }
                 }while (true);
-                NoticeEntity noticeEntity = ConvertToNotice(noticeJsonDTO.getNoticeDTO(), uniqueId);
+
+
+                String url = uploading(titleimg);
+                NoticeEntity noticeEntity = ConvertToNotice(noticeJsonDTO.getNoticeDTO(), uniqueId, url);
+
                 NoticeEntity notice1 = noticeService.InsertNotice(noticeEntity);
                 if(notice1 != null)
                 {
                     int i = 0;
                     List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
+
+
+                    Map<String, List<String>> uploadedFileUrls = new HashMap<>();
+
+                    // 파일 처리 — key 별로 파일 리스트 얻기
+                    Iterator<String> fileNames = multiRequest.getFileNames();
+                    while (fileNames.hasNext()) {
+                        String key = fileNames.next();
+                        List<MultipartFile> files = multiRequest.getFiles(key);
+                        List<String> url2 = new ArrayList<>();
+                        System.out.println("File key: " + key + ", file count: " + files.size());
+                        for(MultipartFile file : files)
+                        {
+                            url2.add(uploading(file));
+                        }
+                        uploadedFileUrls.put(key,url2);
+                        // 각 key에 해당하는 파일들 처리 로직 넣기
+                        // 예: before_0, after_1 등 key에 따라 저장 위치/목적 다르게 처리
+                    }
+
                     while (i < noticeJsonDTO.getNoticeDetailDTO().size() )
                     {
-                        NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i),noticeEntity.getNoticeId() );
+                        List<String> beforeUrls = uploadedFileUrls.getOrDefault("before_" + i, new ArrayList<>());
+                        List<String> afterUrls  = uploadedFileUrls.getOrDefault("after_" + i, new ArrayList<>());
+                        NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i),noticeEntity.getNoticeId(), beforeUrls, afterUrls );
                         NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
                         if(noticeDetailEntity1 != null)
                         {
@@ -134,26 +170,55 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             }
     )
     @PutMapping
-    public ResponseEntity<?> Update(HttpServletRequest request, @RequestBody NoticeJsonDTO noticeJsonDTO)
+    public ResponseEntity<?> Update(HttpServletRequest request,   @RequestPart("noticeJsonDTO") NoticeJsonDTO noticeJsonDTO,
+                                    @RequestPart("titleimg") MultipartFile titleimg,
+                                    MultipartHttpServletRequest multiRequest)
     {
         try
         {
-            System.out.println(noticeJsonDTO);
             if(loginSuccess.isSessionExist(request))
             {
                 NoticeEntity oldnotice = noticeService.findNoticeId(noticeJsonDTO.getNoticeDTO().getNoticeId());
-                NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO()));
+                FileDelete(oldnotice.getTitleimg());
+                String Titleurl = uploading(titleimg);
+                NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO(),Titleurl));
                 if(notice1 != null)
                 {
                     System.out.println(noticeJsonDTO.getNoticeDetailDTO());
                     int i = 0;
                     List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
                     Set<Number> excludeIds = new HashSet<>();  // ArrayList를 Set으로 변환
+
+                    Map<String, List<String>> uploadedFileUrls = new HashMap<>();
+
+                    // 파일 처리 — key 별로 파일 리스트 얻기
+                    Iterator<String> fileNames = multiRequest.getFileNames();
+                    while (fileNames.hasNext()) {
+                        String key = fileNames.next();
+                        List<MultipartFile> files = multiRequest.getFiles(key);
+                        List<String> url2 = new ArrayList<>();
+                        System.out.println("File key: " + key + ", file count: " + files.size());
+                        for(MultipartFile file : files)
+                        {
+                            url2.add(uploading(file));
+                        }
+                        uploadedFileUrls.put(key,url2);
+                        // 각 key에 해당하는 파일들 처리 로직 넣기
+                        // 예: before_0, after_1 등 key에 따라 저장 위치/목적 다르게 처리
+                    }
+
+
                     while (i < noticeJsonDTO.getNoticeDetailDTO().size())
                     {
+                        FileDelete(noticeJsonDTO.getNoticeDetailDTO().get(i).getAfterURL());
+                        List<String> beforeUrls = uploadedFileUrls.getOrDefault("before_" + i, new ArrayList<>());
+                        List<String> afterUrls  = uploadedFileUrls.getOrDefault("after_" + i, new ArrayList<>());
                         if(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId() != null )
                         {
-                            NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId(), ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i)));
+                            NoticeDetailEntity noticeDetailEntity = noticeDetailService.noticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId());
+                            FileDelete(noticeDetailEntity.getBeforeURL());
+                            FileDelete(noticeDetailEntity.getAfterURL());
+                            NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.UpdateNoticeDetailMapper(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId(), ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i), beforeUrls,afterUrls));
                             if(noticeDetailEntity1 != null)
                             {
                                 noticeDetailEntities.add(noticeDetailEntity1);
@@ -167,7 +232,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                         }
                         else
                         {
-                            NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i),noticeJsonDTO.getNoticeDTO().getNoticeId());
+                            NoticeDetailEntity noticeDetailEntity = ConvertToNoticeDetail(noticeJsonDTO.getNoticeDetailDTO().get(i),noticeJsonDTO.getNoticeDTO().getNoticeId(), beforeUrls, afterUrls);
                             NoticeDetailEntity noticeDetailEntity1 = noticeDetailService.InsertNoticeDetallMapper(noticeDetailEntity);
                             if(noticeDetailEntity1 != null)
                             {
@@ -369,48 +434,76 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
         }
     }
 
-    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO, String noticeId)
+    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO, String noticeId, List<String> beforeUrls, List<String> AfterUrls)
     {
         return NoticeDetailEntity.builder()
                 .noticeId(noticeId)
                 .noticeDetailId(noticeDetailDTO.getNoticeDetailId())
                 .direction(noticeDetailDTO.getDirection())
-                .beforeURL(noticeDetailDTO.getBeforeURL())
-                .afterURL(noticeDetailDTO.getAfterURL())
+                .beforeURL(beforeUrls)
+                .afterURL(AfterUrls)
                 .comment(noticeDetailDTO.getComment())
                 .build();
     }
 
-    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO)
+    private NoticeDetailEntity ConvertToNoticeDetail(NoticeDetailDTO noticeDetailDTO, List<String> beforeUrls, List<String> AfterUrls)
     {
         return NoticeDetailEntity.builder()
                 .noticeId(noticeDetailDTO.getNoticeId())
                 .noticeDetailId(noticeDetailDTO.getNoticeDetailId())
                 .direction(noticeDetailDTO.getDirection())
-                .beforeURL(noticeDetailDTO.getBeforeURL())
-                .afterURL(noticeDetailDTO.getAfterURL())
+                .beforeURL(beforeUrls)
+                .afterURL(AfterUrls)
                 .comment(noticeDetailDTO.getComment())
                 .build();
     }
 
-    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO)
+    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO, String Titleurl)
     {
         return NoticeEntity.builder()
                 .noticeId(noticeDTO.getNoticeId())
                 .type(noticeDTO.getType())
                 .greeting(noticeDTO.getGreeting())
-                .titleimg(noticeDTO.getTitleimg())
+                .titleimg(Titleurl)
                 .title(noticeDTO.getTitle())
                 .build();
     }
-    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO, String uniqueId)
+    private NoticeEntity ConvertToNotice(NoticeDTO noticeDTO, String uniqueId, String url)
     {
         return NoticeEntity.builder()
                 .noticeId(uniqueId)
                 .type(noticeDTO.getType())
                 .greeting(noticeDTO.getGreeting())
-                .titleimg(noticeDTO.getTitleimg())
+                .titleimg(url)
                 .title(noticeDTO.getTitle())
                 .build();
     }
+    public String uploading( MultipartFile titleimg)
+    {
+        try {
+            return s3ImageService.upload(titleimg);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void FileDelete(String url)
+    {
+        try {
+            s3ImageService.deleteImageFromS3(url);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public  void FileDelete(List<String> urllist)
+    {
+        try {
+            for(String url : urllist)
+            {
+                s3ImageService.deleteImageFromS3(url);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
