@@ -1,32 +1,36 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import "@/SCSS/header.scss";
-import AdminImage from "@/Components/Common/assets/administrator.png";
-import hamburger from "@/Components/Common/assets/hamburger.png";
 import { useNavigate } from "react-router-dom";
-import {
-  ClientGateWayType,
-  GateWayNumber,
-  ManagerGateWayType,
-} from "@/types/GateWay/GateWayType";
+import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import broom from "@/Components/Common/assets/broom.png";
-import { ComonProfile } from "@/Components/page/ClientPage/Comon/ComonProfile";
 import { Head } from "../frame/header";
+import { ClientPath } from "./headerPaths";
+import { PiPhoneOutgoingFill } from "react-icons/pi";
+import { CgMenuGridR } from "react-icons/cg";
+import { MdAdminPanelSettings } from "react-icons/md";
 
-// Header styles
 const HeaderBox = styled.div`
   width: 100%;
   height: 70px;
   color: #000000;
-  background-color: #fffeee;
+  background-color: #fff9f0;
   display: flex;
-  justify-content: space-between; /* Ensure space between left and right */
-  padding: 0 20px;
+  justify-content: space-between;
   box-sizing: border-box;
-
+  z-index: 1001;
   @media (max-width: 1044px) {
     height: 60px;
     padding: 0 10px;
+  }
+`;
+
+const HeaderLarge = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  @media (max-width: 1044px) {
+    display: none;
   }
 `;
 
@@ -39,7 +43,6 @@ const HeaderButton = styled.div`
     font-style: normal;
   }
   font-family: "PartialSansKR-Regular";
-
   align-items: left;
   color: #000000;
   background-color: #fffeee;
@@ -77,15 +80,15 @@ const HeaderButton1 = styled.div`
 const ChangeButton = styled.button.withConfig({
   shouldForwardProp: (prop) => prop !== "isActive",
 })<{ isActive: boolean }>`
-  width: 100%;
+  width: 100px;
   border: none;
-  background-color: #fffeee;
+  background-color: #fff9f0;
   text-align: center;
+  margin-left: 40px;
   padding: 10px 0;
-  margin: 0;
-  margin-left: 10px;
   font-size: 16px;
   font-family: "EliceDigitalBaeum-Bd";
+  color: #000;
 
   @font-face {
     font-family: "EliceDigitalBaeum-Bd";
@@ -98,51 +101,52 @@ const ChangeButton = styled.button.withConfig({
   ${({ isActive }) =>
     isActive &&
     `
-    color: #f6f6fa;
-    background-color: rgb(60, 32, 143);
     font-weight: bold;
+    border-bottom: 4px double #3CB371;
   `}
 
   &:hover {
-    background-color: #f1f1f1;
     cursor: pointer;
-    border-bottom: 2px double #000000;
-    color: black;
+    border-bottom: ${({ isActive }) =>
+      isActive ? "4px double #3CB371" : "4px double #43b3ae"};
   }
 `;
 
-const HomeButton = styled.img`
+const HomeButton = styled.div`
   align-items: right;
   color: #000000;
   border-radius: 10px;
   font-size: 10px;
   text-align: center;
-  padding-top: 4vw;
-  width: 50px;
-  height: 50px;
-  padding: 10px;
   display: none;
 
   @media (max-width: 1044px) {
-    width: 40px;
-    height: 40px;
     display: block;
-    margin-left: auto; /* Push the hamburger icon to the far right */
-    margin-right: 0; /* Ensure no extra margin on the right */
+    margin-left: auto;
+    margin-right: 0;
+  }
+`;
+const Overlay = styled.div<{ visible: boolean }>`
+  display: ${({ visible }) => (visible ? "block" : "none")};
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 70px);
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+
+  @media (max-width: 1044px) {
+    top: 60px;
+    height: calc(100vh - 60px);
   }
 `;
 
-const MangerButton = styled.img`
-  align-items: right;
-  color: #000000;
+const ManagerButton = styled.div`
   border-radius: 10px;
   font-size: 10px;
   text-align: center;
-  padding-top: 4vw;
-  width: 50px;
-  height: 50px;
   padding: 10px;
-  display: none;
   display: block;
 
   @media (max-width: 1044px) {
@@ -152,51 +156,75 @@ const MangerButton = styled.img`
   }
 `;
 
-const ListBox = styled.div`
-  width: 15vw;
+const ListBox = styled.div<{ visible: boolean }>`
+  width: 200px;
   height: 100vh;
   background-color: #fffeee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  padding: 0;
+  padding: 10px;
+  position: fixed;
+  top: 70px;
+  right: ${({ visible }) => (visible ? "0" : "-220px")};
+  transition: right 0.3s ease;
+  z-index: 1005;
 
   @media (max-width: 1044px) {
-    width: 100%;
-    height: auto;
+    top: 60px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 10px;
   }
 `;
 
-const HeaderSmall = styled.div`
-  display: none; /* Default state: hidden on large screens */
-
-  @media (max-width: 1044px) {
-    display: flex;
-    justify-content: flex-end; /* Align elements to the right on small screens */
-  }
-`;
-
-const HeaderLarge = styled.div`
+const BusinessBox = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 50%;
+  align-items: center;
+  justify-content: end;
+  margin: 10px;
+  width: 30%;
+  padding: 10px;
+  gap: 15px;
+
   @media (max-width: 1044px) {
-    display: none; /* Hide on small screens */
+    display: none;
+  }
+
+  div {
+    border-left: 4px solid #8b3d3d;
   }
 `;
 
-export const ClientHeader = () => {
+const Container = styled.div<{ visible: boolean }>`
+  display: flex;
+  flex-direction: row;
+  position: ${({ visible }) => (visible ? "fixed" : "absolute")};
+  width: 100%;
+`;
+
+type ClientHeaderProps = {
+  children?: React.ReactNode;
+};
+
+export const ClientHeader = ({ children }: ClientHeaderProps) => {
   const [isListVisible, setListVisible] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("");
   const nativeGate = useNavigate();
+  const listRef = useRef<HTMLDivElement>(null);
+
   const handleImageClick = () => {
     setListVisible(!isListVisible);
   };
 
   const FuncClick = async (name: string, buttonName: string) => {
     setActiveButton(buttonName);
-    nativeGate(GateWayNumber.Client + "/" + name);
+    nativeGate(name);
+    setListVisible(false);
   };
 
   const handleManagerButtonClick = () => {
@@ -205,7 +233,26 @@ export const ClientHeader = () => {
     if (isConfirmed) {
       nativeGate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main);
     }
+    setListVisible(false);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (listRef.current && !listRef.current.contains(event.target as Node)) {
+        setListVisible(false);
+      }
+    };
+
+    if (isListVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isListVisible]);
 
   return (
     <div>
@@ -215,11 +262,7 @@ export const ClientHeader = () => {
           <img
             src={broom}
             alt="logo"
-            style={{
-              width: "40px",
-              height: "40px",
-              marginRight: "0px",
-            }}
+            style={{ width: "40px", height: "40px", marginRight: "0px" }}
           />
           <div>
             <HeaderButton>경상도 청소 전문업체</HeaderButton>
@@ -227,121 +270,91 @@ export const ClientHeader = () => {
           </div>
         </div>
         <HeaderLarge>
-          <ChangeButton
-            isActive={activeButton === "Main"}
-            onClick={() => FuncClick(ClientGateWayType.home, "Main")}
-          >
-            Main
-          </ChangeButton>
-          <ChangeButton
-            isActive={activeButton === "ServiceIntroduction"}
-            onClick={() =>
-              FuncClick(ClientGateWayType.Info, "ServiceIntroduction")
-            }
-          >
-            서비스 소개
-          </ChangeButton>
-          <ChangeButton
-            isActive={activeButton === "Jobfeedback"}
-            onClick={() => FuncClick(ClientGateWayType.Service, "Jobfeedback")}
-          >
-            작업 후기
-          </ChangeButton>
-          <ChangeButton
-            isActive={activeButton === "Question"}
-            onClick={() => FuncClick(ClientGateWayType.Question, "Question")}
-          >
-            Q&A
-          </ChangeButton>
-          <ChangeButton
-            isActive={activeButton === "Reservation"}
-            onClick={() =>
-              FuncClick(ClientGateWayType.Reservation, "Reservation")
-            }
-          >
-            예약하기
-          </ChangeButton>
+          {ClientPath && (
+            <div
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {ClientPath.map((data) => (
+                <ChangeButton
+                  key={data.activename}
+                  isActive={activeButton === data.activename}
+                  onClick={() => FuncClick(data.paths, data.activename)}
+                >
+                  {data.buttonname}
+                </ChangeButton>
+              ))}
+            </div>
+          )}
         </HeaderLarge>
+        <BusinessBox>
+          <PiPhoneOutgoingFill
+            style={{ color: "royalblue", width: "20px", height: "20px" }}
+          />
+          010-6513-1458
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              borderLeft: "4px solid #813232",
+              textAlign: "center",
+              width: "40%",
+            }}
+          >
+            <span>24시간 상담 예약</span>
+            <span style={{ fontWeight: "bold" }}>언제든지 환영</span>
+          </div>
+        </BusinessBox>
         <div style={{ backgroundColor: "#F4DFB6" }}>
-          <HomeButton
-            src={hamburger}
-            onClick={handleImageClick}
-            style={{ width: "50px", height: "50px" }}
-          />
-          <MangerButton
-            src={AdminImage}
-            onClick={handleManagerButtonClick} // 관리자 버튼 클릭 시 확인
-            style={{ width: "50px", height: "50px" }}
-          />
+          <HomeButton>
+            <CgMenuGridR
+              onClick={handleImageClick}
+              style={{ width: "50px", height: "50px" }}
+            />
+          </HomeButton>
+          <ManagerButton>
+            <MdAdminPanelSettings
+              onClick={handleManagerButtonClick}
+              style={{ width: "50px", height: "50px" }}
+            />
+          </ManagerButton>
         </div>
       </HeaderBox>
 
-      {/* Conditional rendering based on screen size */}
-      <HeaderSmall>
-        {isListVisible && (
-          <ListBox>
-            <ul style={{ width: "100%" }}>
-              <li>
-                <ChangeButton
-                  isActive={activeButton === "관리자 로그인"}
-                  onClick={handleManagerButtonClick} // 관리자 버튼 클릭 시 확인
-                >
-                  관리자 로그인
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  isActive={activeButton === "Main"}
-                  onClick={() => FuncClick(ClientGateWayType.home, "Main")}
-                >
-                  Main
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  isActive={activeButton === "ServiceIntroduction"}
-                  onClick={() =>
-                    FuncClick(ClientGateWayType.Info, "ServiceIntroduction")
-                  }
-                >
-                  서비스 소개
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  isActive={activeButton === "Jobfeedback"}
-                  onClick={() =>
-                    FuncClick(ClientGateWayType.Service, "Jobfeedback")
-                  }
-                >
-                  서비스 가격
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  isActive={activeButton === "Question"}
-                  onClick={() =>
-                    FuncClick(ClientGateWayType.Question, "Question")
-                  }
-                >
-                  Q&A
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  isActive={activeButton === "Reservation"}
-                  onClick={() =>
-                    FuncClick(ClientGateWayType.Reservation, "Reservation")
-                  }
-                >
-                  온라인 예약하기
-                </ChangeButton>
-              </li>
-            </ul>
-          </ListBox>
-        )}
-      </HeaderSmall>
-      <ComonProfile />
+      <Container visible={isListVisible}>
+        <Overlay
+          visible={isListVisible}
+          onClick={() => setListVisible(false)}
+        />
+        <div style={{ flex: 1 }}>{children}</div>
+        <ListBox ref={listRef} visible={isListVisible}>
+          <ul>
+            <li>
+              <ChangeButton
+                isActive={activeButton === "관리자 로그인"}
+                onClick={handleManagerButtonClick}
+              >
+                관리자 로그인
+              </ChangeButton>
+            </li>
+            {ClientPath &&
+              ClientPath.map((data) => (
+                <li key={data.activename}>
+                  <ChangeButton
+                    isActive={activeButton === data.activename}
+                    onClick={() => FuncClick(data.paths, data.activename)}
+                  >
+                    {data.buttonname}
+                  </ChangeButton>
+                </li>
+              ))}
+          </ul>
+        </ListBox>
+      </Container>
     </div>
   );
 };

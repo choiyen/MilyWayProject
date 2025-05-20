@@ -3,7 +3,10 @@ import { RadioBox } from "@/Components/Common/ui/Radio/RadioBox";
 import { paths } from "@/config/paths/paths";
 import { POST } from "@/config/request/axios/axiosInstance";
 import { setAdministrationData } from "@/config/request/ReduxList/AdministrationReducer";
-import { adminstrationSelect } from "@/types/appointment/adminstrationType";
+import {
+  adminstrationSelect,
+  ScheduleType,
+} from "@/types/appointment/adminstrationType";
 import { ModelWrapper, Overlay } from "@/types/Conmon/ModelWapperType";
 import { SmallButton } from "@/SCSS/Fixed";
 import { useSelector } from "react-redux";
@@ -13,9 +16,9 @@ import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 interface Props {
   setChange: (value: boolean) => void;
   date: Date | null;
-  setType: (value: string) => void;
+  setType: (value: ScheduleType) => void;
   setDate: (value: Date | null) => void;
-  type: string;
+  type: (typeof adminstrationSelect)[number];
   dispatch: Dispatch<ReturnType<typeof setAdministrationData>>;
   fetchData: () => Promise<void>;
 }
@@ -76,8 +79,8 @@ export const ScheduleModal = ({
         <br />
         <RadioBox
           name="선택 유형"
-          append={adminstrationSelect}
-          setValue={setType}
+          append={Array.from(adminstrationSelect)}
+          setValue={(value: string) => setType(value as ScheduleType)}
         />
         <br />
         <div style={{ display: "flex", justifyContent: "space-around" }}>

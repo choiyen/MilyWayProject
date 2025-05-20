@@ -11,6 +11,7 @@ import { ScheduleModal } from "../ui/ScheduleModal";
 import { LastButton } from "@/SCSS/Fixed";
 import { GET, POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
+type ScheduleType = "휴일" | "업무" | "연가" | "예약";
 
 export const ManagerCalendar = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ export const ManagerCalendar = () => {
 
   const [change, setChange] = useState(false);
   const [date, setDate] = useState<Date | null>(null);
-  const [type, setType] = useState("");
+  const [type, setType] = useState<ScheduleType>("휴일");
   const [select, setSelect] = useState<number | null>(null);
   const [admintration, setAdmintration] = useState<AdministrationType[]>([]);
   const [address, setAddress] = useState<AddressType[]>([]);

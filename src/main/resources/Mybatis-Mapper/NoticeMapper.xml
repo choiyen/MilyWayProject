@@ -4,7 +4,10 @@
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.noticeMain.Notice.mapper.NoticeMapper">
     <select id="findAll" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
-        SELECT noticeId, type, title FROM Notice
+        SELECT noticeId, type, title,titleimg FROM Notice
+    </select>
+    <select id="findByType"  parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
+        SELECT noticeId, type, title,titleimg FROM Notice WHERE type = #{type}
     </select>
     <select id="findByNoticeId" parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
         SELECT * FROM Notice WHERE noticeId = #{noticeId}

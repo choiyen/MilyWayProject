@@ -5,6 +5,7 @@ package project.MilkyWay.noticeMain.Common.Controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
+import project.MilkyWay.ComonType.Enum.CleanType;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.S3ClientService.S3ImageService;
 import project.MilkyWay.noticeMain.Common.DTO.NoticeJsonDTO;
+import project.MilkyWay.noticeMain.Common.DTO.TypeDTO;
 import project.MilkyWay.noticeMain.Notice.DTO.NoticeDTO;
 import project.MilkyWay.noticeMain.NoticeDetail.DTO.NoticeDetailDTO;
 import project.MilkyWay.noticeMain.NoticeDetail.Entity.NoticeDetailEntity;
@@ -366,17 +369,11 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             List<NoticeEntity> notice = new ArrayList<>(noticeService.findAll());
             if(notice != null)
             {
-                for (int i = 0; i < notice.size(); i++) {
-                    NoticeEntity notice1 = notice.get(i); // 리스트에서 해당 인덱스의 NoticeEntity를 가져옵니다.
-                    notice.set(i, NoticeEntity.builder()  // 새로 만든 NoticeEntity 객체로 덮어씁니다.
-                            .noticeId(notice1.getNoticeId())
-                            .greeting(notice1.getGreeting())
-                            .type(notice1.getType())
-                            .title(notice1.getTitle())
-                            .noticeDetailEntities(noticeDetailService.ListNoticeDetail(notice1.getNoticeId()))
-                            .build());
+
+                for(NoticeEntity noticeEntity : notice)
+                {
+                    list.add(ConvertToNotice(noticeEntity));//자동으로 못가져오면 추가하거나 수정 예정
                 }
-                list.add(notice);//자동으로 못가져오면 추가하거나 수정 예정
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
             }
             else
@@ -391,6 +388,47 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
 
         }
     }
+
+
+    @Operation(
+            summary = "Returns a list of Notice objects along with their associated NoticeDetails.",
+            description = "This API fetches a list of Notice and NoticeDetail objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Notice and Notice Detail List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = NoticeJsonDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Notice and Notice Detail List not found")
+            }
+    )
+    @GetMapping("/search/Type")
+    public ResponseEntity<?> FindSmallALl(@RequestParam String type)
+    {
+        try
+        {
+            List<Object> list = new ArrayList<>();
+            List<NoticeEntity> notice = new ArrayList<>(noticeService.findSmallAll(CleanType.valueOf(type)));
+            if(notice != null)
+            {
+
+                for(NoticeEntity noticeEntity : notice)
+                {
+                    list.add(ConvertToNotice(noticeEntity));//자동으로 못가져오면 추가하거나 수정 예정
+                }
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
+            }
+            else
+            {
+                throw new FindFailedException("전체 후기 데이터를 찾아내는데 실패했습니다.");
+            }
+
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+
+        }
+    }
+
+
+
 
     @Operation(
             summary = "Returns a NoticeDTO object for a given notice ID, along with its associated NoticeDetail list. ",
@@ -476,6 +514,19 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 .title(noticeDTO.getTitle())
                 .build();
     }
+    private NoticeDTO ConvertToNotice(NoticeEntity noticeEntity)
+    {
+        return NoticeDTO.builder()
+                .noticeId(noticeEntity.getNoticeId())
+                .type(noticeEntity.getType())
+                .greeting(noticeEntity.getGreeting())
+                .titleimg(noticeEntity.getTitleimg())
+                .title(noticeEntity.getTitle())
+                .build();
+    }
+
+
+
     public String uploading( MultipartFile titleimg)
     {
         try {

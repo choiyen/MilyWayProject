@@ -84,6 +84,10 @@ export const paths = {
       path: "/notice/search",
       getHref: () => "/notice/search",
     }, //Get은 개별 내역, Post는 전체 내역
+    Type: {
+      path: "/notice/search/Type",
+      getHref: () => "/notice/search/Type",
+    },
   },
   Question: {
     basic: {

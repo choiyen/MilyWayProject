@@ -4,6 +4,7 @@ import { AdministrationType } from "@/types/Feature/Address/Adminstration";
 import { administrationDeletefetchData } from "../api/Dayutil";
 import { useEffect } from "react";
 import ReservationFind from "../Components/ReservationFind";
+import "@/SCSS/tailwind.scss";
 
 interface ScheduleInfoProps {
   date: Date | null;

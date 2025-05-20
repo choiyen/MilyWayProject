@@ -4,6 +4,7 @@ package project.MilkyWay.noticeMain.Notice.Service;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.MilkyWay.ComonType.Enum.CleanType;
 import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
@@ -76,6 +77,31 @@ public class NoticeService
             throw new FindFailedException("데이터를 지울려고 했는데, 후기 Id에 맞는 정보가 없네요");
         }
     }
+
+
+    public List<NoticeEntity> findSmallAll(CleanType type)
+    {
+        System.out.println(noticeMapper.findByType(String.valueOf(type)));
+        List<NoticeEntity> list = new ArrayList<>(noticeMapper.findByType(String.valueOf(type)));
+        for(NoticeEntity notice : list)
+        {
+            Hibernate.initialize(notice.getNoticeDetailEntities());
+        }
+
+        if(list.isEmpty() != true)
+        {
+            return list;
+        }
+        else if(list.isEmpty() == true)
+        {
+            throw new FindFailedException("list를 찾긴 찾았는데, 비어있어요");
+        }
+        else
+        {
+            throw new FindFailedException("리뷰 데이터를 찾는 도중, 알 수 없는 오류가 발생했어요");
+        }
+    }
+
     public List<NoticeEntity> findAll()
     {
         List<NoticeEntity> list = new ArrayList<>(noticeMapper.findAll());
@@ -97,6 +123,7 @@ public class NoticeService
             throw new FindFailedException("리뷰 데이터를 찾는 도중, 알 수 없는 오류가 발생했어요");
         }
     }
+
 
     public NoticeEntity findNoticeId(String noticeId)
     {

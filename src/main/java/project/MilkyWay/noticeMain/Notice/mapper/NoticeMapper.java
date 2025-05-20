@@ -9,6 +9,7 @@ import java.util.List;
 public interface NoticeMapper
 {
     List<NoticeEntity> findAll();
+    List<NoticeEntity> findByType(String type);
     NoticeEntity findByNoticeId(String NoticeId);
     void deleteByNoticeId(String NoticeId);
 

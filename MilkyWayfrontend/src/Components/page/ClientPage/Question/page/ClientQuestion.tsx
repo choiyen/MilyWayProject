@@ -7,7 +7,6 @@ import { PostQuestionALL } from "@/Components/page/ManagerPage/Question/api/util
 import { useDispatch } from "react-redux";
 import { setQuestionData } from "@/config/request/ReduxList/QuestionsReducer";
 import { ExampleQuestion } from "./ui/ExampleQuestion";
-import { BoardQuestion } from "./ui/BoardQuestion";
 import CommentQuestion from "./ui/CommentQuestion";
 
 // 페이지 전체 컨테이너
@@ -102,7 +101,6 @@ export const ClientQuestion = () => {
       </QuestionCampaign>
       <ExampleQuestion Question={Question} />
       <CommentQuestion />
-      <BoardQuestion />
     </PageContainer>
   );
 };

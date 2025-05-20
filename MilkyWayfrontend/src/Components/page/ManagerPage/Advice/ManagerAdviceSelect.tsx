@@ -7,7 +7,6 @@ import { paths } from "@/config/paths/paths";
 import { DELETE, POST } from "@/config/request/axios/axiosInstance";
 import { NoticeType } from "@/types/Feature/Notice/NoticeAll";
 import styled from "styled-components";
-import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
 
 const DeleteButton = styled.button`
   width: 100%;
@@ -39,13 +38,14 @@ export const ManagerAdviceSelect = () => {
 
         // ✅ 중복 방지를 위해 지역 변수로 선언
         const Notice: NoticeType[] = [];
+        console.log(res.data);
 
-        if (Array.isArray(res.data[0])) {
-          for (let i = 0; i < res.data[0].length; i++) {
+        if (Array.isArray(res.data)) {
+          for (let i = 0; i < res.data.length; i++) {
             Notice.push({
-              noticeId: res.data[0][i].noticeId,
-              title: res.data[0][i].title,
-              type: res.data[0][i].type,
+              noticeId: res.data[i].noticeId,
+              title: res.data[i].title,
+              type: res.data[i].type,
               titleimg: "",
               greeting: "",
             });
@@ -60,10 +60,6 @@ export const ManagerAdviceSelect = () => {
     };
 
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    LoginCheck();
   }, []);
 
   const handleRowClick = (noticeId: string) => {
