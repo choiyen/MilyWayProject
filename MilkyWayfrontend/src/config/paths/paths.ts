@@ -1,8 +1,14 @@
 export const paths = {
   Address: {
     search: {
-      path: "/address/search",
-      getHref: () => "/address/search",
+      defaul: {
+        path: "/address/search",
+        getHref: () => "/address/search",
+      },
+      Date: {
+        path: "/address/search/Date",
+        getHref: () => "/address/search/Date",
+      },
     },
     basic: {
       path: "/address",

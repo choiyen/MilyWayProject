@@ -127,7 +127,7 @@ export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
     try {
       setActiveButton(buttonName);
       await LoginCheck();
-      navigate(GateWayNumber.Manager + "/" + name);
+      navigate(name);
     } catch (error) {
       console.error("Error during login:", error);
       alert("로그인 후 이용해주세요.");

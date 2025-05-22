@@ -100,6 +100,23 @@ public class AdministrationService
             throw new FindFailedException("알 수 없는 오류로 데이터베이스 정보를 찾을 수 없어요! 다시 시도해주세요");
         }
     }
+    public List<AdministrationEntity> FindByAdministrationDateBetween(LocalDate Date)
+    {
+        LocalDate LastDate = Date.plusDays(30);
+        List<AdministrationEntity> administrationEntities = administrationRepository.findByAdministrationDateBetween(Date,LastDate);
+        if(administrationEntities.isEmpty())
+        {
+            throw new FindFailedException("일정 데이터를 찾았는데, 데이터베이스가 비어 있어요");
+        }
+        else if(administrationEntities != null)
+        {
+            return administrationEntities;
+        }
+        else
+        {
+            throw new FindFailedException("알 수 없는 오류로 데이터베이스 정보를 찾을 수 없어요! 다시 시도해주세요");
+        }
+    }
 
     public AdministrationEntity FindByAdministration(String EncodingAdministrationId)
     {

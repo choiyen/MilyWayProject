@@ -11,38 +11,64 @@ import { ScheduleModal } from "../ui/ScheduleModal";
 import { LastButton } from "@/SCSS/Fixed";
 import { GET, POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
-type ScheduleType = "휴일" | "업무" | "연가" | "예약";
+import { ScheduleType } from "@/types/appointment/adminstrationType";
 
 export const ManagerCalendar = () => {
   const dispatch = useDispatch();
   const calendar = userCalendar();
 
   const [change, setChange] = useState(false);
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date | null>();
   const [type, setType] = useState<ScheduleType>("휴일");
   const [select, setSelect] = useState<number | null>(null);
   const [admintration, setAdmintration] = useState<AdministrationType[]>([]);
   const [address, setAddress] = useState<AddressType[]>([]);
+  // const [FirstDate, setFirstDate] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(calendar.currentDate);
+      calendar.currentDate = new Date(
+        calendar.currentDate.getFullYear(),
+        calendar.currentDate.getMonth(),
+        2
+      );
       await POST({
-        url: paths.Administration.search.path,
+        url:
+          paths.Administration.search.path +
+          `/${calendar.currentDate.toISOString().slice(0, 10)}`,
       }).then((res) => {
         setAdmintration(res.data);
       });
-      await GET({
-        url: paths.Address.search.path,
-      }).then((res) => {
-        setAddress(res.data);
-      });
     };
     fetchData();
-  }, []);
+  }, [calendar.currentDate, date]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await GET({
+        url: paths.Address.search.Date.path,
+        params: {
+          AdminstrationDate:
+            date?.toLocaleDateString("sv-SE").split("T")[0] ||
+            new Date().toISOString().split("T")[0],
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          setAddress(res.data);
+        })
+        .catch((err) => {
+          setAddress([]);
+        });
+    };
+    fetchData();
+  }, [date]);
+
   const fetchData = async () => {
     const [adminRes, addressRes] = await Promise.all([
       GET({ url: paths.Administration.search.path }),
-      GET({ url: paths.Address.search.path }),
+      GET({ url: paths.Address.search.defaul.path }),
     ]);
     setAdmintration(adminRes.data);
     setAddress(addressRes.data);

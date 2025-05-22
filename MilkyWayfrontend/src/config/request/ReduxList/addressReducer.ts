@@ -5,9 +5,9 @@ const initialAddressStateValue: AddressType = {
   customer: "",
   address: "",
   phoneNumber: "",
-  submissionDate: "",
+  submissionDate: `${new Date().toISOString().split("T")[0]}`,
   acreage: "",
-  cleanType: "",
+  cleanType: "주거청소",
   addressId: "",
 };
 

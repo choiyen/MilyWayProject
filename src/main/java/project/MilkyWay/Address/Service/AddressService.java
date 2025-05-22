@@ -14,6 +14,7 @@ import project.MilkyWay.ComonType.Expection.InsertFailedException;
 import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.Address.Repository.AddressRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -90,6 +91,13 @@ public class AddressService
     {
         return addressRepository.findByAddressId(EncodingAddressId);
     }
+    public  AddressEntity FindBySubmissionDate(LocalDate SubmissionDate)
+    {
+        return addressRepository.findBySubmissionDate(SubmissionDate);
+    }
+
+
+
     public List<AddressEntity> findALL()
     {
         List<AddressEntity> addressEntities = addressRepository.findAll();

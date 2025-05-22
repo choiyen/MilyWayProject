@@ -25,6 +25,7 @@ import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
 import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.ComonType.LoginSuccess;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -297,6 +298,43 @@ public class AddressController
                 else
                 {
                     throw new RuntimeException("예기치 못한 오류로 런타임 오류 발생!!");
+                }
+            }
+            else
+            {
+                throw new SessionNotFoundExpection("관리자 로그인 X, 예약정보 조회 불가");
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
+        }
+    }
+    @Operation(
+            summary = "Returns AddressDTO object for a given Address Id , but only if the user is an administrator.",
+            description = "This API retrieves an Address based on the provided Address Id and returns the corresponding AddressDTO object.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Address found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Address not found")
+            }
+    )
+    @GetMapping("/search/Date")
+    public ResponseEntity<?> FindByDate(HttpServletRequest request, @RequestParam LocalDate AdminstrationDate)
+    {
+        try
+        {
+            System.out.println(AdminstrationDate);
+            if(loginSuccess.isSessionExist(request))
+            {
+                AddressEntity addressEntity = addressService.FindBySubmissionDate(AdminstrationDate);
+                if(addressEntity != null)
+                {
+                    AddressDTO addressDTO = ConvertToDTO(addressEntity);
+                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회 성공", Collections.singletonList(addressDTO)));
+                }
+                else
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("empty", "데이터 조회 성공했으나, 비어있음"));
                 }
             }
             else

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public interface AddressRepository extends JpaRepository<AddressEntity, String>
 {
     AddressEntity findByAddressId(String addressId);
+    AddressEntity findBySubmissionDate(LocalDate SubmissionDate);
     boolean existsBySubmissionDate(LocalDate SubmissionDate);
     boolean existsByAddressId(String addressId);
     void deleteByAddressId(String addressId);

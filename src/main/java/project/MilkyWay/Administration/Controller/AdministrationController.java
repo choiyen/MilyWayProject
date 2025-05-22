@@ -22,6 +22,7 @@ import project.MilkyWay.Administration.Service.AdministrationService;
 import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
 import project.MilkyWay.ComonType.LoginSuccess;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -234,18 +235,32 @@ public class AdministrationController
                     @ApiResponse(responseCode = "404", description = "administration List not found")
             }
     )
-    @PostMapping("/search")
-    public ResponseEntity<?> FindAll()
+    @PostMapping({"/search/{page}", "/search"})
+    public ResponseEntity<?> FindAll(@PathVariable(value = "page",required = false) LocalDate Date)
     {
         try
         {
-            List<AdministrationEntity> administrationEntities = administrationService.FindAll();
-            List<AdministrationDTO> administrationDTOS = new ArrayList<>();
-            for (AdministrationEntity administrationEntity : administrationEntities)
+            System.out.println(Date);
+            if(Date == null)
             {
+                List<AdministrationEntity> administrationEntities = administrationService.FindAll();
+                List<AdministrationDTO> administrationDTOS = new ArrayList<>();
+                for (AdministrationEntity administrationEntity : administrationEntities)
+                {
                     administrationDTOS.add(ConvertToDTO(administrationEntity));
+                }
+                return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 일정데이터 전체조회 성공",  administrationDTOS));
             }
-            return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 일정데이터 전체조회 성공",  administrationDTOS));
+            else
+            {
+                List<AdministrationEntity> administrationEntities = administrationService.FindByAdministrationDateBetween(Date);
+                List<AdministrationDTO> administrationDTOS = new ArrayList<>();
+                for (AdministrationEntity administrationEntity : administrationEntities)
+                {
+                    administrationDTOS.add(ConvertToDTO(administrationEntity));
+                }
+                return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에서 일정데이터 전체조회 성공",  administrationDTOS));
+            }
         }
         catch (Exception e)
         {

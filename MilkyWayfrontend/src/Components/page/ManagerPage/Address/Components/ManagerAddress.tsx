@@ -40,21 +40,49 @@ export const ManagerAddress = () => {
   const AddressData = useSelector((state: RootState) => {
     return state.Address.value;
   });
+  function isValidPhoneNumber(phone: string) {
+    const regex = /^01[0-9]-\d{3,4}-\d{4}$/;
+    return regex.test(phone);
+  }
+
+  const isEmptyAddress = () => {
+    if (
+      AddressData.acreage == "" ||
+      AddressData.cleanType == "" ||
+      AddressData.customer == "" ||
+      AddressData.phoneNumber == "" ||
+      AddressData.submissionDate == "" ||
+      Address == "" ||
+      AddressDetail == ""
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const handleReservation = () => {
-    AddressInsertfetchData(AddressData)
-      .then((res) => {
-        if (res.resultType === "success") {
-          console.log(res.message);
-          native(GateWayNumber.Manager + "/" + ManagerGateWayType.Join);
-        } else {
-          console.log(res.message);
-          alert(res.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (isEmptyAddress()) {
+      if (isValidPhoneNumber(AddressData.phoneNumber)) {
+        AddressInsertfetchData(AddressData)
+          .then((res) => {
+            if (res.resultType === "success") {
+              console.log(res.message);
+              native(GateWayNumber.Manager + "/" + ManagerGateWayType.Join);
+            } else {
+              console.log(res.message);
+              alert(res.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        alert("전화번호는 -을 포함한 형태로 입력하셔야 합니다.");
+      }
+    } else {
+      alert("비어있는 데이터가 존재합니다.");
+    }
   };
 
   useEffect(() => {

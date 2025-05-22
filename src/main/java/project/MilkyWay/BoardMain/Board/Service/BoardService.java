@@ -81,6 +81,7 @@ public class BoardService
     }
     public List<BoardEntity> FindAll()
     {
+
         List<BoardEntity> boardEntity = boardRepository.findAll();
         if(boardEntity.isEmpty())
         {
