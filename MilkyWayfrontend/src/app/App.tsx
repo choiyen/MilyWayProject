@@ -31,6 +31,8 @@ import { ClientQuestion } from "@/Components/page/ClientPage/Question/page/Clien
 import ServiceInsert from "@/Components/page/ClientPage/Question/Board/ServiceInsert";
 import ServiceBoard from "@/Components/page/ClientPage/Question/Board/ServiceBoard";
 import { ClientReservation } from "@/Components/page/ClientPage/Reservation/ClientReservation";
+import { ThemeProvider } from "styled-components";
+import { theme } from "@/SCSS/typecss";
 
 const router = createBrowserRouter([
   {
@@ -141,11 +143,13 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <div className="App">
-        <RouterProvider router={router} />
-      </div>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <div className="App">
+          <RouterProvider router={router} />
+        </div>
+      </Provider>
+    </ThemeProvider>
   );
 };
 

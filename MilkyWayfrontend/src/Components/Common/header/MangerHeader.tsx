@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useRef, useState } from "react";
 import "@/SCSS/header.scss";
-import homeImage from "@/Components/Common/assets/home.png";
-import hamburger from "@/Components/Common/assets/hamburger.png";
 import broom from "@/Components/Common/assets/broom.png";
-
 import { useNavigate } from "react-router-dom";
 import {
   ClientGateWayType,
@@ -22,184 +18,43 @@ import {
 import { POST } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { Head } from "../frame/header";
-// Header styles
-const HeaderBox = styled.div`
+import { ManagerLoginPath, ManagerPath } from "./headerPaths";
+import {
+  ChangeButton,
+  HeaderBox,
+  HeaderButton,
+  HeaderButton1,
+  HeaderLarge,
+  HomeButton,
+  ListBox,
+  ManagerButton,
+  Overlay,
+} from "./HeaderCommon";
+import { CgMenuGridR } from "react-icons/cg";
+import styled from "styled-components";
+import { IoHome } from "react-icons/io5";
+import { theme } from "@/SCSS/typecss";
+
+interface MangerHeaderProps {
+  children?: React.ReactNode;
+}
+
+const Container = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "visible",
+})<{ visible: boolean }>`
+  display: flex;
+  flex-direction: row;
+  position: ${({ visible }) => (visible ? "fixed" : "absolute")};
   width: 100%;
-  height: 70px;
-  color: #000000;
-  background-color: #fffeee;
-  display: flex;
-  justify-content: space-between; /* Ensure space between left and right */
-  padding: 0 20px;
-  box-sizing: border-box;
-
-  @media (max-width: 1044px) {
-    height: 60px;
-    padding: 0 10px;
-  }
 `;
 
-const HeaderButton = styled.div`
-  @font-face {
-    font-family: "PartialSansKR-Regular";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/PartialSansKR-Regular.woff2")
-      format("woff2");
-    font-weight: normal;
-    font-style: normal;
-  }
-  font-family: "PartialSansKR-Regular";
-
-  align-items: left;
-  color: #000000;
-  background-color: #fffeee;
-  margin-top: 20px;
-
-  @media (max-width: 1044px) {
-    font-size: 12px;
-  }
-`;
-
-const HeaderButton1 = styled.div`
-  @font-face {
-    font-family: "BMkkubulimTTF-Regular";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/BMkkubulimTTF-Regular.woff2")
-      format("woff2");
-    font-weight: normal;
-    font-style: normal;
-  }
-  font-family: "BMkkubulimTTF-Regular";
-  align-items: left;
-  color: #000000;
-  background-color: #fffeee;
-  font-size: 20px;
-  text-align: center;
-  padding-top: 4px;
-  color: #e195ab;
-  padding: 0px;
-  margin: 0px;
-
-  @media (max-width: 1044px) {
-    font-size: 8px;
-  }
-`;
-
-const ChangeButton = styled.button<{ $isActive: boolean }>`
-  width: 100%;
-  border: none;
-  background-color: #fffeee;
-  text-align: center;
-  padding: 10px 0;
-  margin: 0;
-  margin-left: 10px;
-  font-size: 16px;
-  font-family: "EliceDigitalBaeum-Bd";
-
-  @font-face {
-    font-family: "EliceDigitalBaeum-Bd";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_elice@1.0/EliceDigitalBaeum-Bd.woff2")
-      format("woff2");
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  ${({ $isActive }) =>
-    $isActive &&
-    `
-    color : #f6f6fa;
-    background-color: rgb(60, 32, 143); /* Add a background color to the active button */
-    font-weight: bold;
-    `}
-
-  /* Mouse hover effect */
-&:hover {
-    background-color: #f1f1f1; /* Change the background color on hover */
-    cursor: pointer; /* Change the cursor to a pointer */
-    border-bottom: 2px double #000000;
-    color: black;
-  }
-`;
-
-const HomeButton = styled.img`
-  align-items: right;
-  color: #000000;
-  border-radius: 10px;
-  font-size: 10px;
-  text-align: center;
-  padding-top: 4vw;
-  width: 50px;
-  height: 50px;
-  padding: 10px;
-  display: none;
-
-  @media (max-width: 1044px) {
-    width: 40px;
-    height: 40px;
-    display: block;
-    margin-left: auto; /* Push the hamburger icon to the far right */
-    margin-right: 0; /* Ensure no extra margin on the right */
-  }
-`;
-
-const MangerButton = styled.img`
-  align-items: right;
-  color: #000000;
-  border-radius: 10px;
-  font-size: 10px;
-  text-align: center;
-  padding-top: 4vw;
-  width: 50px;
-  height: 50px;
-  padding: 10px;
-  display: none;
-  display: block;
-
-  @media (max-width: 1044px) {
-    width: 40px;
-    height: 40px;
-    display: none;
-  }
-`;
-
-const ListBox = styled.div`
-  width: 15vw;
-  height: 100vh;
-  background-color: #fffeee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 0;
-
-  @media (max-width: 1044px) {
-    width: 100%;
-    height: auto;
-  }
-`;
-
-const HeaderSmall = styled.div`
-  display: none; /* Default state: hidden on large screens */
-
-  @media (max-width: 1044px) {
-    display: flex;
-    justify-content: flex-end; /* Align elements to the right on small screens */
-  }
-`;
-
-const HeaderLarge = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 50%;
-  @media (max-width: 1044px) {
-    display: none; /* Hide on small screens */
-  }
-`;
-
-export const MangerHeader = () => {
+export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
   const [isListVisible, setListVisible] = useState(false);
   const [activeButton, setActiveButton] = useState<string>("Login");
   const handleImageClick = () => {
     setListVisible(!isListVisible);
   };
+  const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (activeButton === "Login" || activeButton === "Home") return; // activeButton이 "Login"일 때는 로그인 체크를 하지 않음
@@ -232,6 +87,24 @@ export const MangerHeader = () => {
         navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main); // 로그인 페이지로 이동
       }); // 로그인 체크
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (listRef.current && !listRef.current.contains(event.target as Node)) {
+        setListVisible(false);
+      }
+    };
+
+    if (isListVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isListVisible]);
 
   const handleButtonClick = (buttonName: string) => {
     setActiveButton(buttonName);
@@ -306,149 +179,112 @@ export const MangerHeader = () => {
             <HeaderButton1>은하수 홈케어</HeaderButton1>
           </div>
         </div>
+
         <HeaderLarge>
-          <ChangeButton
-            $isActive={activeButton === "ReservationMangeMent"}
-            onClick={() =>
-              FuncClick(ManagerGateWayType.Join, "ReservationMangeMent")
-            }
-          >
-            예약 관리
-          </ChangeButton>
-          <ChangeButton
-            $isActive={activeButton === "QuestionMangeMent"}
-            onClick={() =>
-              FuncClick(ManagerGateWayType.QuestionSelect, "QuestionMangeMent")
-            }
-          >
-            Q & A 관리
-          </ChangeButton>
-          <ChangeButton
-            $isActive={activeButton === "ReviewMangeMent"}
-            onClick={() =>
-              FuncClick(ManagerGateWayType.AdviceSelect, "ReviewMangeMent")
-            }
-          >
-            후기 관리
-          </ChangeButton>
-          <ChangeButton
-            $isActive={activeButton === "ScheduleMangeMent"}
-            onClick={() =>
-              FuncClick(ManagerGateWayType.Calendar, "ScheduleMangeMent")
-            }
-          >
-            일정 관리
-          </ChangeButton>
+          {ManagerPath &&
+            ManagerPath.map((value, index) => (
+              <ChangeButton
+                key={index}
+                isActive={activeButton === value.activename}
+                onClick={() => FuncClick(value.paths, value.activename)}
+              >
+                {value.buttonname}
+              </ChangeButton>
+            ))}
           {auth.isAuthenticated ? (
             <ChangeButton
-              $isActive={activeButton === "Logout"}
+              isActive={activeButton === "Logout"}
               onClick={() => Logout()}
             >
               Logout
             </ChangeButton>
           ) : (
             <ChangeButton
-              $isActive={activeButton === "Login"}
-              onClick={() => FuncClick(ManagerGateWayType.Main, "Login")}
+              isActive={activeButton === ManagerLoginPath.activename}
+              onClick={() =>
+                FuncClick(ManagerLoginPath.paths, ManagerLoginPath.activename)
+              }
             >
-              Login
+              {ManagerLoginPath.buttonname}
             </ChangeButton>
           )}
         </HeaderLarge>
-        <div style={{ backgroundColor: "#F4DFB6" }}>
-          <HomeButton
-            src={hamburger}
-            onClick={handleImageClick}
-            style={{ width: "50px", height: "50px" }}
-          />
-          <MangerButton
-            src={homeImage}
-            onClick={handleHomeButtonClick} // 관리자 버튼 클릭 시 확인
-            style={{ width: "50px", height: "50px" }}
-          />
+        <div style={{ backgroundColor: `${theme.colors.hazeRose}` }}>
+          <HomeButton>
+            <CgMenuGridR
+              onClick={handleImageClick}
+              style={{
+                width: "50px",
+                height: "50px",
+                color: `${theme.colors.charcoalBlack}`,
+              }} // 진한 틸
+            />
+          </HomeButton>
+          <ManagerButton>
+            <IoHome
+              onClick={handleHomeButtonClick}
+              style={{
+                width: "50px",
+                height: "50px",
+                color: `${theme.colors.charcoalBlack}`,
+              }}
+            />
+          </ManagerButton>
         </div>
       </HeaderBox>
 
-      {/* Conditional rendering based on screen size */}
-      <HeaderSmall>
-        {isListVisible && (
-          <ListBox>
-            <ul style={{ width: "100%" }}>
-              <li>
+      <Container visible={isListVisible}>
+        <Overlay
+          visible={isListVisible}
+          onClick={() => setListVisible(false)}
+        />
+        <div style={{ flex: 1 }}>{children}</div>
+        <ListBox ref={listRef} visible={isListVisible}>
+          <ul>
+            <li>
+              <ChangeButton
+                isActive={activeButton === "Home"}
+                onClick={() => handleButtonClick("Home")}
+              >
+                Home
+              </ChangeButton>
+            </li>
+            {ManagerPath &&
+              ManagerPath.map((data) => (
+                <li key={data.activename}>
+                  <ChangeButton
+                    isActive={activeButton === data.activename}
+                    onClick={() => FuncClick(data.paths, data.activename)}
+                  >
+                    {data.buttonname}
+                  </ChangeButton>
+                </li>
+              ))}
+            <li>
+              {auth.isAuthenticated ? (
                 <ChangeButton
-                  $isActive={activeButton === "Home"}
-                  onClick={() => handleButtonClick("Home")}
+                  isActive={activeButton === "LogOut"}
+                  onClick={() => Logout()}
                 >
-                  Home
+                  Logout
                 </ChangeButton>
-              </li>
-              <li>
+              ) : (
                 <ChangeButton
-                  $isActive={activeButton === "ReservationMangeMent"}
-                  onClick={() =>
-                    FuncClick(ManagerGateWayType.Join, "ReservationMangeMent")
-                  }
-                >
-                  예약 관리
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  $isActive={activeButton === "QuestionMangeMent"}
+                  isActive={activeButton === ManagerLoginPath.activename}
                   onClick={() =>
                     FuncClick(
-                      ManagerGateWayType.QuestionSelect,
-                      "QuestionMangeMent"
+                      ManagerLoginPath.paths,
+                      ManagerLoginPath.activename
                     )
                   }
                 >
-                  Q & A 관리
+                  {ManagerLoginPath.buttonname}
                 </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  $isActive={activeButton === "ReviewMangeMent"}
-                  onClick={() =>
-                    FuncClick(
-                      ManagerGateWayType.AdviceSelect,
-                      "ReviewMangeMent"
-                    )
-                  }
-                >
-                  후기 관리
-                </ChangeButton>
-              </li>
-              <li>
-                <ChangeButton
-                  $isActive={activeButton === "ScheduleMangeMent"}
-                  onClick={() =>
-                    FuncClick(ManagerGateWayType.Calendar, "ScheduleMangeMent")
-                  }
-                >
-                  일정 관리
-                </ChangeButton>
-              </li>
-              <li>
-                {auth.isAuthenticated ? (
-                  <ChangeButton
-                    $isActive={activeButton === "LogOut"}
-                    onClick={() => Logout()}
-                  >
-                    Logout
-                  </ChangeButton>
-                ) : (
-                  <ChangeButton
-                    $isActive={activeButton === "Login"}
-                    onClick={() => FuncClick(ManagerGateWayType.Main, "Login")}
-                  >
-                    Login
-                  </ChangeButton>
-                )}
-              </li>
-            </ul>
-          </ListBox>
-        )}
-      </HeaderSmall>
+              )}
+            </li>
+          </ul>
+        </ListBox>
+      </Container>
     </div>
   );
 };

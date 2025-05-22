@@ -3,6 +3,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { ClientHeader } from "@/Components/Common/header/ClientHeader";
 import { MangerHeader } from "@/Components/Common/header/MangerHeader";
+import { theme } from "./typecss";
 
 export const FixedManagerHeader = styled(MangerHeader)`
   position: fixed;
@@ -22,7 +23,7 @@ export const FixedClientHeader = styled(ClientHeader)`
   z-index: 1000; /* Make sure it stays on top */
 `;
 export const Fontname = styled.div`
-  color: darkviolet; /* 세련된 다크 퍼플 */
+  color: ${theme.colors.charcoalBlack}; /* 세련된 다크 퍼플 */
   font-size: 40px;
   margin-bottom: 30px; /* Add space below the title to separate from the next content */
   margin-top: 30px;
@@ -58,7 +59,7 @@ export const SmallButton = styled.button`
   margin-top: 50px;
   border: none;
   border-radius: 6px;
-  background-color: #6c63ff;
+  background-color: ${theme.colors.auroraBlue};
   color: #fff;
 
   font-size: 14px;
@@ -88,7 +89,7 @@ export const LastButton = styled.button`
 
   border: none;
   border-radius: 8px;
-  background-color: #6c63ff; /* 세련된 보라톤 */
+  background-color: ${theme.colors.auroraBlue};
   color: #fff;
 
   font-size: 16px;

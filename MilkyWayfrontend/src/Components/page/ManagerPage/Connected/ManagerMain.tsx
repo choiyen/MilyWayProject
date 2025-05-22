@@ -10,6 +10,7 @@ import { setSession } from "@/config/request/ReduxList/useauthSlice";
 import { checkSession } from "@/config/request/axios/util";
 import { RootState } from "@/config/reduxstore";
 import { login } from "@/config/request/ReduxList/userlogin";
+import { theme } from "@/SCSS/typecss";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -66,9 +67,9 @@ const MangerButton = styled.button`
   max-width: 250px;
   height: 50px;
   margin-top: 70px;
-  border: 1px solid #e195ab;
+  border: 1px solid ${theme.colors.cloudGrey};
   border-radius: 10px;
-  background-color: #e195ab;
+  background-color: ${theme.colors.auroraBlue};
   color: white;
   display: inline-block;
   font-size: 20px;
