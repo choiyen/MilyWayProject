@@ -8,12 +8,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.DTO.AddressDTO;
 import project.MilkyWay.Administration.Entity.AdministrationEntity;
 import project.MilkyWay.Administration.Service.AdministrationService;
+import project.MilkyWay.BoardMain.Board.DTO.BoardDTO;
+import project.MilkyWay.ComonType.DTO.PageDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.Address.Entity.AddressEntity;
 import project.MilkyWay.ComonType.Enum.CleanType;
@@ -242,13 +245,15 @@ public class AddressController
             }
     )
     @GetMapping("/search")
-    public ResponseEntity<?> FindAll(HttpServletRequest request)
+    public ResponseEntity<?> FindAll(HttpServletRequest request, @RequestParam(name = "page", defaultValue = "0") Integer page)
     {
         try
         {
+            System.out.println(page);
             if(loginSuccess.isSessionExist(request))
             {
-                List<AddressEntity> addressEntityList = addressService.findALL();
+
+                Page<AddressEntity> addressEntityList = addressService.findALL(page);
                 if(addressEntityList.isEmpty())
                 {
                     return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 내용은 비어있음"));
@@ -258,7 +263,11 @@ public class AddressController
                     for (AddressEntity addressEntity : addressEntityList) {
                         addressDTOS.add(ConvertToDTO(addressEntity));
                     }
-                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 조회 성공", addressDTOS));
+                    PageDTO pageDTO = PageDTO.<AddressDTO>builder().list(addressDTOS)
+                            .PageCount(addressEntityList.getTotalPages())
+                            .Total(addressEntityList.getTotalElements()).build();
+
+                    return ResponseEntity.ok().body(responseDTO.Response("success","데이터베이스에 주소 데이터 조회 성공",pageDTO));
                 }
             }
             else
@@ -334,7 +343,7 @@ public class AddressController
                 }
                 else
                 {
-                    return ResponseEntity.ok().body(responseDTO.Response("empty", "데이터 조회 성공했으나, 비어있음"));
+                    return ResponseEntity.ok().body(responseDTO.Response("empty", "데이터 조회 성공했으나 비어있음"));
                 }
             }
             else

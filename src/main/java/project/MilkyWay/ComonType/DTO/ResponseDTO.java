@@ -14,6 +14,7 @@ public class ResponseDTO<T>
     private String resultType; //어떤 유형의 데이터인지 확인
     private String message; // error message - fail
     private List<T> data; // response data - success
+    private PageDTO pageDTO;
 
 
     public ResponseDTO<T> Response(String result, String message, List<T> list)
@@ -24,6 +25,16 @@ public class ResponseDTO<T>
                 .resultType(result)
                 .message(message)
                 .data(list) // List<T> 그대로 사용
+                .build();
+    }
+    public ResponseDTO<T> Response(String result, String message, PageDTO list)
+    {
+        // List<T> 그대로 사용
+
+        return ResponseDTO.<T>builder()
+                .resultType(result)
+                .message(message)
+                .pageDTO(list) // List<T> 그대로 사용
                 .build();
     }
     public ResponseDTO<T> Response(String result, String message)

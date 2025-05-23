@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Administration.Entity.AdministrationEntity;
+import project.MilkyWay.ComonType.DTO.PageDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Enum.DateType;
 import project.MilkyWay.ComonType.Expection.*;
@@ -182,21 +183,30 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
             }
     )
     @GetMapping
-    public ResponseEntity<?> FindAll(HttpServletRequest request)
+    public ResponseEntity<?> FindAll(HttpServletRequest request, @RequestParam(name = "page", defaultValue = "0") Integer page)
     {
         try
         {
             if(loginSuccess.isSessionExist(request))
             {
-                List<ReservationEntity> reservationEntities = reservationService.ListReservation();
+
+                List<ReservationEntity> reservationEntities = reservationService.ListReservation(page);
                 List<ReservationDTO> reservationDTOS = new ArrayList<>();
                 for (ReservationEntity reservationEntity : reservationEntities) {
                     reservationDTOS.add(ConvertToDTO(reservationEntity));
                 }
-                if (reservationDTOS.isEmpty()) {
-                    throw new FindFailedException("데이터 찾기를 시도했는데, 비어있어요ㅠㅠㅠ");
-                } else {
-                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회에 성공했습니다.", reservationDTOS));
+                if (reservationDTOS.isEmpty())
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("empty","데이터베이스에 내용은 비어있음"));
+                }
+                else
+                {
+                    PageDTO pageDTO = PageDTO.<ReservationDTO>builder()
+                            .list(reservationDTOS)
+                            .PageCount(reservationService.totalPaging())
+                            .Total(reservationService.totalRecord())
+                            .build();
+                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회에 성공했습니다.", pageDTO));
                 }
             }
             else

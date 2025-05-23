@@ -10,9 +10,12 @@ export const AddressInsertfetchData = async (Addressdata: AddressType) => {
   return response;
 };
 
-export const AddressSelectfetchData = async () => {
+export const AddressSelectfetchData = async (page: number) => {
   return await GET({
-    url: paths.Address.search.path,
+    url: paths.Address.search.defaul.path,
+    params: {
+      page,
+    },
   });
 };
 

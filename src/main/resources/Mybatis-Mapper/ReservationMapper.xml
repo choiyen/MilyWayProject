@@ -4,7 +4,10 @@
 <!--MyBatics 매퍼 DTO(Document Type Definition)-->
 <mapper namespace="project.MilkyWay.Reservation.Mapper.ReservationMapper">
     <select id="findAll" resultType="project.MilkyWay.Reservation.Entity.ReservationEntity">
-        SELECT * FROM reservation
+        SELECT *
+        FROM reservation
+        ORDER BY submissionDate DESC
+        LIMIT #{limit} OFFSET #{offset}
     </select>
     <select id="findByAdministrationId" parameterType="String" resultType="project.MilkyWay.Reservation.Entity.ReservationEntity">
         SELECT * FROM reservation WHERE administrationId = #{administrationId}
@@ -21,4 +24,8 @@
     <update id="Update" parameterType="project.MilkyWay.Reservation.Entity.ReservationEntity">
         UPDATE reservation SET acreage = #{acreage}, name = #{name}, phone = #{phone}, address = #{address}, subissionDate = #{subissionDate} WHERE reservationId = #{reservationId}
     </update>
+<!-- 페이징 처리 -->
+    <select id="totalRecord" resultType="java.lang.Long">
+        SELECT count(*) FROM reservation
+    </select>
 </mapper>

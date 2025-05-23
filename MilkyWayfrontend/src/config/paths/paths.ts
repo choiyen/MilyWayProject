@@ -32,6 +32,10 @@ export const paths = {
         getHref: () => "/board",
       },
       search: {
+        path: "/board/search/page",
+        getHref: () => "/board/search/page",
+      },
+      param: {
         path: "/board/search",
         getHref: () => "/board/search",
       },

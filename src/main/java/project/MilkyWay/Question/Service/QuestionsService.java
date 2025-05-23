@@ -1,5 +1,6 @@
 package project.MilkyWay.Question.Service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -10,7 +11,9 @@ import project.MilkyWay.ComonType.Expection.FindFailedException;
 import project.MilkyWay.ComonType.Expection.InsertFailedException;
 import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.Question.mapper.QuestionsMapper;
+import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -94,6 +97,21 @@ public class QuestionsService //고객 질문을 관리하기 위한 DTO
             throw new FindFailedException("해당 질문코드를 지닌 데이터는 없어요.");
         }
     }
+    public List<QuestionsEntity> findAll2(Integer page)
+    {
+        List<QuestionsEntity> list = new ArrayList<>(questionsMapper.findAll2(page, 10));
+        return list;
+    }
+    public Long totalRecord() {
+        return questionsMapper.totalRecord();
+    }
+    public Integer totalPaging() {
+        Long totalRecords = totalRecord(); // 전체 레코드 수
+        int pageSize = 100;               // 한 페이지에 보여줄 수
+
+        return (int) Math.ceil((double) totalRecords / pageSize);
+    }
+
 
     private QuestionsEntity ChangeToQuestion(QuestionsEntity questionsEntity, QuestionsEntity newQuestionEntity)
     {

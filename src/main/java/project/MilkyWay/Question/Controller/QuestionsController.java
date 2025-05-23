@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.ComonType.DTO.PageDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
 import project.MilkyWay.ComonType.LoginSuccess;
@@ -225,6 +226,45 @@ public class QuestionsController //고객 질문을 관리하기 위한 DTO
                     questionsDTOS.add(ConVertToDTO(questionsEntity));
                 }
                 return ResponseEntity.ok().body(responseDTO.Response("success","질문 데이터 조회에 성공했습니다.",questionsDTOS));
+            }
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage() ));
+        }
+    }
+    @Operation(
+            summary = "Returns a list of QuestionsDTO objects",
+            description = "This API retrieves a list of QuestionsDTO objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Questions List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = QuestionsDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Questions List not found")
+            }
+    )
+    @PostMapping("/search/limit")
+    public ResponseEntity<?> QuestionFindAlllimit(@RequestParam(name = "page", defaultValue = "0") Integer page)
+    {
+        try
+        {
+            List<QuestionsEntity> questionsEntities = questionsService.findAll2(page);
+
+            if(questionsEntities.isEmpty())
+            {
+                return ResponseEntity.ok().body(responseDTO.Response("findnot","질문 조회를 시도했으나, 데이터가 비어있습니다."));
+            }
+            else
+            {
+                List<QuestionsDTO> questionsDTOS = new ArrayList<>();
+                for(QuestionsEntity questionsEntity : questionsEntities)
+                {
+                    questionsDTOS.add(ConVertToDTO(questionsEntity));
+                }
+                PageDTO pageDTO = PageDTO.<QuestionsDTO>builder()
+                        .list(questionsDTOS)
+                        .Total(questionsService.totalRecord())
+                        .PageCount(questionsService.totalPaging())
+                        .build();
+                return ResponseEntity.ok().body(responseDTO.Response("success","질문 데이터 조회에 성공했습니다.",pageDTO));
             }
         }
         catch (Exception e)

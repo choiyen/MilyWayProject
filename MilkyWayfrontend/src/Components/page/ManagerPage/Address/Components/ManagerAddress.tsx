@@ -103,6 +103,7 @@ export const ManagerAddress = () => {
             <SelectBox
               name={"서비스명"}
               append={cleanType}
+              value={AddressData.cleanType}
               setValue={(value: string) => {
                 dispatch(setAddressData({ ...AddressData, cleanType: value }));
               }}

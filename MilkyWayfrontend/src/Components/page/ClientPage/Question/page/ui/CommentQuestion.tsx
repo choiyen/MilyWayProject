@@ -1,5 +1,5 @@
 import { paths } from "@/config/paths/paths";
-import { DELETE, POST } from "@/config/request/axios/axiosInstance";
+import { DELETE, GET } from "@/config/request/axios/axiosInstance";
 import "@/SCSS/tailwind.scss";
 import { BoardType } from "@/types/Feature/Boards/Board";
 import { ClientGateWayType, GateWayNumber } from "@/types/GateWay/GateWayType";
@@ -13,15 +13,19 @@ const CommentQuestion = () => {
   const selectText = useRef<HTMLInputElement>(null);
   const selectText2 = useRef<HTMLSelectElement>(null);
   const nativeGate = useNavigate();
-
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
   const [inputPassword, setInputPassword] = useState("");
   const [inputPassword2, setInputPassword2] = useState("");
+  const TotalPage = useRef(0);
+  const [CurrentPage, setCurrentPage] = useState(0);
 
   const handleSearch = async () => {
-    return await POST({
+    return await GET({
       url: paths.forum.Board.search.path,
+      params: {
+        page: CurrentPage,
+      },
     });
   };
 
@@ -50,15 +54,21 @@ const CommentQuestion = () => {
 
   useEffect(() => {
     handleSearch().then((res) => {
-      const uniqueItems = res.data.map((commit: BoardType) => ({
-        boardId: commit.boardId || "",
-        title: commit.title || "",
-        content: commit.content || "",
-      }));
-      setAllBoards(uniqueItems);
-      setBoard(uniqueItems);
+      console.log(res);
+      if (res.resultType == "empty") {
+        setBoard([]);
+      } else {
+        const uniqueItems = res.pageDTO.list.map((commit: BoardType) => ({
+          boardId: commit.boardId || "",
+          title: commit.title || "",
+          content: commit.content || "",
+        }));
+        TotalPage.current = res.pageDTO.pageCount;
+        setAllBoards(uniqueItems);
+        setBoard(uniqueItems);
+      }
     });
-  }, []);
+  }, [CurrentPage]);
 
   const handlewriting = () => {
     nativeGate(GateWayNumber.Client + "/" + ClientGateWayType.ServiceInsert);
@@ -122,6 +132,14 @@ const CommentQuestion = () => {
 
       <div className="flex flex-col gap-4 mt-4 bg-slate-300 w-full h-2/5 p-6">
         <div className="flex flex-col gap-2 w-full h-full bg-amber-600 rounded-lg shadow-md p-4">
+          <div className="text-gray-700 font-semibold text-base md:text-lg">
+            <span className="mr-2 font-normal text-gray-500">
+              전체 페이지 수:
+            </span>
+            <span className="text-blue-600 font-bold">
+              {TotalPage.current || 0}
+            </span>
+          </div>
           <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md table-fixed">
             <thead className="bg-gray-200 text-gray-600 text-sm font-semibold uppercase">
               <tr>
@@ -171,6 +189,50 @@ const CommentQuestion = () => {
               )}
             </tbody>
           </table>
+          <div className="flex justify-center mt-3">
+            <div className="flex items-center space-x-6 gap-10">
+              <div className="flex items-center space-x-2 gap-5">
+                <button
+                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                  aria-label="이전 페이지"
+                  onClick={() => {
+                    if (CurrentPage > 0) {
+                      console.log(CurrentPage);
+                      setCurrentPage(CurrentPage - 1);
+                    }
+                  }}
+                >
+                  &lt;
+                </button>
+                {Array.from({ length: TotalPage.current }, (_, index) => (
+                  <button
+                    key={index}
+                    className="px-3 py-1 rounded-md bg-white border border-gray-300 hover:bg-blue-100 focus:outline-none"
+                    onClick={() => {
+                      console.log(index);
+                      setCurrentPage(index);
+                    }}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                  aria-label="다음 페이지"
+                  onClick={() => {
+                    if (TotalPage.current > CurrentPage + 1) {
+                      console.log(CurrentPage);
+                      setCurrentPage(CurrentPage + 1);
+                    } else {
+                      alert("페이지 변경 불가 : 전체 페이지 수 초과");
+                    }
+                  }}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          </div>
 
           <div className="flex justify-center items-center mt-2 gap-4">
             <select

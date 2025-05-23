@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import project.MilkyWay.ComonType.DTO.PageDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Enum.CleanType;
 import project.MilkyWay.ComonType.Expection.*;
@@ -389,6 +390,47 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
         }
     }
 
+    @Operation(
+            summary = "Returns a list of Notice objects along with their associated NoticeDetails.",
+            description = "This API fetches a list of Notice and NoticeDetail objects from the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Notice and Notice Detail List Found successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = NoticeJsonDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Notice and Notice Detail List not found")
+            }
+    )
+    @PostMapping("/search/page")
+    public ResponseEntity<?> findAll2(@RequestParam(name = "page", defaultValue = "0") long page)
+    {
+        try
+        {
+            List<Object> list = new ArrayList<>();
+            List<NoticeEntity> notice = new ArrayList<>(noticeService.findAll2(page));
+            if(notice != null)
+            {
+
+                for(NoticeEntity noticeEntity : notice)
+                {
+                    list.add(ConvertToNotice(noticeEntity));//자동으로 못가져오면 추가하거나 수정 예정
+                }
+                PageDTO pageDTO = PageDTO.builder()
+                        .list(list)
+                        .PageCount(noticeService.totalPaging())
+                        .Total(noticeService.totalRecord())
+                        .build();
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  pageDTO));
+            }
+            else
+            {
+                throw new FindFailedException("전체 후기 데이터를 찾아내는데 실패했습니다.");
+            }
+
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error", e.getMessage()));
+
+        }
+    }
 
     @Operation(
             summary = "Returns a list of Notice objects along with their associated NoticeDetails.",
@@ -399,12 +441,12 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             }
     )
     @GetMapping("/search/Type")
-    public ResponseEntity<?> FindSmallALl(@RequestParam String type)
+    public ResponseEntity<?> FindSmallALl(@RequestParam String type, @RequestParam(name = "page", defaultValue = "0") long page)
     {
         try
         {
             List<Object> list = new ArrayList<>();
-            List<NoticeEntity> notice = new ArrayList<>(noticeService.findSmallAll(CleanType.valueOf(type)));
+            List<NoticeEntity> notice = new ArrayList<>(noticeService.findSmallAll(CleanType.valueOf(type), page));
             if(notice != null)
             {
 

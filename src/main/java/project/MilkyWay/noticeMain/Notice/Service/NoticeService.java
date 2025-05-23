@@ -77,12 +77,19 @@ public class NoticeService
             throw new FindFailedException("데이터를 지울려고 했는데, 후기 Id에 맞는 정보가 없네요");
         }
     }
+    public Long totalRecord() {
+        return noticeMapper.totalRecord();
+    }
+    public Integer totalPaging() {
+        Long totalRecords = totalRecord(); // 전체 레코드 수
+        int pageSize = 100;               // 한 페이지에 보여줄 수
 
-
-    public List<NoticeEntity> findSmallAll(CleanType type)
+        return (int) Math.ceil((double) totalRecords / pageSize);
+    }
+    public List<NoticeEntity> findSmallAll(CleanType type, Long page)
     {
-        System.out.println(noticeMapper.findByType(String.valueOf(type)));
-        List<NoticeEntity> list = new ArrayList<>(noticeMapper.findByType(String.valueOf(type)));
+        System.out.println(noticeMapper.findByType(String.valueOf(type), page, 10));
+        List<NoticeEntity> list = new ArrayList<>(noticeMapper.findByType(String.valueOf(type), page, 10));
         for(NoticeEntity notice : list)
         {
             Hibernate.initialize(notice.getNoticeDetailEntities());
@@ -105,6 +112,27 @@ public class NoticeService
     public List<NoticeEntity> findAll()
     {
         List<NoticeEntity> list = new ArrayList<>(noticeMapper.findAll());
+        for(NoticeEntity notice : list)
+        {
+            Hibernate.initialize(notice.getNoticeDetailEntities());
+        }
+
+        if(list.isEmpty() != true)
+        {
+            return list;
+        }
+        else if(list.isEmpty() == true)
+        {
+            throw new FindFailedException("list를 찾긴 찾았는데, 비어있어요");
+        }
+        else
+        {
+            throw new FindFailedException("리뷰 데이터를 찾는 도중, 알 수 없는 오류가 발생했어요");
+        }
+    }
+    public List<NoticeEntity> findAll2(long page)
+    {
+        List<NoticeEntity> list = new ArrayList<>(noticeMapper.findAll2(page,10));
         for(NoticeEntity notice : list)
         {
             Hibernate.initialize(notice.getNoticeDetailEntities());

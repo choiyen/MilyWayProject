@@ -199,10 +199,20 @@ public class ReservationService //고객의 예약을 관리하기 위한 DTO
     {
         return reservationMapper.findByReservationId(reservationId);
     }
-    public List<ReservationEntity> ListReservation()
+    public List<ReservationEntity> ListReservation(int page)
     {
-        return reservationMapper.findAll();
+        return reservationMapper.findAll(page, 100);
     }
+    public Long totalRecord() {
+        return reservationMapper.totalRecord();
+    }
+    public Integer totalPaging() {
+        Long totalRecords = totalRecord(); // 전체 레코드 수
+        int pageSize = 100;               // 한 페이지에 보여줄 수
+
+        return (int) Math.ceil((double) totalRecords / pageSize);
+    }
+
     private ReservationEntity ChangeReservation(ReservationEntity OldReservation, ReservationEntity newReservation)
     {
         return ReservationEntity.builder()

@@ -2,6 +2,7 @@ package project.MilkyWay.Question.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import project.MilkyWay.Question.Entity.QuestionsEntity;
+import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
 
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface QuestionsMapper
     void deleteById(Long Id);
     void Insert(QuestionsEntity questionsEntity);
     void Update(QuestionsEntity questionsEntity);
-
+    List<QuestionsEntity> findAll2(Integer offset, Integer limit);
+    Long totalRecord();
 }

@@ -1,7 +1,7 @@
 import { Fontname, LastButton } from "@/SCSS/Fixed";
 import { AddressType } from "@/types/Feature/Address/AddressType";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
-import { Key, useEffect, useState } from "react";
+import { Key, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { AddressDeletefetchData, AddressSelectfetchData } from "../api/util";
@@ -141,23 +141,27 @@ const DeleteButton = styled.button`
 export const ManagerJoin = () => {
   const [Sign, setSign] = useState<null | AddressType[]>(null);
   const navigate = useNavigate();
+  const TotalPage = useRef(0);
 
   const FuncClick = (name: string) => {
     navigate(name);
   };
 
   useEffect(() => {
-    AddressSelectfetchData().then((res) => {
-      setSign(res.data);
+    AddressSelectfetchData(TotalPage.current).then((res) => {
+      console.log(res);
+      setSign(res.pageDTO.list);
+      TotalPage.current = res.pageDTO.pageCount;
     });
-  }, []);
+  }, [TotalPage.current]);
 
   const handleClick = (AddressId: string) => {
     AddressDeletefetchData(AddressId)
       .then((res) => {
         if (res.resultType === "success") {
-          AddressSelectfetchData().then((res) => {
-            setSign(res.data);
+          AddressSelectfetchData(TotalPage.current).then((res) => {
+            console.log(res);
+            setSign(res.pageDTO.list);
           });
         }
       })
@@ -222,6 +226,35 @@ export const ManagerJoin = () => {
               )}
             </tbody>
           </table>
+          <div className="flex justify-center mt-3">
+            <div className="flex items-center space-x-6 gap-10">
+              <div className="flex items-center space-x-2 gap-5">
+                <button
+                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                  aria-label="이전 페이지"
+                  onClick={() => (TotalPage.current -= 1)}
+                >
+                  &lt;
+                </button>
+                {Array.from({ length: TotalPage.current }, (_, index) => (
+                  <button
+                    key={index}
+                    className="px-3 py-1 rounded-md bg-white border border-gray-300 hover:bg-blue-100 focus:outline-none"
+                    onClick={() => TotalPage.current == index + 1}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                  aria-label="다음 페이지"
+                  onClick={() => (TotalPage.current += 1)}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          </div>
         </TableWrapper>
 
         {/* 모바일 카드형 뷰 */}

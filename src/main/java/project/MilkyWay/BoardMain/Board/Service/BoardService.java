@@ -2,6 +2,9 @@ package project.MilkyWay.BoardMain.Board.Service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,15 +82,12 @@ public class BoardService
             throw new FindFailedException("해당 코드로 삭제할 수 있는 게시판이 존재하지 않아요");
         }
     }
-    public List<BoardEntity> FindAll()
+    public Page<BoardEntity> FindAll(int page)
     {
 
-        List<BoardEntity> boardEntity = boardRepository.findAll();
-        if(boardEntity.isEmpty())
-        {
-          throw new FindFailedException("데이터를 찾긴 찾았으나, 비어있습니다.");
-        }
-        else if(boardEntity != null)
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<BoardEntity> boardEntity = boardRepository.findAll(pageable);
+        if(boardEntity != null)
         {
             return  boardEntity;
         }

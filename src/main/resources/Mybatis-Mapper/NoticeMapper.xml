@@ -6,8 +6,14 @@
     <select id="findAll" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
         SELECT noticeId, type, title,titleimg FROM Notice
     </select>
+    <select id="findAll2" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
+        SELECT noticeId, type, title,titleimg
+        FROM Notice
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
     <select id="findByType"  parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
         SELECT noticeId, type, title,titleimg FROM Notice WHERE type = #{type}
+        LIMIT #{limit} OFFSET #{offset}
     </select>
     <select id="findByNoticeId" parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
         SELECT * FROM Notice WHERE noticeId = #{noticeId}
@@ -21,4 +27,8 @@
     <update id="Update" parameterType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
         UPDATE Notice SET type = #{type}, title = #{title}, greeting = #{greeting}, titleimg = #{titleimg} WHERE noticeId = #{noticeId}
     </update>
+    <!-- 페이징 처리 -->
+    <select id="totalRecord" resultType="java.lang.Long">
+        SELECT count(*) FROM reservation
+    </select>
 </mapper>

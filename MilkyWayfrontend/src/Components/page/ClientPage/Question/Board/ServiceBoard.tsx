@@ -47,7 +47,7 @@ const ServiceBoard = () => {
 
   const BoardPOST = async (boardId: string) => {
     return await GET({
-      url: paths.forum.Board.search.path,
+      url: paths.forum.Board.param.path,
       params: {
         BoardId: boardId,
       },
@@ -67,7 +67,6 @@ const ServiceBoard = () => {
     const boardId = param.BoardId;
     if (boardId) {
       BoardPOST(boardId).then((res) => {
-        console.log(res.data[0]);
         setDummy({
           boardId: res.data[0].boardId,
           title: res.data[0].title,
@@ -77,7 +76,6 @@ const ServiceBoard = () => {
       });
 
       CommentPOST(boardId).then((res) => {
-        console.log(res.data);
         setCommit(res.data); // 전체 배열을 한 번에 상태에 넣음
       });
     }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
 import project.MilkyWay.BoardMain.Board.Service.BoardService;
 import project.MilkyWay.BoardMain.Comment.Entity.CommentEntity;
 import project.MilkyWay.BoardMain.Comment.Service.CommentService;
+import project.MilkyWay.ComonType.DTO.PageDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
@@ -186,23 +188,26 @@ public class BoardController
                     @ApiResponse(responseCode = "404", description = "Board List not found")
             }
     )
-    @PostMapping("/search")
-    public ResponseEntity<?> FindALl()
+    @GetMapping("/search/page")
+    public ResponseEntity<?> FindALl(@RequestParam(value = "page", defaultValue = "0") int page)
     {
         try
         {
-            List<BoardEntity> boardEntities = boardService.FindAll();
+            System.out.println(page);
+            Page<BoardEntity> boardEntities = boardService.FindAll(page);
             List<BoardDTO> boardDTOS = new ArrayList<>();
-            for(BoardEntity boardEntity : boardEntities)
-            {
+            for(BoardEntity boardEntity : boardEntities) {
                 boardDTOS.add(ConvertToBoardDTO(boardEntity));
             }
             if(boardDTOS.isEmpty())
             {
-                throw new FindFailedException("데이터베이스에서 데이터를 찾았는데 비어있어요!!");
+                return ResponseEntity.ok().body(responseDTO.Response("empty","데이터베이스에 내용은 비어있음"));
             }
             else {
-                return ResponseEntity.ok().body(responseDTO.Response("success","데이터 조회 완료!", boardDTOS));
+                PageDTO pageDTO = PageDTO.<BoardDTO>builder().list(boardDTOS)
+                        .PageCount(boardEntities.getTotalPages())
+                        .Total(boardEntities.getTotalElements()).build();
+                return ResponseEntity.<PageDTO>ok().body(responseDTO.Response("success","데이터 조회 완료!", pageDTO));
             }
         }
         catch (Exception e)

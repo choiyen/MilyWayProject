@@ -18,7 +18,7 @@ export const ManagerCalendar = () => {
   const calendar = userCalendar();
 
   const [change, setChange] = useState(false);
-  const [date, setDate] = useState<Date | null>();
+  const [date, setDate] = useState<Date | null>(null);
   const [type, setType] = useState<ScheduleType>("휴일");
   const [select, setSelect] = useState<number | null>(null);
   const [admintration, setAdmintration] = useState<AdministrationType[]>([]);
@@ -58,7 +58,7 @@ export const ManagerCalendar = () => {
           console.log(res);
           setAddress(res.data);
         })
-        .catch((err) => {
+        .catch(() => {
           setAddress([]);
         });
     };

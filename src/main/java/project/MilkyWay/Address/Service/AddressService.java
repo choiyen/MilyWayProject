@@ -2,6 +2,9 @@ package project.MilkyWay.Address.Service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +18,6 @@ import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.Address.Repository.AddressRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 
 
 @Service
@@ -98,9 +100,11 @@ public class AddressService
 
 
 
-    public List<AddressEntity> findALL()
+    public Page<AddressEntity> findALL(int page)
     {
-        List<AddressEntity> addressEntities = addressRepository.findAll();
+        Pageable pageable = PageRequest.of(page,10);
+
+        Page<AddressEntity> addressEntities = addressRepository.findAll(pageable);
         return addressEntities;
     }
     private AddressEntity ConvertToEntity(AddressEntity oldAddressEntity, AddressEntity newAddressEntity)
