@@ -9,6 +9,7 @@ export const ManagerGateWayType = {
   QuestionSelect: "Question/Select",
   SignUp: "SignUp",
   Adviceedit: "editNotice/:noticeId",
+  Inquires: "Inquires",
 };
 export const ClientGateWayType = {
   home: "home",
