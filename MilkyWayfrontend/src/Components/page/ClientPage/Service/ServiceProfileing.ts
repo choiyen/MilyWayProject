@@ -3,6 +3,7 @@ import bathsroom from "@/Components/Common/assets/bathroom.jpg";
 import cleaningroom from "@/Components/Common/assets/cleaningroom.jpg";
 import divcleaning from "@/Components/Common/assets/divcleaning.jpg";
 import bathsrooms from "@/Components/Common/assets/bathsrooms.png";
+import RoomClean from "@/Components/Common/assets/RoomClean.jpg";
 
 export interface Service {
   Service: string;
@@ -53,7 +54,7 @@ export const ServiceProfiling: Service[] = [
   },
   {
     Service: "부분청소",
-    image: bathsroom,
+    image: RoomClean,
     target: "Partial Cleaning",
   },
 ];

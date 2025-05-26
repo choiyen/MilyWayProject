@@ -2,6 +2,7 @@ import { InqurieType } from "@/types/Feature/Inqurie/Inqurie";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialInqurieValue: InqurieType = {
+  InquireName: "",
   Address: "",
   PhoneNumber: "",
   Inqurie: "",

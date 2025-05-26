@@ -398,7 +398,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     @ApiResponse(responseCode = "404", description = "Notice and Notice Detail List not found")
             }
     )
-    @PostMapping("/search/page")
+    @GetMapping("/search/page")
     public ResponseEntity<?> findAll2(@RequestParam(name = "page", defaultValue = "0") long page)
     {
         try
@@ -441,12 +441,14 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             }
     )
     @GetMapping("/search/Type")
-    public ResponseEntity<?> FindSmallALl(@RequestParam String type, @RequestParam(name = "page", defaultValue = "0") long page)
+    public ResponseEntity<?> FindSmallALl(@RequestParam(name = "type") String type, @RequestParam(name = "page", defaultValue = "0") long page)
     {
         try
         {
+            System.out.println(CleanType.valueOf(type));
+            System.out.println(page);
             List<Object> list = new ArrayList<>();
-            List<NoticeEntity> notice = new ArrayList<>(noticeService.findSmallAll(CleanType.valueOf(type), page));
+            List<NoticeEntity> notice = new ArrayList<>(noticeService.findSmallAll(CleanType.valueOf(type),page));
             if(notice != null)
             {
 
@@ -454,7 +456,12 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 {
                     list.add(ConvertToNotice(noticeEntity));//자동으로 못가져오면 추가하거나 수정 예정
                 }
-                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  list));
+                PageDTO pageDTO = PageDTO.builder()
+                        .list(list)
+                        .PageCount(noticeService.totalPaging())
+                        .Total(noticeService.totalRecord())
+                        .build();
+                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  pageDTO));
             }
             else
             {

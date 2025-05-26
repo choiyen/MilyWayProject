@@ -11,8 +11,10 @@
         FROM Notice
         LIMIT #{limit} OFFSET #{offset}
     </select>
-    <select id="findByType"  parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
-        SELECT noticeId, type, title,titleimg FROM Notice WHERE type = #{type}
+    <select id="findByType" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">
+        SELECT noticeId, type, title, titleimg
+        FROM Notice
+        WHERE type = #{type}
         LIMIT #{limit} OFFSET #{offset}
     </select>
     <select id="findByNoticeId" parameterType="String" resultType="project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity">

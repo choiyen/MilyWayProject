@@ -17,13 +17,8 @@ export const ClientPath: PathsType[] = [
     paths: `${GateWayNumber.Client}/${ClientGateWayType.home}`,
   },
   {
-    activename: "ServiceIntroduction",
-    buttonname: "서비스 소개",
-    paths: `${GateWayNumber.Client}/${ClientGateWayType.Info}`,
-  },
-  {
     activename: "Jobfeedback",
-    buttonname: "작업 후기",
+    buttonname: "서비스 소개",
     paths: `${GateWayNumber.Client}/${ClientGateWayType.Service}`,
   },
   {

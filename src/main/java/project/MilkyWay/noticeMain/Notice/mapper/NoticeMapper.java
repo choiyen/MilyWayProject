@@ -1,6 +1,8 @@
 package project.MilkyWay.noticeMain.Notice.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import project.MilkyWay.ComonType.Enum.CleanType;
 import project.MilkyWay.Reservation.Entity.ReservationEntity;
 import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
 
@@ -11,7 +13,11 @@ public interface NoticeMapper
 {
     List<NoticeEntity> findAll();
 
-    List<NoticeEntity> findByType(String type, Long offset, Integer limit);
+    List<NoticeEntity> findByType(
+            @Param("type") CleanType type,
+            @Param("offset") Long offset,
+            @Param("limit") Integer limit
+    );
     NoticeEntity findByNoticeId(String NoticeId);
     void deleteByNoticeId(String NoticeId);
     List<NoticeEntity> findAll2(long offset, Integer limit);
