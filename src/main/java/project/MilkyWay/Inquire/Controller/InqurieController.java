@@ -205,6 +205,8 @@ public class InqurieController
                 .address(inquireDTO.getAddress())
                 .phoneNumber(inquireDTO.getPhoneNumber())
                 .inquire(inquireDTO.getInquire())
+                .dateOfInquiry(inquireDTO.getDateOfInquiry())
+                .inquirename(inquireDTO.getInquirename())
                 .build();
     }
     //uniqueId
@@ -215,6 +217,8 @@ public class InqurieController
                 .address(inquireDTO.getAddress())
                 .phoneNumber(inquireDTO.getPhoneNumber())
                 .inquire(inquireDTO.getInquire())
+                .inquirename(inquireDTO.getInquirename())
+                .dateOfInquiry(inquireDTO.getDateOfInquiry())
                 .build();
     }
 
@@ -225,6 +229,8 @@ public class InqurieController
                 .address(inquireEntity.getAddress())
                 .phoneNumber(inquireEntity.getPhoneNumber())
                 .inquire(inquireEntity.getInquire())
+                .dateOfInquiry(inquireEntity.getDateOfInquiry())
+                .inquirename(inquireEntity.getInquirename())
                 .build();
     }
 

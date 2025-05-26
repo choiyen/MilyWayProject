@@ -6,7 +6,7 @@ const initialInqurieValue: InqurieType = {
   Address: "",
   PhoneNumber: "",
   Inqurie: "",
-  SubmissionDate: "",
+  SubmissionDate: new Date().toISOString(),
 };
 
 export const InqurleValue = createSlice({

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 
 @Getter
@@ -39,6 +42,16 @@ public class InquireDTO
     @Schema(description = "문의 사항에 대한 내용", example = "예약하려는데, 19일에 가능한가요?")
     @JsonProperty("inquire")
     private String inquire;
+
+    @NotBlank(message = "customer cannot be empty")
+    @Size(min = 3, message = "customer는 최소 다섯자리 이상 입력해야 함.")
+    @Pattern(regexp = "^[a-zA-Z가-힣]*$", message = "고객 이름은 대소문자, 한글만 입력 가능합니다.")
+    @Schema(description = "고객 이름", example = "홍길동")
+    private String inquirename;
+
+    @Schema(description = "예약 날짜", example = "2025-03-14")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfInquiry;
 
 }
 //- 상담 신청이 들어온 날짜에서 1주일이 지날 경우, 자동 페기하는 스케줄러 등록

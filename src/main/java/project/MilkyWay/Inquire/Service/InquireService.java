@@ -62,14 +62,7 @@ public class InquireService
     public InquireEntity FindByInquireId(String encodingInquireId)
     {
         InquireEntity inquireEntity = inqurieRepository.findByInquireId(encodingInquireId);
-        if(inquireEntity != null)
-        {
             return inquireEntity;
-        }
-        else
-        {
-            throw new FindFailedException("InqireId에 따른 정보를 찾지 못했습니다. 오류 발생!!");
-        }
     }
     private boolean existByinquireId(String inquireId)
     {
@@ -115,6 +108,8 @@ public class InquireService
                 .inquire(newinquireEntity.getInquire())
                 .phoneNumber(newinquireEntity.getPhoneNumber())
                 .address(newinquireEntity.getAddress())
+                .dateOfInquiry(oldinquireEntity.getDateOfInquiry())
+                .inquirename(oldinquireEntity.getInquirename())
                 .build();
     }
 

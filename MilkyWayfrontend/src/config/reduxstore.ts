@@ -7,7 +7,6 @@ import NoticeReducer from "./request/ReduxList/NoticeReducer";
 import NoticeDetailReducer from "./request/ReduxList/NoticeDetailReducer";
 import InqurleReducer from "@/config/request/ReduxList/InqurieReducer";
 import BoardReducer from "@/config/request/ReduxList/BoardReducer";
-import CommentReducer from "@/config/request/ReduxList/CommentReducer";
 import AdministrationReducer from "@/config/request/ReduxList/AdministrationReducer";
 import AddressReducer from "@/config/request/ReduxList/addressReducer";
 import authReducer from "@/config/request/ReduxList/useauthSlice";

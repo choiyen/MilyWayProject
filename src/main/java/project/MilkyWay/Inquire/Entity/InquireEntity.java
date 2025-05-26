@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -25,6 +26,11 @@ public class InquireEntity
     private String phoneNumber;
     @Column(name = "inquire", nullable = false)
     private String inquire;
+    @Column(name = "inquirename", nullable = false)
+    private String inquirename;
+    @Column(name = "dateOfInquiry", nullable = false)
+    private LocalDate dateOfInquiry;
+
 
 
     @Override
