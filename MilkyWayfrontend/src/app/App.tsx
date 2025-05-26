@@ -33,6 +33,7 @@ import ServiceBoard from "@/Components/page/ClientPage/Question/Board/ServiceBoa
 import { ClientReservation } from "@/Components/page/ClientPage/Reservation/ClientReservation";
 import { ThemeProvider } from "styled-components";
 import { theme } from "@/SCSS/typecss";
+import { GlobalSwalStyle } from "./AppToast";
 
 const router = createBrowserRouter([
   {
@@ -145,6 +146,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
+        <GlobalSwalStyle /> {/* 여기 넣기 */}
         <div className="App">
           <RouterProvider router={router} />
         </div>

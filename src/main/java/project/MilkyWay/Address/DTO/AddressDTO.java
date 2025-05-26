@@ -42,6 +42,8 @@ public class AddressDTO
     @Schema(description = "고객 전화번호", example = "010-1234-1234")
     private String phoneNumber;
 
+
+
     @Schema(description = "예약 날짜", example = "2025-03-14")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate submissionDate;
