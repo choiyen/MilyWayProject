@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import blog from "@/Components/Common/assets/blog.jpg";
-import facebook from "@/Components/Common/assets/facebook.png";
+import band from "@/Components/Common/assets/band.png";
 import kakaoTalk from "@/Components/Common/assets/kakaoTalk.png";
 import instar from "@/Components/Common/assets/instar.webp";
+import { Link } from "react-router-dom";
 
 const WidgetContainer = styled.div`
   position: fixed;
@@ -11,7 +12,7 @@ const WidgetContainer = styled.div`
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
   z-index: 1000;
 `;
 
@@ -19,8 +20,8 @@ const ImgWidget = styled.img`
   border-radius: 50%;
 `;
 const RoundWidget = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   background-color: #81d4a3;
   border-radius: 50%;
   display: flex;
@@ -39,19 +40,29 @@ const RoundWidget = styled.div`
 `;
 
 export const RoundWidgets = () => {
+  const handleKakaoTalk = () => {
+    window.open("https://open.kakao.com/o/g1b2c5Yc", "_blank");
+  };
+
   return (
     <WidgetContainer>
       <RoundWidget>
-        <ImgWidget src={blog} alt="" />
+        <Link to="https://blog.naver.com/shingi02">
+          <ImgWidget src={blog} alt="네이버 블로그 접속 링크" />
+        </Link>
       </RoundWidget>
       <RoundWidget>
-        <ImgWidget src={facebook} alt="" />
+        <Link to="https://www.band.us/band/70391878/intro">
+          <ImgWidget src={band} alt="네이버 밴드 접속 링크" />
+        </Link>
       </RoundWidget>
       <RoundWidget>
-        <ImgWidget src={kakaoTalk} alt="" />
+        <ImgWidget src={kakaoTalk} alt="" onClick={handleKakaoTalk} />
       </RoundWidget>
       <RoundWidget>
-        <ImgWidget src={instar} alt="" />
+        <Link to="https://www.instagram.com/shin_gi02/#">
+          <ImgWidget src={instar} alt="" />
+        </Link>
       </RoundWidget>
     </WidgetContainer>
   );

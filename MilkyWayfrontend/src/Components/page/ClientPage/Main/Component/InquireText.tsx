@@ -79,7 +79,10 @@ export const InquireText = () => {
   const Selector = useSelector((state: RootState) => state.Inqurle.value);
   const dispatch = useDispatch();
 
-  function handleServerError(response: { message: any; resultType: any }) {
+  function handleServerError(response: {
+    message: string;
+    resultType: "error" | "success";
+  }) {
     const { message, resultType } = response;
 
     if (resultType === "error" && message) {
