@@ -4,7 +4,7 @@ import { InquireText } from "./Component/InquireText";
 import { FaFeatherAlt, FaHandsWash, FaStar } from "react-icons/fa";
 import bathsrooms from "@/Components/Common/assets/bathsrooms.png";
 import { RoundWidgets } from "./Component/RoundWidgets";
-import { BlogComment } from "./Component/blogComment";
+import { BlogComment } from "./Component/BlogComment";
 
 export const MainMapper = styled.div`
   display: flex;

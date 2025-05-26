@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialAdministrationData: AdministrationType = {
   administrationDate: "",
-  adminstrationType: "",
+  adminstrationType: "휴일",
 };
 
 const Administration = createSlice({

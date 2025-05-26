@@ -5,6 +5,7 @@ import { ReservationType } from "@/types/Feature/Address/Reservation";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "@/SCSS/tailwind.scss";
 
 type ReservationProps = {
   selectDate: string;

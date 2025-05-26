@@ -54,6 +54,11 @@ export const ManagerPath: PathsType[] = [
     buttonname: "예약 관리",
     paths: `${GateWayNumber.Manager}/${ManagerGateWayType.Calendar}`,
   },
+  {
+    activename: "InquiryManagement",
+    buttonname: "문의 관리",
+    paths: `${GateWayNumber.Manager}/${ManagerGateWayType.Inquires}`,
+  },
 ];
 
 export const ManagerLoginPath: PathsType = {

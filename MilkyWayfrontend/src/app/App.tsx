@@ -34,6 +34,7 @@ import { ClientReservation } from "@/Components/page/ClientPage/Reservation/Clie
 import { ThemeProvider } from "styled-components";
 import { theme } from "@/SCSS/typecss";
 import { GlobalSwalStyle } from "./AppToast";
+import ManagerInquires from "@/Components/page/ManagerPage/Inquires/ManagerInquires";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
       {
         path: ManagerGateWayType.Adviceedit,
         element: <ManagerAdviceedit />,
+      },
+      {
+        path: ManagerGateWayType.Inquires,
+        element: <ManagerInquires />, // Assuming this is the correct component for Inquires
       },
       {
         path: "*",
