@@ -7,6 +7,8 @@ import axios, {
   Method,
 } from "axios";
 import { baseURL, timeout } from "./util";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 // 환경 변수 사용
 const TIMEOUT = timeout ? parseInt(timeout, 10) : undefined;
@@ -72,8 +74,18 @@ const ResponseInterceptor = {
 
     // response가 없을 경우 네트워크 오류나 CORS 문제 등으로 처리
     if (!response) {
-      console.error("No response received:", error);
-      alert("서버와의 연결에 문제가 발생했습니다. 인터넷 연결을 확인해주세요.");
+      toast.error(
+        "서버와의 연결에 문제가 발생했습니다. 인터넷 연결을 확인해주세요.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
       return Promise.reject(error);
     }
 
@@ -108,7 +120,6 @@ axiosInstance.interceptors.response.use(
 const curringMethod =
   (method: Method) =>
   async (requestConfig: Omit<AxiosRequestConfig, "method">) => {
-    console.log(requestConfig);
     return axiosInstance
       .request({ ...requestConfig, method })
       .then((response) => response.data);

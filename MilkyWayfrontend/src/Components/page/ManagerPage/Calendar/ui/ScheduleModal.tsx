@@ -12,6 +12,7 @@ import { SmallButton } from "@/SCSS/Fixed";
 import { useSelector } from "react-redux";
 import { RootState } from "@/config/reduxstore";
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
+import Swal from "sweetalert2";
 
 interface Props {
   setChange: (value: boolean) => void;
@@ -48,23 +49,30 @@ export const ScheduleModal = ({
     try {
       // 상태 업데이트
 
-      console.log(type); // 상태 업데이트 후에 확인
       // 상태 값이 제대로 업데이트 되도록 한 뒤에 POST 요청 실행
       setTimeout(async () => {
         const res = await POST({
           url: paths.Administration.basic.path,
           data: AdministrationData,
         });
-        console.log(res);
         if (res.resultType === "success") {
-          alert("전송 처리 완료!");
+          Swal.fire({
+            icon: "success",
+            title: "일정 확정 완료",
+            text: "일정이 성공적으로 확정되었습니다.",
+            confirmButtonText: "확인",
+          });
           setChange(false);
           fetchData(); // 상태 갱신
         }
       }, 1000); // 조금의 지연을 주어 상태 업데이트가 끝날 시간을 줍니다.
     } catch (e) {
-      alert("전송 실패");
-      console.error(e);
+      Swal.fire({
+        icon: "error",
+        title: "일정 확정 실패",
+        text: "일정 확정에 실패했습니다. 다시 시도해주세요." + e,
+        confirmButtonText: "확인",
+      });
     }
   };
 

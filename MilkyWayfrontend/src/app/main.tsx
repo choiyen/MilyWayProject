@@ -5,6 +5,7 @@ import "@/SCSS/index.scss";
 // import "./index.css";
 import { Provider } from "react-redux";
 import reduxstore from "@/config/reduxstore";
+import Swal from "sweetalert2";
 const rootElement = document.getElementById("root");
 
 if (rootElement) {
@@ -18,5 +19,9 @@ if (rootElement) {
     </React.StrictMode>
   );
 } else {
-  console.error("Root element not found");
+  Swal.fire({
+    icon: "error",
+    title: "오류",
+    text: "애플리케이션을 시작할 수 없습니다. 루트 요소를 찾을 수 없습니다.",
+  });
 }

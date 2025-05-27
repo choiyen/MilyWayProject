@@ -1,6 +1,9 @@
 package project.MilkyWay.Inquire.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,8 +13,6 @@ import project.MilkyWay.ComonType.Expection.FindFailedException;
 import project.MilkyWay.ComonType.Expection.InsertFailedException;
 import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.Inquire.Repository.InqurieRepository;
-
-import java.util.List;
 
 
 @Service
@@ -68,16 +69,13 @@ public class InquireService
     {
         return inqurieRepository.existsByInquireId(inquireId);
     }
-    public List<InquireEntity> findAll()
+    public Page<InquireEntity> findAll(int page)
     {
-        List<InquireEntity> list = inqurieRepository.findAll();
-        if(list != null)
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<InquireEntity> InquireEntity = inqurieRepository.findAll(pageable);
+        if(InquireEntity != null)
         {
-            return list;
-        }
-        else if(list.isEmpty())
-        {
-            throw new FindFailedException("조회에는 성공했는데, 관련 데이터가 없습니다.");
+            return InquireEntity;
         }
         else
         {
@@ -110,6 +108,7 @@ public class InquireService
                 .address(newinquireEntity.getAddress())
                 .dateOfInquiry(oldinquireEntity.getDateOfInquiry())
                 .inquirename(oldinquireEntity.getInquirename())
+                .inquireBool(newinquireEntity.getInquireBool())
                 .build();
     }
 

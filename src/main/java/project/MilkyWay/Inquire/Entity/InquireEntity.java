@@ -31,6 +31,10 @@ public class InquireEntity
     @Column(name = "dateOfInquiry", nullable = false)
     private LocalDate dateOfInquiry;
 
+    @Column(name = "inquireBool", nullable = false)
+    private Boolean inquireBool;
+
+
 
 
     @Override

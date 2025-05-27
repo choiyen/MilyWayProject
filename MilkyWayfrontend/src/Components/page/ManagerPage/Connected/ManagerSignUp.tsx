@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
 import { RootState } from "@/config/reduxstore";
+import Swal from "sweetalert2";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -104,11 +105,21 @@ export const ManagerSignUp = () => {
           email: SignUPData.email,
         },
       });
-      alert("회원가입 성공!");
+      Swal.fire({
+        icon: "success",
+        title: "회원가입 성공",
+        text: "관리자 회원가입이 완료되었습니다. 추가 가입은 불가능합니다.",
+        confirmButtonText: "확인",
+      });
       navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main);
     } catch (error) {
-      console.error("회원가입 실패!", error);
-      alert("회원가입에 실패했습니다. 다시 시도해주세요");
+      Swal.fire({
+        icon: "error",
+        title: "회원가입 실패",
+        text:
+          "이미 가입된 관리자가 존재합니다. 추가 가입은 불가능합니다. " + error,
+        confirmButtonText: "확인",
+      });
     }
   };
 

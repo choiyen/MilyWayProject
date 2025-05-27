@@ -27,7 +27,6 @@ export const ManagerCalendar = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(calendar.currentDate);
       calendar.currentDate = new Date(
         calendar.currentDate.getFullYear(),
         calendar.currentDate.getMonth(),
@@ -55,7 +54,6 @@ export const ManagerCalendar = () => {
         },
       })
         .then((res) => {
-          console.log(res);
           setAddress(res.data);
         })
         .catch(() => {
@@ -73,11 +71,6 @@ export const ManagerCalendar = () => {
     setAdmintration(adminRes.data);
     setAddress(addressRes.data);
   };
-
-  useEffect(() => {
-    console.log(admintration); // admintration 값이 업데이트될 때마다 실행됨
-    console.log(address); // admintration 값이 업데이트될 때마다 실행됨
-  }, [address, admintration]); // admintration이 바뀔 때마다 실행되도록 설정
 
   return (
     <>

@@ -240,7 +240,7 @@ public class AdministrationController
     {
         try
         {
-            System.out.println(Date);
+
             if(Date == null)
             {
                 List<AdministrationEntity> administrationEntities = administrationService.FindAll();

@@ -64,7 +64,6 @@ public class AddressController
     {
         try
         {
-            System.out.println(addressDTO);
 
             if(loginSuccess.isSessionExist(request))
             {
@@ -249,7 +248,6 @@ public class AddressController
     {
         try
         {
-            System.out.println(page);
             if(loginSuccess.isSessionExist(request))
             {
 
@@ -332,7 +330,6 @@ public class AddressController
     {
         try
         {
-            System.out.println(AdminstrationDate);
             if(loginSuccess.isSessionExist(request))
             {
                 AddressEntity addressEntity = addressService.FindBySubmissionDate(AdminstrationDate);

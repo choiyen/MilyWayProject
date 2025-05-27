@@ -68,11 +68,9 @@ export const FileTage = ({
     index !== undefined ? `fileInput-${index}` : "fileInput-default";
   if (type === "before") {
     inputId = `fileInput-before-${index}`; // before 타입일 때 ID 설정
-    // console.log("before", inputId);
   }
   if (type === "after") {
     inputId = `fileInput-after-${index}`; // after 타입일 때 ID 설정
-    // console.log("before", inputId);
   } // 타입에 따라 ID 설정
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

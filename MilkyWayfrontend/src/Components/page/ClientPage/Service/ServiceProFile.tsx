@@ -12,6 +12,7 @@ import ReviewBanner from "./Component/ReviewBanner";
 import EmptyReview from "./Component/EmptyReview";
 import ReviewCards from "./Component/ReviewCards";
 import { PageNavigator } from "../Question/page/ui/PageNavigator";
+import { toast } from "react-toastify";
 
 const Fontname2 = styled.div`
   color: ${theme.colors.charcoalBlack};
@@ -41,15 +42,25 @@ const ServiceProFile = () => {
   };
 
   useEffect(() => {
-    console.log(select);
     fetchType(select, CurrentPage ?? 0)
       .then((res) => {
-        console.log(res);
         setNotice(res.pageDTO.list);
         TotalPage.current = res.pageDTO.pageCount;
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(
+          "리뷰를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요." +
+            err,
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
         setNotice([]);
       });
     setIntroduction(IntroductionService.filter((s) => s.Service === select));

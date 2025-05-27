@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { AddressInsertfetchData } from "../api/util";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const MainWapper = styled.div`
   display: flex;
@@ -67,21 +69,51 @@ export const ManagerAddress = () => {
         AddressInsertfetchData(AddressData)
           .then((res) => {
             if (res.resultType === "success") {
-              console.log(res.message);
+              Swal.fire({
+                icon: "success",
+                title: "예약 등록 완료",
+                text: "예약이 성공적으로 등록되었습니다.",
+                confirmButtonText: "확인",
+              });
               native(GateWayNumber.Manager + "/" + ManagerGateWayType.Join);
             } else {
-              console.log(res.message);
-              alert(res.message);
+              Swal.fire({
+                icon: "error",
+                title: "예약 등록 실패",
+                text: "예약 등록 중 오류가 발생했습니다. 전화로 문의해주세요.",
+                confirmButtonText: "확인",
+              });
             }
           })
           .catch((err) => {
-            console.log(err);
+            toast.error(
+              "예약 등록 중 오류가 발생했습니다. 다시 시도해주세요." + err,
+              {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              }
+            );
           });
       } else {
-        alert("전화번호는 -을 포함한 형태로 입력하셔야 합니다.");
+        Swal.fire({
+          icon: "error",
+          title: "전화번호 형식 오류",
+          text: "전화번호는 01X-XXXX-XXXX 형식으로 입력해주세요.",
+          confirmButtonText: "확인",
+        });
       }
     } else {
-      alert("비어있는 데이터가 존재합니다.");
+      Swal.fire({
+        icon: "error",
+        title: "예약 등록 실패",
+        text: "모든 필드를 입력해주세요.",
+        confirmButtonText: "확인",
+      });
     }
   };
 

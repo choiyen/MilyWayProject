@@ -65,6 +65,10 @@ export const paths = {
     serach: {
       path: "/inqurie/search",
       getHref: () => "/inqurie/search",
+      page: {
+        path: "/inqurie/search/page",
+        getHref: () => "/inqurie/search/page",
+      },
     },
   }, //수정 기능 지원하지 않음
   Certification: {

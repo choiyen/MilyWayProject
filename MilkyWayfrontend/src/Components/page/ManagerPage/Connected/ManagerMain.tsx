@@ -11,6 +11,7 @@ import { checkSession } from "@/config/request/axios/util";
 import { RootState } from "@/config/reduxstore";
 import { login } from "@/config/request/ReduxList/userlogin";
 import { theme } from "@/SCSS/typecss";
+import { toast } from "react-toastify";
 
 // Wrapper styled component
 const Wrapper = styled.div`
@@ -98,17 +99,43 @@ export const ManagerMain = () => {
     })
       .then((res) => {
         if (res !== undefined) {
-          console.log("로그인 성공:", res);
+          toast.success("로그인에 성공했습니다.", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           checkSession();
           dispatch(setSession({ userId: res.userId, isAuthenticated: true })); // Redux에 저장
           navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Join); // 페이지 이동
         } else {
-          console.log("로그인 실패, 서버에 오류가 존재합니다.");
+          toast.error("로그인에 실패했습니다. 서버에 오류가 존재합니다.", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
       })
       .catch((error) => {
-        console.error("로그인 실패:", error);
-        alert("로그인에 실패했습니다.");
+        toast.error(
+          "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요." + error,
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
       });
   };
 

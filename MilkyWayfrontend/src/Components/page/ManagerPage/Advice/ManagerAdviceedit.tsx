@@ -17,6 +17,8 @@ import { paths } from "@/config/paths/paths";
 import { RootState } from "@/config/reduxstore";
 import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const MainBox = styled.div`
   width: 100%;
@@ -120,7 +122,18 @@ const ManagerAdviceedit = () => {
         setbeforefile(beforeURL);
         setNoticeDetailId(NoticeDetailId);
       } catch (error) {
-        console.error("Data fetching failed", error);
+        toast.error(
+          "후기 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요." + error,
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
       }
     };
 
@@ -168,10 +181,6 @@ const ManagerAdviceedit = () => {
     dispatch(setNoticeDetailData(combinedData));
   }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
 
-  useEffect(() => {
-    console.log("업데이트된 Advice 값:", AdviceDetailselector);
-  }, [AdviceDetailselector]);
-
   const handleOnclick = async () => {
     const AdviceData: NoticeDetailType[] = [];
     for (let i = 0; i < count; i++) {
@@ -197,14 +206,26 @@ const ManagerAdviceedit = () => {
         noticeDetailDTO: AdviceData,
       },
     }).then((res) => {
-      console.log(res);
       if (res.resultType === "success") {
-        alert("수정 완료");
+        Swal.fire({
+          icon: "success",
+          title: "수정 완료",
+          text: "후기가 성공적으로 수정되었습니다.",
+          confirmButtonText: "확인",
+        });
         navigator(
           GateWayNumber.Manager + "/" + ManagerGateWayType.AdviceSelect
         );
       } else {
-        alert("수정 실패");
+        toast.error("후기 수정에 실패했습니다. 다시 시도해주세요.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     });
   };

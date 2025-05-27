@@ -12,6 +12,8 @@ import { PostQuestionALL } from "./api/util";
 import { RootState } from "@/config/reduxstore";
 import { POST, PUT } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const MainWapper = styled.div`
   display: flex;
@@ -63,13 +65,23 @@ export const ManagerQuestion = () => {
   useEffect(() => {
     PostQuestionALL().then((res) => {
       if (res.resultType === "findnot") {
-        alert("현제 데이터베이스 내 Q&A 정보 비어있음");
+        toast.error(
+          "현재 데이터베이스에 Q&A 정보가 없습니다. 새로운 정보를 추가해주세요.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
       } else if (res.resultType === "success") {
         const newQuestions: string[] = [];
         const newComments: string[] = [];
         const newID: number[] = [];
         for (let i = 0; i < res.data.length; i++) {
-          console.log(res.data[i]);
           newQuestions.push(res.data[i].exceptionQA);
           newComments.push(res.data[i].expectedComment);
           newID.push(res.data[i].id);
@@ -78,7 +90,6 @@ export const ManagerQuestion = () => {
         SetQuestion(newQuestions);
         SetComment(newComments);
         SetID(newID);
-        console.log(newQuestions);
 
         const combinedData = newQuestions.map((q, idx) => ({
           id: newID[idx],
@@ -86,9 +97,7 @@ export const ManagerQuestion = () => {
           expectedComment: newComments[idx],
         }));
         dispatch(setQuestionData(combinedData));
-        console.log(QuestionDatas);
         setCount(combinedData.length);
-        console.log(combinedData);
       }
     });
   }, [dispatch]);
@@ -103,69 +112,88 @@ export const ManagerQuestion = () => {
   }, [Comment, Question, dispatch]);
 
   const handleQuestion = () => {
-    PostQuestionALL().then(async (res) => {
-      if (res.resultType === "findnot") {
-        for (let i = 0; i < QuestionDatas.length; i++) {
-          await POST({
-            url: paths.Question.basic.path,
-            data: {
-              exceptionQA: QuestionDatas[i].exceptionQA,
-              expectedComment: QuestionDatas[i].expectedComment,
-            },
-          });
-        }
-      } else if (res.resultType === "success") {
-        console.log(QuestionDatas);
-
-        const newOrUpdatedList = QuestionDatas.filter((q) => {
-          const match = res.data.find(
-            (e: { id: number; exceptionQA: string; expectedComment: string }) =>
-              e.id === q.id
-          );
-
-          // 신규 데이터 (id 없음) → 추가
-          if (!q.id) return true;
-
-          // id는 같지만 내용이 다르면 → 수정 대상
-          if (
-            match &&
-            (match.exceptionQA !== q.exceptionQA ||
-              match.expectedComment !== q.expectedComment)
-          ) {
-            return true;
-          }
-
-          // 그 외는 기존과 동일 → 제외
-          return false;
-        });
-
-        for (const DataList of newOrUpdatedList) {
-          if (!DataList.id) {
-            // 신규 데이터 → POST
+    try {
+      PostQuestionALL().then(async (res) => {
+        if (res.resultType === "findnot") {
+          for (let i = 0; i < QuestionDatas.length; i++) {
             await POST({
               url: paths.Question.basic.path,
               data: {
-                exceptionQA: DataList.exceptionQA,
-                expectedComment: DataList.expectedComment,
+                exceptionQA: QuestionDatas[i].exceptionQA,
+                expectedComment: QuestionDatas[i].expectedComment,
               },
-            });
-          } else {
-            // 수정된 데이터 → PUT
-            console.log(DataList);
-            await PUT({
-              url: paths.Question.basic.path,
-              data: {
-                id: DataList.id,
-                exceptionQA: DataList.exceptionQA,
-                expectedComment: DataList.expectedComment,
-              },
-            }).then((res) => {
-              console.log(res.data);
             });
           }
+          Swal.fire({
+            icon: "success",
+            title: "Q&A 정보 등록 완료",
+            text: "Q&A 정보가 성공적으로 등록되었습니다.",
+            confirmButtonText: "확인",
+          });
+        } else if (res.resultType === "success") {
+          const newOrUpdatedList = QuestionDatas.filter((q) => {
+            const match = res.data.find(
+              (e: {
+                id: number;
+                exceptionQA: string;
+                expectedComment: string;
+              }) => e.id === q.id
+            );
+
+            // 신규 데이터 (id 없음) → 추가
+            if (!q.id) return true;
+
+            // id는 같지만 내용이 다르면 → 수정 대상
+            if (
+              match &&
+              (match.exceptionQA !== q.exceptionQA ||
+                match.expectedComment !== q.expectedComment)
+            ) {
+              return true;
+            }
+
+            // 그 외는 기존과 동일 → 제외
+            return false;
+          });
+          for (const DataList of newOrUpdatedList) {
+            if (!DataList.id) {
+              // 신규 데이터 → POST
+              await POST({
+                url: paths.Question.basic.path,
+                data: {
+                  exceptionQA: DataList.exceptionQA,
+                  expectedComment: DataList.expectedComment,
+                },
+              });
+            } else {
+              // 수정된 데이터 → PUT
+              await PUT({
+                url: paths.Question.basic.path,
+                data: {
+                  id: DataList.id,
+                  exceptionQA: DataList.exceptionQA,
+                  expectedComment: DataList.expectedComment,
+                },
+              });
+            }
+          }
+          Swal.fire({
+            icon: "success",
+            title: "Q&A 정보 수정 완료",
+            text: "Q&A 정보가 성공적으로 수정되었습니다.",
+            confirmButtonText: "확인",
+          });
         }
-      }
-    });
+      });
+    } catch (error) {
+      console.error("Failed to handle question:", error);
+      Swal.fire({
+        icon: "error",
+        title: "오류 발생",
+        text: "Q&A 정보를 처리하는 중 오류가 발생했습니다. 다시 시도해주세요.",
+        confirmButtonText: "확인",
+      });
+    }
   };
   return (
     <div>

@@ -3,6 +3,7 @@ package project.MilkyWay.Inquire.DTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -52,6 +53,10 @@ public class InquireDTO
     @Schema(description = "예약 날짜", example = "2025-03-14")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfInquiry;
+
+    @Schema(description = "문의 확인 여부", example = "true")
+    @NotNull(message = "InquireBool cannot be null")
+    private Boolean inquireBool;
 
 }
 //- 상담 신청이 들어온 날짜에서 1주일이 지날 경우, 자동 페기하는 스케줄러 등록

@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { setQuestionData } from "@/config/request/ReduxList/QuestionsReducer";
 import { ExampleQuestion } from "./ui/ExampleQuestion";
 import CommentQuestion from "./ui/CommentQuestion";
+import Swal from "sweetalert2";
 
 // 페이지 전체 컨테이너
 const PageContainer = styled.div`
@@ -70,7 +71,12 @@ export const ClientQuestion = () => {
   useEffect(() => {
     PostQuestionALL().then((res) => {
       if (res.resultType === "findnot") {
-        alert("현제 데이터베이스 내 Q&A 정보 비어있음");
+        Swal.fire({
+          title: "데이터가 없습니다",
+          text: "현재 Q&A 정보가 없습니다. 관리자에게 문의해주세요.",
+          icon: "info",
+          confirmButtonText: "확인",
+        });
       } else if (res.resultType === "success") {
         const newQuestions: QuestionType[] = [];
         for (let i = 0; i < res.data.length; i++) {

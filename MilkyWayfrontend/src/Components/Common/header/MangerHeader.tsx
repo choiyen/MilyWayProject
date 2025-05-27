@@ -34,6 +34,7 @@ import { CgMenuGridR } from "react-icons/cg";
 import styled from "styled-components";
 import { IoHome } from "react-icons/io5";
 import { theme } from "@/SCSS/typecss";
+import Swal from "sweetalert2";
 
 interface MangerHeaderProps {
   children?: React.ReactNode;
@@ -61,7 +62,12 @@ export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
     LoginCheck()
       .then((res) => {
         if (res.resultType === "success") {
-          console.log("로그인 성공:", res);
+          Swal.fire({
+            icon: "success",
+            title: "로그인 성공",
+            text: res.message,
+            confirmButtonText: "확인",
+          });
           dispatch(logout()); // 세션 상태를 false로 설정
           dispatch(
             setSession({
@@ -70,8 +76,18 @@ export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
             })
           ); // 세션 상태를 true로 설정
         } else {
-          console.log("로그인 실패:", res.message);
-          alert("로그인 후 이용해주세요.");
+          Swal.fire({
+            toast: true,
+            position: "top",
+            icon: "error",
+            title: "로그인 후 이용해주세요.",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+              popup: "my-toast", // 커스텀 클래스 지정
+            },
+          });
           setActiveButton("Login");
           dispatch(logout()); // 세션 상태를 false로 설정
           dispatch(Sessionout()); // 세션 상태를 false로 설정
@@ -79,8 +95,18 @@ export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
         }
       })
       .catch((error) => {
-        console.error("Error during login:", error);
-        alert("로그인 후 이용해주세요.");
+        Swal.fire({
+          toast: true,
+          position: "top",
+          icon: "error",
+          title: "Error during login: " + error,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            popup: "my-toast", // 커스텀 클래스 지정
+          },
+        });
         setActiveButton("Login");
         dispatch(logout()); // 세션 상태를 false로 설정
         dispatch(Sessionout()); // 세션 상태를 false로 설정
@@ -129,8 +155,18 @@ export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
       await LoginCheck();
       navigate(name);
     } catch (error) {
-      console.error("Error during login:", error);
-      alert("로그인 후 이용해주세요.");
+      Swal.fire({
+        toast: true,
+        position: "top",
+        icon: "error",
+        title: "로그인 후 이용해주세요." + error,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "my-toast", // 커스텀 클래스 지정
+        },
+      });
       setActiveButton("Login");
       dispatch(logout()); // 세션 상태를 false로 설정
       dispatch(Sessionout()); // 세션 상태를 false로 설정
@@ -146,14 +182,22 @@ export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
         url: paths.Certification.logout.path,
       }).then((res) => {
         if (res.resultType === "success") {
-          console.log("로그아웃 성공:", res);
-          alert("로그아웃 되었습니다.");
+          Swal.fire({
+            icon: "success",
+            title: "로그아웃 성공",
+            text: res.message,
+            confirmButtonText: "확인",
+          });
           dispatch(logout()); // 세션 상태를 false로 설정
           dispatch(Sessionout()); // 세션 상태를 false로 설정
           navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main); // 로그인 페이지로 이동
         } else {
-          console.log("로그아웃 실패:", res.message);
-          alert("로그아웃에 실패했습니다.");
+          Swal.fire({
+            icon: "error",
+            title: "로그아웃 실패",
+            text: res.message,
+            confirmButtonText: "확인",
+          });
           return;
         }
       });

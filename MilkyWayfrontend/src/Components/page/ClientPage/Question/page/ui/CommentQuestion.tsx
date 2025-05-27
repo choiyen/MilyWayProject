@@ -6,6 +6,7 @@ import { ClientGateWayType, GateWayNumber } from "@/types/GateWay/GateWayType";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageNavigator } from "./PageNavigator";
+import Swal from "sweetalert2";
 
 const CommentQuestion = () => {
   const [Board, setBoard] = useState<BoardType[]>([]);
@@ -35,7 +36,12 @@ const CommentQuestion = () => {
     const selectedField = selectText2.current?.value;
 
     if (!selectedValue.trim()) {
-      alert("검색어를 입력해주세요.");
+      Swal.fire({
+        icon: "warning",
+        title: "검색어 입력",
+        text: "검색어를 입력해주세요.",
+      });
+      // 검색어가 비어있을 경우 전체 게시판 데이터로 초기화
       setBoard(allBoards);
       return;
     }
@@ -55,8 +61,12 @@ const CommentQuestion = () => {
 
   useEffect(() => {
     handleSearch().then((res) => {
-      console.log(res);
       if (res.resultType == "empty") {
+        Swal.fire({
+          icon: "info",
+          title: "게시판 없음",
+          text: "현재 관리해야 할 게시판이 없습니다.",
+        });
         setBoard([]);
       } else {
         const uniqueItems = res.pageDTO.list.map((commit: BoardType) => ({
@@ -86,18 +96,32 @@ const CommentQuestion = () => {
       setInputPassword2("");
       setShowPasswordModal(true);
     } else {
-      alert("서버로부터 게시판 아이디를 가져오는데 실패했습니다.");
+      Swal.fire({
+        icon: "error",
+        title: "오류",
+        text: "게시판 아이디를 가져오는데 실패했습니다.",
+      });
     }
   };
 
   const confirmDelete = async () => {
     if (!inputPassword || !inputPassword2) {
-      alert("비밀번호와 비밀번호 확인을 입력해주세요.");
+      Swal.fire({
+        icon: "warning",
+        title: "입력 오류",
+        text: "비밀번호와 비밀번호 확인을 모두 입력해주세요.",
+        confirmButtonText: "확인",
+      });
       return;
     }
 
     if (inputPassword !== inputPassword2) {
-      alert("비밀번호와 비밀번호 확인이 다릅니다.");
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호 불일치",
+        text: "비밀번호와 비밀번호 확인이 일치하지 않습니다.",
+        confirmButtonText: "확인",
+      });
       return;
     }
 
@@ -110,14 +134,24 @@ const CommentQuestion = () => {
     });
 
     if (res.resultType === "success") {
-      alert("삭제되었습니다.");
+      Swal.fire({
+        icon: "success",
+        title: "삭제 성공",
+        text: "게시판이 성공적으로 삭제되었습니다.",
+        confirmButtonText: "확인",
+      });
       setBoard((prev) => prev?.filter((b) => b.boardId !== selectedBoardId));
       setAllBoards((prev) =>
         prev?.filter((b) => b.boardId !== selectedBoardId)
       );
       setShowPasswordModal(false);
     } else {
-      alert("비밀번호가 일치하지 않거나 삭제에 실패했습니다.");
+      Swal.fire({
+        icon: "error",
+        title: "삭제 실패",
+        text: res.message || "비밀번호가 일치하지 않거나 삭제에 실패했습니다.",
+        confirmButtonText: "확인",
+      });
     }
   };
 
