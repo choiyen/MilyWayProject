@@ -5,6 +5,7 @@ import { Key, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { AddressDeletefetchData, AddressSelectfetchData } from "../api/util";
+import Swal from "sweetalert2";
 
 const MainWapper = styled.div`
   display: flex;
@@ -149,7 +150,6 @@ export const ManagerJoin = () => {
 
   useEffect(() => {
     AddressSelectfetchData(TotalPage.current).then((res) => {
-      console.log(res);
       setSign(res.pageDTO.list);
       TotalPage.current = res.pageDTO.pageCount;
     });
@@ -160,12 +160,25 @@ export const ManagerJoin = () => {
       .then((res) => {
         if (res.resultType === "success") {
           AddressSelectfetchData(TotalPage.current).then((res) => {
-            console.log(res);
+            Swal.fire({
+              title: "삭제 성공",
+              text: "청소 예약 정보가 삭제되었습니다.",
+              icon: "success",
+              confirmButtonText: "확인",
+            });
             setSign(res.pageDTO.list);
           });
         }
       })
-      .catch(console.log);
+      .catch((err) => {
+        Swal.fire({
+          title: "삭제 실패",
+          text: "청소 예약 정보 삭제에 실패했습니다. 다시 시도해주세요.",
+          icon: "error",
+          confirmButtonText: "확인",
+        });
+        console.error("삭제 실패:", err);
+      });
   };
 
   return (

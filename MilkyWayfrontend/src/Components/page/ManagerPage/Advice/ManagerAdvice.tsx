@@ -17,6 +17,8 @@ import { paths } from "@/config/paths/paths";
 import { useNavigate } from "react-router-dom";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { POST_FORM } from "@/config/request/axios/MutipartAxios";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const MainBox = styled.div`
   width: 100%;
@@ -78,8 +80,6 @@ export const ManagerAdvice = () => {
   }, [dispatch, greeting, title, type]);
 
   useEffect(() => {
-    console.log("beforefile 상태:", beforefile);
-    console.log("afferfile 상태:", afferfile);
     const beforefileNameMatrix: string[][] = beforefile.map((row) =>
       row.map((file) => file.name)
     );
@@ -96,11 +96,6 @@ export const ManagerAdvice = () => {
     }));
     dispatch(setNoticeDetailData(combinedData));
   }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
-
-  // useEffect(() => {
-  //   console.log("업데이트된 selectAdvice 값:", Adviceselector);
-  //   console.log("업데이트된 Advice 값:", AdviceDetailselector);
-  // }, [Adviceselector, AdviceDetailselector]);
 
   const cleanCount = () => {
     setCount(count + 1);
@@ -142,14 +137,26 @@ export const ManagerAdvice = () => {
     });
 
     await POST_FORM(paths.Notice.basic.path, formData).then((res) => {
-      console.log(res);
       if (res.resultType === "success") {
-        alert("후기 내역 등록 완료");
+        Swal.fire({
+          icon: "success",
+          title: "후기 내역 등록 완료",
+          text: "후기 내역이 성공적으로 등록되었습니다.",
+          confirmButtonText: "확인",
+        });
         navigator(
           GateWayNumber.Manager + "/" + ManagerGateWayType.AdviceSelect
         );
       } else {
-        alert("후기 내역 등록 실패");
+        toast.error("후기 내역 등록 실패", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     });
   };

@@ -29,7 +29,7 @@ import project.MilkyWay.Login.DTO.LoginDTO;
 import project.MilkyWay.Login.DTO.UserDTO;
 import project.MilkyWay.Login.Entity.UserEntity;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
-import project.MilkyWay.Reservation.DTO.ReservationDTO;
+import project.MilkyWay.Reservation.Entity.DTO.ReservationDTO;
 import project.MilkyWay.Login.Service.UserService;
 
 import javax.naming.AuthenticationException;
@@ -298,7 +298,6 @@ public class UserController //관리자 아이디를 관리하는 DTO
             {
                 // 익명 사용자가 아닌지 확인
                 String username = authentication.getName();
-                System.out.println("현재 로그인한 사용자 ID: " + username);
                 List sData = new ArrayList();
                 sData.add(username);
                 return ResponseEntity.ok().body(responseDTO.Response("success", "현재 로그인이 이뤄진 상태입니다.", sData));

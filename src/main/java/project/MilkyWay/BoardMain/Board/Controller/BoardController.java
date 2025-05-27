@@ -145,14 +145,12 @@ public class BoardController
         {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();  // 사용자 이름
-            System.out.println("현재 인증된 사용자: " + username);
 
             BoardEntity boardEntity = boardService.FindByBoardId(boardCheckDTO.getBoardId());
             if(username.equals("anonymousUser") && !boardEntity.getPassword().equals(boardCheckDTO.getPassword()))
             {
                 throw new RuntimeException("삭제를 위한 비밀번호를 다시 입력해주세요");
             }
-            System.out.println(boardEntity);
             List<CommentEntity> list = new ArrayList<>(commentService.FindByBoardId(boardEntity.getBoardId(), false));
             if(!list.isEmpty())
             {
@@ -193,7 +191,7 @@ public class BoardController
     {
         try
         {
-            System.out.println(page);
+
             Page<BoardEntity> boardEntities = boardService.FindAll(page);
             List<BoardDTO> boardDTOS = new ArrayList<>();
             for(BoardEntity boardEntity : boardEntities) {

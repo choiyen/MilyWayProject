@@ -111,7 +111,6 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                         String key = fileNames.next();
                         List<MultipartFile> files = multiRequest.getFiles(key);
                         List<String> url2 = new ArrayList<>();
-                        System.out.println("File key: " + key + ", file count: " + files.size());
                         for(MultipartFile file : files)
                         {
                             url2.add(uploading(file));
@@ -186,7 +185,6 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                 NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO(),Titleurl));
                 if(notice1 != null)
                 {
-                    System.out.println(noticeJsonDTO.getNoticeDetailDTO());
                     int i = 0;
                     List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
                     Set<Number> excludeIds = new HashSet<>();  // ArrayList를 Set으로 변환
@@ -199,7 +197,6 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                         String key = fileNames.next();
                         List<MultipartFile> files = multiRequest.getFiles(key);
                         List<String> url2 = new ArrayList<>();
-                        System.out.println("File key: " + key + ", file count: " + files.size());
                         for(MultipartFile file : files)
                         {
                             url2.add(uploading(file));
@@ -445,8 +442,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     {
         try
         {
-            System.out.println(CleanType.valueOf(type));
-            System.out.println(page);
+
             List<Object> list = new ArrayList<>();
             List<NoticeEntity> notice = new ArrayList<>(noticeService.findSmallAll(CleanType.valueOf(type),page));
             if(notice != null)

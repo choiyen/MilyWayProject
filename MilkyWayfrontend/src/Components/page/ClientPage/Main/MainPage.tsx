@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { InquireText } from "./Component/InquireText";
 import { FaFeatherAlt, FaHandsWash, FaStar } from "react-icons/fa";
 import bathsrooms from "@/Components/Common/assets/bathsrooms.png";
-import { RoundWidgets } from "./Component/RoundWidgets";
 import { BlogComment } from "./Component/BlogComment";
 
 export const MainMapper = styled.div`
@@ -81,8 +80,6 @@ export const MainPage = () => {
     <>
       <div>
         <MainMapper>
-          <RoundWidgets />
-
           <h2>
             <span>하루에 한집씩!</span>
             <span>차근차근!! 꼼꼼히!!</span>

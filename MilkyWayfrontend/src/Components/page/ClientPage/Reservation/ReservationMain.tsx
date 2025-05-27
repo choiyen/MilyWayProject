@@ -12,8 +12,13 @@ import { paths } from "@/config/paths/paths";
 import { POST } from "@/config/request/axios/axiosInstance";
 import { RootState } from "@/config/reduxstore";
 import { setReservationData } from "@/config/request/ReduxList/ReservationReducer";
-
-type ConsentState = { [key: string]: boolean };
+import {
+  ConsentState,
+  handleClickReservation,
+  ReservationPOST,
+} from "./API/ReservationAPI";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const ReservationMain = () => {
   const dispatch = useDispatch();
@@ -37,7 +42,12 @@ const ReservationMain = () => {
       });
       return response;
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "오류 발생",
+        text: "예약 날짜를 불러오는 중 오류가 발생했습니다. : " + err,
+        confirmButtonText: "확인",
+      });
     }
   };
 
@@ -57,7 +67,6 @@ const ReservationMain = () => {
   useEffect(() => {
     const data = Address + " " + AddressDetail;
     dispatch(setReservationData({ ...reservationData, Address: data }));
-    console.log(reservationData);
   }, [Address, AddressDetail]);
 
   const handleConsentChange = (
@@ -92,47 +101,40 @@ const ReservationMain = () => {
   };
 
   const handleSubmit = () => {
-    alert("모든 항목에 동의하셨습니다.");
+    toast.success("개인정보 처리 동의 완료", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     setIsModalOpen(false);
   };
 
-  const handleClickReservation = () => {
-    for (const [, value] of Object.entries(consents)) {
-      if (!value) {
-        alert(`개인정보에 대한 동의가 필요합니다.`);
-        return;
-      }
-    }
-
-    if (
-      !reservationData.name ||
-      !reservationData.phone ||
-      !Address ||
-      !AddressDetail ||
-      !reservationData.SubssionDate ||
-      !reservationData.type ||
-      !reservationData.acreage
-    ) {
-      alert("필수 입력값이 누락되었습니다.");
-      return;
-    }
-  };
-
   const handlePost = async () => {
-    handleClickReservation();
+    handleClickReservation(consents, reservationData, Address, AddressDetail);
 
-    POST({
-      url: paths.reserve.basic.path,
-      data: {
-        name: reservationData.name,
-        phone: reservationData.phone,
-        address: reservationData.Address,
-        subissionDate: reservationData.SubssionDate,
-        acreage: reservationData.acreage,
-        type: reservationData.type,
-      },
-    }).then((res) => {
-      console.log(res);
+    ReservationPOST(reservationData).then((res) => {
+      if (res.resultType === "success") {
+        Swal.fire({
+          icon: "success",
+          title: "신청 완료",
+          text: `${res.message}`,
+          confirmButtonText: "확인",
+        });
+        dispatch(
+          setReservationData({
+            name: "",
+            phone: "",
+            Address: "",
+            SubssionDate: "",
+            acreage: "",
+            type: "",
+          })
+        );
+      }
       setDateNot([...dateNOT, reservationData.SubssionDate]);
     });
 

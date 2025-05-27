@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -134,14 +135,14 @@ public class InqurieController
                     @ApiResponse(responseCode = "404", description = "Inqurie List not found")
             }
     )
-    @PostMapping("/search")
-    public ResponseEntity<?> FindALL(HttpServletRequest request)
+    @GetMapping("/search/page")
+    public ResponseEntity<?> FindALL(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "0") int page)
     {
         try
         {
             if(loginSuccess.isSessionExist(request))
             {
-                List<InquireEntity> inquireEntities = inquireService.findAll();
+                Page<InquireEntity> inquireEntities = inquireService.findAll(page);
                 List<InquireDTO> inquireDTOS = new ArrayList<>();
                 for(InquireEntity inquireEntity : inquireEntities)
                 {
@@ -219,6 +220,7 @@ public class InqurieController
                 .inquire(inquireDTO.getInquire())
                 .inquirename(inquireDTO.getInquirename())
                 .dateOfInquiry(inquireDTO.getDateOfInquiry())
+                .inquireBool(inquireDTO.getInquireBool())
                 .build();
     }
 
@@ -231,6 +233,7 @@ public class InqurieController
                 .inquire(inquireEntity.getInquire())
                 .dateOfInquiry(inquireEntity.getDateOfInquiry())
                 .inquirename(inquireEntity.getInquirename())
+                .inquireBool(inquireEntity.getInquireBool())
                 .build();
     }
 

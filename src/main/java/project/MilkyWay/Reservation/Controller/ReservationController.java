@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Administration.Entity.AdministrationEntity;
 import project.MilkyWay.ComonType.DTO.PageDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
-import project.MilkyWay.ComonType.Enum.DateType;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Reservation.Entity.ReservationEntity;
 import project.MilkyWay.Administration.Service.AdministrationService;
-import project.MilkyWay.Reservation.DTO.ReservationDTO;
+import project.MilkyWay.Reservation.Entity.DTO.ReservationDTO;
 import project.MilkyWay.Reservation.Service.ReservationService;
 
 import java.time.LocalDate;
@@ -272,9 +271,7 @@ public class ReservationController //고객의 예약을 관리하기 위한 DTO
                 AdministrationEntity administrationEntity = administrationService.FindByAdministrationDate(AdminstrationDate);
                 if(administrationEntity != null)
                 {
-                    System.out.println(administrationEntity);
                     ReservationEntity reservationEntity = reservationService.SelectAdminstrationID(administrationEntity.getAdministrationId());
-                    System.out.println(reservationEntity);
                     if (reservationEntity == null)
                     {
                         return ResponseEntity.ok().body(responseDTO.Response("empty", "결과 값이 비어 있습니다."));

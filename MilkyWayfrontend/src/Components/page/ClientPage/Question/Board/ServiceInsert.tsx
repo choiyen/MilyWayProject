@@ -7,6 +7,8 @@ import { GateWayNumber } from "@/types/GateWay/GateWayType";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const ServiceInsert = () => {
   const [password, setpassword] = useState<string>("");
@@ -21,7 +23,12 @@ const ServiceInsert = () => {
       password === "" ||
       Check === ""
     ) {
-      alert("입력되지 않은 데이터가 존재합니다. 다시 확인해주세요.");
+      Swal.fire({
+        icon: "error",
+        title: "입력되지 않은 데이터가 존재합니다.",
+        text: "모든 필드를 입력해주세요.",
+        confirmButtonText: "확인",
+      });
       return false;
     }
 
@@ -41,26 +48,54 @@ const ServiceInsert = () => {
           },
         }).then((res) => {
           if (res.resultType === "success") {
-            alert("Q&A 요청 생성 완료");
+            Swal.fire({
+              icon: "success",
+              title: "Q&A 요청 생성 완료",
+              text: "요청이 성공적으로 생성되었습니다.",
+              confirmButtonText: "확인",
+            });
             nativeGate(
               GateWayNumber.Client + "/" + `editService/${res.data[0].boardId}`
             );
           } else {
-            alert("Q&A 요청 생성 도중 오류 발생!! 전화로 문의주세요");
+            Swal.fire({
+              icon: "error",
+              title: "Q&A 요청 생성 실패",
+              text: "요청 생성 중 오류가 발생했습니다. 전화로 문의해주세요.",
+              confirmButtonText: "확인",
+            });
           }
         });
       } else {
-        alert("비밀번호와 비밀번호 확인이 다릅니다. 확인해주세요.");
+        Swal.fire({
+          icon: "error",
+          title: "비밀번호 불일치",
+          text: "비밀번호와 비밀번호 확인이 일치하지 않습니다.",
+          confirmButtonText: "확인",
+        });
       }
     }
   };
 
   const handleCancel = () => {
     if (window.confirm("정말 취소할 건가여?")) {
-      console.log("사용자가 확인을 눌렀습니다.");
+      Swal.fire({
+        icon: "info",
+        title: "취소됨",
+        text: "질문 등록이 취소되었습니다.",
+        confirmButtonText: "확인",
+      });
       nativeGate(-1);
     } else {
-      console.log("사용자가 취소를 눌렀습니다.");
+      toast.error("사용자가 취소를 눌렀습니다.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 

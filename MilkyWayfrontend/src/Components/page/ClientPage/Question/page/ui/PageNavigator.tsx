@@ -1,4 +1,5 @@
 import "@/SCSS/tailwind.scss";
+import { toast } from "react-toastify";
 
 interface PageNavigate {
   CurrentPage: number;
@@ -21,7 +22,6 @@ export const PageNavigator = ({
               aria-label="이전 페이지"
               onClick={() => {
                 if (CurrentPage > 0) {
-                  console.log(CurrentPage);
                   setCurrentPage(CurrentPage - 1);
                 }
               }}
@@ -33,7 +33,6 @@ export const PageNavigator = ({
                 key={index}
                 className="px-3 py-1 rounded-md bg-white border border-gray-300 hover:bg-blue-100 focus:outline-none"
                 onClick={() => {
-                  console.log(index);
                   setCurrentPage(index);
                 }}
               >
@@ -45,10 +44,18 @@ export const PageNavigator = ({
               aria-label="다음 페이지"
               onClick={() => {
                 if (TotalPage.current > CurrentPage + 1) {
-                  console.log(CurrentPage);
                   setCurrentPage(CurrentPage + 1);
                 } else {
-                  alert("페이지 변경 불가 : 전체 페이지 수 초과");
+                  toast("페이지 변경 불가 : 전체 페이지 수 초과", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
                 }
               }}
             >

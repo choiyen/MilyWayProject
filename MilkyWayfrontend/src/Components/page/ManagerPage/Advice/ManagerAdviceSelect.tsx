@@ -7,6 +7,8 @@ import { paths } from "@/config/paths/paths";
 import { DELETE, POST } from "@/config/request/axios/axiosInstance";
 import { NoticeType } from "@/types/Feature/Notice/NoticeAll";
 import styled from "styled-components";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const DeleteButton = styled.button`
   width: 100%;
@@ -38,7 +40,6 @@ export const ManagerAdviceSelect = () => {
 
         // ✅ 중복 방지를 위해 지역 변수로 선언
         const Notice: NoticeType[] = [];
-        console.log(res.data);
 
         if (Array.isArray(res.data)) {
           for (let i = 0; i < res.data.length; i++) {
@@ -53,9 +54,21 @@ export const ManagerAdviceSelect = () => {
           setAdvicedummy(Notice); // 상태 업데이트
         } else {
           console.warn("Unexpected data format:", res.data);
+          Swal.fire({
+            icon: "warning",
+            title: "데이터 오류",
+            text: "후기 데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해주세요.",
+            confirmButtonText: "확인",
+          });
         }
       } catch (error) {
         console.error("Failed to fetch advice data:", error);
+        Swal.fire({
+          icon: "error",
+          title: "오류 발생",
+          text: "후기 데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해주세요.",
+          confirmButtonText: "확인",
+        });
       }
     };
 
@@ -76,17 +89,37 @@ export const ManagerAdviceSelect = () => {
       })
         .then((res) => {
           if (res.resultType === "success") {
-            alert("삭제 완료");
+            Swal.fire({
+              icon: "success",
+              title: "삭제 완료",
+              text: "후기가 성공적으로 삭제되었습니다.",
+              confirmButtonText: "확인",
+            });
             setAdvicedummy((prev) =>
               prev.filter((item) => item.noticeId !== noticeId)
             );
           } else {
-            alert("삭제 실패");
+            toast.error("후기를 삭제하는데 실패했습니다. 다시 시도해주세요.", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           }
         })
         .catch((error) => {
-          console.error("Error deleting advice:", error);
-          alert("삭제 실패");
+          toast.error("Error deleting advice:" + error, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         });
     }
   };

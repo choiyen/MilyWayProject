@@ -7,9 +7,16 @@ import { RootState } from "@/config/reduxstore";
 import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
 import { logout } from "@/config/request/ReduxList/userlogin";
 import { setSession } from "@/config/request/ReduxList/useauthSlice";
-import { DELETE, GET, POST } from "@/config/request/axios/axiosInstance";
+import { DELETE } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { CommentValueType } from "@/types/Feature/Boards/Comment";
+import {
+  BoardPOST,
+  CommentInsert,
+  CommentPOST,
+  DateUpdate,
+} from "./API/BoardAPI";
+import Swal from "sweetalert2";
 
 interface Commit {
   commentId: number;
@@ -33,7 +40,6 @@ const ServiceBoard = () => {
   useEffect(() => {
     LoginCheck().then((res) => {
       if (res.resultType === "success") {
-        console.log("로그인 성공:", res);
         dispatch(logout()); // 세션 상태를 false로 설정
         dispatch(
           setSession({
@@ -44,24 +50,6 @@ const ServiceBoard = () => {
       }
     });
   }, []);
-
-  const BoardPOST = async (boardId: string) => {
-    return await GET({
-      url: paths.forum.Board.param.path,
-      params: {
-        BoardId: boardId,
-      },
-    });
-  };
-
-  const CommentPOST = async (boardId: string) => {
-    return await GET({
-      url: paths.forum.Comment.search.Board.path,
-      params: {
-        BoardId: boardId,
-      },
-    });
-  };
 
   useEffect(() => {
     const boardId = param.BoardId;
@@ -81,26 +69,10 @@ const ServiceBoard = () => {
     }
   }, [param]);
 
-  const DateUpdate = (isoString: string) => {
-    const date = new Date(isoString);
-    console.log("현재 날짜 :" + isoString);
-    const formatted =
-      `${date.getFullYear()}년 ${String(date.getMonth() + 1).padStart(
-        2,
-        "0"
-      )}월 ${String(date.getDate()).padStart(2, "0")}일 ` +
-      `${String(date.getHours()).padStart(2, "0")}시 ${String(
-        date.getMinutes()
-      ).padStart(2, "0")}분 ${String(date.getSeconds()).padStart(2, "0")}초`;
-
-    return formatted;
-  };
-
   const handleInput = () => {
     const inputCommit = ref1.current ? ref1.current.value : "";
     const password = ref2.current ? ref2.current.value : "";
 
-    console.log(authSlice.isAuthenticated);
     let comment: CommentValueType;
     if (inputCommit !== "" && password !== "") {
       if (authSlice.isAuthenticated === true) {
@@ -129,16 +101,7 @@ const ServiceBoard = () => {
   };
 
   const SaveComment = async (input: CommentValueType) => {
-    return await POST({
-      url: paths.forum.Comment.basic.path,
-      data: {
-        boardId: input.boardId,
-        type: input.type,
-        comment: input.comment,
-        password: input.password,
-      },
-    }).then((res) => {
-      console.log(res.data);
+    CommentInsert(input).then((res) => {
       if (res.resultType === "success") {
         setCommit((prev) => [
           ...(prev || []),
@@ -151,14 +114,18 @@ const ServiceBoard = () => {
           },
         ]);
       } else {
-        alert("댓글 저장 불가");
+        Swal.fire({
+          icon: "error",
+          title: "개인정보 수집 및 이용 동의",
+          text: "개인정보 수집 및 이용 동의를 해주세요.",
+          confirmButtonText: "확인",
+        });
       }
     });
   };
 
   const handCommentDelete = async (code: number) => {
     setModel(!Model);
-    console.log(code);
     setdeleteid(code);
   };
 
@@ -166,7 +133,6 @@ const ServiceBoard = () => {
     const password = ref1.current?.value;
     const password2 = ref2.current?.value;
     if (password === password2) {
-      console.log("실행");
       await DELETE({
         url: paths.forum.Comment.basic.path,
         data: {
@@ -175,13 +141,33 @@ const ServiceBoard = () => {
           password: password,
         },
       }).then((res) => {
-        console.log(res);
-        setCommit(commit?.filter((state) => state.commentId !== deleteid));
-        setdeleteid(0);
-        setModel(false);
+        if (res.resultType === "error") {
+          Swal.fire({
+            icon: "error",
+            title: "삭제 실패",
+            text: "비밀번호가 일치하지 않습니다. 다시 확인해주세요.",
+            confirmButtonText: "확인",
+          });
+          return;
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "삭제 완료",
+            text: "댓글이 성공적으로 삭제되었습니다.",
+            confirmButtonText: "확인",
+          });
+          setCommit(commit?.filter((state) => state.commentId !== deleteid));
+          setdeleteid(0);
+          setModel(false);
+        }
       });
     } else {
-      alert("삭제 명령을 수행할 수 없습니다.");
+      Swal.fire({
+        icon: "error",
+        title: "비밀번호 불일치",
+        text: "입력한 비밀번호가 일치하지 않습니다. 다시 확인해주세요.",
+        confirmButtonText: "확인",
+      });
     }
   };
 

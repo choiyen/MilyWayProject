@@ -88,7 +88,6 @@ public class NoticeService
     }
     public List<NoticeEntity> findSmallAll(CleanType type, Long page)
     {
-        System.out.println(noticeMapper.findByType(type, page, 10));
         List<NoticeEntity> list = new ArrayList<>(noticeMapper.findByType(type, page, 10));
         for(NoticeEntity notice : list)
         {

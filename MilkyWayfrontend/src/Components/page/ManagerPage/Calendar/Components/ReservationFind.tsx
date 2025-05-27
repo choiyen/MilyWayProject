@@ -6,6 +6,8 @@ import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "@/SCSS/tailwind.scss";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 type ReservationProps = {
   selectDate: string;
@@ -22,7 +24,6 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
         AdminstrationDate: selectDate,
       },
     }).then((res) => {
-      console.log(res);
       if (res.resultType == "success") {
         setReservation({
           name: res.data[0].name,
@@ -42,7 +43,15 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
           type: "",
         });
       } else {
-        alert("데이터를 가져오는데 실패했습니다. 관리자 문의 바람!!!");
+        toast.error("데이터를 가져오는데 실패했습니다. 관리자 문의 바람!!!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     });
   };
@@ -60,7 +69,15 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
       Reservation?.acreage == "" ||
       Reservation?.type == ""
     ) {
-      alert("데이터 수립에 오류가 발생했습니다. 관리자에게 문의하세요.");
+      toast.error("데이터 수립에 오류가 발생했습니다. 관리자에게 문의하세요.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } else {
       await POST({
         url: paths.Address.basic.path,
@@ -74,8 +91,22 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
         },
       }).then((res) => {
         if (res.resultType == "error") {
-          alert(res.message);
+          toast.error("예약 확정에 실패했습니다. 관리자에게 문의하세요.", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         } else {
+          Swal.fire({
+            icon: "success",
+            title: "예약이 확정되었습니다.",
+            text: "고객님께서 요청하신 청소 예약이 확정되었습니다.",
+            confirmButtonText: "확인",
+          });
           nativeGate(GateWayNumber.Manager + "/" + ManagerGateWayType.Join);
         }
       });
