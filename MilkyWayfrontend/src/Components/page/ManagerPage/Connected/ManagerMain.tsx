@@ -100,7 +100,7 @@ export const ManagerMain = () => {
       .then((res) => {
         if (res !== undefined) {
           toast.success("로그인에 성공했습니다.", {
-            position: "top-right",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -113,7 +113,7 @@ export const ManagerMain = () => {
           navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Join); // 페이지 이동
         } else {
           toast.error("로그인에 실패했습니다. 서버에 오류가 존재합니다.", {
-            position: "top-right",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -127,7 +127,7 @@ export const ManagerMain = () => {
         toast.error(
           "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요." + error,
           {
-            position: "top-right",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,

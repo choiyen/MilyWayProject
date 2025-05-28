@@ -44,7 +44,7 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
         });
       } else {
         toast.error("데이터를 가져오는데 실패했습니다. 관리자 문의 바람!!!", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -70,7 +70,7 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
       Reservation?.type == ""
     ) {
       toast.error("데이터 수립에 오류가 발생했습니다. 관리자에게 문의하세요.", {
-        position: "top-right",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -92,7 +92,7 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
       }).then((res) => {
         if (res.resultType == "error") {
           toast.error("예약 확정에 실패했습니다. 관리자에게 문의하세요.", {
-            position: "top-right",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -120,9 +120,6 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
   //   });
   // };
 
-  useEffect(() => {
-    console.log(Reservation);
-  }, [Reservation]);
   const Classnametheads =
     "px-4 py-3 text-left text-sm font-semibold text-gray-700 border border-gray-300 text-center";
   const Classtbodys = "px-4 py-3 text-sm text-gray-800 border border-gray-300";

@@ -13,11 +13,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.MilkyWay.BoardMain.Board.DTO.BoardDTO;
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
+import project.MilkyWay.ComonType.DTO.PageDTO;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Inquire.DTO.InquireDTO;
 import project.MilkyWay.ComonType.DTO.ResponseDTO;
+import project.MilkyWay.Inquire.DTO.InquireUpdateDto;
 import project.MilkyWay.Inquire.Entity.InquireEntity;
 import project.MilkyWay.Inquire.Service.InquireService;
 
@@ -125,7 +128,50 @@ public class InqurieController
             return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
         }
     }
+    @Operation(
+            summary = "Update an Inquire by InquireId, but only if the user is an administrator.",  // Provide a brief summary
+            description = "This API deletes an Inquire by the provided InquireId and returns a ResponseEntity with a success or failure message.",  // Provide detailed description
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Inqurie updated successfully"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Inqurie not found"
+                    )
+            }
+    )
+    @PutMapping
+    public ResponseEntity<?> Update(HttpServletRequest request,@RequestBody InquireUpdateDto inquireUpdateDto)
+    {
+        try
+        {
+            System.out.println(inquireUpdateDto);
+            if(loginSuccess.isSessionExist(request))
+            {
+                InquireEntity inquireEntity = inquireService.Update(inquireUpdateDto.getInqurieId());
+                if(inquireEntity != null)
+                {
+                    InquireDTO inquireDTO = ConvertToDTO(inquireEntity);
+                    return ResponseEntity.ok().body(responseDTO.Response("success","고객 문의 확인 완료", Collections.singletonList(inquireDTO)));
+                }
+                else
+                {
+                    throw new InsertFailedException("데이터베이스의 데이터를 수정하는데 실패했습니다. 알 수 없는 오류가 발생했어요.");
+                }
+            }
+            else
+            {
+                throw new SessionNotFoundExpection("관리자 로그인 X, 고객의 문의를 수정할 수 있는 건 관리자 뿐입니다.");
+            }
 
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(responseDTO.Response("error",e.getMessage()));
+        }
+    }
 
     @Operation(
             summary = "Returns a list of InqurieDTO objects, but only if the user is an administrator.",
@@ -148,7 +194,16 @@ public class InqurieController
                 {
                     inquireDTOS.add(ConvertToDTO(inquireEntity));
                 }
-                return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회에 성공했습니다.", inquireDTOS));
+                if(inquireDTOS.isEmpty())
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("empty","데이터베이스에 내용은 비어있음"));
+                }
+                else {
+                    PageDTO pageDTO = PageDTO.<InquireDTO>builder().list(inquireDTOS)
+                            .PageCount(inquireEntities.getTotalPages())
+                            .Total(inquireEntities.getTotalElements()).build();
+                    return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 조회에 성공했습니다.", pageDTO));
+                }
             }
             else
             {

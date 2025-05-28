@@ -6,6 +6,7 @@ import { TbHandClick } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { InqurieInsert } from "./API/InquireAPI";
+import { toast } from "react-toastify";
 
 const InquireMapper = styled.div`
   display: flex;
@@ -76,8 +77,48 @@ export const InquireText = () => {
   const Selector = useSelector((state: RootState) => state.Inqurle.value);
   const dispatch = useDispatch();
 
+  const isValid = () => {
+    const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+
+    const missingFields: string[] = [];
+
+    if (!Selector.InquireName) missingFields.push("작성자 이름");
+    if (!Selector.PhoneNumber) missingFields.push("전화번호");
+    if (!Selector.Address) missingFields.push("주소");
+    if (!Selector.Inqurie) missingFields.push("문의 내용");
+
+    if (missingFields.length > 0) {
+      toast.error(`${missingFields.join(", ")} 항목을 입력해 주세요.`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return false;
+    }
+
+    // 전화번호 형식 검사
+    if (!phoneRegex.test(Selector.PhoneNumber)) {
+      toast.error("전화번호 형식이 올바르지 않습니다. 예: 010-1234-5678", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const HandInquireClick = async () => {
-    InqurieInsert(Selector, dispatch);
+    if (isValid()) {
+      InqurieInsert(Selector, dispatch);
+    }
   };
 
   return (

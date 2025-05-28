@@ -22,7 +22,7 @@ export const POST_FORM = async (
     return response.data;
   } catch (error) {
     toast.error("파일 업로드 중 오류가 발생했습니다. 다시 시도해주세요.", {
-      position: "top-right",
+      position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,

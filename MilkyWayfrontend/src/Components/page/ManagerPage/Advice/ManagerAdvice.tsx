@@ -149,7 +149,7 @@ export const ManagerAdvice = () => {
         );
       } else {
         toast.error("후기 내역 등록 실패", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,

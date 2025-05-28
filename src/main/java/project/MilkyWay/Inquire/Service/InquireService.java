@@ -38,12 +38,13 @@ public class InquireService
             }
         }
     }
-    public InquireEntity Update(String encodinginquireId,InquireEntity inquireEntity)
+    public InquireEntity Update(String encodinginquireId)
     {
+
         InquireEntity inquireEntity1 = inqurieRepository.findByInquireId(encodinginquireId);
         if(inquireEntity1 != null)
         {
-            InquireEntity newinquireEntity2 = ConvertToNew(inquireEntity1, inquireEntity);
+            InquireEntity newinquireEntity2 = ConvertToNewCheck(inquireEntity1);
             InquireEntity inquireEntity2 = inqurieRepository.save(newinquireEntity2);
             InquireEntity saveinquire = inqurieRepository.findByInquireId(newinquireEntity2.getInquireId());
             if(saveinquire.equals(inquireEntity2))
@@ -99,16 +100,16 @@ public class InquireService
                 throw new FindFailedException("이미 삭제가 되었거나, 삭제할 문의 Id를 찾을 수 없습니다.");
             }
     }
-    private InquireEntity ConvertToNew(InquireEntity oldinquireEntity, InquireEntity newinquireEntity)
+    private InquireEntity ConvertToNewCheck(InquireEntity oldinquireEntity)
     {
         return InquireEntity.builder()
                 .inquireId(oldinquireEntity.getInquireId())
-                .inquire(newinquireEntity.getInquire())
-                .phoneNumber(newinquireEntity.getPhoneNumber())
-                .address(newinquireEntity.getAddress())
+                .inquire(oldinquireEntity.getInquire())
+                .phoneNumber(oldinquireEntity.getPhoneNumber())
+                .address(oldinquireEntity.getAddress())
                 .dateOfInquiry(oldinquireEntity.getDateOfInquiry())
                 .inquirename(oldinquireEntity.getInquirename())
-                .inquireBool(newinquireEntity.getInquireBool())
+                .inquireBool(!oldinquireEntity.getInquireBool())
                 .build();
     }
 

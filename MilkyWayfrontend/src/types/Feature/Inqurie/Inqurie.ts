@@ -5,6 +5,7 @@ export type InqurieType = {
   PhoneNumber: string;
   Inqurie: string;
   SubmissionDate: string;
+  inquireBool: boolean;
 };
 export const InqurieDummy: InqurieType[] = [
   {
@@ -14,6 +15,7 @@ export const InqurieDummy: InqurieType[] = [
     PhoneNumber: "010-1234-5678",
     Inqurie: "청소 예약은 어떻게 하나요?",
     SubmissionDate: "2025년-02월-11일",
+    inquireBool: false,
   },
   {
     InqurieId: "2",
@@ -23,6 +25,7 @@ export const InqurieDummy: InqurieType[] = [
     PhoneNumber: "010-1234-5648",
     Inqurie: "예약은 언제까지 가능한가요?",
     SubmissionDate: "2025년-03월-21일",
+    inquireBool: false,
   },
   {
     InqurieId: "3",
@@ -31,5 +34,6 @@ export const InqurieDummy: InqurieType[] = [
     PhoneNumber: "010-1234-5678",
     Inqurie: "청소는 언제 하나요?",
     SubmissionDate: "2025년-05월-7일",
+    inquireBool: false,
   },
 ];

@@ -8,7 +8,6 @@ import axios, {
 } from "axios";
 import { baseURL, timeout } from "./util";
 import { toast } from "react-toastify";
-import Swal from "sweetalert2";
 
 // 환경 변수 사용
 const TIMEOUT = timeout ? parseInt(timeout, 10) : undefined;
@@ -77,7 +76,7 @@ const ResponseInterceptor = {
       toast.error(
         "서버와의 연결에 문제가 발생했습니다. 인터넷 연결을 확인해주세요.",
         {
-          position: "top-right",
+          position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -133,21 +132,3 @@ export const OPTIONS = curringMethod("options");
 export const PATCH = curringMethod("patch");
 
 export default axiosInstance;
-
-/***
- * 
- * import { GET } from "@/api/axiosInstance";
-
-const fetchUserData = async () => {
-  try {
-    const data = await GET({
-      url: "/user/info", // 실제 API 경로
-      params: { userId: "1234" },
-    });
-
-    console.log("User Info:", data);
-  } catch (error) {
-    console.error("GET 요청 실패:", error);
-  }
-};
- */

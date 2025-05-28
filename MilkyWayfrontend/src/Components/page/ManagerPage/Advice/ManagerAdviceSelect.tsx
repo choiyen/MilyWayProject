@@ -100,7 +100,7 @@ export const ManagerAdviceSelect = () => {
             );
           } else {
             toast.error("후기를 삭제하는데 실패했습니다. 다시 시도해주세요.", {
-              position: "top-right",
+              position: "top-center",
               autoClose: 3000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -112,7 +112,7 @@ export const ManagerAdviceSelect = () => {
         })
         .catch((error) => {
           toast.error("Error deleting advice:" + error, {
-            position: "top-right",
+            position: "top-center",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
