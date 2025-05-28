@@ -31,10 +31,12 @@ import { ClientQuestion } from "@/Components/page/ClientPage/Question/page/Clien
 import ServiceInsert from "@/Components/page/ClientPage/Question/Board/ServiceInsert";
 import ServiceBoard from "@/Components/page/ClientPage/Question/Board/ServiceBoard";
 import { ClientReservation } from "@/Components/page/ClientPage/Reservation/ClientReservation";
-import { ThemeProvider } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { theme } from "@/SCSS/typecss";
 import { GlobalSwalStyle } from "./AppToast";
 import ManagerInquires from "@/Components/page/ManagerPage/Inquires/ManagerInquires";
+import { ToastContainer } from "react-toastify";
+import ManagerInquiresSelect from "@/Components/page/ManagerPage/Inquires/ManagerInquiresSelect";
 
 const router = createBrowserRouter([
   {
@@ -89,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: ManagerGateWayType.Inquires,
         element: <ManagerInquires />, // Assuming this is the correct component for Inquires
+      },
+      {
+        path: ManagerGateWayType.Inquireedit,
+        element: <ManagerInquiresSelect />, // Assuming this is the correct component for Inquire edit
       },
       {
         path: "*",
@@ -147,11 +153,38 @@ const router = createBrowserRouter([
   }, // 클라이언트 쪽 페이지로 변경되어 함
 ]);
 
+const GlobalStyle = createGlobalStyle`
+  body, body * {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  input, textarea, select, [contenteditable="true"] {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+`;
+
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <GlobalSwalStyle /> {/* 여기 넣기 */}
+        <GlobalStyle />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+          toastClassName="custom-toast"
+          className="custom-toast-body"
+        />
         <div className="App">
           <RouterProvider router={router} />
         </div>

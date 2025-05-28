@@ -10,6 +10,7 @@ export const ManagerGateWayType = {
   SignUp: "SignUp",
   Adviceedit: "editNotice/:noticeId",
   Inquires: "Inquires",
+  Inquireedit: "editInquire/:InquireId",
 };
 export const ClientGateWayType = {
   home: "home",

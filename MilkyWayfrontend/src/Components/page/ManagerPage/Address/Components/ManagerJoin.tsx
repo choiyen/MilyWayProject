@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { AddressDeletefetchData, AddressSelectfetchData } from "../api/util";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const MainWapper = styled.div`
   display: flex;
@@ -143,7 +144,8 @@ export const ManagerJoin = () => {
   const [Sign, setSign] = useState<null | AddressType[]>(null);
   const navigate = useNavigate();
   const TotalPage = useRef(0);
-
+  const [refreshKey, setrefreshKey] = useState<boolean>(false);
+  const [currentPage, setcurrentPage] = useState<number>(0);
   const FuncClick = (name: string) => {
     navigate(name);
   };
@@ -153,7 +155,7 @@ export const ManagerJoin = () => {
       setSign(res.pageDTO.list);
       TotalPage.current = res.pageDTO.pageCount;
     });
-  }, [TotalPage.current]);
+  }, [refreshKey]);
 
   const handleClick = (AddressId: string) => {
     AddressDeletefetchData(AddressId)
@@ -167,6 +169,7 @@ export const ManagerJoin = () => {
               confirmButtonText: "확인",
             });
             setSign(res.pageDTO.list);
+            setrefreshKey(!refreshKey);
           });
         }
       })
@@ -239,35 +242,6 @@ export const ManagerJoin = () => {
               )}
             </tbody>
           </table>
-          <div className="flex justify-center mt-3">
-            <div className="flex items-center space-x-6 gap-10">
-              <div className="flex items-center space-x-2 gap-5">
-                <button
-                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
-                  aria-label="이전 페이지"
-                  onClick={() => (TotalPage.current -= 1)}
-                >
-                  &lt;
-                </button>
-                {Array.from({ length: TotalPage.current }, (_, index) => (
-                  <button
-                    key={index}
-                    className="px-3 py-1 rounded-md bg-white border border-gray-300 hover:bg-blue-100 focus:outline-none"
-                    onClick={() => TotalPage.current == index + 1}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-                <button
-                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
-                  aria-label="다음 페이지"
-                  onClick={() => (TotalPage.current += 1)}
-                >
-                  &gt;
-                </button>
-              </div>
-            </div>
-          </div>
         </TableWrapper>
 
         {/* 모바일 카드형 뷰 */}
@@ -328,7 +302,53 @@ export const ManagerJoin = () => {
             </div>
           )}
         </CardList>
-
+        {TotalPage.current > 0 && (
+          <div className="flex justify-center mt-3">
+            <div className="flex items-center space-x-6 gap-10">
+              <div className="flex items-center space-x-2 gap-5">
+                <button
+                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                  aria-label="이전 페이지"
+                  onClick={() => {
+                    if (currentPage <= 0) {
+                      toast.error("첫 페이지입니다.", {
+                        position: "top-center",
+                      });
+                      return;
+                    }
+                    setcurrentPage(currentPage - 1);
+                  }}
+                >
+                  &lt;
+                </button>
+                {Array.from({ length: TotalPage.current }, (_, index) => (
+                  <button
+                    key={index}
+                    className="px-3 py-1 rounded-md bg-white border border-gray-300 hover:bg-blue-100 focus:outline-none"
+                    onClick={() => setcurrentPage(index)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                  aria-label="다음 페이지"
+                  onClick={() => {
+                    if (currentPage + 1 < TotalPage.current) {
+                      setcurrentPage(currentPage + 1);
+                    } else {
+                      toast.error("마지막 페이지입니다.", {
+                        position: "top-center",
+                      });
+                    }
+                  }}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <LastButton
           onClick={() =>
             FuncClick(GateWayNumber.Manager + "/" + ManagerGateWayType.Address)

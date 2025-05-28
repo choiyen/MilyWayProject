@@ -4,6 +4,7 @@ import { setIqurieData } from "@/config/request/ReduxList/InqurieReducer";
 import { InqurieType } from "@/types/Feature/Inqurie/Inqurie";
 import { Dispatch } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
 function handleServerError(response: {
@@ -20,17 +21,14 @@ function handleServerError(response: {
       .filter((msg: string) => msg.length > 0); // 빈 항목 제거
 
     if (errors.length > 0) {
-      Swal.fire({
-        toast: true,
-        position: "top",
-        icon: "error",
-        title: errors[0], // 첫 오류만 표시
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        customClass: {
-          popup: "my-toast", // 커스텀 클래스 지정
-        },
+      toast.error(errors[0], {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
     }
   }
@@ -40,8 +38,10 @@ export const InqurieInsert = async (
   Selector: InqurieType,
   dispatch: Dispatch
 ) => {
+  const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+  const curDate = new Date(Date.now() - timezoneOffset);
   dispatch(
-    setIqurieData({ ...Selector, SubmissionDate: new Date().toISOString() })
+    setIqurieData({ ...Selector, SubmissionDate: curDate.toISOString() })
   );
 
   await POST({
@@ -70,6 +70,7 @@ export const InqurieInsert = async (
             PhoneNumber: "",
             Inqurie: "",
             SubmissionDate: "",
+            inquireBool: false,
           })
         );
       } else {

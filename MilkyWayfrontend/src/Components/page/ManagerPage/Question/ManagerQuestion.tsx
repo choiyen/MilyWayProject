@@ -14,6 +14,7 @@ import { POST, PUT } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const MainWapper = styled.div`
   display: flex;
@@ -54,7 +55,7 @@ export const ManagerQuestion = () => {
   const [Question, SetQuestion] = useState<string[]>([]);
   const [Comment, SetComment] = useState<string[]>([]);
   const [id, SetID] = useState<number[]>([]);
-
+  const native = useNavigate();
   const dispatch = useDispatch();
   const cleanCount = () => {
     setCount(count + 1);
@@ -68,7 +69,7 @@ export const ManagerQuestion = () => {
         toast.error(
           "현재 데이터베이스에 Q&A 정보가 없습니다. 새로운 정보를 추가해주세요.",
           {
-            position: "top-right",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -183,6 +184,7 @@ export const ManagerQuestion = () => {
             text: "Q&A 정보가 성공적으로 수정되었습니다.",
             confirmButtonText: "확인",
           });
+          native(-1);
         }
       });
     } catch (error) {
