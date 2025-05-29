@@ -3,7 +3,9 @@ package project.MilkyWay.BoardMain.Board.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Comment;
 import project.MilkyWay.BoardMain.Comment.Entity.CommentEntity;
+import project.MilkyWay.Config.DatabaseConverter;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -19,12 +21,22 @@ public class BoardEntity
 {
     @Id
     @Column(name = "boardId", nullable = false)
-    private String boardId; // 그냥 1씩 증가하는 int로 작성(데이터 수정을 위한 목적) - 게시판 질문
+    @Comment("PK")
+    private String boardId;
+
     @Column(name = "title", nullable = false)
+    @Comment("title")
+    @Convert(converter = DatabaseConverter.class)
     private String title; // 게시판 질문의 제목을 저장하는 변수
+
     @Column(name = "content", nullable = false)
-   private String content; // 게시판의 내용을 저장하는 변수
+    @Comment("content")
+    @Convert(converter = DatabaseConverter.class)
+    private String content; // 게시판의 내용을 저장하는 변수
+
     @Column(name = "password")
+    @Comment("게시판비번")
+    @Convert(converter = DatabaseConverter.class)
     private String password; //비밀번호
 
     @OneToMany(fetch = FetchType.EAGER)

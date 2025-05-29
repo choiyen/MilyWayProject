@@ -68,6 +68,7 @@ export const ManagerAddress = () => {
       if (isValidPhoneNumber(AddressData.phoneNumber)) {
         AddressInsertfetchData(AddressData)
           .then((res) => {
+            console.log(res);
             if (res.resultType === "success") {
               Swal.fire({
                 icon: "success",
@@ -86,10 +87,11 @@ export const ManagerAddress = () => {
             }
           })
           .catch((err) => {
+            console.log(err);
             toast.error(
               "예약 등록 중 오류가 발생했습니다. 다시 시도해주세요." + err,
               {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,

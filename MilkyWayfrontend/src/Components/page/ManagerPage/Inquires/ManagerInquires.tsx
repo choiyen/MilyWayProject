@@ -157,34 +157,59 @@ const ManagerInquires = () => {
           )}
         </tbody>
       </table>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          flexWrap: "wrap",
+        }}
+      >
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 0}
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
+          className={`px-5 py-2 rounded-md font-semibold transition-colors ${
+            currentPage === 0
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
         >
           이전
         </button>
-        <div>{currentPage + 1}</div>
+
+        <div
+          style={{
+            width: "40px",
+            height: "40px",
+            lineHeight: "40px", // 세로 중앙 정렬용
+            textAlign: "center",
+            fontWeight: "700",
+            fontSize: "1.25rem",
+            borderRadius: "50%",
+            backgroundColor: "#1f2937", // 배경색 넣으면 더 잘 보임
+            color: "white",
+            userSelect: "none",
+          }}
+        >
+          {currentPage + 1}
+        </div>
+
         <button
           onClick={() => {
-            console.log(totalPages);
-            console.log(currentPage);
-            if (currentPage >= totalPages) {
+            if (currentPage >= totalPages - 1) {
               toast.error("마지막 페이지입니다.", {
                 position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
+                autoClose: 3000,
               });
               return;
             }
             setCurrentPage(currentPage + 1);
           }}
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+          className={`px-5 py-2 rounded-md font-semibold transition-colors ${
+            currentPage >= totalPages - 1
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
         >
           다음
         </button>

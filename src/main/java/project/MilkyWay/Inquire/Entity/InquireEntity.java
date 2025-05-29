@@ -1,10 +1,9 @@
 package project.MilkyWay.Inquire.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Comment;
+import project.MilkyWay.Config.DatabaseConverter;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -19,22 +18,36 @@ public class InquireEntity
 {
     @Id
     @Column(name = "inquireId")
+    @Comment("PK")
     private String inquireId;
+
     @Column(name = "address", nullable = false)
+    @Comment("주소")
+    @Convert(converter = DatabaseConverter.class)
     private String address;
+
     @Column(name = "phoneNumber", nullable = false)
+    @Comment("전화번호")
+    @Convert(converter = DatabaseConverter.class)
     private String phoneNumber;
-    @Column(name = "inquire", nullable = false)
-    private String inquire;
+
     @Column(name = "inquirename", nullable = false)
+    @Comment("회원 이름")
+    @Convert(converter = DatabaseConverter.class)
     private String inquirename;
+
+    @Column(name = "inquire", nullable = false)
+    @Comment("고객 문의")
+    @Convert(converter = DatabaseConverter.class)
+    private String inquire;
+
     @Column(name = "dateOfInquiry", nullable = false)
+    @Comment("문의날짜")
     private LocalDate dateOfInquiry;
 
     @Column(name = "inquireBool", nullable = false)
+    @Comment("문의처리여부")
     private Boolean inquireBool;
-
-
 
 
     @Override
