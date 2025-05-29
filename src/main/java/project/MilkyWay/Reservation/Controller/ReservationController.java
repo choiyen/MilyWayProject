@@ -19,7 +19,7 @@ import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
 import project.MilkyWay.Reservation.Entity.ReservationEntity;
 import project.MilkyWay.Administration.Service.AdministrationService;
-import project.MilkyWay.Reservation.Entity.DTO.ReservationDTO;
+import project.MilkyWay.Reservation.DTO.ReservationDTO;
 import project.MilkyWay.Reservation.Service.ReservationService;
 
 import java.time.LocalDate;

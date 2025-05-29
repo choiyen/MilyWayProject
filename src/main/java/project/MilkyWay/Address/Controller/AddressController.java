@@ -363,7 +363,7 @@ public class AddressController
                 .phoneNumber(addressEntity1.getPhoneNumber())
                 .submissionDate(addressEntity1.getSubmissionDate())
                 .acreage(addressEntity1.getAcreage())
-                .cleanType(CleanType.valueOf(addressEntity1.getCleanType()))
+                .cleanType(addressEntity1.getCleanType())
                 .build();
     }
 
@@ -376,7 +376,7 @@ public class AddressController
                 .phoneNumber(addressDTO.getPhoneNumber())
                 .submissionDate(addressDTO.getSubmissionDate())
                 .acreage(addressDTO.getAcreage())
-                .cleanType(String.valueOf(addressDTO.getCleanType()))
+                .cleanType(addressDTO.getCleanType())
                 .build();
     }
     private AddressEntity ConvertToEntity(AddressDTO addressDTO)
@@ -388,7 +388,7 @@ public class AddressController
                 .phoneNumber(addressDTO.getPhoneNumber())
                 .submissionDate(addressDTO.getSubmissionDate())
                 .acreage(addressDTO.getAcreage())
-                .cleanType(String.valueOf(addressDTO.getCleanType()))
+                .cleanType(addressDTO.getCleanType())
                 .build();
     }
 

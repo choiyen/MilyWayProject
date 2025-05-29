@@ -5,7 +5,14 @@ import { AddressType } from "@/types/Feature/Address/AddressType";
 export const AddressInsertfetchData = async (Addressdata: AddressType) => {
   const response = await POST({
     url: paths.Address.basic.path,
-    data: Addressdata,
+    data: {
+      customer: Addressdata.customer,
+      address: Addressdata.address,
+      phoneNumber: Addressdata.phoneNumber,
+      submissionDate: Addressdata.submissionDate,
+      acreage: Addressdata.acreage,
+      cleanType: Addressdata.cleanType,
+    },
   });
   return response;
 };
