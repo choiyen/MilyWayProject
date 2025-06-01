@@ -13,7 +13,7 @@ import EmptyReview from "./Component/EmptyReview";
 import ReviewCards from "./Component/ReviewCards";
 import { PageNavigator } from "../Question/page/ui/PageNavigator";
 import { toast } from "react-toastify";
-
+import { useSearchParams } from "react-router-dom";
 const Fontname2 = styled.div`
   color: ${theme.colors.charcoalBlack};
   font-size: 25px;
@@ -22,10 +22,12 @@ const Fontname2 = styled.div`
 `;
 
 const ServiceProFile = () => {
-  const [select, setSelect] = useState<SelectType>("전체보기");
   const [selectIntroduction, setIntroduction] = useState<Introduction[]>();
   const [notices, setNotice] = useState<Notice[]>();
   const TotalPage = useRef(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const type = searchParams.get("type");
+  const [select, setSelect] = useState<SelectType>(type ?? "전체보기");
   const [CurrentPage, setCurrentPage] = useState<number>();
   const fetchType = async (type: string, CurrentPage: number) => {
     if (type === "전체보기") {
@@ -40,6 +42,11 @@ const ServiceProFile = () => {
       });
     }
   };
+  useEffect(() => {
+    setSearchParams({
+      type: select,
+    });
+  }, [select]);
 
   useEffect(() => {
     fetchType(select, CurrentPage ?? 0)

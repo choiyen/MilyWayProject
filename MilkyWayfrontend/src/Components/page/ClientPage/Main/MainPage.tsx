@@ -2,8 +2,10 @@ import { cleanType } from "@/types/cleanspace/cleanType";
 import styled from "styled-components";
 import { InquireText } from "./Component/InquireText";
 import { FaFeatherAlt, FaHandsWash, FaStar } from "react-icons/fa";
-import bathsrooms from "@/Components/Common/assets/bathsrooms.png";
 import { BlogComment } from "./Component/BlogComment";
+import { ImageGrid } from "./Component/ImageGrid";
+import { useNavigate } from "react-router-dom";
+import { ClientGateWayType, GateWayNumber } from "@/types/GateWay/GateWayType";
 
 export const MainMapper = styled.div`
   display: flex;
@@ -52,20 +54,31 @@ const AcrosticBox = styled.div`
   padding: 25px;
   background-color: white; // PowderBlue
 `;
-const ImageGrid = styled.div`
-  display: grid;
-  padding: 20px;
-  margin-top: 60px;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  justify-items: center;
+const CleanButton = styled.button`
+  width: 100px;
+  height: 10vh;
+  background-color: aliceblue;
+  border: 1px solid black;
+  border-radius: 15px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
-  img {
-    width: 70%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
+  &:hover {
+    background-color: #cceeff; /* 밝고 청결한 느낌의 하늘색 배경 */
   }
+  &:active {
+    background-color: #a6d5f7; /* 밝은 하늘색 */
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px #0eeab6; // 포커스 시 민트색 테두리
+  }
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 export const MainPage = () => {
   const iconStyle = { marginRight: "8px", color: "#4a90e2", minWidth: "20px" };
@@ -76,6 +89,17 @@ export const MainPage = () => {
     lineHeight: 1.4,
     color: "#333",
   };
+  const native = useNavigate();
+  const handleClickSerive = (data: string) => {
+    native(
+      GateWayNumber.Client + "/" + ClientGateWayType.Service + `?type=${data}`
+    );
+  };
+  const handleClickQA = () => {
+    native(GateWayNumber.Client + "/" + ClientGateWayType.Question);
+  };
+  const businessPhoneNumber = import.meta.env.VITE_APP_BUSINESS_PHONE_NUMBER;
+
   return (
     <>
       <div>
@@ -88,37 +112,57 @@ export const MainPage = () => {
         </MainMapper>
         <ButtonMapper>
           {cleanType.map((data, index) => (
-            <button key={index}>{data}</button>
+            <CleanButton key={index} onClick={() => handleClickSerive(data)}>
+              {data}
+            </CleanButton>
           ))}
         </ButtonMapper>
         <div
           style={{
             display: "flex",
             textAlign: "center",
-            alignItems: "center",
+            alignItems: "stretch", // 두 영역 높이 맞춤
           }}
         >
-          <div
+          {/* 전화 걸기 영역 전체 클릭 가능 */}
+          <a
+            href={`tel:${businessPhoneNumber}`}
             style={{
               flex: 1,
-              backgroundColor: "#fff9db",
-              height: "15vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "flex-start",
-              flexDirection: "column",
-              paddingLeft: "16px",
-              gap: "6px",
+              textDecoration: "none",
+              color: "inherit",
+              display: "block", // block으로 만들어야 flex 작동
             }}
           >
-            <span style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-              상담전화 걸기
-            </span>
-            <span style={{ fontSize: "1rem", color: "#a5947c" }}>
-              휴대전화에서 클릭 시 바로 연결
-            </span>
-          </div>
+            <div
+              style={{
+                backgroundColor: "#fff9db",
+                height: "15vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                flexDirection: "column",
+                paddingLeft: "16px",
+                gap: "6px",
+                cursor: "pointer",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "#305f55",
+                }}
+              >
+                상담전화 걸기
+              </span>
+              <span style={{ fontSize: "1rem", color: "#a5947c" }}>
+                휴대전화에서 클릭 시 바로 연결
+              </span>
+            </div>
+          </a>
 
+          {/* Q&A 영역 */}
           <div
             style={{
               flex: 1,
@@ -128,7 +172,11 @@ export const MainPage = () => {
               justifyContent: "center",
               alignItems: "flex-end",
               flexDirection: "column",
-              paddingBottom: "12px", // 하단 여백 추가
+              paddingBottom: "12px",
+              cursor: "pointer", // 기본 상태부터 커서를 클릭 가능한 손가락 모양으로 변경
+            }}
+            onClick={() => {
+              handleClickQA();
             }}
           >
             <span style={{ fontSize: "1.55rem", fontWeight: "bold" }}>
@@ -139,6 +187,7 @@ export const MainPage = () => {
             </span>
           </div>
         </div>
+
         <InquireText />
       </div>
       <AcrosticBox>
@@ -174,14 +223,7 @@ export const MainPage = () => {
           를 한번 만나보세요!!!
         </span>
         <BlogComment />
-        <ImageGrid>
-          <img src={bathsrooms} alt="bathroom" />
-          <img src={bathsrooms} alt="bathroom" />
-          <img src={bathsrooms} alt="bathroom" />
-          <img src={bathsrooms} alt="bathroom" />
-          <img src={bathsrooms} alt="bathroom" />
-          <img src={bathsrooms} alt="bathroom" />
-        </ImageGrid>
+        <ImageGrid />
       </AcrosticBox>
     </>
   );
