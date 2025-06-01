@@ -2,6 +2,9 @@ package project.MilkyWay.Address.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Comment;
+import project.MilkyWay.ComonType.Enum.CleanType;
+import project.MilkyWay.Config.DatabaseConverter;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -16,21 +19,34 @@ public class AddressEntity
 {
     @Id
     @Column(name = "addressId", nullable = false)
+    @Comment("PK")
     private String addressId;
+
     @Column(name = "customer", nullable = false)
+    @Comment("고객이름")
+    @Convert(converter = DatabaseConverter.class)
     private String customer;
+
     @Column(name = "Address", nullable = false)
+    @Comment("주소")
+    @Convert(converter = DatabaseConverter.class)
     private String address;
+
     @Column(name = "phoneNumber", nullable = false)
+    @Comment("전화번호")
+    @Convert(converter = DatabaseConverter.class)
     private String phoneNumber;
+
     @Column(name = "SubmissionDate", nullable = false)
+    @Comment("예약 일자")
     private LocalDate submissionDate;
 
     @Column(name = "acreage", nullable = false)
+    @Convert(converter = DatabaseConverter.class)
     private String acreage;
 
     @Column(name = "cleanType", nullable = false)
-    private String cleanType; // 관리자인지, 사용자인지?
+    private CleanType cleanType; // 청소 유형을 판단함
 
 
     @Override

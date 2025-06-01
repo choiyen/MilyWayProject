@@ -1,4 +1,4 @@
-package project.MilkyWay.Reservation.Entity.DTO;
+package project.MilkyWay.Reservation.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

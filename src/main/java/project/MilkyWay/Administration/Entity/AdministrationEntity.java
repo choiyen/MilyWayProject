@@ -2,6 +2,8 @@ package project.MilkyWay.Administration.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Comment;
+import project.MilkyWay.Config.DatabaseConverter;
 import project.MilkyWay.Reservation.Entity.ReservationEntity;
 import project.MilkyWay.ComonType.Enum.DateType;
 
@@ -20,9 +22,13 @@ public class AdministrationEntity
 {
     @Id
     @Column(name= "administrationId")
+    @Comment("PK")
     private String administrationId; //일정표를 관리하기 위한 id
+
     @Column(name= "Date", nullable = false, unique = true)
+    @Comment("일정")
     private LocalDate administrationDate; //일정을 기록할 id
+
     @Column(name= "Type", nullable = false)
     private DateType adminstrationType; // 일정의 유형 - 휴일, 일하는 날, 현재 비어있는 날
 

@@ -29,7 +29,7 @@ import project.MilkyWay.Login.DTO.LoginDTO;
 import project.MilkyWay.Login.DTO.UserDTO;
 import project.MilkyWay.Login.Entity.UserEntity;
 import project.MilkyWay.ComonType.Expection.DeleteFailedException;
-import project.MilkyWay.Reservation.Entity.DTO.ReservationDTO;
+import project.MilkyWay.Reservation.DTO.ReservationDTO;
 import project.MilkyWay.Login.Service.UserService;
 
 import javax.naming.AuthenticationException;

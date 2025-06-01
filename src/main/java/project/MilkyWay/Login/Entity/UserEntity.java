@@ -1,10 +1,9 @@
 package project.MilkyWay.Login.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Comment;
+import project.MilkyWay.Config.DatabaseConverter;
 
 @Entity
 @Table(name = "User")
@@ -16,9 +15,14 @@ public class UserEntity
 {
     @Id
     @Column(name = "userId")
+    @Comment("PK")
     private String userId; //아이디
+
     @Column(name = "password")
+    @Comment("password")
     private String password; //비밀번호
+
     @Column(name = "email")
+    @Comment("이메일")
     private String email; //비밀번호 찾기 구현을 위한 이메일
 }
