@@ -41,7 +41,7 @@ export const ManagerPath: PathsType[] = [
   },
   {
     activename: "QuestionMangeMent",
-    buttonname: "Q & A 관리",
+    buttonname: "Q & A",
     paths: `${GateWayNumber.Manager}/${ManagerGateWayType.QuestionSelect}`,
   },
   {

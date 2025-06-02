@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import project.MilkyWay.ComonType.Enum.Cleandirection;
 import project.MilkyWay.ComonType.Enum.DateType;
 import project.MilkyWay.ComonType.Enum.EnumValue;
@@ -18,6 +19,7 @@ import java.util.List;
 @Getter
 @Builder
 @EqualsAndHashCode
+@Jacksonized
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString

@@ -73,9 +73,9 @@ public class S3ImageService {
     //S3에 파일을 업로드하고 url을 반환함
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String originalFilename = image.getOriginalFilename(); //원본 파일 명
-        String extention = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
+        String extention = originalFilename.substring(originalFilename.lastIndexOf(".") + 1); // 점(.) 제외한 확장자
 
-        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + originalFilename; //변경된 파일 명
+        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + "." + extention; // UUID + 확장자만 저장
 
         InputStream is = image.getInputStream();
         byte[] bytes = IOUtils.toByteArray(is);
@@ -87,9 +87,8 @@ public class S3ImageService {
 
         try {
             PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead);
-            amazonS3.putObject(putObjectRequest); // put image to S3
+                    new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata);
+            amazonS3.putObject(putObjectRequest);
         } catch (Exception e) {
             throw new S3Exception(ErrorCode.PUT_OBJECT_EXCEPTION);
         } finally {
@@ -113,6 +112,9 @@ public class S3ImageService {
     //로컬 주소를 삭제하는 기능
     private String getKeyFromImageAddress(String imageAddress) {
         try {
+            if (imageAddress == null || !imageAddress.startsWith("http")) {
+                throw new RuntimeException("S3 URL 아님, 오류가 발생하였습니다.");
+            }
             URL url = new URL(imageAddress);
             String decodingKey = URLDecoder.decode(url.getPath(), "UTF-8");
             return decodingKey.substring(1); // 맨 앞의 '/' 제거

@@ -88,23 +88,19 @@ public class NoticeService
     }
     public List<NoticeEntity> findSmallAll(CleanType type, Long page)
     {
-        List<NoticeEntity> list = new ArrayList<>(noticeMapper.findByType(type, page, 10));
+        List<NoticeEntity> list = new ArrayList<>(noticeMapper.findByType(type.name(), page, 10));
         for(NoticeEntity notice : list)
         {
             Hibernate.initialize(notice.getNoticeDetailEntities());
         }
 
-        if(list.isEmpty() != true)
+        if(list != null)
         {
             return list;
         }
-        else if(list.isEmpty() == true)
-        {
-            throw new FindFailedException("list를 찾긴 찾았는데, 비어있어요");
-        }
         else
         {
-            throw new FindFailedException("리뷰 데이터를 찾는 도중, 알 수 없는 오류가 발생했어요");
+            throw new FindFailedException("예기치 못한 오류가 발생하였습니다.");
         }
     }
 
@@ -137,18 +133,7 @@ public class NoticeService
             Hibernate.initialize(notice.getNoticeDetailEntities());
         }
 
-        if(list.isEmpty() != true)
-        {
             return list;
-        }
-        else if(list.isEmpty() == true)
-        {
-            throw new FindFailedException("list를 찾긴 찾았는데, 비어있어요");
-        }
-        else
-        {
-            throw new FindFailedException("리뷰 데이터를 찾는 도중, 알 수 없는 오류가 발생했어요");
-        }
     }
 
 

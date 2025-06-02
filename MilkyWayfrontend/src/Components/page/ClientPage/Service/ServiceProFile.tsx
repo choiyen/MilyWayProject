@@ -51,10 +51,24 @@ const ServiceProFile = () => {
   useEffect(() => {
     fetchType(select, CurrentPage ?? 0)
       .then((res) => {
+        if (res.resultType !== "empty") {
+          toast.success("작성된 리뷰가 없는 서비스입니다.", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setNotice([]);
+          return;
+        }
         setNotice(res.pageDTO.list);
         TotalPage.current = res.pageDTO.pageCount;
       })
       .catch((err) => {
+        console.error("Error fetching reviews:", err);
         toast.error(
           "리뷰를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요." +
             err,

@@ -69,9 +69,7 @@ export const HeaderButton = styled.div`
   color: #000000;
   margin-top: 15px;
 
-  @media (max-width: 1044px) {
-    font-size: 12px;
-  }
+  font-size: 12px;
 `;
 
 export const HeaderButton1 = styled.div`

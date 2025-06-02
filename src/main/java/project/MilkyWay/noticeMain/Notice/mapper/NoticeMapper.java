@@ -14,8 +14,8 @@ public interface NoticeMapper
     List<NoticeEntity> findAll();
 
     List<NoticeEntity> findByType(
-            @Param("type") CleanType type,
-            @Param("offset") Long offset,
+            @Param("type") String type,
+            @Param("offset") long offset,
             @Param("limit") Integer limit
     );
     NoticeEntity findByNoticeId(String NoticeId);

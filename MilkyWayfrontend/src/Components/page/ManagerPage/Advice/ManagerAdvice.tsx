@@ -106,18 +106,15 @@ export const ManagerAdvice = () => {
     // FormData 준비
     const formData = new FormData();
 
+    console.log("Adviceselector", Adviceselector);
+    console.log("AdviceDetailselector", AdviceDetailselector);
     // JSON 본문은 파일 경로 없이 전송
     formData.append(
       "noticeJsonDTO",
-      new Blob(
-        [
-          JSON.stringify({
-            noticeDTO: Adviceselector,
-            noticeDetailDTO: AdviceDetailselector,
-          }),
-        ],
-        { type: "application/json" }
-      )
+      JSON.stringify({
+        noticeDTO: Adviceselector,
+        noticeDetailDTO: AdviceDetailselector,
+      })
     );
 
     // 제목 이미지
@@ -126,15 +123,21 @@ export const ManagerAdvice = () => {
     // 각 noticeDetailDTO의 before/after에 index 붙이기
     beforefile.forEach((files, index) => {
       files.forEach((file) => {
+        console.log(`before_${index}:`, file.name); // ← 이걸 보세요
         formData.append(`before_${index}`, file);
       });
     });
 
     afferfile.forEach((files, index) => {
       files.forEach((file) => {
+        console.log(`after_${index}:`, file.name); // ← 이걸 보세요
         formData.append(`after_${index}`, file);
       });
     });
+
+    for (let [key, value] of formData.entries()) {
+      console.log("폼데이터 키:", key, "/ 값:", value);
+    }
 
     await POST_FORM(paths.Notice.basic.path, formData).then((res) => {
       if (res.resultType === "success") {

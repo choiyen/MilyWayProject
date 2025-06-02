@@ -152,6 +152,7 @@ export const ManagerJoin = () => {
 
   useEffect(() => {
     AddressSelectfetchData(TotalPage.current).then((res) => {
+      console.log("주소 조회 결과:", res);
       setSign(res.pageDTO.list);
       TotalPage.current = res.pageDTO.pageCount;
     });

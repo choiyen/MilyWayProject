@@ -18,11 +18,11 @@
         <package name="project.MilkyWay.Reservation.Entity"/>
     </typeAliases>
 
-    <!-- 커스텀 TypeHandler 등록 -->
-    <typeHandlers>
-        <typeHandler handler="project.MilkyWay.Config.AESStringTypeHandler"/>
-        <!-- 필요하다면 다른 핸들러도 추가 가능 -->
-    </typeHandlers>
+<!--    &lt;!&ndash; 커스텀 TypeHandler 등록 &ndash;&gt;-->
+<!--    <typeHandlers>-->
+<!--        <typeHandler handler="project.MilkyWay.Config.AESStringTypeHandler"/>-->
+<!--        &lt;!&ndash; 필요하다면 다른 핸들러도 추가 가능 &ndash;&gt;-->
+<!--    </typeHandlers>-->
 
     <!-- 매퍼 등록 -->
     <mappers>

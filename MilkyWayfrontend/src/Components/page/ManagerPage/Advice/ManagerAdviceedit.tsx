@@ -19,6 +19,7 @@ import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { PUT_FORM } from "@/config/request/axios/MutipartAxios";
 
 const MainBox = styled.div`
   width: 100%;
@@ -122,10 +123,11 @@ const ManagerAdviceedit = () => {
         setbeforefile(beforeURL);
         setNoticeDetailId(NoticeDetailId);
       } catch (error) {
+        console.error("후기 데이터를 불러오는 데 실패했습니다:", error);
         toast.error(
           "후기 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요." + error,
           {
-            position: "top-right",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -156,6 +158,7 @@ const ManagerAdviceedit = () => {
   useEffect(() => {
     dispatch(
       setNoticeData({
+        noticeId: noticeId,
         title: title,
         titleimg: titleimg.name,
         type: type,
@@ -173,6 +176,7 @@ const ManagerAdviceedit = () => {
     );
     const combinedData = cleanspot.map((q, idx) => ({
       noticeDetailId: noticeDetailId[idx],
+      noticeId: noticeId,
       direction: q,
       beforeURL: beforefileNameMatrix[idx] || "",
       afterURL: affterfileNameMatrix[idx] || "",
@@ -181,31 +185,98 @@ const ManagerAdviceedit = () => {
     dispatch(setNoticeDetailData(combinedData));
   }, [beforefile, cleanspot, afferfile, Advice, dispatch]);
 
-  const handleOnclick = async () => {
-    const AdviceData: NoticeDetailType[] = [];
-    for (let i = 0; i < count; i++) {
-      AdviceData.push({
-        noticeDetailId: noticeDetailId[i],
-        NoticeId: noticeId,
-        direction: AdviceDetailselector[i].direction,
-        beforeURL: beforefile[i].map((file) => file.name),
-        afterURL: afferfile[i].map((file) => file.name),
-        comment: AdviceDetailselector[i].comment,
+  /*
+const handleOnclick = async () => {
+    // FormData 준비
+    const formData = new FormData();
+
+    console.log("Adviceselector", Adviceselector);
+    console.log("AdviceDetailselector", AdviceDetailselector);
+    // JSON 본문은 파일 경로 없이 전송
+    formData.append(
+      "noticeJsonDTO",
+      JSON.stringify({
+        noticeDTO: Adviceselector,
+        noticeDetailDTO: AdviceDetailselector,
+      })
+    );
+
+    // 제목 이미지
+    formData.append("titleimg", titleimg);
+
+    // 각 noticeDetailDTO의 before/after에 index 붙이기
+    beforefile.forEach((files, index) => {
+      files.forEach((file) => {
+        console.log(`before_${index}:`, file.name); // ← 이걸 보세요
+        formData.append(`before_${index}`, file);
       });
+    });
+
+    afferfile.forEach((files, index) => {
+      files.forEach((file) => {
+        console.log(`after_${index}:`, file.name); // ← 이걸 보세요
+        formData.append(`after_${index}`, file);
+      });
+    });
+
+    for (let [key, value] of formData.entries()) {
+      console.log("폼데이터 키:", key, "/ 값:", value);
     }
-    await PUT({
-      url: paths.Notice.basic.path,
-      data: {
-        noticeDTO: {
-          noticeId: noticeId,
-          title: Adviceselector.title,
-          titleimg: titleimg.name,
-          type: Adviceselector.type,
-          greeting: Adviceselector.greeting,
-        },
-        noticeDetailDTO: AdviceData,
-      },
-    }).then((res) => {
+
+    await POST_FORM(paths.Notice.basic.path, formData).then((res) => {
+      if (res.resultType === "success") {
+        Swal.fire({
+          icon: "success",
+          title: "후기 내역 등록 완료",
+          text: "후기 내역이 성공적으로 등록되었습니다.",
+          confirmButtonText: "확인",
+        });
+        navigator(
+          GateWayNumber.Manager + "/" + ManagerGateWayType.AdviceSelect
+        );
+      } else {
+        toast.error("후기 내역 등록 실패", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    });
+  };
+*/
+
+  const handleOnclick = async () => {
+    const formData = new FormData();
+    formData.append(
+      "noticeJsonDTO",
+      JSON.stringify({
+        noticeDTO: Adviceselector,
+        noticeDetailDTO: AdviceDetailselector,
+      })
+    );
+    formData.append("titleimg", titleimg);
+    beforefile.forEach((files, index) => {
+      files.forEach((file) => {
+        console.log(`before_${index}:`, file.name); // ← 이걸 보세요
+        formData.append(`before_${index}`, file);
+      });
+    });
+
+    afferfile.forEach((files, index) => {
+      files.forEach((file) => {
+        console.log(`after_${index}:`, file.name); // ← 이걸 보세요
+        formData.append(`after_${index}`, file);
+      });
+    });
+    for (let [key, value] of formData.entries()) {
+      console.log("폼데이터 키:", key, "/ 값:", value);
+    }
+
+    await PUT_FORM(paths.Notice.basic.path, formData).then((res) => {
       if (res.resultType === "success") {
         Swal.fire({
           icon: "success",
@@ -218,7 +289,7 @@ const ManagerAdviceedit = () => {
         );
       } else {
         toast.error("후기 수정에 실패했습니다. 다시 시도해주세요.", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,

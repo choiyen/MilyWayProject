@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import project.MilkyWay.ComonType.Enum.CleanType;
 import project.MilkyWay.ComonType.Enum.EnumValue;
 
 @Getter
 @Builder
+@Jacksonized  // 여기를 추가하세요
 @EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
