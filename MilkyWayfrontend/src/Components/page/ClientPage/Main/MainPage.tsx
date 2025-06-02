@@ -127,6 +127,7 @@ export const MainPage = () => {
           {/* 전화 걸기 영역 전체 클릭 가능 */}
           <a
             href={`tel:${businessPhoneNumber}`}
+            target="_blank"
             style={{
               flex: 1,
               textDecoration: "none",
@@ -145,6 +146,7 @@ export const MainPage = () => {
                 paddingLeft: "16px",
                 gap: "6px",
                 cursor: "pointer",
+                boxShadow: "4px 4px rgba(0, 0, 0, 0.1)",
               }}
             >
               <span
@@ -174,6 +176,7 @@ export const MainPage = () => {
               flexDirection: "column",
               paddingBottom: "12px",
               cursor: "pointer", // 기본 상태부터 커서를 클릭 가능한 손가락 모양으로 변경
+              boxShadow: "4px 4px rgba(0, 0, 0, 0.1)",
             }}
             onClick={() => {
               handleClickQA();

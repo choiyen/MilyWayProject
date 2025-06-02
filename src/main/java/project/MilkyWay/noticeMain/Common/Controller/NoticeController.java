@@ -2,6 +2,7 @@ package project.MilkyWay.noticeMain.Common.Controller;
 
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,6 +32,7 @@ import project.MilkyWay.noticeMain.Notice.Entity.NoticeEntity;
 import project.MilkyWay.noticeMain.NoticeDetail.Service.NoticeDetailService;
 import project.MilkyWay.noticeMain.Notice.Service.NoticeService;
 
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -69,14 +71,15 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             }
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> Insert(HttpServletRequest request,     @RequestPart("noticeJsonDTO") NoticeJsonDTO noticeJsonDTO,
+    public ResponseEntity<?> Insert(HttpServletRequest request,
+                                    @RequestPart("noticeJsonDTO") String noticeJsonJson,
                                     @RequestPart("titleimg") MultipartFile titleimg,
-                                    MultipartHttpServletRequest multiRequest )  // after_0, after_1...
-    {
+                                    MultipartHttpServletRequest multiRequest) throws IOException { // after_0, after_1...
         try
         {
 
-
+            ObjectMapper objectMapper = new ObjectMapper();
+            NoticeJsonDTO noticeJsonDTO = objectMapper.readValue(noticeJsonJson, NoticeJsonDTO.class);
 
             if(loginSuccess.isSessionExist(request))
             {
@@ -103,21 +106,31 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
 
 
-                    Map<String, List<String>> uploadedFileUrls = new HashMap<>();
-
                     // 파일 처리 — key 별로 파일 리스트 얻기
                     Iterator<String> fileNames = multiRequest.getFileNames();
+                    Map<String, List<String>> uploadedFileUrls = new HashMap<>();
+
                     while (fileNames.hasNext()) {
                         String key = fileNames.next();
                         List<MultipartFile> files = multiRequest.getFiles(key);
-                        List<String> url2 = new ArrayList<>();
-                        for(MultipartFile file : files)
-                        {
-                            url2.add(uploading(file));
+                        List<String> urlList = new ArrayList<>();
+
+                        for (MultipartFile file : files) {
+                            String filename = file.getOriginalFilename();
+
+                            if (filename == null || !filename.contains(".")) {
+                                throw new RuntimeException("No file extension found");
+                            }
+
+                            try {
+                                urlList.add(uploading(file));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                throw new RuntimeException("업로드 실패");
+                            }
                         }
-                        uploadedFileUrls.put(key,url2);
-                        // 각 key에 해당하는 파일들 처리 로직 넣기
-                        // 예: before_0, after_1 등 key에 따라 저장 위치/목적 다르게 처리
+
+                        uploadedFileUrls.put(key, urlList);
                     }
 
                     while (i < noticeJsonDTO.getNoticeDetailDTO().size() )
@@ -171,12 +184,15 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             }
     )
     @PutMapping
-    public ResponseEntity<?> Update(HttpServletRequest request,   @RequestPart("noticeJsonDTO") NoticeJsonDTO noticeJsonDTO,
+    public ResponseEntity<?> Update(HttpServletRequest request,
+                                    @RequestPart("noticeJsonDTO") String noticeJsonJson,
                                     @RequestPart("titleimg") MultipartFile titleimg,
-                                    MultipartHttpServletRequest multiRequest)
+                                    MultipartHttpServletRequest multiRequest) throws IOException
     {
         try
         {
+            ObjectMapper objectMapper = new ObjectMapper();
+            NoticeJsonDTO noticeJsonDTO = objectMapper.readValue(noticeJsonJson, NoticeJsonDTO.class);
             if(loginSuccess.isSessionExist(request))
             {
                 NoticeEntity oldnotice = noticeService.findNoticeId(noticeJsonDTO.getNoticeDTO().getNoticeId());
@@ -189,27 +205,37 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     List<NoticeDetailEntity> noticeDetailEntities = new ArrayList<>();
                     Set<Number> excludeIds = new HashSet<>();  // ArrayList를 Set으로 변환
 
-                    Map<String, List<String>> uploadedFileUrls = new HashMap<>();
-
                     // 파일 처리 — key 별로 파일 리스트 얻기
                     Iterator<String> fileNames = multiRequest.getFileNames();
+                    Map<String, List<String>> uploadedFileUrls = new HashMap<>();
+
                     while (fileNames.hasNext()) {
                         String key = fileNames.next();
                         List<MultipartFile> files = multiRequest.getFiles(key);
-                        List<String> url2 = new ArrayList<>();
-                        for(MultipartFile file : files)
-                        {
-                            url2.add(uploading(file));
+                        List<String> urlList = new ArrayList<>();
+
+                        for (MultipartFile file : files) {
+                            String filename = file.getOriginalFilename();
+
+                            if (filename == null || !filename.contains(".")) {
+                                throw new RuntimeException("No file extension found");
+                            }
+
+
+                            try {
+                                urlList.add(uploading(file));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                throw new RuntimeException("업로드 실패");
+                            }
                         }
-                        uploadedFileUrls.put(key,url2);
-                        // 각 key에 해당하는 파일들 처리 로직 넣기
-                        // 예: before_0, after_1 등 key에 따라 저장 위치/목적 다르게 처리
+
+                        uploadedFileUrls.put(key, urlList);
                     }
 
 
                     while (i < noticeJsonDTO.getNoticeDetailDTO().size())
                     {
-                        FileDelete(noticeJsonDTO.getNoticeDetailDTO().get(i).getAfterURL());
                         List<String> beforeUrls = uploadedFileUrls.getOrDefault("before_" + i, new ArrayList<>());
                         List<String> afterUrls  = uploadedFileUrls.getOrDefault("after_" + i, new ArrayList<>());
                         if(noticeJsonDTO.getNoticeDetailDTO().get(i).getNoticeDetailId() != null )
@@ -313,6 +339,8 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     for(NoticeDetailEntity noticeDetail : noticeDetailEntity)
                     {
                         noticeDetailService.DeleteToNoticeDetail(noticeDetail.getNoticeDetailId());
+                        FileDelete(noticeDetail.getBeforeURL());
+                        FileDelete(noticeDetail.getAfterURL());
                     }
                     NoticeEntity noticeEntity = noticeService.findNoticeId(noticeId);
                     if(noticeEntity != null)
@@ -447,7 +475,6 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             List<NoticeEntity> notice = new ArrayList<>(noticeService.findSmallAll(CleanType.valueOf(type),page));
             if(notice != null)
             {
-
                 for(NoticeEntity noticeEntity : notice)
                 {
                     list.add(ConvertToNotice(noticeEntity));//자동으로 못가져오면 추가하거나 수정 예정
@@ -457,6 +484,10 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                         .PageCount(noticeService.totalPaging())
                         .Total(noticeService.totalRecord())
                         .build();
+                if(notice.isEmpty() == true)
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("empty", "자료 조사 결과 비어있는 항목입니다.",pageDTO));
+                }
                 return ResponseEntity.ok().body(responseDTO.Response("success", "데이터 전송 완료",  pageDTO));
             }
             else
@@ -488,6 +519,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
     {
         try
         {
+
             List<Object> list = new ArrayList<>();
             NoticeEntity notice = noticeService.findNoticeId(NoticeId);
             if(notice != null)
@@ -574,6 +606,7 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
 
     public String uploading( MultipartFile titleimg)
     {
+
         try {
             return s3ImageService.upload(titleimg);
         } catch (Exception e) {

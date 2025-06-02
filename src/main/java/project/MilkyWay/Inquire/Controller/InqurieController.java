@@ -147,7 +147,6 @@ public class InqurieController
     {
         try
         {
-            System.out.println(inquireUpdateDto);
             if(loginSuccess.isSessionExist(request))
             {
                 InquireEntity inquireEntity = inquireService.Update(inquireUpdateDto.getInqurieId());

@@ -57,17 +57,14 @@ public class NoticeDetailService {
     public List<NoticeDetailEntity> ListNoticeDetail(String encodingNoticeId)
     {
         List<NoticeDetailEntity> list = noticeDetailMapper.findByNoticeId(encodingNoticeId);
-        if(list.isEmpty())
-        {
-            throw new FindFailedException("데이터를 찾았어요. 근데 비어있는 것 같아요");
-        }
-        else if(!list.isEmpty())
-        {
-            return list;
-        }
-        else
+        if(list == null)
         {
             throw new FindFailedException("데이터 찾기를 시도했는데, 알 수 없는 오류가 발생했어요. 관리자에게 문의해줘요");
+        }
+
+        else
+        {
+            return list;
         }
     }
     @Transactional(propagation = Propagation.REQUIRED)

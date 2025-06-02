@@ -28,7 +28,7 @@
     </select>
 
     <!-- 타입별 페이징 조회 -->
-    <select id="findByType" resultMap="noticeResultMap" parameterType="String">
+    <select id="findByType" resultMap="noticeResultMap" parameterType="project.MilkyWay.noticeMain.Notice.DTO.NoticeSearchCondition">
         SELECT noticeId, type, greeting, title, titleimg
         FROM Notice
         WHERE type = #{type}
