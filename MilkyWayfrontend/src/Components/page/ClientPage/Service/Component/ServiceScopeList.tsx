@@ -1,5 +1,5 @@
 import { MdCheckCircle } from "react-icons/md";
-import { TabService } from "../IntroductionService";
+import { TabService } from "../Type/IntroductionService";
 
 interface ServiceScopeData {
   Service: string;

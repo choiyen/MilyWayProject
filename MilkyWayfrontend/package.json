@@ -29,6 +29,7 @@
     "scss": "^0.2.4",
     "styled-components": "^6.1.15",
     "sweetalert2": "^11.22.0",
+    "swiper": "^11.2.8",
     "url": "^0.11.4",
     "vite-plugin-svgr": "^4.3.0"
   },
@@ -37,6 +38,7 @@
     "@types/node": "^22.13.8",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@types/swiper": "^5.4.3",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.21.0",

@@ -244,6 +244,10 @@ public class AdministrationController
             if(Date == null)
             {
                 List<AdministrationEntity> administrationEntities = administrationService.FindAll();
+                if(administrationEntities.isEmpty())
+                {
+                    return ResponseEntity.ok().body(responseDTO.Response("empty", "데이터를 조사하였으나, 작성된 예약 일정 없음"));
+                }
                 List<AdministrationDTO> administrationDTOS = new ArrayList<>();
                 for (AdministrationEntity administrationEntity : administrationEntities)
                 {

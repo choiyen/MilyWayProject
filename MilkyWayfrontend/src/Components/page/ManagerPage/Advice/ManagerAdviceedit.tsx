@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNoticeData } from "@/config/request/ReduxList/NoticeReducer";
 import { setNoticeDetailData } from "@/config/request/ReduxList/NoticeDetailReducer";
 import { FileTage } from "@/Components/Common/ui/File/FileTage";
-import { GET, PUT } from "@/config/request/axios/axiosInstance";
+import { GET } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
 import { RootState } from "@/config/reduxstore";
 import { NoticeDetailType } from "@/types/Feature/Notice/NoticeAll";
@@ -272,9 +272,6 @@ const handleOnclick = async () => {
         formData.append(`after_${index}`, file);
       });
     });
-    for (let [key, value] of formData.entries()) {
-      console.log("폼데이터 키:", key, "/ 값:", value);
-    }
 
     await PUT_FORM(paths.Notice.basic.path, formData).then((res) => {
       if (res.resultType === "success") {

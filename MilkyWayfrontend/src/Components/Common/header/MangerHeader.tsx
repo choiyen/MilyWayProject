@@ -173,6 +173,23 @@ export const MangerHeader: React.FC<MangerHeaderProps> = ({ children }) => {
       navigate(GateWayNumber.Manager + "/" + ManagerGateWayType.Main); // 로그인 페이지로 이동
     }
   };
+  useEffect(() => {
+    const LoginCheck = async () => {
+      await POST({
+        url: paths.Certification.check.path,
+      }).then((res) => {
+        console.log("LoginCheck Response:", res);
+        dispatch(
+          setSession({
+            isAuthenticated: res.resultType === "success",
+            userId: res.data ? res.data.userid : "",
+          })
+        ); // 세션 상태를 true로 설정
+      });
+    };
+
+    LoginCheck();
+  }, [activeButton]);
 
   const Logout = async () => {
     const isConfirmed = window.confirm("로그아웃 하시겠습니까?");

@@ -18,8 +18,9 @@ export const ClientGateWayType = {
   Reservation: "Reservation",
   Service: "Service",
   Info: "Info",
-  Serviceedit: "editService/:BoardId",
+  Boardedit: "editBoard/:BoardId",
   ServiceInsert: "ServiceInsert",
+  ServiceDetail: "ServiceDetail/:ServiceId",
 };
 
 export const GateWayNumber = {

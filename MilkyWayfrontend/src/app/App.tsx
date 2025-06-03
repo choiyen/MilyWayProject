@@ -37,6 +37,7 @@ import { GlobalSwalStyle } from "./AppToast";
 import ManagerInquires from "@/Components/page/ManagerPage/Inquires/ManagerInquires";
 import { ToastContainer } from "react-toastify";
 import ManagerInquiresSelect from "@/Components/page/ManagerPage/Inquires/ManagerInquiresSelect";
+import ServiceDetail from "@/Components/page/ClientPage/Service/ServiceDetail";
 
 const router = createBrowserRouter([
   {
@@ -128,12 +129,16 @@ const router = createBrowserRouter([
         element: <ClientQuestion />,
       },
       {
+        path: ClientGateWayType.Boardedit,
+        element: <ServiceBoard />,
+      },
+      {
         path: ClientGateWayType.ServiceInsert,
         element: <ServiceInsert />,
       },
       {
-        path: ClientGateWayType.Serviceedit,
-        element: <ServiceBoard />,
+        path: ClientGateWayType.ServiceDetail,
+        element: <ServiceDetail />, // Assuming this is the correct component for Service Detail
       },
       {
         path: "*",

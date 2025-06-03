@@ -158,7 +158,7 @@ export const ManagerAdviceSelect = () => {
                       </td>
                       <td className="border px-6 py-3 whitespace-nowrap text-center">
                         <DeleteButton
-                          onClick={(e) => {
+                          onClick={(e: { stopPropagation: () => void }) => {
                             e.stopPropagation(); // ✅ 행 클릭 이벤트 전파 막기
                             handleDeleteClick(item.noticeId ?? "");
                           }}

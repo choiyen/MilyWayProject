@@ -135,10 +135,6 @@ export const ManagerAdvice = () => {
       });
     });
 
-    for (let [key, value] of formData.entries()) {
-      console.log("폼데이터 키:", key, "/ 값:", value);
-    }
-
     await POST_FORM(paths.Notice.basic.path, formData).then((res) => {
       if (res.resultType === "success") {
         Swal.fire({
