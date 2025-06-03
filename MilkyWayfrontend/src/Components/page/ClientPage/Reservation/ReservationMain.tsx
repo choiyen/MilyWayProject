@@ -42,6 +42,7 @@ const ReservationMain = () => {
       });
       return response;
     } catch (err) {
+      console.error("예약 날짜 불러오기 실패:", err);
       Swal.fire({
         icon: "error",
         title: "오류 발생",
@@ -57,6 +58,11 @@ const ReservationMain = () => {
     setConsents(initial);
 
     dateNoting().then((res) => {
+      console.log("예약 날짜 불러오기 성공", res);
+      if (!res || !res.data) {
+        setDateNot([]);
+        return;
+      }
       const dates = res.data.map(
         (a: { administrationDate: string }) => a.administrationDate
       );
@@ -102,7 +108,7 @@ const ReservationMain = () => {
 
   const handleSubmit = () => {
     toast.success("개인정보 처리 동의 완료", {
-      position: "top-right",
+      position: "top-center",
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,

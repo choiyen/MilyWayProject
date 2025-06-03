@@ -39,7 +39,8 @@ public class NoticeEntity
     @Comment("청소유형")
     private CleanType type; // 어떤 유형의 일 : 이사청소, 입주청소, 주거청소.....
 
-    @Column(name = "greeting", nullable = false)
+    @Lob
+    @Column(name = "greeting", nullable = false,columnDefinition = "TEXT")
     @Comment("서문")
     private String greeting;
 

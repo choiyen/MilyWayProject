@@ -72,27 +72,23 @@ public class S3ImageService {
 
     //S3에 파일을 업로드하고 url을 반환함
     private String uploadImageToS3(MultipartFile image) throws IOException {
-        String originalFilename = image.getOriginalFilename(); //원본 파일 명
-        String extention = originalFilename.substring(originalFilename.lastIndexOf(".") + 1); // 점(.) 제외한 확장자
+        String originalFilename = image.getOriginalFilename();
+        String extention = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
 
-        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + "." + extention; // UUID + 확장자만 저장
+        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + "." + extention;
 
+        // MultipartFile에서 바로 InputStream 가져오기
         InputStream is = image.getInputStream();
-        byte[] bytes = IOUtils.toByteArray(is);
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("image/" + extention);
-        metadata.setContentLength(bytes.length);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        metadata.setContentLength(image.getSize());  // 이미지 실제 크기 세팅
 
         try {
             PutObjectRequest putObjectRequest =
-                    new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata);
+                    new PutObjectRequest(bucketName, s3FileName, is, metadata);
             amazonS3.putObject(putObjectRequest);
-        } catch (Exception e) {
-            throw new S3Exception(ErrorCode.PUT_OBJECT_EXCEPTION);
         } finally {
-            byteArrayInputStream.close();
             is.close();
         }
 

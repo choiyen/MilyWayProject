@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 import project.MilkyWay.ComonType.Enum.Cleandirection;
+import project.MilkyWay.ComonType.StringListTypeHandler;
 
 import java.util.List;
 
@@ -37,13 +38,18 @@ public class NoticeDetailEntity
     @Comment("방종류")
     private Cleandirection direction; // 방 위치 중에 어디? - 기실, 방, 화장실, 베란다
 
-    @Column(name = "beforeURL")
+    @Column(name = "beforeURL", columnDefinition = "TEXT")
     @Comment("청소전 사진")
     private List<String> beforeURL; // 청소 전 사진
-    @Column(name = "afterURL")
+
+
+    @Column(name = "afterURL", columnDefinition = "TEXT")
     @Comment("청소후 사진")
     private List<String> afterURL; // 청소 후 사진
-    @Column(name = "comment")
+
+
+    @Lob
+    @Column(name = "comment", nullable = false,columnDefinition = "TEXT")
     private String comment; // 해당 구역을 청소하고 느낀점 기록
 
 }

@@ -1,13 +1,15 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
-    "baseUrl": "src", // src 폴더를 기준으로 경로 설정
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"] // @는 src 폴더를 기준으로 경로를 찾도록 설정
+      "@/*": ["*"]
     }
-  }
+  },
+  "include": ["src", "src/global.d.ts"]
 }

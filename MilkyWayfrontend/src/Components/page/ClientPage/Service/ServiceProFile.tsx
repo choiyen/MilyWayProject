@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GET } from "@/config/request/axios/axiosInstance";
 import { paths } from "@/config/paths/paths";
-import { Introduction, IntroductionService } from "./IntroductionService";
+import { Introduction, IntroductionService } from "./Type/IntroductionService";
 
 import styled from "styled-components";
 import { theme } from "@/SCSS/typecss";
@@ -51,7 +51,7 @@ const ServiceProFile = () => {
   useEffect(() => {
     fetchType(select, CurrentPage ?? 0)
       .then((res) => {
-        if (res.resultType !== "empty") {
+        if (res.resultType == "empty") {
           toast.success("작성된 리뷰가 없는 서비스입니다.", {
             position: "top-center",
             autoClose: 5000,

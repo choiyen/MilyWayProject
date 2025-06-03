@@ -1,4 +1,4 @@
-import { TabService } from "../IntroductionService";
+import { TabService } from "../Type/IntroductionService";
 import ServiceScopeList from "./ServiceScopeList";
 
 interface IntroductionDetailProps {

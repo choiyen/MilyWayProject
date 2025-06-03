@@ -86,7 +86,7 @@ const CommentQuestion = () => {
   };
 
   const handleRowClick = (BoardId: string) => {
-    nativeGate(GateWayNumber.Client + `/editService/${BoardId}`);
+    nativeGate(GateWayNumber.Client + `/editBoard/${BoardId}`);
   };
 
   const handleDeleteClick = (boardId: string) => {

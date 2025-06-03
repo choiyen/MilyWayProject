@@ -88,6 +88,10 @@ export const paths = {
       path: "/auth/search",
       getHref: () => "/auth/search",
     },
+    check: {
+      path: "/auth/check",
+      getHref: () => "/auth/check",
+    },
   },
   Notice: {
     basic: {

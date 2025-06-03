@@ -87,11 +87,7 @@ public class AdministrationService
     public List<AdministrationEntity> FindAll()
     {
         List<AdministrationEntity> administrationEntities = administrationRepository.findAll();
-        if(administrationEntities.isEmpty())
-        {
-            throw new FindFailedException("일정 데이터를 찾았는데, 데이터베이스가 비어 있어요");
-        }
-        else if(administrationEntities != null)
+        if(administrationEntities != null)
         {
             return administrationEntities;
         }

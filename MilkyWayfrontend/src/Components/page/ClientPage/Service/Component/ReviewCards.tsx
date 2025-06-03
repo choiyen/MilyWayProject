@@ -1,7 +1,10 @@
 import bathsrooms from "@/Components/Common/assets/bathsrooms.png";
 import { Notice } from "./type";
+import { useNavigate } from "react-router-dom";
+import { GateWayNumber } from "@/types/GateWay/GateWayType";
 
 const ReviewCards = ({ notices }: { notices: Notice[] }) => {
+  const navigator = useNavigate();
   return (
     <div
       style={{
@@ -24,6 +27,9 @@ const ReviewCards = ({ notices }: { notices: Notice[] }) => {
             overflow: "hidden",
             transition: "transform 0.2s ease",
             cursor: "pointer",
+          }}
+          onClick={() => {
+            navigator(GateWayNumber.Client + `/ServiceDetail/${data.noticeId}`);
           }}
         >
           <img
