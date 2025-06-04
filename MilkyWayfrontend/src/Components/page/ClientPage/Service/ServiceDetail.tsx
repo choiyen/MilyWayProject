@@ -49,40 +49,42 @@ const ServiceDetail = () => {
 
   return (
     <>
-      <div>
+      <div className="p-10">
         {notice && (
-          <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4 text-center">
+          <div>
+            <h1 className="text-2xl font-bold text-center bg-yellow-50 rounded-t-lg p-5">
               {notice.title}
             </h1>
-            <p className="text-gray-700 mb-2 text-right">Type: {notice.type}</p>
             {notice.titleimg && (
               <img
                 src={notice.titleimg}
                 alt="Title Image"
-                className="w-full h-[300px] object-cover rounded-lg mb-4"
+                className="w-full h-[300px] object-cover"
               />
             )}
+            <p className="text-gray-700 text-right bg-orange-100 p-3">
+              Type: {notice.type}
+            </p>
             <Greeting GreetingText={notice.greeting || ""} />
           </div>
         )}
         {noticeDetails.length > 0 ? (
-          <div className="p-4">
+          <div>
             {noticeDetails.map((detail, index) => (
-              <div key={index} className="space-y-2 gap-10">
-                <h2 className="text-center font-bold">
-                  {detail.direction} 청소 이전 사진
-                </h2>
-                <div className="mb-4 p-4 flex justify-center">
+              <div key={index}>
+                <div className="bg-gray-100 p-5 flex flex-col justify-center items-center">
                   <Slider URL={detail.beforeURL} />
+                  <h2 className="text-center font-bold">
+                    {detail.direction} 청소 이전 사진
+                  </h2>
                 </div>
-                <h2 className="text-center font-bold">
-                  {detail.direction} 청소 이후 사진
-                </h2>
-                <div className="mb-4 p-4 flex justify-center">
+                <div className="bg-gray-100 p-5 flex flex-col justify-center items-center">
                   <Slider URL={detail.afterURL} />
+                  <h2 className="text-center font-bold">
+                    {detail.direction} 청소 이후 사진
+                  </h2>
                 </div>
-                <div className="text-gray-600  p-10">
+                <div className="text-gray-600">
                   <Greeting GreetingText={detail.comment || ""} />
                 </div>
               </div>
@@ -93,6 +95,41 @@ const ServiceDetail = () => {
             No service details available.
           </div>
         )}
+        <div className="flex flex-col md:flex-row items-start mt-10 gap-5 px-4">
+          {/* 소개 영역 */}
+          <div className="bg-slate-400 text-white p-10 rounded-xl shadow-md flex-1 hover:shadow-lg cursor-pointer transition-all duration-200">
+            <div className="text-xl font-bold mb-2 text-blue-500">
+              Clean & Cleaning Service
+            </div>
+            <div className="text-sm text-[10px]">
+              가족 같은 마음으로, 청소에 임합니다.
+            </div>
+            <div className="text-sm text-[10px]">
+              입주, 이사, 거주, 준공 청소의 모든 것!
+            </div>
+            <div className="text-sm text-[10px] font-semibold mt-2">
+              청소는{" "}
+              <strong className="font-bold text-black">은하수홈케어</strong>와
+              함께!
+            </div>
+          </div>
+
+          {/* Information 버튼 */}
+          <div className="bg-white p-6 rounded-xl shadow-md flex-1 hover:bg-slate-100 hover:shadow-lg cursor-pointer transition-all duration-200">
+            <span className="block text-lg font-semibold mb-1 text-slate-800">
+              Information
+            </span>
+            <span className="text-sm text-gray-600">이용안내</span>
+          </div>
+
+          {/* Contact 버튼 */}
+          <div className="bg-white p-6 rounded-xl shadow-md flex-1 hover:bg-slate-100 hover:shadow-lg cursor-pointer transition-all duration-200">
+            <span className="block text-lg font-semibold mb-1 text-slate-800">
+              Contact
+            </span>
+            <span className="text-sm text-gray-600">견적 문의</span>
+          </div>
+        </div>
       </div>
     </>
   );
