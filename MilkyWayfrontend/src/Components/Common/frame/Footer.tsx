@@ -20,6 +20,14 @@ const FooterLite = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: 600px) {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
 `;
 
 const FooterText = styled.div`

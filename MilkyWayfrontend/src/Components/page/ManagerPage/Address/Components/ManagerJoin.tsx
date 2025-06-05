@@ -17,6 +17,11 @@ const MainWapper = styled.div`
   min-height: 100vh;
   background-color: #f3f4f6;
   padding: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    min-height: 73vh; /* 모바일에서는 내용에 따라 늘어남 */
+  }
 `;
 
 const MainBox = styled.div`
@@ -31,7 +36,6 @@ const MainBox = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
-    padding: 1rem;
   }
 `;
 
@@ -40,8 +44,8 @@ const Label = styled.span`
   font-weight: bold;
   margin-bottom: 2rem;
 
-  @media (max-width: 480px) {
-    font-size: 16px;
+  @media (max-width: 600px) {
+    font-size: 12px;
     margin-bottom: 1rem;
   }
 `;
@@ -137,6 +141,19 @@ const DeleteButton = styled.button`
 
   &:hover {
     background-color: #d9363e;
+  }
+`;
+
+const ResponsiveText = styled.div`
+  text-align: center;
+  padding: 2rem;
+  color: #2563eb;
+  font-weight: bold;
+  font-size: 1.5rem;
+  background-color: #f0f9ff;
+
+  @media screen and (max-width: 600px) {
+    font-size: 12px;
   }
 `;
 
@@ -282,25 +299,9 @@ export const ManagerJoin = () => {
               </Card>
             ))
           ) : (
-            <div
-              style={{
-                width: "100%",
-                backgroundColor: "#6ecf7e",
-                lineHeight: "50px",
-                height: "100px",
-              }}
-            >
-              <div
-                style={{
-                  textAlign: "center",
-                  padding: "1rem",
-                  color: "#2563eb",
-                  fontWeight: "bold",
-                }}
-              >
-                최근 한달에 해당하는 데이터가 없습니다.
-              </div>
-            </div>
+            <ResponsiveText>
+              <div>최근 한달에 해당하는 데이터가 없습니다.</div>
+            </ResponsiveText>
           )}
         </CardList>
         {TotalPage.current > 0 && (

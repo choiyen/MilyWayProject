@@ -77,7 +77,7 @@ export const ManagerAdvice = () => {
         greeting: greeting,
       })
     );
-  }, [dispatch, greeting, title, type]);
+  }, [dispatch, greeting, title, titleimg.name, type]);
 
   useEffect(() => {
     const beforefileNameMatrix: string[][] = beforefile.map((row) =>

@@ -12,20 +12,23 @@ import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { LoginCheck } from "@/Components/Common/header/api/Logincheck";
 import { RootState } from "@/config/reduxstore";
 import Swal from "sweetalert2";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
 
 // Wrapper styled component
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
-  flex-direction: column;
+  min-height: 100vh; // ✅ 화면 전체 높이 확보
   padding: 20px;
   background-color: #f0f0f0;
+  box-sizing: border-box;
 `;
 
 const Warning = styled.div`
   color: red;
+  margin-top: 20px;
+  padding: 10px;
   font-size: 14px;
   font-weight: bold;
 `;
@@ -66,7 +69,13 @@ const MangerInput = styled.input`
     margin-bottom: 10px;
     width: 100%; /* Full width on smaller screens */
     max-width: 400px;
-    height: 50px;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    max-width: 300px; /* Adjust max-width for smaller screens */
+    margin-top: 15px; /* Adjust margin for smaller screens */
+    margin-left: 0px; /* Remove left margin on smaller screens */
   }
 `;
 
@@ -85,6 +94,14 @@ const MangerButton = styled.button`
   &:hover {
     background-color: #461baa;
     color: white;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 15px;
+    margin-left: 0px;
+    height: 40px; /* Adjust height for smaller screens */
   }
 `;
 
@@ -122,20 +139,19 @@ export const ManagerSignUp = () => {
       });
     }
   };
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
 
   return (
     <div>
       <Wrapper>
         <MangerPage>
           <Fontname>관리자 회원가입</Fontname>
-          <Warning>
-            주의!! 기존에 가입된 관리자가 존재 할 경우, 회원가입이 불가능합니다.
-          </Warning>
           <MangerInput
             type="text"
             placeholder="아이디를 입력해주세요"
             value={SignUPData.userId}
-            onChange={(e) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               dispatch(setSignData({ ...SignUPData, userId: e.target.value }))
             }
           />
@@ -143,7 +159,7 @@ export const ManagerSignUp = () => {
             type="password"
             placeholder="비밀번호를 입력해주세요"
             value={SignUPData.password}
-            onChange={(e) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               dispatch(setSignData({ ...SignUPData, password: e.target.value }))
             }
           />
@@ -151,11 +167,16 @@ export const ManagerSignUp = () => {
             type="email"
             placeholder="이메일을 입력해주세요"
             value={SignUPData.email}
-            onChange={(e) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               dispatch(setSignData({ ...SignUPData, email: e.target.value }))
             }
           />
           <MangerButton onClick={handleSignup}>회원가입</MangerButton>
+          <Warning>
+            {isMobile
+              ? "⚠️ 서버 관리자는 하나만 존재함"
+              : "주의!! 기존에 가입된 관리자가 존재 할 경우, 회원가입이 불가능합니다."}
+          </Warning>
         </MangerPage>
       </Wrapper>
     </div>

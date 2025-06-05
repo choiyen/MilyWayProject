@@ -22,16 +22,15 @@ const MainWapper = styled.div`
   align-items: center;
 `;
 const MainBox = styled.div`
-  width: 100%;
   background-color: #f3f4f6;
+  width: 100%;
+  max-width: 100vw; // 뷰포트 넘침 방지
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 50px; /* Space at the top */
-  padding-bottom: 50px; /* Space at the bottom */
-  overflow-y: auto; /* Scroll only within the MainBox */
+  overflow-x: hidden; // ← 추가
+  overflow-y: auto;
 `;
-
 export const ManagerAddress = () => {
   const [Address, SetAddress] = useState("");
   const [AddressDetail, SetAddressDetail] = useState("");
