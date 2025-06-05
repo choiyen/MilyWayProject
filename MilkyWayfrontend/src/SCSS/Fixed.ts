@@ -34,6 +34,30 @@ export const Fontname = styled.div`
   }
 `;
 
+export const StyledCalendarWrapper = styled.div`
+  width: 100%;
+  align-items: center;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 20px;
+
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f3f4f6; /* 밝고 청결한 느낌의 민트 배경 */
+  padding: 40px;
+  @media screen and (max-width: 600px) {
+    margin-bottom: 20px; /* 모바일에서 아래 여백 조정 */
+    padding: 20px; /* 모바일에서 패딩 조정 */
+    box-shadow: none;
+    background-color: transparent; /* 모바일에서 배경색 제거 */
+    padding: 0px;
+  }
+`;
 export const Wapper = styled.div`
   background-color: gainsboro;
   display: flex;
@@ -45,15 +69,15 @@ export const Wapper = styled.div`
   flex-grow: 1;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+  margin: 20px;
   width: 50%;
   gap: 30px;
 
   @media screen and (max-width: 600px) {
     padding: 12px;
-    margin: 0 8px;
     width: 100%;
 
-    border-radius: 12px;
+    border-radius: 0px;
     gap: 12px;
     box-shadow: none;
     max-width: 600px;
@@ -64,6 +88,12 @@ export const ImgTag = styled.img`
   width: 70px;
   height: 70px;
   margin-top: 50px;
+
+  @media screen and (max-width: 600px) {
+    width: 50px;
+    height: 50px;
+    margin-top: 30px; /* 모바일에서 위 여백 조정 */
+  }
 `;
 
 export const SmallButton = styled.button`
