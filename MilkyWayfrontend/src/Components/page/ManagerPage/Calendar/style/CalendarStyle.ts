@@ -7,6 +7,7 @@ export const CalendarWapper = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
+  max-width: 100vw;
 `;
 
 export const CalendarsWrapper = styled(StyledCalendarWrapper)`

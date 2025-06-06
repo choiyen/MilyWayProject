@@ -14,14 +14,16 @@ interface SelectBoxProps {
 
 // Textarea 스타일 정의
 const Textarea = styled.textarea`
-  width: 100%;
-  max-width: 660px !important; /* max-width를 600px로 설정 */
+  width: 70%;
+  max-width: 650px !important; /* max-width를 680px로 설정 */
   min-height: 200px !important;
   resize: none;
   padding: 12px 13px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
+  padding: 20px; /* padding을 20px로 설정 */
   line-height: 16px;
+  font-weight: 400;
   box-sizing: border-box; /* box-sizing을 border-box로 설정 */
 
   @media screen and (max-width: 600px) {

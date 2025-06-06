@@ -12,6 +12,7 @@ import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.Administration.Repository.AdministrationRepository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -84,6 +85,22 @@ public class AdministrationService
             throw new FindFailedException("해당 코드로 삭제할 수 있는 일정표가 존재하지 않아요");
         }
     }
+    @Transactional
+    public boolean deleteByAdministrationDateBeforeTodayAtSixAM() {
+        LocalTime now = LocalTime.now();
+        LocalTime sixPM = LocalTime.of(18, 0);
+
+        // 현재 시간이 오후 6시 이전라면 삭제하지 않음
+        if (now.isBefore(sixPM)) {
+            return false;
+        }
+
+        // 오늘보다 이전 날짜의 데이터를 삭제
+        LocalDate endOfYesterday = LocalDate.now(); // 오늘 00시
+        administrationRepository.deleteByAdministrationDateBefore(endOfYesterday);
+        return true;
+    }
+
     public List<AdministrationEntity> FindAll()
     {
         List<AdministrationEntity> administrationEntities = administrationRepository.findAll();

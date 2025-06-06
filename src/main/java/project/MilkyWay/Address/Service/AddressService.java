@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,8 @@ import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.Address.Repository.AddressRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 
 @Service
@@ -97,13 +100,27 @@ public class AddressService
     {
         return addressRepository.findBySubmissionDate(SubmissionDate);
     }
+    @Transactional
+    public boolean deleteSubmissionBeforeTodayAtSixAM() {
+        LocalTime now = LocalTime.now();
+        LocalTime sixPM = LocalTime.of(18, 0);
 
+        // 현재 시간이 오후 6시 이전라면 삭제하지 않음
+        if (now.isBefore(sixPM)) {
+            return false;
+        }
+
+        // 오늘보다 이전 날짜의 데이터를 삭제
+        LocalDate endOfYesterday = LocalDate.now(); // 오늘 00시
+        addressRepository.deleteBySubmissionDateBefore(endOfYesterday);
+
+        return true;
+    }
 
 
     public Page<AddressEntity> findALL(int page)
     {
-        Pageable pageable = PageRequest.of(page,10);
-
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "submissionDate"));
         Page<AddressEntity> addressEntities = addressRepository.findAll(pageable);
         return addressEntities;
     }

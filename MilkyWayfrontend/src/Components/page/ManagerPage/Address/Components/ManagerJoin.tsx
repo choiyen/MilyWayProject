@@ -7,6 +7,7 @@ import { styled } from "styled-components";
 import { AddressDeletefetchData, AddressSelectfetchData } from "../api/util";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { Card, CardList, CardRow, ResponsiveText } from "@/types/CardType/Card";
 
 const MainWapper = styled.div`
   display: flex;
@@ -83,51 +84,6 @@ const TableWrapper = styled.div`
   }
 `;
 
-const CardList = styled.div`
-  display: none;
-
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-  }
-`;
-
-const Card = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-`;
-
-const CardRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 0.6rem 0;
-  border-bottom: 2px solid #ccc; /* 더 두껍고 진하게 */
-
-  span.label {
-    font-weight: 600;
-    color: #222;
-    width: 40%;
-  }
-
-  span.value {
-    text-align: right;
-    color: #444;
-    width: 60%;
-    word-break: break-word;
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
 const DeleteButton = styled.button`
   margin-top: 1rem;
   padding: 0.5rem 0.8rem;
@@ -144,19 +100,6 @@ const DeleteButton = styled.button`
   }
 `;
 
-const ResponsiveText = styled.div`
-  text-align: center;
-  padding: 2rem;
-  color: #2563eb;
-  font-weight: bold;
-  font-size: 1.5rem;
-  background-color: #f0f9ff;
-
-  @media screen and (max-width: 600px) {
-    font-size: 12px;
-  }
-`;
-
 export const ManagerJoin = () => {
   const [Sign, setSign] = useState<null | AddressType[]>(null);
   const navigate = useNavigate();
@@ -168,7 +111,8 @@ export const ManagerJoin = () => {
   };
 
   useEffect(() => {
-    AddressSelectfetchData(TotalPage.current).then((res) => {
+    console.log("주소 관리 페이지가 로드되었습니다." + currentPage);
+    AddressSelectfetchData(currentPage).then((res) => {
       console.log("주소 조회 결과:", res);
       setSign(res.pageDTO.list);
       TotalPage.current = res.pageDTO.pageCount;
@@ -179,7 +123,7 @@ export const ManagerJoin = () => {
     AddressDeletefetchData(AddressId)
       .then((res) => {
         if (res.resultType === "success") {
-          AddressSelectfetchData(TotalPage.current).then((res) => {
+          AddressSelectfetchData(currentPage).then((res) => {
             Swal.fire({
               title: "삭제 성공",
               text: "청소 예약 정보가 삭제되었습니다.",
@@ -319,6 +263,7 @@ export const ManagerJoin = () => {
                       return;
                     }
                     setcurrentPage(currentPage - 1);
+                    setrefreshKey(!refreshKey);
                   }}
                 >
                   &lt;
@@ -327,7 +272,10 @@ export const ManagerJoin = () => {
                   <button
                     key={index}
                     className="px-3 py-1 rounded-md bg-white border border-gray-300 hover:bg-blue-100 focus:outline-none"
-                    onClick={() => setcurrentPage(index)}
+                    onClick={() => {
+                      setcurrentPage(index);
+                      setrefreshKey(!refreshKey);
+                    }}
                   >
                     {index + 1}
                   </button>
@@ -338,6 +286,7 @@ export const ManagerJoin = () => {
                   onClick={() => {
                     if (currentPage + 1 < TotalPage.current) {
                       setcurrentPage(currentPage + 1);
+                      setrefreshKey(!refreshKey);
                     } else {
                       toast.error("마지막 페이지입니다.", {
                         position: "top-center",

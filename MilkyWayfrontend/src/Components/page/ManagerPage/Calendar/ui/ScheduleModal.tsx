@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/config/reduxstore";
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import Swal from "sweetalert2";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
+import styled from "styled-components";
 
 interface Props {
   setChange: (value: boolean) => void;
@@ -23,6 +25,27 @@ interface Props {
   dispatch: Dispatch<ReturnType<typeof setAdministrationData>>;
   fetchData: () => Promise<void>;
 }
+
+const BottomSheet = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1000;
+`;
+
+const MobileOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+`;
 
 export const ScheduleModal = ({
   setChange,
@@ -47,9 +70,6 @@ export const ScheduleModal = ({
 
   const handleSubmit = async () => {
     try {
-      // 상태 업데이트
-
-      // 상태 값이 제대로 업데이트 되도록 한 뒤에 POST 요청 실행
       setTimeout(async () => {
         const res = await POST({
           url: paths.Administration.basic.path,
@@ -63,9 +83,9 @@ export const ScheduleModal = ({
             confirmButtonText: "확인",
           });
           setChange(false);
-          fetchData(); // 상태 갱신
+          fetchData();
         }
-      }, 1000); // 조금의 지연을 주어 상태 업데이트가 끝날 시간을 줍니다.
+      }, 1000);
     } catch (e) {
       Swal.fire({
         icon: "error",
@@ -76,12 +96,15 @@ export const ScheduleModal = ({
     }
   };
 
-  return (
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
+
+  const MobileBottomSheet = () => (
     <>
-      <Overlay />
-      <ModelWrapper $istrue="true">
+      <MobileOverlay onClick={() => setChange(false)} />
+      <BottomSheet>
         <InputTextBox
-          name={"현재 날짜 :"}
+          name="현재 날짜:"
           Value={date ? date.toLocaleDateString("sv-SE") : ""}
         />
         <br />
@@ -91,11 +114,46 @@ export const ScheduleModal = ({
           setValue={(value: string) => setType(value as ScheduleType)}
         />
         <br />
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            justifyContent: "space-between",
+          }}
+        >
           <SmallButton onClick={handleSubmit}>일정 확정</SmallButton>
           <SmallButton onClick={() => setChange(false)}>취소</SmallButton>
         </div>
-      </ModelWrapper>
+      </BottomSheet>
+    </>
+  );
+
+  return (
+    <>
+      {isMobile ? (
+        <MobileBottomSheet />
+      ) : (
+        <>
+          <Overlay />
+          <ModelWrapper $istrue="true">
+            <InputTextBox
+              name={"현재 날짜 :"}
+              Value={date ? date.toLocaleDateString("sv-SE") : ""}
+            />
+            <br />
+            <RadioBox
+              name="선택 유형"
+              append={Array.from(adminstrationSelect)}
+              setValue={(value: string) => setType(value as ScheduleType)}
+            />
+            <br />
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <SmallButton onClick={handleSubmit}>일정 확정</SmallButton>
+              <SmallButton onClick={() => setChange(false)}>취소</SmallButton>
+            </div>
+          </ModelWrapper>
+        </>
+      )}
     </>
   );
 };

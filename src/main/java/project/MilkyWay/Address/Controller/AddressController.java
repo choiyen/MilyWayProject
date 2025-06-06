@@ -5,12 +5,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import project.MilkyWay.Address.DTO.AddressDTO;
 import project.MilkyWay.Administration.Entity.AdministrationEntity;
@@ -29,6 +31,7 @@ import project.MilkyWay.ComonType.Expection.UpdateFailedException;
 import project.MilkyWay.ComonType.LoginSuccess;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,8 +40,7 @@ import java.util.List;
 @Tag(name = "주소 관련 정보를 제공하는  Controller")
 @RestController
 @RequestMapping("/address")
-public class AddressController
-{
+public class AddressController {
     @Autowired
     AddressService addressService;
 
@@ -50,6 +52,27 @@ public class AddressController
 
     LoginSuccess loginSuccess = new LoginSuccess();
 
+    @Scheduled(cron = "0 0 18 * * *", zone = "Asia/Seoul")
+    public void scheduledDeleteOldSubmissions() {
+        boolean deleted = addressService.deleteSubmissionBeforeTodayAtSixAM();
+        boolean deletedadmini = administrationService.deleteByAdministrationDateBeforeTodayAtSixAM();
+        if (deleted && deletedadmini) {
+            System.out.println("[삭제 완료] 이전 날짜의 데이터가 성공적으로 삭제되었습니다.");
+        } else {
+            System.out.println("[삭제 미수행] 현재 시간이 오전 6시 이후입니다.");
+        }
+    }
+
+    @PostConstruct
+    public void init() {
+        boolean deleted =addressService.deleteSubmissionBeforeTodayAtSixAM();
+        boolean deletedadmini = administrationService.deleteByAdministrationDateBeforeTodayAtSixAM();
+        if (deleted && deletedadmini) {
+            System.out.println("delete check");
+        } else {
+            System.out.println("delete uncheck");
+        }
+    }
 
     @Operation(
             summary = "Create a new Address",

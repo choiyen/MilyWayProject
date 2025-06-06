@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import "@/SCSS/tailwind.scss";
 import { useNavigate } from "react-router-dom";
 import { Fontname, LastButton } from "@/SCSS/Fixed";
@@ -9,6 +9,8 @@ import { NoticeType } from "@/types/Feature/Notice/NoticeAll";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
+import { Card, CardList, CardRow, ResponsiveText } from "@/types/CardType/Card";
 
 const DeleteButton = styled.button`
   width: 100%;
@@ -30,7 +32,11 @@ const DeleteButton = styled.button`
 export const ManagerAdviceSelect = () => {
   const [Advicedummy, setAdvicedummy] = useState<NoticeType[]>([]);
   const navigate = useNavigate();
-
+  const [currentPage, setcurrentPage] = useState(0);
+  const [refreshKey, setrefreshKey] = useState(false);
+  const TotalPage = useState({ current: 0 })[0]; // ✅ 상태로 관리
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth <= 600; // 모바일 여부 확인
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -130,56 +136,145 @@ export const ManagerAdviceSelect = () => {
         <Fontname>온라인 후기 관리</Fontname>
         <div className="w-9/12 flex flex-col px-4 py-4 overflow-y-auto">
           <div className="flex flex-col gap-4 w-full mx-auto">
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-              <thead className="bg-gray-200 text-gray-600 text-sm font-semibold uppercase">
-                <tr>
-                  <th className="px-6 py-3 text-left">관리번호</th>
-                  <th className="px-6 py-3 text-left">제목</th>
-                  <th className="px-6 py-3 text-left">청소유형</th>
-                  <th className="px-6 py-3 text-left">삭제</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-700 text-sm">
-                {Advicedummy.length > 0 ? (
-                  Advicedummy.map((item, index) => (
-                    <tr
-                      key={item.noticeId}
-                      onClick={() => handleRowClick(item.noticeId ?? "")}
-                      className="cursor-pointer hover:bg-gray-100"
-                    >
-                      <td className="border px-6 py-3 whitespace-nowrap">
-                        {index + 1}
-                      </td>
-                      <td className="border px-6 py-3 whitespace-nowrap">
-                        {item.title}
-                      </td>
-                      <td className="border px-6 py-3 whitespace-nowrap">
-                        {item.type}
-                      </td>
-                      <td className="border px-6 py-3 whitespace-nowrap text-center">
+            {isMobile ? (
+              <div className="text-center text-gray-500 mb-4">
+                <CardList>
+                  {Advicedummy && Advicedummy.length !== 0 ? (
+                    Advicedummy.map((date: NoticeType, index: Key) => (
+                      <Card
+                        key={index}
+                        onClick={() => handleRowClick(date.noticeId ?? "")}
+                      >
+                        <CardRow>
+                          <span className="label">번호</span>
+                          <span className="value">{Number(index) + 1}</span>
+                        </CardRow>
+                        <CardRow>
+                          <span className="label">제목</span>
+                          <span className="value">{date.title}</span>
+                        </CardRow>
                         <DeleteButton
                           onClick={(e: { stopPropagation: () => void }) => {
                             e.stopPropagation(); // ✅ 행 클릭 이벤트 전파 막기
-                            handleDeleteClick(item.noticeId ?? "");
+                            handleDeleteClick(date.noticeId ?? "");
                           }}
                         >
-                          🗑 삭제
+                          삭제
                         </DeleteButton>
+                      </Card>
+                    ))
+                  ) : (
+                    <ResponsiveText>
+                      <div>최근 한달에 해당하는 데이터가 없습니다.</div>
+                    </ResponsiveText>
+                  )}
+                </CardList>
+              </div>
+            ) : (
+              <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                <thead className="bg-gray-200 text-gray-600 text-sm font-semibold uppercase">
+                  <tr>
+                    <th className="px-6 py-3 text-left">관리번호</th>
+                    <th className="px-6 py-3 text-left">제목</th>
+                    <th className="px-6 py-3 text-left">청소유형</th>
+                    <th className="px-6 py-3 text-left">삭제</th>
+                  </tr>
+                </thead>
+                <tbody className="text-gray-700 text-sm">
+                  {Advicedummy.length > 0 ? (
+                    Advicedummy.map((item, index) => (
+                      <tr
+                        key={item.noticeId}
+                        onClick={() => handleRowClick(item.noticeId ?? "")}
+                        className="cursor-pointer hover:bg-gray-100"
+                      >
+                        <td className="border px-6 py-3 whitespace-nowrap">
+                          {index + 1}
+                        </td>
+                        <td className="border px-6 py-3 whitespace-nowrap">
+                          {item.title}
+                        </td>
+                        <td className="border px-6 py-3 whitespace-nowrap">
+                          {item.type}
+                        </td>
+                        <td className="border px-6 py-3 whitespace-nowrap text-center">
+                          <DeleteButton
+                            onClick={(e: { stopPropagation: () => void }) => {
+                              e.stopPropagation(); // ✅ 행 클릭 이벤트 전파 막기
+                              handleDeleteClick(item.noticeId ?? "");
+                            }}
+                          >
+                            🗑 삭제
+                          </DeleteButton>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={4}
+                        className="text-center py-10 text-blue-600 font-bold text-lg border-t"
+                      >
+                        관리해야 할 온라인 후기가 없습니다.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      className="text-center py-10 text-blue-600 font-bold text-lg border-t"
+                  )}
+                </tbody>
+              </table>
+            )}
+
+            {TotalPage.current > 0 && (
+              <div className="flex justify-center mt-3">
+                <div className="flex items-center space-x-6 gap-10">
+                  <div className="flex items-center space-x-2 gap-5">
+                    <button
+                      className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                      aria-label="이전 페이지"
+                      onClick={() => {
+                        if (currentPage <= 0) {
+                          toast.error("첫 페이지입니다.", {
+                            position: "top-center",
+                          });
+                          return;
+                        }
+                        setcurrentPage(currentPage - 1);
+                        setrefreshKey(!refreshKey);
+                      }}
                     >
-                      관리해야 할 온라인 후기가 없습니다.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                      &lt;
+                    </button>
+                    {Array.from({ length: TotalPage.current }, (_, index) => (
+                      <button
+                        key={index}
+                        className="px-3 py-1 rounded-md bg-white border border-gray-300 hover:bg-blue-100 focus:outline-none"
+                        onClick={() => {
+                          setcurrentPage(index);
+                          setrefreshKey(!refreshKey);
+                        }}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                    <button
+                      className="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                      aria-label="다음 페이지"
+                      onClick={() => {
+                        if (currentPage + 1 < TotalPage.current) {
+                          setcurrentPage(currentPage + 1);
+                          setrefreshKey(!refreshKey);
+                        } else {
+                          toast.error("마지막 페이지입니다.", {
+                            position: "top-center",
+                          });
+                        }
+                      }}
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="flex justify-center items-center mt-2">
               <LastButton
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"

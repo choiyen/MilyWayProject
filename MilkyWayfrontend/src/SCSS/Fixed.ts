@@ -69,18 +69,17 @@ export const Wapper = styled.div`
   flex-grow: 1;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
-  margin: 20px;
-  width: 50%;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
   gap: 30px;
 
   @media screen and (max-width: 600px) {
     padding: 12px;
     width: 100%;
-
     border-radius: 0px;
     gap: 12px;
     box-shadow: none;
-    max-width: 600px;
   }
 `;
 
@@ -122,6 +121,10 @@ export const SmallButton = styled.button`
   &:active {
     transform: translateY(0);
     box-shadow: none;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 70px;
   }
 `;
 

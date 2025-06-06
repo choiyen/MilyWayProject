@@ -93,7 +93,7 @@ export const SelectDate = ({
         placeholderText="날짜를 선택하세요"
         popperPlacement="bottom-start"
         portalId="root-portal"
-        dayClassName={(date) => getDayClassName(date)} // 날짜에 따른 색상 설정
+        dayClassName={(date: Date) => getDayClassName(date)} // 날짜에 따른 색상 설정
       />
     </RadioBoxContainer>
   );

@@ -1,3 +1,5 @@
+import { Label } from "@/SCSS/Fixed";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
 import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
@@ -24,7 +26,7 @@ const FileTageBox = styled.input`
 const CustomFileLabel = styled.label`
   cursor: pointer;
   background-color: gray;
-  width: 300px;
+  width: 70%;
   height: 50px;
   color: white;
   font-size: 14px;
@@ -33,26 +35,32 @@ const CustomFileLabel = styled.label`
   text-transform: uppercase;
   font-weight: bold;
   border-radius: 10px;
+  margin-top: 20px;
 
   &:hover {
     background-color: brown;
   }
-`;
 
-const Label = styled.span`
-  margin-right: 20px;
-  font-size: 20px;
-  line-height: 16px;
-  font-weight: bolder;
-  text-align: left;
+  @media screen and (max-width: 600px) {
+    width: 270px;
+    height: 40px;
+    font-size: 12px;
+    line-height: 40px;
+  }
 `;
 
 const FileContainer = styled.div`
   display: flex;
+  align-items: center; /* 세로 정렬 */
+  width: 100%;
   justify-content: space-between;
-  align-items: center;
-  width: 500px;
-  margin-top: 20px;
+  height: auto;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    gap: 10px; /* 모바일에서 간격 조정 */
+    margin-top: 0px;
+  }
 `;
 
 export const FileTage = ({
@@ -72,6 +80,11 @@ export const FileTage = ({
   if (type === "after") {
     inputId = `fileInput-after-${index}`; // after 타입일 때 ID 설정
   } // 타입에 따라 ID 설정
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
+  const buttonText = isMobile
+    ? "클릭 시 갤러리가 열립니다"
+    : name + "에 해당하는 파일을 선택해주세요";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []); // 선택한 파일들
@@ -104,9 +117,7 @@ export const FileTage = ({
   return (
     <FileContainer>
       <Label>{name}</Label>
-      <CustomFileLabel htmlFor={inputId}>
-        클릭 시 갤러리가 열립니다
-      </CustomFileLabel>
+      <CustomFileLabel htmlFor={inputId}>{buttonText}</CustomFileLabel>
       <FileTageBox
         type="file"
         id={inputId}

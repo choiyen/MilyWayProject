@@ -21,6 +21,9 @@ module.exports = {
           background: "#F7F9FA", // 배경
         },
       },
+      screens: {
+        "max-sm": { max: "639px" }, // 639px 이하일 때
+      },
     },
   },
   plugins: [],
