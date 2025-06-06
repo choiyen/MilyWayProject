@@ -23,19 +23,40 @@ const InquireMapping = styled.div`
 
     strong {
       padding: 15px;
-
       width: 30%;
       text-align: left;
       border-right: 1px solid black;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* 투명도 낮은 검정 */
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     span {
       padding: 15px;
-
       width: 70%;
-      text-align: right; /* 오른쪽 끝 정렬 */
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* 투명도 낮은 검정 */
+      text-align: right;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 10px;
+
+    div {
+      flex-direction: column;
+      align-items: flex-start;
+
+      strong,
+      span {
+        width: 100%;
+        padding: 10px 0;
+        border-right: none;
+        text-align: left;
+      }
+
+      strong,
+      span {
+        text-align: center; /* ✅ 모바일에서 strong 가운데 정렬 */
+      }
     }
   }
 `;
@@ -43,6 +64,10 @@ const InquireMapping = styled.div`
 export const Fontname2 = styled(Fontname)`
   font-size: 30px;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+  }
 `;
 
 const Mapper = styled.div`
@@ -53,6 +78,10 @@ const Mapper = styled.div`
   align-items: center;
   padding: 20px;
   background-color: ${theme.colors.starlightWhite};
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const SmallButton2 = styled.button<{ variant?: "call" | "phone" | "cancel" }>`
@@ -68,13 +97,13 @@ const SmallButton2 = styled.button<{ variant?: "call" | "phone" | "cancel" }>`
   background-color: ${({ variant }) => {
     switch (variant) {
       case "call":
-        return "#007bff"; // 파란색
+        return "#007bff";
       case "phone":
-        return "#28a745"; // 초록색
+        return "#28a745";
       case "cancel":
-        return "#dc3545"; // 빨간색
+        return "#dc3545";
       default:
-        return "#6c757d"; // 회색
+        return "#6c757d";
     }
   }};
 
@@ -92,6 +121,24 @@ const SmallButton2 = styled.button<{ variant?: "call" | "phone" | "cancel" }>`
       }
     }};
   }
+
+  @media (max-width: 768px) {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    font-size: 14px;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 30vw;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const ManagerInquiresSelect = () => {
@@ -107,8 +154,6 @@ const ManagerInquiresSelect = () => {
         params: { InquireId: InqurieId },
       }).then((res) => {
         if (res.resultType === "success") {
-          // 문의 상세 정보를 성공적으로 가져온 경우 상태를 업데이트합니다.
-          console.log(res.data);
           setInquiries({
             Inqurie: res.data[0].inquire || "",
             InquireName: res.data[0].inquirename || "",
@@ -128,10 +173,7 @@ const ManagerInquiresSelect = () => {
   };
 
   useEffect(() => {
-    // 선택된 문의 ID를 기반으로 문의 상세 정보를 가져오는 로직을 추가할 수 있습니다.
-    // 예: API 호출 등을 통해 Inquiries 상태를 업데이트합니다.
     HandeGet(InqurieId || "");
-    console.log("문의 상세 정보:", Inquiries);
   }, [InqurieId, reloadFlag]);
 
   const infoList = [
@@ -150,8 +192,8 @@ const ManagerInquiresSelect = () => {
       showCancelButton: true,
       confirmButtonText: "예, 취소합니다",
       cancelButtonText: "아니오",
-      confirmButtonColor: "#d33", // 파란색
-      cancelButtonColor: "#3889cf", // 회색 (부트스트랩 기준 중간 회색)
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3889cf",
     }).then(async (result) => {
       if (result.isConfirmed) {
         await PUT({
@@ -160,8 +202,7 @@ const ManagerInquiresSelect = () => {
             InqurieId: InqurieId,
           },
         });
-        setReloadFlag((prev) => !prev); // reloadFlag 토글해서 useEffect 재실행 유도
-        // window.location.href = `tel:${phoneNumber}`;
+        setReloadFlag((prev) => !prev);
       }
     });
   };
@@ -184,8 +225,9 @@ const ManagerInquiresSelect = () => {
             InqurieId: InqurieId,
           },
         });
-        setReloadFlag((prev) => !prev); // reloadFlag 토글해서 useEffect 재실행 유도
-        // window.location.href = `tel:${phoneNumber}`;
+        setReloadFlag((prev) => !prev);
+        // 실제 전화 걸기
+        window.location.href = `tel:${phoneNumber}`;
       }
     });
   };
@@ -212,7 +254,6 @@ const ManagerInquiresSelect = () => {
     <div className="flex flex-col items-center p-10">
       <Fontname2>문의 상세 정보</Fontname2>
       <hr className="w-[70%] border-t-1 border-gray-400 my-4" />
-      {/* 여기에 문의 상세 정보를 표시하는 컴포넌트를 추가할 수 있습니다. */}
       {Inquiries && (
         <Mapper>
           <InquireMapping>
@@ -224,16 +265,9 @@ const ManagerInquiresSelect = () => {
             ))}
           </InquireMapping>
           <hr className="w-[70%] border-t-1 border-gray-400 my-4 mt-10" />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between", // 가운데 정렬
-              alignItems: "center",
-              width: "30vw", // 적당한 너비 지정
-            }}
-          >
+          <ButtonWrapper>
             {Inquiries.inquireBool ? (
-              <SmallButton2 variant="phone" onClick={() => handleCallCancel()}>
+              <SmallButton2 variant="phone" onClick={handleCallCancel}>
                 확인취소
               </SmallButton2>
             ) : (
@@ -244,13 +278,14 @@ const ManagerInquiresSelect = () => {
                 전화하기
               </SmallButton2>
             )}
-            <SmallButton2 variant="cancel" onClick={() => handleCancel()}>
+            <SmallButton2 variant="cancel" onClick={handleCancel}>
               이전으로
             </SmallButton2>
-          </div>
+          </ButtonWrapper>
         </Mapper>
       )}
     </div>
   );
 };
+
 export default ManagerInquiresSelect;

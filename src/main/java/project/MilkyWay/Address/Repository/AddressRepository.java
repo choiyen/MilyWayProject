@@ -8,6 +8,7 @@ import project.MilkyWay.Address.Entity.AddressEntity;
 import project.MilkyWay.BoardMain.Board.Entity.BoardEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Repository
 public interface AddressRepository extends JpaRepository<AddressEntity, String>
@@ -18,5 +19,6 @@ public interface AddressRepository extends JpaRepository<AddressEntity, String>
     boolean existsByAddressId(String addressId);
     void deleteByAddressId(String addressId);
     Page<AddressEntity> findAll(Pageable pageable);
+    void deleteBySubmissionDateBefore(LocalDate dateTime);
 
 }

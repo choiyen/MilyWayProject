@@ -1,32 +1,51 @@
 import { ChangeEvent } from "react";
 import styled from "styled-components";
 
+const RadioBoxContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  width: 500px;
+  margin-top: 20px;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+`;
+
+const Label = styled.label<{ $isred?: string | undefined }>`
+  font-size: 20px;
+  line-height: 16px;
+  font-weight: bolder;
+  color: ${(props) => (props.$isred === "true" ? "red" : "black")};
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  @media screen and (max-width: 600px) {
+    width: 35%; /* 2개씩 한 줄에 배치 */
+    box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 780px) {
+    font-size: 15px;
+    line-height: 16px;
+  }
+`;
+
+// 타입 정의 추가
 interface SelectBoxProps {
   name: string;
   append: string[];
   setValue: (value: string) => void;
 }
 
-const RadioBoxContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: center; /* 수직 정렬 */
-  width: 500px;
-  height: auto;
-  margin-top: 20px;
-`;
-
-const Label = styled.span<{ $isred?: string | undefined }>`
-  font-size: 20px; /* 글씨 크기 조정 */
-  line-height: 16px;
-  font-weight: bolder;
-  color: ${(props) =>
-    props.$isred === "true"
-      ? "red"
-      : "black"}; /* isRed가 true일 때 빨간색으로 */
-`;
-
+// 컴포넌트
 export const RadioBox = ({ name, append, setValue }: SelectBoxProps) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -34,18 +53,20 @@ export const RadioBox = ({ name, append, setValue }: SelectBoxProps) => {
 
   return (
     <RadioBoxContainer>
-      <Label>{name}</Label>
-      {append.map((item) => (
-        <Label key={item} $isred={`${item === "업무"}`}>
-          <input
-            type="radio"
-            name="example"
-            value={item}
-            onChange={handleChange}
-          />
-          {item}
-        </Label>
-      ))}
+      <Label>{name}:</Label>
+      <RadioGroup>
+        {append.map((item) => (
+          <Label key={item} $isred={`${item === "업무"}`}>
+            <input
+              type="radio"
+              name="example"
+              value={item}
+              onChange={handleChange}
+            />
+            {item}
+          </Label>
+        ))}
+      </RadioGroup>
     </RadioBoxContainer>
   );
 };

@@ -28,27 +28,71 @@ export const Fontname = styled.div`
   margin-bottom: 30px; /* Add space below the title to separate from the next content */
   margin-top: 30px;
   font-weight: bolder;
+
+  @media screen and (max-width: 600px) {
+    font-size: 25px; /* Adjust font size for smaller screens */
+  }
 `;
 
+export const StyledCalendarWrapper = styled.div`
+  width: 100%;
+  align-items: center;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 20px;
+
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f3f4f6; /* 밝고 청결한 느낌의 민트 배경 */
+  padding: 40px;
+  @media screen and (max-width: 600px) {
+    margin-bottom: 20px; /* 모바일에서 아래 여백 조정 */
+    padding: 20px; /* 모바일에서 패딩 조정 */
+    box-shadow: none;
+    background-color: transparent; /* 모바일에서 배경색 제거 */
+    padding: 0px;
+  }
+`;
 export const Wapper = styled.div`
-  width: 60%;
-  height: auto; /* Allow Wapper to grow dynamically */
   background-color: gainsboro;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Ensure all elements are top-aligned */
+  justify-content: flex-start;
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
-  flex-grow: 1; /* Allow Wapper to take remaining space */
+  flex-grow: 1;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  gap: 30px;
+
+  @media screen and (max-width: 600px) {
+    padding: 12px;
+    width: 100%;
+    border-radius: 0px;
+    gap: 12px;
+    box-shadow: none;
+  }
 `;
 
 export const ImgTag = styled.img`
   width: 70px;
   height: 70px;
   margin-top: 50px;
+
+  @media screen and (max-width: 600px) {
+    width: 50px;
+    height: 50px;
+    margin-top: 30px; /* 모바일에서 위 여백 조정 */
+  }
 `;
 
 export const SmallButton = styled.button`
@@ -78,25 +122,32 @@ export const SmallButton = styled.button`
     transform: translateY(0);
     box-shadow: none;
   }
+
+  @media screen and (max-width: 600px) {
+    width: 70px;
+  }
 `;
 
 export const LastButton = styled.button`
   width: 100%;
-  max-width: 240px;
-  height: 48px;
-  padding: 0 20px;
-  margin: 48px auto 40px auto;
-
+  max-width: 400px; /* ✅ 최대 너비 설정 */
+  height: 38px;
+  padding: 30px; /* ✅ 패딩 제거 */
   border: none;
   border-radius: 8px;
-  background-color: ${theme.colors.auroraBlue};
+  background-color: #84cc16;
   color: #fff;
-
+  margin-top: 50px;
+  margin-bottom: 60px; /* ✅ 아래 여백 추가 */
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.5px;
   cursor: pointer;
   transition: all 0.3s ease;
+
+  display: flex; /* ✅ 중앙 정렬 */
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: #574fd6;
@@ -108,19 +159,41 @@ export const LastButton = styled.button`
     transform: translateY(0);
     box-shadow: none;
   }
+
+  @media screen and (max-width: 600px) {
+    max-width: 250px;
+    padding: 20px; /* ✅ 모바일에서 패딩 조정 */
+    height: 20px;
+    margin-top: 25px;
+    color: black;
+    font-weight: 600;
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
-// 캘린더를 감싸주는 스타일
-export const StyledCalendarWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  gap: 50px;
-  align-items: center;
-  position: relative;
-  margin-bottom: 40px;
-`;
 // 캘린더를 불러옴
 export const StyledCalendar = styled(Calendar)`
-  width: 300px;
+  width: 400px;
+  height: auto;
+  padding: 20px;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    height: auto;
+  }
+`;
+
+export const Label = styled.span`
+  font-size: 20px;
+  line-height: 16px;
+  font-weight: bolder;
+  text-align: left;
+
+  @media screen and (max-width: 600px) {
+    font-size: 15px; /* 모바일에서 폰트 크기 조정 */
+  }
 `;

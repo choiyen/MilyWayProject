@@ -19,9 +19,11 @@ import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { POST_FORM } from "@/config/request/axios/MutipartAxios";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
 
 const MainBox = styled.div`
   width: 100%;
+  max-width: 100vw;
   background-color: #f3f4f6;
   display: flex;
   flex-direction: column;
@@ -31,13 +33,49 @@ const MainBox = styled.div`
   padding-bottom: 50px; /* Space at the bottom */
   overflow-y: auto; /* Scroll only within the MainBox */
 `;
+const Textareas = styled.textarea`
+  width: 100%;
+  min-height: 200px;
+  resize: none;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 6px;
+  box-sizing: border-box;
+  margin-top: 30px;
 
-const MainWapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  min-height: 100vh;
+  @media screen and (max-width: 600px) {
+    min-height: 120px;
+    font-size: 13px;
+    padding: 10px;
+  }
+`;
+const CardContainer = styled.div`
+  width: 100%;
+  background-color: #f3f4f6;
+  border-radius: 10px 10px 0px 0px;
+  padding: 20px;
+
+  @media screen and (max-width: 600px) {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+  }
+`;
+
+const DeskContainer = styled.div`
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 0px 0px 10px 10px;
+  width: 100%;
+
+  @media screen and (max-width: 600px) {
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #eee;
+    padding: 10px;
+  }
 `;
 
 export const ManagerAdvice = () => {
@@ -60,6 +98,8 @@ export const ManagerAdvice = () => {
   const AdviceDetailselector = useSelector(
     (state: RootState) => state.NoticeDetail.value
   );
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth <= 600; // 모바일 여부 확인
 
   // 컴포넌트가 처음 렌더링될 때와, 추가할 때마다 스크롤을 내리기 위해 useEffect 사용
   useEffect(() => {
@@ -77,7 +117,7 @@ export const ManagerAdvice = () => {
         greeting: greeting,
       })
     );
-  }, [dispatch, greeting, title, type]);
+  }, [dispatch, greeting, title, titleimg.name, type]);
 
   useEffect(() => {
     const beforefileNameMatrix: string[][] = beforefile.map((row) =>
@@ -168,70 +208,96 @@ export const ManagerAdvice = () => {
   };
 
   return (
-    <div style={{ overflow: "Visble" }}>
-      <MainWapper>
-        <MainBox>
-          <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
-          <Wapper>
+    <div style={{ width: "100%" }}>
+      <MainBox>
+        <Fontname>후기 관리</Fontname> {/* Heading should be visible now */}
+        <Wapper>
+          <div style={{ width: "100%", gap: "50px" }}>
             <InputTextBox
               name={"제목"}
               place={"후기 제목을 입력해주세요."}
               Value={title}
               setValue2={setTitle}
             ></InputTextBox>
-            <FileTage name={"대표 이미지"} setValue2={setTitleimg} />
             <SelectBox
               name={"청소 유형"}
               append={cleanType}
               value={type}
               setValue={setType}
             />
+            <FileTage name={"대표 이미지"} setValue2={setTitleimg} />
             <TextAreaBox
               name={"도입 인사"}
               Value={greeting}
               setValue2={setgreeting}
             />
-            {[...Array(count)].map((_, i) => (
-              <div
-                key={i}
-                ref={i === count - 1 ? lastItemRef : null}
-                style={{ gap: "20px" }}
+          </div>
+          {[...Array(count)].map((_, i) => (
+            <CardContainer key={i} ref={i === count - 1 ? lastItemRef : null}>
+              <Fontname
+                style={{
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  fontSize: isMobile ? "16px" : "20px",
+                  width: "100%",
+                  border: isMobile ? "none" : "1px solid #ccc",
+                  padding: isMobile ? "5px 0" : "10px",
+                  borderRadius: isMobile ? "0" : "10px 10px 0px 0px",
+                  margin: "0px",
+                }}
               >
+                게시판 구역 {i + 1}
+              </Fontname>
+              <DeskContainer>
                 <SelectBox
-                  name={"청소 위치(" + cleanspot[i] + ")"}
+                  name={"청소 위치"}
                   append={RoomType}
                   value={cleanspot[i]}
                   updateCleanspot={updateCleanspot}
                   Cleancount={i}
                 />
                 <FileTage
-                  name={"청소 이전(" + cleanspot[i] + ")"}
+                  name={"청소 이전"}
                   Value={beforefile}
                   setBeforeValue={setbeforefile}
                   index={i}
                   type="before"
                 />
                 <FileTage
-                  name={"청소 이후(" + cleanspot[i] + ")"}
+                  name={"청소 이후"}
                   Value={afferfile}
                   setAfferValue={setAfferfile}
                   index={i}
                   type="after"
                 />
-                <TextAreaBox
-                  name={"청소 후기(" + cleanspot[i] + ")"}
-                  place={"청소할 때 힘들었던 점이나 후기 글을 작성해주세요."}
-                  index={i}
-                  Value={Advice}
-                  setValue={SetAdvice}
+
+                <Textareas
+                  placeholder={
+                    "청소할 때 힘들었던 점이나 후기 글을 작성해주세요."
+                  }
+                  value={Advice[i] || ""}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                    const newAdvice = [...Advice];
+                    newAdvice[i] = e.target.value;
+                    SetAdvice(newAdvice);
+                  }}
                 />
-              </div>
-            ))}
-            <ImgTag src={plus} onClick={cleanCount} />
-          </Wapper>
-        </MainBox>
+              </DeskContainer>
+            </CardContainer>
+          ))}
+          <ImgTag
+            src={plus}
+            style={{
+              width: isMobile ? "40px" : "60px",
+              height: isMobile ? "40px" : "60px",
+              marginTop: "20px",
+              cursor: "pointer",
+            }}
+            onClick={cleanCount}
+          />
+        </Wapper>
         <LastButton onClick={handleOnclick}>업로드</LastButton>
-      </MainWapper>
+      </MainBox>
     </div>
   );
 };

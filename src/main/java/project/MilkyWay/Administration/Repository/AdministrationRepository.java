@@ -17,4 +17,6 @@ public interface AdministrationRepository extends JpaRepository<AdministrationEn
     boolean existsByAdministrationDate(LocalDate AdministrationDate);
     AdministrationEntity findByAdministrationDate(LocalDate subissionDate);
     List<AdministrationEntity> findByAdministrationDateBetween(LocalDate start, LocalDate end);
+    void deleteByAdministrationDateBefore(LocalDate dateTime);
+
 }

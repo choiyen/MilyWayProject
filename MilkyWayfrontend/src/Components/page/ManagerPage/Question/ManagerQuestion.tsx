@@ -16,14 +16,8 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const MainWapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
 const MainBox = styled.div`
-  width: 100%;
+  width: 100vw;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -35,11 +29,10 @@ const MainBox = styled.div`
 `;
 
 const Wapper = styled.div`
-  width: auto;
+  width: 50vw;
   background-color: #d3f8ff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Ensure all elements are top-aligned */
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
@@ -47,6 +40,11 @@ const Wapper = styled.div`
   margin-bottom: 50px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+
+  @media screen and (max-width: 600px) {
+    width: 90vw; /* Adjust width for smaller screens */
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
 `;
 
 export const ManagerQuestion = () => {
@@ -199,37 +197,35 @@ export const ManagerQuestion = () => {
   };
   return (
     <div>
-      <MainWapper>
-        <MainBox>
-          <Fontname> Q&A 관리</Fontname>
-          <Wapper>
-            {[...Array(count)].map((_, i) => (
-              <div
-                key={i}
-                ref={i === count - 1 ? lastItemRef : null}
-                style={{ gap: "20px" }}
-              >
-                <InputTextBox
-                  name={"Q&A 질문 (" + (i + 1) + ")"}
-                  place={"예상 질문을 입력해주세요."}
-                  Value={Question}
-                  setValue={SetQuestion}
-                  index={i}
-                ></InputTextBox>
-                <TextAreaBox
-                  name={"Q&A 내용 (" + (i + 1) + ")"}
-                  place={"질문에 대한 내용을 입력해주세요"}
-                  Value={Comment}
-                  setValue={SetComment}
-                  index={i}
-                ></TextAreaBox>
-              </div>
-            ))}
-            <ImgTag src={plus} onClick={cleanCount} />
-          </Wapper>
-        </MainBox>
+      <MainBox>
+        <Fontname> Q&A 관리</Fontname>
+        <Wapper>
+          {[...Array(count)].map((_, i) => (
+            <div
+              key={i}
+              ref={i === count - 1 ? lastItemRef : null}
+              style={{ gap: "50px", width: "100%" }}
+            >
+              <InputTextBox
+                name={"Q&A 질문 (" + (i + 1) + ")"}
+                place={"예상 질문을 입력해주세요."}
+                Value={Question}
+                setValue={SetQuestion}
+                index={i}
+              ></InputTextBox>
+              <TextAreaBox
+                name={"Q&A 내용 (" + (i + 1) + ")"}
+                place={"질문에 대한 내용을 입력해주세요"}
+                Value={Comment}
+                setValue={SetComment}
+                index={i}
+              ></TextAreaBox>
+            </div>
+          ))}
+          <ImgTag src={plus} onClick={cleanCount} />
+        </Wapper>
         <LastButton onClick={handleQuestion}> 재업로드</LastButton>
-      </MainWapper>
+      </MainBox>
     </div>
   );
 };

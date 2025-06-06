@@ -1,4 +1,4 @@
-import { cleanType } from "@/types/cleanspace/cleanType";
+import { cleaning } from "@/types/cleanspace/cleanType";
 import styled from "styled-components";
 import { InquireText } from "./Component/InquireText";
 import { FaFeatherAlt, FaHandsWash, FaStar } from "react-icons/fa";
@@ -40,7 +40,7 @@ export const ButtonMapper = styled.div`
     flex: 1 0 21%; /* 한 줄에 4개 배치 (100% / 4 ≈ 25%, gap 빼고 약간 작게) */
     min-width: 0; /* 줄 넘침 방지 */
     width: 100px;
-    height: 10vh;
+    height: 20vh;
     background-color: aliceblue;
     border: 1px solid black;
     border-radius: 15px;
@@ -56,7 +56,6 @@ const AcrosticBox = styled.div`
 `;
 const CleanButton = styled.button`
   width: 100px;
-  height: 10vh;
   background-color: aliceblue;
   border: 1px solid black;
   border-radius: 15px;
@@ -64,6 +63,15 @@ const CleanButton = styled.button`
   box-sizing: border-box;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  padding: 15px;
+  gap: 10px;
+  font-weight: bolder;
+
+  img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px; /* 아이콘과 텍스트 사이 간격 */
+  }
 
   &:hover {
     background-color: #cceeff; /* 밝고 청결한 느낌의 하늘색 배경 */
@@ -111,9 +119,13 @@ export const MainPage = () => {
           <div>어떤 업무를 하는 지 궁금하지 않으신가요?</div>
         </MainMapper>
         <ButtonMapper>
-          {cleanType.map((data, index) => (
-            <CleanButton key={index} onClick={() => handleClickSerive(data)}>
-              {data}
+          {cleaning.map((data, index) => (
+            <CleanButton
+              key={index}
+              onClick={() => handleClickSerive(data.cleanType)}
+            >
+              <img src={data.icon} alt="" />
+              {data.cleanType}
             </CleanButton>
           ))}
         </ButtonMapper>

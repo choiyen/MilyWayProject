@@ -19,11 +19,15 @@ export const CalendarHeader = ({
       onClick={() =>
         calendar.setCurrentDate(subMonths(calendar.currentDate, 1))
       }
-      className="px-4 py-2 text-lg font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow"
+      className="
+    px-3 py-1 text-sm
+    sm:px-4 sm:py-2 sm:text-lg
+    font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow
+  "
     >
       {"<"} 이전
     </button>
-    <span className="text-2xl font-semibold text-gray-800">
+    <span className="text-2xl font-semibold text-gray-800 max-sm:text-lg">
       {calendar.getCurrentYear()}년 {calendar.getCurrentMonth()}월
     </span>
     <button
@@ -31,7 +35,10 @@ export const CalendarHeader = ({
         calendar.setCurrentDate(subMonths(calendar.currentDate, -1));
         setSelect(null);
       }}
-      className="px-4 py-2 text-lg font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow"
+      className="
+    px-3 py-1 text-sm
+    sm:px-4 sm:py-2 sm:text-lg
+    font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow"
     >
       다음 {">"}
     </button>

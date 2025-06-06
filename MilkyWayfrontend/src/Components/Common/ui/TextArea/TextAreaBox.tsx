@@ -1,3 +1,4 @@
+import { Label } from "@/SCSS/Fixed";
 import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 
@@ -13,34 +14,36 @@ interface SelectBoxProps {
 
 // Textarea 스타일 정의
 const Textarea = styled.textarea`
-  width: 300px !important; /* Tailwind의 영향을 받지 않도록 !important 사용 */
-  min-height: 100px !important;
+  width: 70%;
+  max-width: 650px !important; /* max-width를 680px로 설정 */
+  min-height: 200px !important;
   resize: none;
   padding: 12px 13px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
+  padding: 20px; /* padding을 20px로 설정 */
   line-height: 16px;
+  font-weight: 400;
   box-sizing: border-box; /* box-sizing을 border-box로 설정 */
+
+  @media screen and (max-width: 600px) {
+    width: 70% !important; /* 모바일에서 너비를 100%로 설정 */
+    height: auto !important; /* 모바일에서 높이를 자동으로 설정 */
+    min-height: 100px !important; /* 모바일에서 최소 높이를 100px로 설정 */
+  }
 `;
 
 // TextAreaContainer 스타일 정의
 const TextAreaContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 500px !important; /* Tailwind의 영향을 받지 않도록 !important 사용 */
+  width: 100%;
   justify-content: space-between;
-  gap: 20px;
+  gap: 10px;
   height: auto;
   margin-top: 20px !important; /* margin-top도 !important로 설정 */
   box-sizing: border-box; /* box-sizing을 border-box로 설정 */
-`;
-
-// Label 스타일 정의
-const Label = styled.span`
-  font-size: 20px;
-  line-height: 16px;
-  font-weight: bolder;
-  text-align: left;
+  margin-bottom: 20px !important; /* margin-bottom도 !important로 설정 */
 `;
 
 // TextAreaBox 컴포넌트 정의
@@ -84,14 +87,16 @@ export const TextAreaBox = ({
         <Textarea
           placeholder={place}
           value={Value[index] || ""}
-          onChange={(e) => SetChange(e, index)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            SetChange(e, index)
+          }
           className="block"
         />
       ) : (
         <Textarea
           placeholder={place}
           value={Value || ""}
-          onChange={(e) => SetChange(e)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => SetChange(e)}
           className="block"
         />
       )}

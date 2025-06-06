@@ -2,7 +2,9 @@ import { paths } from "@/config/paths/paths";
 import { GET } from "@/config/request/axios/axiosInstance";
 import { Fontname } from "@/SCSS/Fixed";
 import "@/SCSS/tailwind.scss";
+import { Card, CardList, CardRow } from "@/types/CardType/Card";
 import { GateWayNumber } from "@/types/GateWay/GateWayType";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -92,71 +94,131 @@ const ManagerInquires = () => {
       GateWayNumber.Manager + "/" + `editInquire/${inquireid}` // 문의 상세 페이지로 이동
     );
   };
-
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
   return (
     <div className="flex flex-col items-center h-full gap-10">
       <Fontname> 고객 문의 </Fontname>
-      <div className="text-gray-600 text-lg mt-4">
+      <div className="text-gray-600 text-lg mt-4 max-sm:text-sm">
         고객님들의 문의사항을 확인하고 관리하세요.
       </div>
-      <table>
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 text-left">번호</th>
-            <th className="px-4 py-2 text-left">이름</th>
-            <th className="px-4 py-2 text-left">주소</th>
-            <th className="px-4 py-2 text-left">날짜</th>
-            <th className="px-4 py-2 text-left">상태</th>
-            <th className="px-4 py-2 text-left">전화번호</th>
-            <th className="px-4 py-2 text-left">응답확인</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* 여기에 문의 데이터가 들어갑니다. */}
-          {/* 예시 데이터 */}
+      {isMobile ? (
+        <div style={{ width: "100%" }}>
           {inquiries && inquiries.length > 0 ? (
-            inquiries.map((inquiry, index) => {
-              console.log("문의 데이터ddddd:", inquiry);
-              return (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{inquiry.inquirename}</td>
-                  <td className="px-4 py-2">{inquiry.address}</td>
-                  <td className="px-4 py-2">{inquiry.dateOfInquiry}</td>
-                  <td
-                    className={`px-4 py-2 ${
-                      inquiry.inquireBool ? "text-green-600" : "text-red-500"
-                    }`}
-                  >
-                    {inquiry.inquireBool ? "확인" : "미확인"}
-                  </td>
-                  <td className="px-4 py-2">{inquiry.phoneNumber}</td>
-                  <td className="px-4 py-2">
-                    <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded"
-                      onClick={() => {
-                        // 문의 응답 확인 로직을 여기에 추가합니다.
-                        // 예: API 호출, 상태 업데이트
-                        handlePageChange(inquiry.inquireId);
-                        // 페이지 변경 함수 호출
+            inquiries.map((inquiry, index) => (
+              <CardList key={index}>
+                <Card>
+                  <CardRow>
+                    <span className="label">이름</span>
+                    <span className="value">{inquiry.inquirename}</span>
+                  </CardRow>
+                  <CardRow>
+                    <span className="label">주소</span>
+                    <span className="value">{inquiry.address}</span>
+                  </CardRow>
+                  <CardRow>
+                    <span className="label">날짜</span>
+                    <span className="value">{inquiry.dateOfInquiry}</span>
+                  </CardRow>
+                  <CardRow>
+                    <span className="label">상태</span>
+                    <span
+                      className={`value ${
+                        inquiry.inquireBool ? "text-green-600" : "text-red-500"
+                      }`}
+                    >
+                      {inquiry.inquireBool ? "확인" : "미확인"}
+                    </span>
+                  </CardRow>
+                  <CardRow>
+                    <span className="label">전화번호</span>
+                    <span className="value">{inquiry.phoneNumber}</span>
+                  </CardRow>
+                  <CardRow>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
                       }}
                     >
-                      {/* 문의 응답 확인 버튼 */}
-                      확인
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
+                      <button
+                        className="bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-600 transition w-28 h-10 flex items-center justify-center"
+                        onClick={() => handlePageChange(inquiry.inquireId)}
+                      >
+                        확인
+                      </button>
+                    </div>
+                  </CardRow>
+                </Card>
+              </CardList>
+            ))
           ) : (
-            <tr>
-              <td colSpan={7} className="text-center px-4 py-2">
-                문의 데이터가 없습니다.
-              </td>
-            </tr>
+            <div>문의 데이터가 없습니다.</div>
           )}
-        </tbody>
-      </table>
+        </div>
+      ) : (
+        <table>
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-4 py-2 text-left">번호</th>
+              <th className="px-4 py-2 text-left">이름</th>
+              <th className="px-4 py-2 text-left">주소</th>
+              <th className="px-4 py-2 text-left">날짜</th>
+              <th className="px-4 py-2 text-left">상태</th>
+              <th className="px-4 py-2 text-left">전화번호</th>
+              <th className="px-4 py-2 text-left">응답확인</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* 여기에 문의 데이터가 들어갑니다. */}
+            {/* 예시 데이터 */}
+            {inquiries && inquiries.length > 0 ? (
+              inquiries.map((inquiry, index) => {
+                console.log("문의 데이터ddddd:", inquiry);
+                return (
+                  <tr key={index} className="hover:bg-gray-50">
+                    <td className="px-4 py-2">{index + 1}</td>
+                    <td className="px-4 py-2">{inquiry.inquirename}</td>
+                    <td className="px-4 py-2">{inquiry.address}</td>
+                    <td className="px-4 py-2">{inquiry.dateOfInquiry}</td>
+                    <td
+                      className={`px-4 py-2 ${
+                        inquiry.inquireBool ? "text-green-600" : "text-red-500"
+                      }`}
+                    >
+                      {inquiry.inquireBool ? "확인" : "미확인"}
+                    </td>
+                    <td className="px-4 py-2">{inquiry.phoneNumber}</td>
+                    <td className="px-4 py-2">
+                      <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                        onClick={() => {
+                          // 문의 응답 확인 로직을 여기에 추가합니다.
+                          // 예: API 호출, 상태 업데이트
+                          handlePageChange(inquiry.inquireId);
+                          // 페이지 변경 함수 호출
+                        }}
+                      >
+                        {/* 문의 응답 확인 버튼 */}
+                        확인
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={7} className="text-center px-4 py-2">
+                  문의 데이터가 없습니다.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      )}
+
       <div
         style={{
           display: "flex",
