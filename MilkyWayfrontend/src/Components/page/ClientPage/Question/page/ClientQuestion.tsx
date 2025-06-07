@@ -8,10 +8,12 @@ import { useDispatch } from "react-redux";
 import { setQuestionData } from "@/config/request/ReduxList/QuestionsReducer";
 import { ExampleQuestion } from "./ui/ExampleQuestion";
 import CommentQuestion from "./ui/CommentQuestion";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
 
 // 페이지 전체 컨테이너
 const PageContainer = styled.div`
   width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -41,6 +43,11 @@ const QuestionTitle = styled.div`
   margin-bottom: 42px;
   margin-top: 50px;
   gap: 10px;
+  @media screen and (max-width: 600px) {
+    font-size: 25px;
+    margin-bottom: 25px;
+    margin-top: 30px;
+  }
 `;
 
 // 설명 텍스트
@@ -86,6 +93,9 @@ export const ClientQuestion = () => {
     });
   }, [dispatch]);
 
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
+
   return (
     <PageContainer>
       <QuestionCampaign>
@@ -95,8 +105,9 @@ export const ClientQuestion = () => {
         </QuestionTitle>
         <Divider />
         <QuestionSubtitle>
-          고객 여러분께서 자주 물어보는 질문을 정리해드렸어요 😊
-          <br />
+          {isMobile
+            ? "고객님들이 자주 물어보셨어요 😊"
+            : "고객분들께서 자주 물어보는 질문을 정리해드렸어요 😊"}
         </QuestionSubtitle>
       </QuestionCampaign>
       <ExampleQuestion Question={Question} />

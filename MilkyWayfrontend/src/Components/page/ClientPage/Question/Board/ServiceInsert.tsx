@@ -13,9 +13,11 @@ import Swal from "sweetalert2";
 const ServiceInsert = () => {
   const [password, setpassword] = useState<string>("");
   const [Check, setCheck] = useState<string>("");
+
   const nativeGate = useNavigate();
   const dispatch = useDispatch();
   const BoardData = useSelector((state: RootState) => state.Board.value);
+
   const checkEmptyFields = () => {
     if (
       BoardData.title === "" ||
@@ -88,7 +90,7 @@ const ServiceInsert = () => {
       nativeGate(-1);
     } else {
       toast.error("사용자가 취소를 눌렀습니다.", {
-        position: "top-right",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -101,17 +103,16 @@ const ServiceInsert = () => {
 
   return (
     <div className="flex w-full items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-md p-8 space-y-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800">
+      <div className="w-full max-w-2xl bg-white rounded-xl shadow-md p-8 space-y-8 max-sm:p-4 max-sm:space-y-4">
+        <h2 className="text-3xl font-bold text-center text-gray-800 max-sm:text-xl max-sm:mb-2">
           질문 등록
         </h2>
 
-        <div className="space-y-6">
-          {/* 제목 입력 */}
-          <div className="flex items-center">
+        <div className="space-y-6 max-sm:space-y-4">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="title"
-              className="w-24 text-lg font-medium text-gray-700"
+              className="text-lg font-medium text-gray-700 max-sm:text-base"
             >
               제목
             </label>
@@ -120,16 +121,18 @@ const ServiceInsert = () => {
               type="text"
               value={BoardData.title}
               placeholder="제목을 입력하세요"
-              className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 max-sm:px-3 max-sm:py-1 max-sm:text-sm"
               onChange={(e) =>
                 dispatch(setBoardData({ ...BoardData, title: e.target.value }))
               }
             />
           </div>
-          <div className="flex items-center">
+
+          {/* 비밀번호 입력 */}
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="password"
-              className="w-24 text-lg font-medium text-gray-700"
+              className="text-lg font-medium text-gray-700 max-sm:text-base"
             >
               비밀번호
             </label>
@@ -137,32 +140,35 @@ const ServiceInsert = () => {
               id="password"
               type="password"
               value={password}
-              placeholder="제목을 입력하세요"
-              className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="비밀번호를 입력하세요"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 max-sm:px-3 max-sm:py-1 max-sm:text-sm"
               onChange={(e) => setpassword(e.target.value)}
             />
           </div>
-          <div className="flex items-center">
+
+          {/* 비밀번호 확인 */}
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="check"
-              className="w-24 text-lg font-medium text-gray-700"
+              className="text-lg font-medium text-gray-700 max-sm:text-base"
             >
-              비번확인
+              비밀번호 확인
             </label>
             <input
               id="check"
               type="password"
               value={Check}
               placeholder="비밀번호를 다시 입력하세요"
-              className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 max-sm:px-3 max-sm:py-1 max-sm:text-sm"
               onChange={(e) => setCheck(e.target.value)}
             />
           </div>
+
           {/* 내용 입력 */}
-          <div className="flex items-start">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="commit"
-              className="mt-30 w-24 pt-2 text-lg font-medium text-gray-700"
+              className="text-lg font-medium text-gray-700 max-sm:text-base"
             >
               내용
             </label>
@@ -170,7 +176,7 @@ const ServiceInsert = () => {
               id="commit"
               value={BoardData.content}
               placeholder="질문 내용을 입력하세요"
-              className="flex-1 h-60 border border-gray-300 rounded-md px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full h-60 border border-gray-300 rounded-md px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 max-sm:h-40 max-sm:px-3 max-sm:py-1 max-sm:text-sm"
               onChange={(e) =>
                 dispatch(
                   setBoardData({ ...BoardData, content: e.target.value })
@@ -180,16 +186,17 @@ const ServiceInsert = () => {
           </div>
         </div>
 
-        <div className="flex justify-evenly gap-4 pt-6">
+        {/* 버튼 */}
+        <div className="flex flex-col sm:flex-row gap-4 pt-6 justify-evenly">
           <button
             onClick={handleBoard}
-            className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition"
+            className="w-full sm:w-auto bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition"
           >
             생성
           </button>
           <button
             onClick={handleCancel}
-            className="bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition"
+            className="w-full sm:w-auto bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition"
           >
             취소
           </button>
@@ -199,5 +206,4 @@ const ServiceInsert = () => {
   );
 };
 
-// 고객 질문 등록 페이지
 export default ServiceInsert;

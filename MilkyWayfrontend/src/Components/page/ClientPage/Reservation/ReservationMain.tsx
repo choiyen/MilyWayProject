@@ -148,78 +148,91 @@ const ReservationMain = () => {
   };
 
   return (
-    <div className="px-4 py-8 flex flex-col items-center justify-center">
-      <h1 className="p-11 text-4xl sm:text-5xl font-bold text-gray-800 text-center mb-8 after:content-[''] after:block after:w-96 after:h-1 after:mt-10 after:bg-blue-500 after:mx-auto after:mt-2">
+    <div className="max-w-[100vw] px-4 py-8 flex flex-col items-center justify-center">
+      <h1
+        className="p-11 text-4xl max-sm:text-2xl sm:text-5xl font-bold text-gray-800 text-center mb-8
+  after:content-[''] after:block after:w-96 max-sm:after:w-40 after:h-1 after:mt-10 after:bg-blue-500 after:mx-auto after:mt-2"
+      >
         온라인 예약
       </h1>
-      <div className="flex items-center justify-center w-full mb-6 gap-x-28">
-        <label htmlFor="user" className="mr-4 text-lg font-bold text-gray-700">
-          개인정보 처리 동의
+      <div className="flex items-center justify-between  max-sm:w-[100%] w-[70%] mb-3 gap-x-10 flex-wrap max-sm:gap-x-6">
+        <label
+          htmlFor="user"
+          className="text-base sm:text-lg font-bold text-gray-700 whitespace-nowrap"
+        >
+          개인정보 동의
         </label>
         <div id="user">
           <button
             onClick={() => setIsModalOpen(true)}
             disabled={isAgreed}
-            className={`px-6 py-2 ${
+            className={`px-5 py-2 sm:px-6 sm:py-2 text-sm sm:text-base ${
               isAgreed ? "bg-green-500" : "bg-blue-500"
-            } text-white rounded-md hover:bg-blue-600`}
+            } text-white rounded-md hover:bg-blue-600 whitespace-nowrap`}
           >
             {isAgreed ? "개인정보 처리 동의 완료" : "개인정보 처리방침 보기"}
           </button>
         </div>
       </div>
-      <SelectDate
-        name={"예약 날짜"}
-        change={reservationData.SubssionDate}
-        setValue={(date: Date | null) => {
-          dispatch(
-            setReservationData({
-              ...reservationData,
-              SubssionDate: date ? date.toISOString().split("T")[0] : "",
-            })
-          );
-        }}
-        bookedDates={dateNOT}
-      />
-      <SelectBox
-        name={"서비스명"}
-        append={cleanType}
-        value={reservationData.type}
-        setValue={(value: string) =>
-          dispatch(setReservationData({ ...reservationData, type: value }))
-        }
-      />
-      <InputTextBox
-        name={"이름"}
-        Value={reservationData.name}
-        setValue2={(value: string) =>
-          dispatch(setReservationData({ ...reservationData, name: value }))
-        }
-      />
-      <InputTextBox
-        name={"고객 전화번호"}
-        Value={reservationData.phone}
-        setValue2={(value: string) =>
-          dispatch(setReservationData({ ...reservationData, phone: value }))
-        }
-      />
-      <div>
-        <InputTextBox
-          name={"실제 평수"}
-          Value={reservationData.acreage}
-          setValue2={(value: string) =>
-            dispatch(setReservationData({ ...reservationData, acreage: value }))
-          }
+      <div className="w-[70%] max-sm:w-[100%] flex flex-col">
+        <SelectDate
+          name={"예약날짜"}
+          change={reservationData.SubssionDate}
+          setValue={(date: Date | null) => {
+            dispatch(
+              setReservationData({
+                ...reservationData,
+                SubssionDate: date ? date.toISOString().split("T")[0] : "",
+              })
+            );
+          }}
+          bookedDates={dateNOT}
         />
-        <div className="text-red-600">[아파트 외 전용 및 실평수 기재]</div>
       </div>
 
-      <InputTextBox name={"주소"} Value={Address} setValue2={setAddress} />
-      <InputTextBox
-        name={"상세 주소"}
-        Value={AddressDetail}
-        setValue2={setAddressDetail}
-      />
+      <div className="w-[70%] max-sm:w-[100%] flex flex-col gap-5">
+        <SelectBox
+          name={"서비스명"}
+          append={cleanType}
+          value={reservationData.type}
+          setValue={(value: string) =>
+            dispatch(setReservationData({ ...reservationData, type: value }))
+          }
+        />
+        <InputTextBox
+          name={"이름"}
+          Value={reservationData.name}
+          setValue2={(value: string) =>
+            dispatch(setReservationData({ ...reservationData, name: value }))
+          }
+        />
+        <InputTextBox
+          name={"고객 전화번호"}
+          Value={reservationData.phone}
+          setValue2={(value: string) =>
+            dispatch(setReservationData({ ...reservationData, phone: value }))
+          }
+        />
+        <div>
+          <InputTextBox
+            name={"실제 평수"}
+            Value={reservationData.acreage}
+            setValue2={(value: string) =>
+              dispatch(
+                setReservationData({ ...reservationData, acreage: value })
+              )
+            }
+          />
+          <div className="text-red-600">[아파트 외 전용 및 실평수 기재]</div>
+        </div>
+
+        <InputTextBox name={"주소"} Value={Address} setValue2={setAddress} />
+        <InputTextBox
+          name={"상세 주소"}
+          Value={AddressDetail}
+          setValue2={setAddressDetail}
+        />
+      </div>
       <LastButton onClick={handlePost}>예약 신청</LastButton>
 
       {isModalOpen && (

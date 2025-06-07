@@ -1,6 +1,6 @@
 import { paths } from "@/config/paths/paths";
 import { GET, POST } from "@/config/request/axios/axiosInstance";
-import { LastButton } from "@/SCSS/Fixed";
+import { LastButton, SmallButton } from "@/SCSS/Fixed";
 import { ReservationType } from "@/types/Feature/Address/Reservation";
 import { GateWayNumber, ManagerGateWayType } from "@/types/GateWay/GateWayType";
 import { useEffect, useState } from "react";
@@ -8,11 +8,19 @@ import { useNavigate } from "react-router-dom";
 import "@/SCSS/tailwind.scss";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
+import { Card, CardList, CardRow } from "@/types/CardType/Card";
+import styled from "styled-components";
 
 type ReservationProps = {
   selectDate: string;
   handleCancel: (id: string) => void;
 };
+
+const CardRowReset = styled(CardRow)`
+  display: flex;
+  flex-direction: column;
+`;
 
 const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
   const [Reservation, setReservation] = useState<ReservationType>();
@@ -123,41 +131,104 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
   const Classnametheads =
     "px-4 py-3 text-left text-sm font-semibold text-gray-700 border border-gray-300 text-center";
   const Classtbodys = "px-4 py-3 text-sm text-gray-800 border border-gray-300";
+
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
   return (
     <div>
       <div>
-        {Reservation && (
-          <div className="p-6">
-            <table className="min-w-full divide-y divide-gray-200 shadow rounded-2xl overflow-hidden">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className={Classnametheads}>청소유형</th>
-                  <th className={Classnametheads}>의뢰자명</th>
-                  <th className={Classnametheads}>주소</th>
-                  <th className={Classnametheads}>전화번호</th>
-                  <th className={Classnametheads}>예약요청일</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-100">
-                <tr>
-                  <td className="px-4 py-3 text-sm text-gray-800">
-                    {Reservation.type}
-                  </td>
-                  <td className={Classtbodys}>{Reservation.name}</td>
-                  <td className={Classtbodys}>{Reservation.Address}</td>
-                  <td className={Classtbodys}>{Reservation.phone}</td>
-                  <td className={Classtbodys}>{Reservation.SubssionDate}</td>
-                </tr>
-              </tbody>
-            </table>
+        {Reservation &&
+          (isMobile ? (
+            <CardList>
+              <Card>
+                <CardRow>
+                  <span>청소 유형</span>
+                  <span>{Reservation.type}</span>
+                </CardRow>
+                <CardRow>
+                  <span>의뢰자명</span>
+                  <span>{Reservation.name}</span>
+                </CardRow>
+                <CardRowReset>
+                  <div
+                    style={{
+                      display: "table",
+                      width: "100%",
+                      borderCollapse: "collapse",
+                      border: "1px solid #ccc",
+                    }}
+                  >
+                    <div style={{ display: "table-row" }}>
+                      <div
+                        style={{
+                          display: "table-cell",
+                          width: "20%",
+                          fontWeight: "bold",
+                          backgroundColor: "#f7f7f7",
+                          border: "1px solid #ccc",
+                          textAlign: "center",
+                          padding: "8px",
+                          lineHeight: "auto",
+                        }}
+                      >
+                        주소
+                      </div>
+                      <div
+                        style={{
+                          display: "table-cell",
+                          width: "80%",
+                          border: "1px solid #ccc",
+                          padding: "8px",
+                        }}
+                      >
+                        {Reservation.Address}
+                      </div>
+                    </div>
+                  </div>
+                </CardRowReset>
+                <CardRow>
+                  <span>전화번호</span>
+                  <span>{Reservation.phone}</span>
+                </CardRow>
+              </Card>
+            </CardList>
+          ) : (
+            <div className="p-6">
+              <table className="min-w-full divide-y divide-gray-200 shadow rounded-2xl overflow-hidden">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className={Classnametheads}>청소유형</th>
+                    <th className={Classnametheads}>의뢰자명</th>
+                    <th className={Classnametheads}>주소</th>
+                    <th className={Classnametheads}>전화번호</th>
+                    <th className={Classnametheads}>예약요청일</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-4 py-3 text-sm text-gray-800">
+                      {Reservation.type}
+                    </td>
+                    <td className={Classtbodys}>{Reservation.name}</td>
+                    <td className={Classtbodys}>{Reservation.Address}</td>
+                    <td className={Classtbodys}>{Reservation.phone}</td>
+                    <td className={Classtbodys}>{Reservation.SubssionDate}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ))}
+        {isMobile ? (
+          <div className="flex items-center justify-between">
+            <SmallButton onClick={handleAddress}>예약 확정</SmallButton>
+            <SmallButton onClick={handleCancel}>예약 취소</SmallButton>
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <LastButton onClick={handleAddress}>예약 확정</LastButton>
+            <LastButton onClick={handleCancel}>예약 취소</LastButton>
           </div>
         )}
-        <div className="flex items-center justify-between">
-          <LastButton onClick={handleAddress}>예약 확정</LastButton>
-          <LastButton onClick={() => handleCancel("some-id")}>
-            예약 취소
-          </LastButton>
-        </div>
       </div>
     </div>
   );
