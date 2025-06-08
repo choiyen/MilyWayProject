@@ -84,7 +84,7 @@ export const ComonProfile = () => {
           드립니다.
         </Line2>
         <Line3>고객, 여러분의 방문을 진심으로 환영합니다.</Line3>
-        <AboutLink to="/Client/Info">About</AboutLink>
+        <AboutLink to="/Client/Service">About</AboutLink>
       </TextContainer>
     </ProfileWrapper>
   );

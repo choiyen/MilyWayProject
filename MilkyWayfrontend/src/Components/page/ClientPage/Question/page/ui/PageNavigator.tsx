@@ -20,7 +20,7 @@ export const PageNavigator = ({
     <div>
       <div className="flex justify-center mt-3">
         <div
-          className={`flex items-center ${
+          className={`flex mb-10 items-center ${
             isMobile ? "space-x-2 gap-2" : "space-x-6 gap-10"
           }`}
         >

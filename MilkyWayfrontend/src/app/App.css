@@ -1,14 +1,16 @@
 body {
   margin: 0;
-  padding: auto;
+  padding: 0; /* 또는 필요시 1rem 등 */
 }
 
 .custom-toast {
-  width: 400px !important; /* 너비 변경 */
+  width: 80%;
+  max-width: 400px;
   height: auto;
-  font-size: 16px;
+  font-size: 1rem;
+  margin: 1rem auto; /* 중앙 정렬용 */
 }
 
 .custom-toast-body {
-  font-size: 18px; /* 내부 텍스트 크기 조정 */
+  font-size: 1.125rem;
 }

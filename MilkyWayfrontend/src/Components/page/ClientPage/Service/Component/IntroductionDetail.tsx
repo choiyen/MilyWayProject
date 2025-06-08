@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { TabService } from "../Type/IntroductionService";
 import ServiceScopeList from "./ServiceScopeList";
 
@@ -8,10 +9,18 @@ interface IntroductionDetailProps {
     Introduction: string;
     ServiceList: TabService[];
   };
-  select: string;
 }
+const ImageType = styled.img`
+  width: 70%;
+  height: 40vh;
+  object-fit: cover;
 
-const IntroductionDetail = ({ data, select }: IntroductionDetailProps) => {
+  @media screen and (max-width: 600px) {
+    width: 80%;
+    height: 30vh;
+  }
+`;
+const IntroductionDetail = ({ data }: IntroductionDetailProps) => {
   return (
     <div
       style={{
@@ -33,11 +42,7 @@ const IntroductionDetail = ({ data, select }: IntroductionDetailProps) => {
       >
         서비스 안내
       </div>
-      <img
-        src={data.defaultImg}
-        alt={data.Service}
-        style={{ width: "70%", height: "40vh", objectFit: "cover" }}
-      />
+      <ImageType src={data.defaultImg} alt={data.Service} />
       <p
         style={{
           width: "70%",
@@ -48,12 +53,8 @@ const IntroductionDetail = ({ data, select }: IntroductionDetailProps) => {
       >
         {data.Introduction}
       </p>
-      {select !== "전체보기" && (
-        <ServiceScopeList
-          Service={data.Service}
-          ServiceList={data.ServiceList}
-        />
-      )}
+
+      <ServiceScopeList Service={data.Service} ServiceList={data.ServiceList} />
     </div>
   );
 };

@@ -11,8 +11,9 @@ const QuestionTitle = styled.h2`
   margin: 50px 0 30px;
   gap: 12px;
 
-  @media screen and (max-width: 600px) {
-    font-size: 24px;
+  @media screen and (max-width: 800px) {
+    font-size: 25px;
+    margin: 10px 0 20px;
   }
 `;
 
@@ -35,6 +36,10 @@ const InfoText = styled.p`
   max-width: 600px;
   margin-bottom: 25px;
   line-height: 1.6;
+
+  @media screen and (max-width: 600px) {
+    font-size: 15px;
+  }
 `;
 
 const CallButton = styled.a`
@@ -59,8 +64,8 @@ const CallButton = styled.a`
     flex-shrink: 0;
   }
 
-  @media screen and (max-width: 600px) {
-    font-size: 20px;
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
   }
 `;
 

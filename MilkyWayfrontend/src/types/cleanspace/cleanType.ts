@@ -24,14 +24,9 @@ export const cleaning = [
     icon: advice,
   },
   {
-    cleanType: "입주청소",
-    description: "새로운 집으로 이사할 때 필요한 청소 서비스입니다.",
-    icon: tenants,
-  },
-  {
-    cleanType: "이사청소",
-    description: "이사 전후에 필요한 청소 서비스입니다.",
-    icon: movein,
+    cleanType: "부분청소",
+    description: "특정 부분만 청소하는 서비스입니다.",
+    icon: depart,
   },
   {
     cleanType: "계단청소",
@@ -55,8 +50,13 @@ export const cleaning = [
     icon: construction,
   },
   {
-    cleanType: "부분청소",
-    description: "특정 부분만 청소하는 서비스입니다.",
-    icon: depart,
+    cleanType: "이사청소",
+    description: "이사 전후에 필요한 청소 서비스입니다.",
+    icon: movein,
+  },
+  {
+    cleanType: "입주청소",
+    description: "새로운 집으로 이사할 때 필요한 청소 서비스입니다.",
+    icon: tenants,
   },
 ];

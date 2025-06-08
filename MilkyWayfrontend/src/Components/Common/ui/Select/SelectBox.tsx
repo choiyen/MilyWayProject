@@ -19,7 +19,7 @@ const Select = styled.select`
     outline: 3px solid #f8e4ff;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 100%;
     max-width: 260px; /* 모바일에서 최대 너비 설정 */
     height: 40px; /* 모바일에서 높이 설정 */
@@ -35,7 +35,7 @@ const SelectContainer = styled.div`
   margin-top: 20px;
   gap: 52px;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 100%;
     gap: 10px; /* 모바일에서 간격 조정 */
   }

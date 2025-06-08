@@ -19,6 +19,7 @@ import {
 } from "./API/ReservationAPI";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { AddressBox } from "@/Components/Common/ui/Select/AddressBox";
 
 const ReservationMain = () => {
   const dispatch = useDispatch();
@@ -158,7 +159,7 @@ const ReservationMain = () => {
       <div className="flex items-center justify-between  max-sm:w-[100%] w-[70%] mb-3 gap-x-10 flex-wrap max-sm:gap-x-6">
         <label
           htmlFor="user"
-          className="text-base sm:text-lg font-bold text-gray-700 whitespace-nowrap"
+          className="text-xl font-bold text-black whitespace-nowrap max-sm:text-sm"
         >
           개인정보 동의
         </label>
@@ -213,7 +214,27 @@ const ReservationMain = () => {
             dispatch(setReservationData({ ...reservationData, phone: value }))
           }
         />
-        <div>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "100vw",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <AddressBox
+            name={"주소"}
+            append={["경상남도", "부산광역시"]}
+            value={Address}
+            setValue={setAddress}
+          />
+        </div>
+        <InputTextBox
+          name={"상세 주소"}
+          Value={AddressDetail}
+          setValue2={setAddressDetail}
+        />
+        <div style={{ margin: "0px" }}>
           <InputTextBox
             name={"실제 평수"}
             Value={reservationData.acreage}
@@ -225,13 +246,6 @@ const ReservationMain = () => {
           />
           <div className="text-red-600">[아파트 외 전용 및 실평수 기재]</div>
         </div>
-
-        <InputTextBox name={"주소"} Value={Address} setValue2={setAddress} />
-        <InputTextBox
-          name={"상세 주소"}
-          Value={AddressDetail}
-          setValue2={setAddressDetail}
-        />
       </div>
       <LastButton onClick={handlePost}>예약 신청</LastButton>
 
