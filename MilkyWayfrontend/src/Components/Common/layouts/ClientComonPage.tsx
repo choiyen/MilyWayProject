@@ -5,6 +5,7 @@ import { ComonProfile } from "@/Components/page/ClientPage/Comon/ComonProfile";
 import { ClientPhoneNumber } from "./ClientPhoneNumber";
 import styled from "styled-components";
 import { RoundWidgets } from "@/Components/page/ClientPage/Main/Component/RoundWidgets";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
 
 const MobileBox = styled.div`
   @media (max-width: 1044px) {
@@ -13,6 +14,8 @@ const MobileBox = styled.div`
 `;
 
 export const ClientComonPage = () => {
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
   return (
     <div>
       <FixedClientHeader>
@@ -21,7 +24,7 @@ export const ClientComonPage = () => {
         </MobileBox>
         <Outlet />
         <ClientPhoneNumber />
-        <RoundWidgets />
+        {isMobile ? null : <RoundWidgets />}
         <Footer />
       </FixedClientHeader>
     </div>

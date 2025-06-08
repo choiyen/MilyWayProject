@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DatePickerProps } from "react-datepicker";
 import "./path-to-your-css-file.css";
+import { Label } from "@/SCSS/Fixed";
 
 interface SelectBoxProps {
   name: string;
@@ -19,22 +20,25 @@ const RadioBoxContainer = styled.div`
   align-items: center;
   width: 500px;
   height: auto;
+  width: 100%;
   margin-top: 20px;
-`;
 
-const Label = styled.span`
-  font-size: 20px;
-  line-height: 16px;
-  font-weight: bolder;
-  margin-right: 80px;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 const DateInput = styled(
   DatePicker as unknown as React.ComponentType<DatePickerProps>
 )`
-  width: 300px;
+  width: 600px;
   height: 50px;
   border: 1px solid black;
+
+  @media screen and (max-width: 600px) {
+    width: 270px;
+    height: 40px;
+  }
 `;
 
 export const SelectDate = ({

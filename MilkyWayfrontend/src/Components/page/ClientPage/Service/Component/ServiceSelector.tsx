@@ -1,6 +1,48 @@
 import { Key } from "react";
 import { theme } from "@/SCSS/typecss";
 import { Service, ServiceProfiling } from "../ServiceProfileing";
+import styled from "styled-components";
+
+const ImageCardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 30px;
+  justify-items: center;
+
+  @media screen and (max-width: 800px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 20px;
+  }
+`;
+
+interface ImageCardProps {
+  image: string;
+  onClick?: () => void;
+  children?: React.ReactNode;
+}
+
+const ImageCard = styled.div<ImageCardProps>`
+  width: 400px;
+  height: 180px;
+  background-image: url(${(props) => props.image});
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: flex-end;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+
+  @media screen and (max-width: 800px) {
+    width: 170px;
+    font-size: 12px;
+  }
+`;
 
 const ServiceSelector = ({
   setSelect,
@@ -8,37 +50,15 @@ const ServiceSelector = ({
   setSelect: (service: string) => void;
 }) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "20px",
-        padding: "40px",
-        justifyItems: "center",
-      }}
-    >
+    <ImageCardContainer>
       {ServiceProfiling.map((service: Service, index: Key) => (
-        <div
+        <ImageCard
           key={index}
-          style={{
-            width: "400px",
-            height: "180px",
-            backgroundImage: `url(${service.image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            borderRadius: "12px",
-            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-            display: "flex",
-            alignItems: "flex-end",
-            padding: "10px",
-            cursor: "pointer",
-          }}
+          image={service.image}
           onClick={() => setSelect(service.Service)}
         >
           <div
             style={{
-              fontWeight: "bold",
-              fontSize: "14px",
               color: `${theme.colors.charcoalBlack}`,
               backgroundColor: "rgba(198, 169, 169, 0.4)",
               padding: "6px 10px",
@@ -52,9 +72,9 @@ const ServiceSelector = ({
               {service.target}
             </span>
           </div>
-        </div>
+        </ImageCard>
       ))}
-    </div>
+    </ImageCardContainer>
   );
 };
 

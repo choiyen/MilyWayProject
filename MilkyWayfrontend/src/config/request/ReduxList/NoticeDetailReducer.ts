@@ -7,7 +7,7 @@ const initialNoticeDetailStateValue: NoticeDetailType[] = [
     direction: "",
     beforeURL: [],
     afterURL: [],
-    Advice: "",
+    comment: "",
   },
 ];
 export const NoticeDetailSave = createSlice({

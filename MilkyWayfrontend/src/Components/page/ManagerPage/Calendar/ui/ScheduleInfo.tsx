@@ -45,7 +45,7 @@ export const ScheduleInfo = ({
 
   const handleAdminDelete = async (id: string) => {
     await administrationDeletefetchData(id);
-    await fetchData(); // 상태 갱신
+    fetchData(); // 상태 갱신
   };
   const width = useWindowWidth();
   const isMobile = width <= 600;
@@ -113,44 +113,82 @@ export const ScheduleInfo = ({
           )}
         </div>
       ) : matched2.length > 0 ? (
-        matched2.map((item, index) => (
-          <div
-            key={index}
-            className="bg-red-100 border border-red-400 text-red-800 rounded-lg px-6 py-4 mt-4 w-8/12 mx-auto text-center"
-          >
-            <p className="text-lg font-semibold mb-1">
-              선택한 날짜:{" "}
-              <span className="font-bold text-blue-700">
-                {item.administrationDate}
-              </span>
-            </p>
-            {item.adminstrationType == "휴일" ? (
-              <div>
-                <p className="text-md">
-                  관리자 님께서 {item.adminstrationType}로 지정해놓으신
-                  날입니다.
-                </p>
-                <SmallButton
-                  onClick={() => handleAdminDelete(item.administrationId ?? "")}
-                >
-                  휴일 삭제
-                </SmallButton>
-              </div>
-            ) : (
-              <div>
+        matched2.map((item, index) =>
+          isMobile ? (
+            <div key={index}>
+              <p className="text-lg font-semibold mb-1 text-center">
+                선택한 날짜:
+                <span className="font-bold text-blue-700">
+                  {item.administrationDate}
+                </span>
+              </p>
+              {item.adminstrationType === "휴일" ? (
+                <div className="text-center">
+                  <p className="text-md">
+                    관리자 님께서 {item.adminstrationType}로 지정해놓으신
+                    날입니다.
+                  </p>
+                  <SmallButton
+                    onClick={() =>
+                      handleAdminDelete(item.administrationId ?? "")
+                    }
+                  >
+                    휴일 삭제
+                  </SmallButton>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-md text-center pt-5 gap-9 mb-6">
+                    고객 님의 예약이 들어온 날짜이니 확인 부탁드립니다.
+                  </p>
+                  <ReservationFind
+                    selectDate={item.administrationDate}
+                    handleCancel={() =>
+                      handleAdminDelete(item.administrationId ?? "")
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <div
+              key={index}
+              className="bg-red-100 border border-red-400 text-red-800 rounded-lg px-6 py-4 mt-4 w-8/12 mx-auto text-center"
+            >
+              <p className="text-lg font-semibold mb-1">
+                선택한 날짜:
+                <span className="font-bold text-blue-700">
+                  {item.administrationDate}
+                </span>
+              </p>
+              {item.adminstrationType === "휴일" ? (
+                <div>
+                  <p className="text-md">
+                    관리자 님께서 {item.adminstrationType}로 지정해놓으신
+                    날입니다.
+                  </p>
+                  <SmallButton
+                    onClick={() =>
+                      handleAdminDelete(item.administrationId ?? "")
+                    }
+                  >
+                    휴일 삭제
+                  </SmallButton>
+                </div>
+              ) : (
                 <p className="text-md">
                   고객 님의 예약이 들어온 날짜이니 확인 부탁드립니다.
+                  <ReservationFind
+                    selectDate={item.administrationDate}
+                    handleCancel={() =>
+                      handleAdminDelete(item.administrationId ?? "")
+                    }
+                  />
                 </p>
-                <ReservationFind
-                  selectDate={item.administrationDate}
-                  handleCancel={() =>
-                    handleAdminDelete(item.administrationId ?? "")
-                  }
-                />
-              </div>
-            )}
-          </div>
-        ))
+              )}
+            </div>
+          )
+        )
       ) : (
         <div className="bg-red-100 border max-sm:text-sm border-green-400 text-blue-900 font-bold rounded-lg px-6 py-4 mt-4 w-8/12 h-[100px] mx-auto text-center flex items-center justify-center">
           {isMobile ? (

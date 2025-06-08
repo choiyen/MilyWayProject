@@ -8,17 +8,27 @@ import { theme } from "@/SCSS/typecss";
 import { Notice, SelectType } from "./Component/type";
 import ServiceSelector from "./Component/ServiceSelector";
 import IntroductionDetail from "./Component/IntroductionDetail";
-import ReviewBanner from "./Component/ReviewBanner";
 import EmptyReview from "./Component/EmptyReview";
 import ReviewCards from "./Component/ReviewCards";
 import { PageNavigator } from "../Question/page/ui/PageNavigator";
 import { toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
+import { ReviewBanner } from "./Component/ReviewBanner";
 const Fontname2 = styled.div`
   color: ${theme.colors.charcoalBlack};
   font-size: 25px;
   margin-bottom: 30px;
   font-weight: bolder;
+
+  @media screen and (max-width: 600px) {
+    font-size: 22px;
+  }
+`;
+const FontComment = styled.div`
+  font-size: 20px;
+  @media screen and (max-width: 600px) {
+    font-size: 14px;
+  }
 `;
 
 const ServiceProFile = () => {
@@ -88,23 +98,29 @@ const ServiceProFile = () => {
   }, [select, CurrentPage]);
 
   return (
-    <div style={{ backgroundColor: "#f9f6f1", padding: "15px" }}>
-      <div style={{ textAlign: "center" }}>
+    <div
+      style={{
+        backgroundColor: "#f9f6f1",
+        width: "100%",
+        maxWidth: "100vw",
+      }}
+    >
+      <div style={{ textAlign: "center", padding: "20px" }}>
         <Fontname2>
           <span style={{ color: "#c88b6f" }}>가족처럼 </span>
           포근하고
           <span style={{ color: "#609ea2" }}> 기계처럼 </span>
           꼼꼼한 Care Service
         </Fontname2>
-        <div style={{ fontSize: "15px" }}>
+        <FontComment>
           은하수 홈케어의 차별화된 청소 서비스를 한번 경험해보세요!
-        </div>
+        </FontComment>
       </div>
       <ServiceSelector setSelect={setSelect} />
       <div style={{ backgroundColor: "#F0F4F8", width: "100%" }}>
         {selectIntroduction?.map((intro, idx) => (
           <div key={idx}>
-            <IntroductionDetail data={intro} select={select} />
+            <IntroductionDetail data={intro} />
             <ReviewBanner />
             {notices && notices.length > 0 ? (
               <div>

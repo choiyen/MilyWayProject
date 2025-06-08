@@ -29,7 +29,7 @@ export const Fontname = styled.div`
   margin-top: 30px;
   font-weight: bolder;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     font-size: 25px; /* Adjust font size for smaller screens */
   }
 `;
@@ -50,7 +50,7 @@ export const StyledCalendarWrapper = styled.div`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   background-color: #f3f4f6; /* 밝고 청결한 느낌의 민트 배경 */
   padding: 40px;
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     margin-bottom: 20px; /* 모바일에서 아래 여백 조정 */
     padding: 20px; /* 모바일에서 패딩 조정 */
     box-shadow: none;
@@ -74,7 +74,7 @@ export const Wapper = styled.div`
   margin: 0 auto;
   gap: 30px;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     padding: 12px;
     width: 100%;
     border-radius: 0px;
@@ -88,7 +88,7 @@ export const ImgTag = styled.img`
   height: 70px;
   margin-top: 50px;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 50px;
     height: 50px;
     margin-top: 30px; /* 모바일에서 위 여백 조정 */
@@ -123,7 +123,7 @@ export const SmallButton = styled.button`
     box-shadow: none;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 70px;
   }
 `;
@@ -160,7 +160,7 @@ export const LastButton = styled.button`
     box-shadow: none;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     max-width: 250px;
     padding: 20px; /* ✅ 모바일에서 패딩 조정 */
     height: 20px;
@@ -181,7 +181,7 @@ export const StyledCalendar = styled(Calendar)`
   height: auto;
   padding: 20px;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 100%;
     height: auto;
   }
@@ -193,7 +193,7 @@ export const Label = styled.span`
   font-weight: bolder;
   text-align: left;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     font-size: 15px; /* 모바일에서 폰트 크기 조정 */
   }
 `;

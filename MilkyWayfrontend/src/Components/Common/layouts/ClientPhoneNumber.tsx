@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { BsQuestionDiamond, BsTelephoneFill } from "react-icons/bs";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
 
 const QuestionTitle = styled.h2`
   display: flex;
@@ -9,6 +10,11 @@ const QuestionTitle = styled.h2`
   color: #ca8383;
   margin: 50px 0 30px;
   gap: 12px;
+
+  @media screen and (max-width: 800px) {
+    font-size: 25px;
+    margin: 10px 0 20px;
+  }
 `;
 
 const SupportBanner = styled.section`
@@ -30,6 +36,10 @@ const InfoText = styled.p`
   max-width: 600px;
   margin-bottom: 25px;
   line-height: 1.6;
+
+  @media screen and (max-width: 600px) {
+    font-size: 15px;
+  }
 `;
 
 const CallButton = styled.a`
@@ -53,9 +63,16 @@ const CallButton = styled.a`
   svg {
     flex-shrink: 0;
   }
+
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 `;
 
 export const ClientPhoneNumber = () => {
+  const width = useWindowWidth();
+  const isMobile = width <= 600;
+
   return (
     <SupportBanner>
       <QuestionTitle>
@@ -63,7 +80,9 @@ export const ClientPhoneNumber = () => {
         궁금한 점이 있으신가요?
       </QuestionTitle>
       <InfoText>
-        은하수 홈케어는 언제나 여러분의 문의를 환영합니다. 편하게 연락 주세요!
+        {isMobile
+          ? "전화 문의는 언제든지 환영입니다!"
+          : "은하수 홈케어는 언제나 여러분의 문의를 환영합니다. 편하게 연락 주세요!"}
       </InfoText>
       <CallButton href="tel:01065131458">
         <BsTelephoneFill size={22} />

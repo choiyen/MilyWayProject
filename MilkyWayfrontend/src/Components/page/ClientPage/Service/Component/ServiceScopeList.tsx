@@ -1,10 +1,32 @@
 import { MdCheckCircle } from "react-icons/md";
 import { TabService } from "../Type/IntroductionService";
+import styled from "styled-components";
+import ReviewBanner from "./ReviewBanner";
 
 interface ServiceScopeData {
   Service: string;
   ServiceList: TabService[];
 }
+
+const ImageType = styled.img`
+  width: 70%;
+  height: 40vh;
+  object-fit: cover;
+
+  @media screen and (max-width: 600px) {
+    width: 80%;
+    height: 30vh;
+  }
+`;
+const ReviewContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  @media screen and (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
 
 const ServiceScopeList = ({ Service, ServiceList }: ServiceScopeData) => {
   return (
@@ -36,7 +58,11 @@ const ServiceScopeList = ({ Service, ServiceList }: ServiceScopeData) => {
             alignItems: "center",
           }}
         >
-          <img src={item.ImageComment} alt="" style={{ width: "500px" }} />
+          <ImageType
+            src={item.ImageComment}
+            alt=""
+            style={{ width: "500px" }}
+          />
           <h4
             style={{
               fontSize: "20px",
@@ -48,21 +74,14 @@ const ServiceScopeList = ({ Service, ServiceList }: ServiceScopeData) => {
           </h4>
           <div style={{ marginTop: "30px" }}>
             {item.ServiceList.map((value: string, i: number) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "10px",
-                }}
-              >
+              <ReviewContainer key={i}>
                 <MdCheckCircle
                   color="#00a59e"
                   size={20}
                   style={{ marginRight: "10px" }}
                 />
                 <span>{value}</span>
-              </div>
+              </ReviewContainer>
             ))}
           </div>
         </div>

@@ -24,19 +24,44 @@ const QuestionTitle = styled.div`
   margin-bottom: 42px;
   margin-top: 50px;
   gap: 10px;
+
+  @media screen and (max-width: 600px) {
+    font-size: 30px;
+  }
 `;
 
 const QuestionBoxTitle = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== "visible", // DOM으로 전달 막기
 })<{ visible: boolean }>`
   display: ${(props) => (props.visible ? "flex" : "none")};
-  background-color: #279acf;
+  background-color: #cbe9f7;
   font-size: 18px;
   width: 50vw;
   padding: 50px;
   border-radius: 0px 0px 10px 10px;
   margin-bottom: 20px;
-  border: 1px solid #000000;
+
+  @media screen and (max-width: 600px) {
+    padding: 25px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+`;
+
+const QuestionText = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #e0f7fa;
+  border-radius: 10px 10px 0px 0px;
+  padding: 10px;
+  width: 50vw;
+
+  @media screen and (max-width: 600px) {
+    font-size: 15px;
+    font-weight: 300;
+    padding: 5px;
+    text-align: center;
+  }
 `;
 
 interface ExampleQuestionProps {
@@ -60,19 +85,9 @@ export const ExampleQuestion = ({ Question }: ExampleQuestionProps) => {
         {Question &&
           Question.map((item, index) => (
             <div key={index} style={{ marginBottom: "20px" }}>
-              <div
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  backgroundColor: "#e0f7fa",
-                  borderRadius: "10px 10px 0px 0px",
-                  padding: "10px",
-                  width: "50vw",
-                }}
-                onClick={() => handleToggle(item.exceptionQA)}
-              >
+              <QuestionText onClick={() => handleToggle(item.exceptionQA)}>
                 <strong>{item.exceptionQA}</strong>
-              </div>
+              </QuestionText>
               <QuestionBoxTitle visible={!!openItems[item.exceptionQA]}>
                 <p>{item.expectedComment}</p>
               </QuestionBoxTitle>

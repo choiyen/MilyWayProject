@@ -1,4 +1,29 @@
 import bathsrooms from "@/Components/Common/assets/bathsrooms.png";
+import there_image from "@/Components/Common/assets/cleaning_blog_assets/there_image.jpg";
+import bathsroom from "@/Components/Common/assets/bathroom.jpg";
+import cleaningroom from "@/Components/Common/assets/cleaningroom.jpg";
+import divcleaning from "@/Components/Common/assets/divcleaning.jpg";
+import RoomClean from "@/Components/Common/assets/RoomClean.jpg";
+import two_image from "@/Components/Common/assets/cleaning_blog_assets/two_image.jpg";
+import building from "@/Components/Common/assets/cleaning_blog_assets/building.png";
+import post_construction from "@/Components/Common/assets/cleaning_blog_assets/post-construction.png";
+import balcony from "@/Components/Common/assets/movein/KakaoTalk_20250517_205032360_19.jpg";
+import room from "@/Components/Common/assets/movein/KakaoTalk_20250517_205032360_04.jpg";
+import sink from "@/Components/Common/assets/movein/KakaoTalk_20250517_204915707_05.jpg";
+import homroom_room from "@/Components/Common/assets/movein/homroom_room.jpg";
+import homroom_sink from "@/Components/Common/assets/movein/homroom_sink.jpg";
+import newhome_bathrooms from "@/Components/Common/assets/newhome/newhome_bathrooms.jpg";
+import newhome_room from "@/Components/Common/assets/newhome/newhome_room.jpg";
+import newhome_sink from "@/Components/Common/assets/newhome/newhome_sink.jpg";
+import steps from "@/Components/Common/assets/steps/steps.png";
+import stepsnew from "@/Components/Common/assets/steps/stepsnew.png";
+import stepsbalcony from "@/Components/Common/assets/steps/stepsbalcony.png";
+import newhouse from "@/Components/Common/assets/steps/newhouse.jpg";
+import stepclean from "@/Components/Common/assets/steps/stepclean.png";
+import newout from "@/Components/Common/assets/steps/newout.jpg";
+import divcleanings from "@/Components/Common/assets/buliding/divcleanings.png";
+import foodclean from "@/Components/Common/assets/buliding/foodclean.png";
+import hometown from "@/Components/Common/assets/buliding/hometown.png";
 
 export interface TabService {
   ImageComment: string;
@@ -20,7 +45,7 @@ export const IntroductionService: Introduction[] = [
     defaultImg: bathsrooms,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: cleaningroom,
         name: "이사청소",
         ServiceList: [
           "1. 욕실·주방 묵은 때 제거",
@@ -33,7 +58,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: divcleaning,
         name: "주거청소",
         ServiceList: [
           "1. 욕실 곰팡이 및 물때 제거",
@@ -46,7 +71,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: two_image,
         name: "입주청소",
         ServiceList: [
           "1. 건축 자재 먼지 제거",
@@ -59,7 +84,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: there_image,
         name: "계단청소",
         ServiceList: [
           "1. 계단 먼지 및 쓰레기 제거",
@@ -72,7 +97,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: building,
         name: "건물청소",
         ServiceList: [
           "1. 외부 유리창 물청소",
@@ -85,7 +110,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: RoomClean,
         name: "새집증후군",
         ServiceList: [
           "1. 새집 냄새 제거 (피톤치드 등)",
@@ -98,7 +123,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: post_construction,
         name: "준공청소",
         ServiceList: [
           "1. 공사 잔해 및 먼지 제거",
@@ -111,7 +136,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: bathsroom,
         name: "부분청소",
         ServiceList: [
           "1. 욕실 집중 클리닝",
@@ -129,10 +154,10 @@ export const IntroductionService: Introduction[] = [
     Service: "이사청소",
     Introduction:
       "이사청소는 다른 사람이 사용했던 공간을 처음처럼 새롭게 만드는 서비스입니다. 집을 비운 직후나 입주 직전에 진행되며, 바닥, 창틀, 싱크대, 욕실, 벽면 등 오염이 집중된 부분을 꼼꼼하게 청소합니다. 특히 장판 밑 먼지, 찌든 때, 곰팡이 흔적 등 일반 청소로는 어려운 오염까지 제거합니다. 이사는 새 출발의 시작이기에, 깨끗한 환경에서 시작할 수 있도록 도와드립니다. 쾌적한 새집의 기분을 느끼고 싶다면 꼭 필요한 필수 서비스입니다.",
-    defaultImg: bathsrooms,
+    defaultImg: cleaningroom,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: balcony,
         name: "현관, 베란다",
         ServiceList: [
           "1. 현관 바닥 묵은 때 및 먼지 제거",
@@ -145,7 +170,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: room,
         name: "거실, 방",
         ServiceList: [
           "1. 바닥 청소 및 얼룩 제거",
@@ -158,7 +183,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: bathsroom,
         name: "욕실, 화장실",
         ServiceList: [
           "1. 변기, 세면대, 욕조 찌든 때 제거",
@@ -171,7 +196,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: sink,
         name: "주방, 싱크대",
         ServiceList: [
           "1. 싱크대 상하부장 내부 청소",
@@ -189,10 +214,10 @@ export const IntroductionService: Introduction[] = [
     Service: "주거청소",
     Introduction:
       "주거청소는 현재 거주 중인 공간을 주기적으로 정리하고 위생적으로 관리하는 서비스입니다. 집 안의 각종 생활 먼지, 주방의 기름때, 욕실의 곰팡이, 창틀과 방충망의 미세먼지 등은 시간이 지날수록 건강에 영향을 미칠 수 있습니다. 전문 청소도구와 친환경 세제를 이용해 공간의 구석구석을 관리하고, 고객의 생활 리듬에 맞춰 청소 일정을 조정할 수 있어 바쁜 현대인에게 최적화된 서비스입니다. 더 나은 주거환경과 가족의 건강을 지키기 위한 현명한 선택입니다.",
-    defaultImg: bathsrooms,
+    defaultImg: two_image,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: balcony,
         name: "현관, 베란다",
         ServiceList: [
           "1. 현관 바닥 먼지 제거 및 물걸레질",
@@ -205,7 +230,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: homroom_room,
         name: "거실, 방",
         ServiceList: [
           "1. 바닥 먼지 제거 및 물걸레 청소",
@@ -218,7 +243,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: bathsroom,
         name: "욕실, 화장실",
         ServiceList: [
           "1. 세면대 및 변기 청소 및 소독",
@@ -231,7 +256,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: homroom_sink,
         name: "주방, 싱크대",
         ServiceList: [
           "1. 싱크대 내부 정리 및 물때 제거",
@@ -249,10 +274,10 @@ export const IntroductionService: Introduction[] = [
     Service: "입주청소",
     Introduction:
       "입주청소는 새로 지어진 아파트나 리모델링을 마친 공간에서 입주 전 실시하는 전문 청소입니다. 시공 후 남은 분진, 유리나 타일의 접착제 자국, 건축자재의 흔적 등을 말끔히 정리해 완전한 새집으로 탈바꿈시킵니다. 일반적인 청소로는 제거하기 힘든 오염을 고성능 장비와 전문 인력을 통해 처리하며, 특히 알레르기나 피부 질환이 걱정되는 어린 자녀가 있는 가정에 필수적인 서비스입니다. 새 출발의 첫 공간을 건강하고 깨끗하게 준비해드립니다.",
-    defaultImg: bathsrooms,
+    defaultImg: divcleaning,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: balcony,
         name: "현관, 베란다",
         ServiceList: [
           "1. 현관 바닥 시공 잔여물 제거",
@@ -265,7 +290,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: newhome_room,
         name: "거실, 방",
         ServiceList: [
           "1. 바닥 분진 및 미세 시멘트 가루 제거",
@@ -278,7 +303,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: newhome_bathrooms,
         name: "욕실, 화장실",
         ServiceList: [
           "1. 타일 벽면·바닥 시공 잔여물 제거",
@@ -291,7 +316,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: newhome_sink,
         name: "주방, 싱크대",
         ServiceList: [
           "1. 싱크대 내부 공사 분진 제거",
@@ -309,10 +334,10 @@ export const IntroductionService: Introduction[] = [
     Service: "계단청소",
     Introduction:
       "계단청소는 아파트, 오피스텔, 상가 등 다중 이용시설의 공용 계단을 대상으로 하는 전문 서비스입니다. 계단은 많은 사람이 이용하면서도 관리가 소홀해지기 쉬운 공간입니다. 먼지, 낙서, 물자국, 껌, 기름때 등 다양한 오염을 제거하며, 바닥 코팅 및 난간 소독 등도 포함됩니다. 미끄럼 사고 예방과 위생적인 환경 유지는 입주민과 방문자의 만족도와 직결되기 때문에 정기적인 관리가 필요합니다. 은하수 홈케어는 시설의 품격을 높이는 계단 관리를 제공합니다.",
-    defaultImg: bathsrooms,
+    defaultImg: there_image,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: steps,
         name: "계단 바닥",
         ServiceList: [
           "1. 바닥 먼지 및 이물질 제거 (빗자루·진공청소기 활용)",
@@ -325,7 +350,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: stepsnew,
         name: "난간 및 벽면",
         ServiceList: [
           "1. 난간 손잡이 소독 및 세척",
@@ -338,7 +363,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: stepsbalcony,
         name: "입구 및 휴게 공간",
         ServiceList: [
           "1. 입구 바닥 및 매트 청소",
@@ -356,10 +381,10 @@ export const IntroductionService: Introduction[] = [
     Service: "새집증후군",
     Introduction:
       "새집증후군은 신축 건물에서 발생하는 유해물질로 인한 불편함을 줄여주는 서비스입니다. 은하수 홈케어는 친환경 약제를 사용해 실내 공기질을 개선하고, 건강한 환경을 만들기 위한 기본 케어를 제공합니다. 복잡한 절차 없이 신속하게 유해물질을 줄이고 쾌적한 공간을 조성합니다.",
-    defaultImg: bathsrooms,
+    defaultImg: RoomClean,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: newhouse,
         name: "새집증후군 케어",
         ServiceList: [
           "1. 친환경 탈취제 및 중화제 약제 분사",
@@ -375,10 +400,10 @@ export const IntroductionService: Introduction[] = [
     Service: "준공청소",
     Introduction:
       "준공청소는 상가, 오피스, 주택 등 공사 후 완공된 현장을 깨끗하게 정리하는 작업입니다. 시멘트 가루, 실리콘 자국, 먼지와 페인트 찌꺼기 등을 제거해 입주 전 최상의 상태로 마무리합니다. 일반적인 생활 청소보다 더 전문적인 장비와 경험이 필요하며, 미관은 물론 위생과 안전까지 고려한 작업이 이루어집니다. 건물의 첫인상을 결정짓는 중요한 과정이므로, 디테일한 마감 청소가 필수입니다. 은하수 홈케어는 현장 맞춤형 준공청소를 제공합니다.",
-    defaultImg: bathsrooms,
+    defaultImg: post_construction,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: steps,
         name: "바닥 및 표면 청소",
         ServiceList: [
           "1. 시멘트 가루 및 건축 먼지 제거",
@@ -389,7 +414,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: stepclean,
         name: "유리 및 창문 청소",
         ServiceList: [
           "1. 창문 유리 내부·외부 클리닝",
@@ -409,7 +434,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: newout,
         name: "최종 점검 및 정리",
         ServiceList: [
           "1. 쓰레기 및 폐기물 처리",
@@ -424,10 +449,10 @@ export const IntroductionService: Introduction[] = [
     Service: "부분청소",
     Introduction:
       "부분청소는 집 전체가 아닌 특정 공간이나 항목에 집중하여 진행하는 선택형 서비스입니다. 예를 들어 욕실, 화장실, 주방, 창문 청소 등 고객의 요청에 따라 맞춤형으로 진행됩니다. 전문 장비를 이용해 일반 청소로는 어려운 찌든 때나 곰팡이 등을 제거하며, 비용 부담을 줄이면서도 효율적인 결과를 기대할 수 있습니다. 바쁜 일정, 임박한 방문 일정 등 다양한 상황에서 활용도가 높은 유연한 서비스입니다.",
-    defaultImg: bathsrooms,
+    defaultImg: bathsroom,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: newhome_bathrooms,
         name: "욕실 청소",
         ServiceList: [
           "1. 타일 및 벽면 곰팡이 제거",
@@ -445,7 +470,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: sink,
         name: "주방 청소",
         ServiceList: [
           "1. 싱크대 및 가스레인지 클리닝",
@@ -455,7 +480,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: stepclean,
         name: "창문 및 발코니 청소",
         ServiceList: [
           "1. 창문 유리 내·외부 닦기",
@@ -469,10 +494,10 @@ export const IntroductionService: Introduction[] = [
     Service: "건물청소",
     Introduction:
       "건물청소는 상업용 건물, 오피스, 공공기관 등 다양한 규모의 건물을 대상으로 하는 전문적인 청소 서비스입니다. 공용 공간, 복도, 로비, 화장실 등 위생 관리가 중요한 구역을 집중적으로 관리하며, 쾌적하고 청결한 환경을 유지합니다. 정기적인 유지관리 청소부터 집중적인 대청소까지, 고객의 운영 환경에 맞춰 맞춤형 서비스를 제공합니다. 은하수 홈케어는 건물의 가치를 높이고, 방문객과 입주자의 만족도를 향상시키기 위한 고품질의 클리닝 솔루션을 제공합니다.",
-    defaultImg: bathsrooms,
+    defaultImg: building,
     ServiceList: [
       {
-        ImageComment: bathsrooms,
+        ImageComment: foodclean,
         name: "음식점 청소",
         ServiceList: [
           "1. 주방 후드 및 배기구 클리닝",
@@ -483,7 +508,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: divcleanings,
         name: "상가 청소",
         ServiceList: [
           "1. 매장 내 바닥 및 벽면 청소",
@@ -494,7 +519,7 @@ export const IntroductionService: Introduction[] = [
         ],
       },
       {
-        ImageComment: bathsrooms,
+        ImageComment: hometown,
         name: "사무실 청소",
         ServiceList: [
           "1. 책상 및 사무기기 외부 닦기",

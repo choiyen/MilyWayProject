@@ -6,6 +6,7 @@ interface SliderProps {
 
 export const Slider = ({ URL }: SliderProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? URL.length - 1 : prev - 1));
@@ -14,17 +15,27 @@ export const Slider = ({ URL }: SliderProps) => {
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === URL.length - 1 ? 0 : prev + 1));
   };
+
+  // 👉 포커스 중일 때만 자동 슬라이드
   useEffect(() => {
+    if (!isFocused) return;
+
     const timer = setInterval(() => {
       nextSlide();
     }, 5000);
 
-    return () => clearInterval(timer); // cleanup
-  }, [currentIndex]);
+    return () => clearInterval(timer);
+  }, [isFocused]);
 
   return (
-    <div className="relative w-2/3 h-[400px] overflow-hidden rounded-lg mb-4">
-      {/* 이미지 */}
+    <div
+      className="relative w-3/4 h-[300px] overflow-hidden rounded-lg mb-4 max-sm:w-11/12 max-sm:h-48"
+      onMouseEnter={() => setIsFocused(true)}
+      onMouseLeave={() => setIsFocused(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      tabIndex={0}
+    >
       <img
         src={URL[currentIndex]}
         alt={`Image ${currentIndex + 1}`}
@@ -45,6 +56,7 @@ export const Slider = ({ URL }: SliderProps) => {
         ▶
       </button>
 
+      {/* 인디케이터 */}
       <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
         {URL.map((_, idx) => (
           <div
