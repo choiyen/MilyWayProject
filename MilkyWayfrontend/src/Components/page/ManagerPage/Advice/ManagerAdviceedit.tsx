@@ -1,7 +1,7 @@
 import { InputTextBox } from "@/Components/Common/ui/Input/InputTextBox";
 import { SelectBox } from "@/Components/Common/ui/Select/SelectBox";
 import { TextAreaBox } from "@/Components/Common/ui/TextArea/TextAreaBox";
-import { Fontname, ImgTag, LastButton, Wapper } from "@/SCSS/Fixed";
+import { Fontname, ImgTag, Label, LastButton, Wapper } from "@/SCSS/Fixed";
 import { cleanType } from "@/types/cleanspace/cleanType";
 import { RoomType } from "@/types/Room/RoomType";
 import { useEffect, useRef, useState } from "react";
@@ -32,6 +32,11 @@ const MainBox = styled.div`
   padding-top: 50px;
   padding-bottom: 50px;
   overflow-y: auto;
+  padding: 10px;
+
+  @media screen and (max-width: 600px) {
+    padding: 0px;
+  }
 `;
 
 const DeleteButton = styled.button`
@@ -239,32 +244,50 @@ const ManagerAdviceedit = () => {
     <MainBox>
       <Fontname>후기 관리</Fontname>
       <Wapper>
-        <InputTextBox
-          name={"제목"}
-          place={"후기 제목을 입력해주세요."}
-          Value={title}
-          setValue2={setTitle}
-        ></InputTextBox>
-        <FileTage name={"대표 이미지"} setValue2={setTitleimg} />
-        <SelectBox
-          name={"청소 유형"}
-          append={cleanType}
-          value={type}
-          setValue={setType}
-        />
-        <TextAreaBox
-          name={"도입 인사"}
-          Value={greeting}
-          setValue2={setgreeting}
-        />
+        <div style={{ width: "100%" }}>
+          <InputTextBox
+            name={"제목"}
+            place={"후기 제목을 입력해주세요."}
+            Value={title}
+            setValue2={setTitle}
+          ></InputTextBox>
+          <FileTage name={"대표 이미지"} setValue2={setTitleimg} />
+          <SelectBox
+            name={"청소 유형"}
+            append={cleanType}
+            value={type}
+            setValue={setType}
+          />
+          <TextAreaBox
+            name={"도입 인사"}
+            Value={greeting}
+            setValue2={setgreeting}
+          />
+        </div>
+
         {[...Array(count)].map((_, i) => (
           <div
             key={i}
             ref={i === count - 1 ? lastItemRef : null}
-            style={{ gap: "20px" }}
+            style={{
+              gap: "20px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "10px 10px 0px 10px",
+              padding: "10px",
+              width: "100%",
+            }}
           >
+            <div
+              style={{
+                textAlign: "center",
+                padding: "10px",
+                borderBottom: "1px solid black",
+              }}
+            >
+              <Label>{`후기 글 (${i + 1}) -  ${cleanspot[i]}`} </Label>
+            </div>
             <SelectBox
-              name={`청소 위치 (${cleanspot[i]})`}
+              name={`청소위치`}
               append={RoomType}
               value={cleanspot[i]}
               updateCleanspot={(val: string) =>
@@ -275,21 +298,21 @@ const ManagerAdviceedit = () => {
               Cleancount={i}
             />
             <FileTage
-              name={`청소 이전 (${cleanspot[i]})`}
+              name={`청소이전`}
               Value={beforefile}
               setBeforeValue={setbeforefile}
               index={i}
               type="before"
             />
             <FileTage
-              name={`청소 이후 (${cleanspot[i]})`}
+              name={`청소이후`}
               Value={afferfile}
               setAfferValue={setAfferfile}
               index={i}
               type="after"
             />
             <TextAreaBox
-              name={`청소 후기 (${cleanspot[i]})`}
+              name={`청소후기`}
               place={"청소할 때 힘들었던 점이나 후기 글을 작성해주세요."}
               index={i}
               Value={Advice}

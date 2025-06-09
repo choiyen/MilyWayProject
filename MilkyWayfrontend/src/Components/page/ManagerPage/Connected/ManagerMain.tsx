@@ -29,7 +29,7 @@ const MangerPage = styled.div`
   margin-top: 100px;
   margin-bottom: 100px;
 
-  max-width: 600px;
+  max-width: 800px;
   min-height: 500px; /* ✅ 고정 높이 대신 최소 높이로 */
   background-color: #f3f4f6;
 
@@ -47,7 +47,7 @@ const MangerPage = styled.div`
     padding: 20px;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 100%;
     min-height: auto; /* 모바일은 내용에 따라 늘어남 */
     padding: 20px;
@@ -73,7 +73,7 @@ const MangerInput = styled.input`
     height: 40px;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 100%;
     max-width: 300px; /* Adjust max-width for smaller screens */
     margin-top: 15px; /* Adjust margin for smaller screens */
@@ -149,18 +149,15 @@ export const ManagerMain = () => {
         }
       })
       .catch((error) => {
-        toast.error(
-          "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요." + error,
-          {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          }
-        );
+        toast.error(error.response.data.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
 

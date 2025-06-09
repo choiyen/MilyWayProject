@@ -62,15 +62,6 @@ const ServiceProFile = () => {
     fetchType(select, CurrentPage ?? 0)
       .then((res) => {
         if (res.resultType == "empty") {
-          toast.success("작성된 리뷰가 없는 서비스입니다.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
           setNotice([]);
           return;
         }

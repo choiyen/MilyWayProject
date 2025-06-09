@@ -23,44 +23,50 @@ const FileTageBox = styled.input`
   opacity: 0;
 `;
 
+const CustomLabel = styled(Label)`
+  font-size: 20px;
+  font-weight: bold;
+  height: 50px;
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: 800px) {
+    font-size: 15px; /* 모바일에서 폰트 크기 조정 */
+  }
+`;
+
 const CustomFileLabel = styled.label`
   cursor: pointer;
-  background-color: gray;
+  background-color: #888;
   width: 70%;
   height: 50px;
   color: white;
   font-size: 14px;
   text-align: center;
-  line-height: 50px;
-  text-transform: uppercase;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
-  margin-top: 20px;
+  font-weight: bold;
 
   &:hover {
     background-color: brown;
   }
 
-  @media screen and (max-width: 600px) {
-    width: 270px;
+  @media screen and (max-width: 800px) {
+    width: 265px;
     height: 40px;
     font-size: 12px;
-    line-height: 40px;
   }
 `;
 
 const FileContainer = styled.div`
   display: flex;
-  align-items: center; /* 세로 정렬 */
+  align-items: center; /* 수직 정렬 */
+  gap: 10px;
   width: 100%;
+  margin-top: 10px;
   justify-content: space-between;
-  height: auto;
-
-  @media screen and (max-width: 600px) {
-    width: 100%;
-    gap: 10px; /* 모바일에서 간격 조정 */
-    margin-top: 0px;
-  }
 `;
 
 export const FileTage = ({
@@ -116,7 +122,7 @@ export const FileTage = ({
 
   return (
     <FileContainer>
-      <Label>{name}</Label>
+      <CustomLabel>{name}</CustomLabel>
       <CustomFileLabel htmlFor={inputId}>{buttonText}</CustomFileLabel>
       <FileTageBox
         type="file"

@@ -46,6 +46,7 @@ export const PUT_FORM = async (
   try {
     const response = await axiosInstance.put(url, formData, {
       ...config,
+      timeout: config?.timeout ?? 80000, // 기본 20초로 설정, 필요에 따라 조절 가능
       headers: {
         "Content-Type": "multipart/form-data",
         ...config?.headers,
