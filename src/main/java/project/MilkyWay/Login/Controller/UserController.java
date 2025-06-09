@@ -25,6 +25,7 @@ import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Expection.FindFailedException;
 import project.MilkyWay.ComonType.Expection.SessionNotFoundExpection;
 import project.MilkyWay.ComonType.LoginSuccess;
+import project.MilkyWay.Config.SessionManager;
 import project.MilkyWay.Login.DTO.LoginDTO;
 import project.MilkyWay.Login.DTO.UserDTO;
 import project.MilkyWay.Login.Entity.UserEntity;
@@ -43,7 +44,7 @@ import java.util.List;
 @RequestMapping("/auth")
 @Tag(name = "유저 정보를 제공하는 Controller")
 public class UserController //관리자 아이디를 관리하는 DTO
-{ //1차 Test 완료 - 보안 설정 후 재테스트
+{
     private final ResponseDTO<UserDTO> responseDTO = new ResponseDTO<>();
 
     @Autowired
@@ -59,6 +60,10 @@ public class UserController //관리자 아이디를 관리하는 DTO
 
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private SessionManager sessionManager;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -109,6 +114,12 @@ public class UserController //관리자 아이디를 관리하는 DTO
                 throw new AuthenticationException("Invalid username or password");
             }
 
+            // 이미 로그인 중인지 검사
+            if (!sessionManager.registerSession(user.getUserId(), request.getSession())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(responseDTO.Response("error", "이미 로그인 중인 계정입니다."));
+            }
+
             // Spring Security 인증 객체 생성
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(user.getUserId(), null, List.of());
@@ -124,7 +135,7 @@ public class UserController //관리자 아이디를 관리하는 DTO
                     context
             );
 
-            session.setAttribute("userId", user.getUserId());
+            request.getSession().setAttribute("userId", user.getUserId());
 
             // 사용자 DTO 반환
             UserDTO user1 = ConvertToDTO(user);
@@ -154,7 +165,16 @@ public class UserController //관리자 아이디를 관리하는 DTO
             // 세션 무효화
             if(loginSuccess.isSessionExist(request))
             {
-                session.invalidate();
+                HttpSession session = request.getSession(false);
+                if(session != null)
+                {
+                    String userId = (String) session.getAttribute("userId");
+                    if(userId != null)
+                    {
+                        sessionManager.removeSession(userId);
+                    }
+                    session.invalidate();
+                }
                 // 쿠키 삭제 (JSESSIONID)
                 Cookie cookie = new Cookie("JSESSIONID", null);
                 cookie.setMaxAge(0);  // 쿠키 만료

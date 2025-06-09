@@ -22,6 +22,7 @@ import project.MilkyWay.ComonType.DTO.ResponseDTO;
 import project.MilkyWay.ComonType.Enum.CleanType;
 import project.MilkyWay.ComonType.Expection.*;
 import project.MilkyWay.ComonType.LoginSuccess;
+import project.MilkyWay.Config.SessionManager;
 import project.MilkyWay.S3ClientService.S3ImageService;
 import project.MilkyWay.noticeMain.Common.DTO.NoticeJsonDTO;
 import project.MilkyWay.noticeMain.Common.DTO.TypeDTO;
@@ -41,14 +42,14 @@ import java.util.*;
 public class NoticeController //Notice, Noticedetaill 동시 동작
 {
     @Autowired
-    NoticeService noticeService;
+    private NoticeService noticeService;
 
     @Autowired
-    NoticeDetailService noticeDetailService;
+    private NoticeDetailService noticeDetailService;
 
 
     @Autowired
-    S3ImageService s3ImageService;
+    private S3ImageService s3ImageService;
 
     private final ResponseDTO<Object> responseDTO = new ResponseDTO<>();
 
@@ -196,8 +197,19 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
             if(loginSuccess.isSessionExist(request))
             {
                 NoticeEntity oldnotice = noticeService.findNoticeId(noticeJsonDTO.getNoticeDTO().getNoticeId());
-                FileDelete(oldnotice.getTitleimg());
-                String Titleurl = uploading(titleimg);
+
+                String Titleurl;
+                if (titleimg != null && !titleimg.isEmpty()) {
+                    // 새 파일 업로드
+                    Titleurl = uploading(titleimg);
+                    FileDelete(oldnotice.getTitleimg());
+                }
+                else
+                {
+                    // 기존 링크 그대로 사용
+                    Titleurl = noticeJsonDTO.getNoticeDTO().getTitleimg();
+                }
+
                 NoticeEntity notice1 = noticeService.UpdateNotice(noticeJsonDTO.getNoticeDTO().getNoticeId(), ConvertToNotice(noticeJsonDTO.getNoticeDTO(),Titleurl));
                 if(notice1 != null)
                 {
@@ -210,20 +222,40 @@ public class NoticeController //Notice, Noticedetaill 동시 동작
                     Map<String, List<String>> uploadedFileUrls = new HashMap<>();
 
                     while (fileNames.hasNext()) {
-                        String key = fileNames.next();
+                        String key = fileNames.next(); //before_1, affer_1
+                        String[] parts = key.split("_"); // "before", "1"
+                        if (parts.length != 2) continue; // 예외 처리
+                        String type = parts[0];
+
+                        // 슨서
+                        int index = Integer.parseInt(parts[1]);
                         List<MultipartFile> files = multiRequest.getFiles(key);
                         List<String> urlList = new ArrayList<>();
 
-                        for (MultipartFile file : files) {
+                        for (int fileIndex = 0; fileIndex < files.size(); fileIndex++) {
+                            MultipartFile file = files.get(fileIndex);
                             String filename = file.getOriginalFilename();
 
                             if (filename == null || !filename.contains(".")) {
                                 throw new RuntimeException("No file extension found");
                             }
 
-
                             try {
-                                urlList.add(uploading(file));
+                                if (file != null && !file.isEmpty()) {
+                                    urlList.add(uploading(file));
+                                }
+                                else
+                                {
+                                    String existUrl = null;
+                                    if (type.equals("before")) {
+                                        existUrl = noticeJsonDTO.getNoticeDetailDTO().get(index).getBeforeURL().get(fileIndex);
+                                        System.out.println(existUrl);
+                                    } else if (type.equals("after")) {
+                                        existUrl = noticeJsonDTO.getNoticeDetailDTO().get(index).getAfterURL().get(fileIndex);
+                                        System.out.println(existUrl);
+                                    }
+                                    urlList.add(existUrl);
+                                }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                                 throw new RuntimeException("업로드 실패");

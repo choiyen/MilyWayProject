@@ -26,10 +26,10 @@ const Textarea = styled.textarea`
   font-weight: 400;
   box-sizing: border-box; /* box-sizing을 border-box로 설정 */
 
-  @media screen and (max-width: 600px) {
-    width: 70% !important; /* 모바일에서 너비를 100%로 설정 */
-    height: auto !important; /* 모바일에서 높이를 자동으로 설정 */
-    min-height: 100px !important; /* 모바일에서 최소 높이를 100px로 설정 */
+  @media screen and (max-width: 800px) {
+    width: 75% !important;
+    height: auto !important;
+    min-height: 100px !important;
   }
 `;
 
