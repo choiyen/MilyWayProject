@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import * as React from "react";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import "@/SCSS/index.scss";
 // import "./index.css";
@@ -10,7 +10,7 @@ const rootElement = document.getElementById("root");
 
 if (rootElement) {
   // rootElement가 null이 아닌 경우에만 실행
-  const root = ReactDOM.createRoot(rootElement);
+  const root = createRoot(rootElement);
   root.render(
     <React.StrictMode>
       <Provider store={reduxstore}>

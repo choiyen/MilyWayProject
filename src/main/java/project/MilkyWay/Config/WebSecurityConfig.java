@@ -18,15 +18,20 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Value("${released.URL}")
-    String url;
 
+    @Value("released.URL")
+    String releaseURL;
+
+    List<String> releaseURLState = Arrays.asList(releaseURL.split(","));
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,16 +54,16 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(Arrays.asList(url, "http://localhost:9000"));  // 특정 도메인 허용
+
+        // allowedOrigins 수동 설정
+        config.setAllowedOriginPatterns(releaseURLState);
         config.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));  // 🔹 허용할 헤더 추가
-        config.setExposedHeaders(Arrays.asList("Authorization", "Content-Type")); // 🔹 클라이언트에서 접근 가능하도록 노출
+        config.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
         return source;
     }
-
-
 }

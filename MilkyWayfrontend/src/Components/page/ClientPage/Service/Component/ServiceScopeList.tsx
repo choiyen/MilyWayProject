@@ -1,7 +1,6 @@
 import { MdCheckCircle } from "react-icons/md";
 import { TabService } from "../Type/IntroductionService";
 import styled from "styled-components";
-import ReviewBanner from "./ReviewBanner";
 
 interface ServiceScopeData {
   Service: string;

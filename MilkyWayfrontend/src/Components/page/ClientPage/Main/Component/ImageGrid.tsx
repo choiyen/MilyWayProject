@@ -82,7 +82,7 @@ const StyledImage = styled.img`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 600px) {
     max-width: 150px;
   }
 `;
@@ -99,7 +99,7 @@ const ImageDescription = styled.div`
     color: #d32f2f;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 700px) {
     font-size: 0.8rem;
   }
 `;

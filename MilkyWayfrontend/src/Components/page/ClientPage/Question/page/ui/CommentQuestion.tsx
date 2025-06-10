@@ -272,7 +272,7 @@ const CommentQuestion = () => {
                 <tr>
                   <td
                     colSpan={4}
-                    className="text-center py-10 text-blue-600 font-bold text-lg border-t"
+                    className="text-center py-10 text-blue-600 font-bold text-lg border-t max-sm:text-sm"
                   >
                     관리해야 할 질문이 없습니다.
                   </td>
@@ -287,15 +287,16 @@ const CommentQuestion = () => {
           />
 
           <div
-            className={`flex items-center mt-5 w-full ${
-              ismobile ? "justify-around gap-2" : "justify-center gap-10"
+            className={`flex items-center w-full ${
+              ismobile ? "justify-around gap-2" : "justify-center gap-10 "
             }`}
           >
             {/* 모바일일 땐 검색 버튼 왼쪽 끝, 아니면 기존 UI */}
             {ismobile ? (
               <button
                 onClick={onMobileSearchClick}
-                className="h-8 text-sm bg-blue-500 text-white px-3 rounded-lg hover:bg-blue-600 transition"
+                className="h-8 text-sm  bg-blue-500 text-white px-3 rounded-lg hover:bg-blue-600 transition 
+             max-sm:h-8 sm-max:w-[100px] max-sm:px-6"
               >
                 검색
               </button>
@@ -334,7 +335,7 @@ const CommentQuestion = () => {
             <button
               onClick={handlewriting}
               className={`bg-green-500 text-white rounded-lg hover:bg-green-600 transition ${
-                ismobile ? "h-8 px-3 text-sm" : "h-[40px] px-4"
+                ismobile ? "h-8 w-[100px] px-3 text-sm" : "h-[40px] px-4"
               }`}
             >
               글쓰기

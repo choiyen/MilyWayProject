@@ -15,6 +15,7 @@ import styled from "styled-components";
 type ReservationProps = {
   selectDate: string;
   handleCancel: (id: string) => void;
+  administrationId: string;
 };
 
 const CardRowReset = styled(CardRow)`
@@ -22,7 +23,11 @@ const CardRowReset = styled(CardRow)`
   flex-direction: column;
 `;
 
-const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
+const ReservationFind = ({
+  selectDate,
+  handleCancel,
+  administrationId,
+}: ReservationProps) => {
   const [Reservation, setReservation] = useState<ReservationType>();
   const nativeGate = useNavigate();
   const FindReservation = async () => {
@@ -221,12 +226,16 @@ const ReservationFind = ({ selectDate, handleCancel }: ReservationProps) => {
         {isMobile ? (
           <div className="flex items-center justify-between">
             <SmallButton onClick={handleAddress}>예약 확정</SmallButton>
-            <SmallButton onClick={handleCancel}>예약 취소</SmallButton>
+            <SmallButton onClick={() => handleCancel(administrationId)}>
+              예약 취소
+            </SmallButton>
           </div>
         ) : (
           <div className="flex items-center">
             <LastButton onClick={handleAddress}>예약 확정</LastButton>
-            <LastButton onClick={handleCancel}>예약 취소</LastButton>
+            <LastButton onClick={() => handleCancel(administrationId)}>
+              예약 취소
+            </LastButton>
           </div>
         )}
       </div>

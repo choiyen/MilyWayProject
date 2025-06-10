@@ -22,7 +22,7 @@ const Label2 = styled.span`
 
   background-color: #a7badf; /* 밝고 청결한 느낌의 민트 배경 */
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     font-size: 15px; /* 모바일에서 폰트 크기 조정 */
   }
 `;
@@ -42,7 +42,7 @@ const StyledCalendarWrapper = styled.div`
   background-color: #f3f4f6; /* 밝고 청결한 느낌의 민트 배경 */
   padding: 40px;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     margin-bottom: 20px; /* 모바일에서 아래 여백 조정 */
     padding: 20px; /* 모바일에서 패딩 조정 */
     box-shadow: none;
@@ -81,7 +81,7 @@ export const NewCalendar = ({ name, Value, setValue }: SelectBoxProps) => {
             next2Label={null}
             prev2Label={null}
             minDetail="year"
-            formatDay={(locale: string, date: Date) => {
+            formatDay={(locale: string | undefined, date: Date) => {
               if (isMobile) {
                 return date.getDate().toString(); // 숫자만
               } else {

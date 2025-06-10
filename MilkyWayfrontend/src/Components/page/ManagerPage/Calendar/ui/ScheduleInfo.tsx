@@ -146,6 +146,7 @@ export const ScheduleInfo = ({
                     handleCancel={() =>
                       handleAdminDelete(item.administrationId ?? "")
                     }
+                    administrationId={item.administrationId ?? ""}
                   />
                 </div>
               )}
@@ -183,6 +184,7 @@ export const ScheduleInfo = ({
                     handleCancel={() =>
                       handleAdminDelete(item.administrationId ?? "")
                     }
+                    administrationId={item.administrationId ?? ""}
                   />
                 </p>
               )}

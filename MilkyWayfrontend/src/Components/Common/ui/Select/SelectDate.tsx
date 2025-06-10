@@ -23,7 +23,7 @@ const RadioBoxContainer = styled.div`
   width: 100%;
   margin-top: 20px;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 100%;
   }
 `;
@@ -31,11 +31,11 @@ const RadioBoxContainer = styled.div`
 const DateInput = styled(
   DatePicker as unknown as React.ComponentType<DatePickerProps>
 )`
-  width: 600px;
+  width: 45vw;
   height: 50px;
   border: 1px solid black;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: 270px;
     height: 40px;
   }

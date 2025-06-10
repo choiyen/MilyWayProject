@@ -1,6 +1,5 @@
 // src/components/common/GlobalErrorBoundary.tsx
 
-import React from "react";
 import { useRouteError, isRouteErrorResponse } from "react-router-dom";
 
 const GlobalErrorBoundary: React.FC = () => {

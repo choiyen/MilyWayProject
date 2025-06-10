@@ -1,6 +1,7 @@
 import "@/SCSS/tailwind.scss";
 import { toast } from "react-toastify";
 import { useWindowWidth } from "@/types/hooks/useWindowWidth";
+import { useEffect } from "react";
 
 interface PageNavigate {
   CurrentPage: number;
@@ -15,6 +16,9 @@ export const PageNavigator = ({
 }: PageNavigate) => {
   const width = useWindowWidth();
   const isMobile = width <= 600;
+  useEffect(() => {
+    console.log(TotalPage.current);
+  }, [TotalPage]);
 
   return (
     <div>
@@ -42,23 +46,26 @@ export const PageNavigator = ({
             >
               &lt;
             </button>
-            {Array.from({ length: TotalPage.current }, (_, index) => (
-              <button
-                key={index}
-                className={`rounded-md border border-gray-300 hover:bg-blue-100 focus:outline-none ${
-                  isMobile ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-base"
-                } ${
-                  CurrentPage === index
-                    ? "bg-blue-300 font-semibold"
-                    : "bg-white"
-                }`}
-                onClick={() => {
-                  setCurrentPage(index);
-                }}
-              >
-                {index + 1}
-              </button>
-            ))}
+            {Array.from(
+              { length: Math.max(TotalPage.current ?? 0, 1) },
+              (_, index) => (
+                <button
+                  key={index}
+                  className={`rounded-md border border-gray-300 hover:bg-blue-100 focus:outline-none ${
+                    isMobile ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-base"
+                  } ${
+                    CurrentPage === index
+                      ? "bg-blue-300 font-semibold"
+                      : "bg-white"
+                  }`}
+                  onClick={() => {
+                    setCurrentPage(index);
+                  }}
+                >
+                  {index + 1}
+                </button>
+              )
+            )}
             <button
               className={`rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none ${
                 isMobile ? "px-2 py-0.5 text-sm" : "px-3 py-1 text-base"

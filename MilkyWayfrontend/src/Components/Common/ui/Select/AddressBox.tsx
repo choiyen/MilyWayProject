@@ -118,7 +118,7 @@ export const AddressBox = ({ name, append, setValue }: SelectBoxProps) => {
         </Select>
         <InputBox
           placeholder={isMobileText}
-          onchange={handleChangeInput}
+          onChange={handleChangeInput}
           value={address.select ?? ""}
         />
       </FieldGroup>
