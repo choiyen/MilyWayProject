@@ -1,5 +1,6 @@
 package project.MilkyWay.Config;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,10 +29,27 @@ import java.util.List;
 public class WebSecurityConfig {
 
 
-    @Value("released.URL")
-    String releaseURL;
+    @Value("${released.URL}")
+    String releasesURL;
 
-    List<String> releaseURLState = Arrays.asList(releaseURL.split(","));
+    @Value("${released.URL2}")
+    String releaseURL2;
+
+    @Value("${released.URL3}")
+    String releaseURL3s;
+
+    @Value("${released.URL4}")
+    String releaseURL4s;
+
+
+    @PostConstruct
+    public void printUrls() {
+        System.out.println("releasesURL = " + releasesURL);
+        System.out.println("releaseURL2 = " + releaseURL2);
+        System.out.println("releaseURL3s = " + releaseURL3s);
+        System.out.println("releaseURL3s = " + releaseURL4s);
+
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,9 +72,8 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-
         // allowedOrigins 수동 설정
-        config.setAllowedOriginPatterns(releaseURLState);
+        config.setAllowedOrigins(Arrays.asList(releasesURL,releaseURL2,releaseURL3s,releaseURL4s));
         config.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "PATCH", "OPTIONS"));
         config.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));

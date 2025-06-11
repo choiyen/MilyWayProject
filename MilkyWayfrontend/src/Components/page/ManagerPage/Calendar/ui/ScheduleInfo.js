@@ -1,0 +1,33 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { SmallButton } from "@/SCSS/Fixed";
+import { administrationDeletefetchData } from "../api/Dayutil";
+import ReservationFind from "../Components/ReservationFind";
+import "@/SCSS/tailwind.scss";
+import { useWindowWidth } from "@/types/hooks/useWindowWidth";
+import { Card, CardList, CardRow } from "@/types/CardType/Card";
+export const ScheduleInfo = ({ date, address, admintration, fetchData, }) => {
+    const matched = address?.filter((item) => {
+        if (!date || !item.submissionDate)
+            return false;
+        const itemDate = new Date(item.submissionDate);
+        if (isNaN(itemDate.getTime()))
+            return false;
+        return itemDate.toDateString() === date.toDateString();
+    }) || [];
+    const matched2 = admintration?.filter((item) => {
+        if (!date || !item.administrationDate)
+            return false;
+        const itemDate = new Date(item.administrationDate);
+        if (isNaN(itemDate.getTime()))
+            return false;
+        return (itemDate.toDateString() === date.toDateString() &&
+            (item.adminstrationType === "휴일" || item.adminstrationType === "예약"));
+    }) || [];
+    const handleAdminDelete = async (id) => {
+        await administrationDeletefetchData(id);
+        fetchData(); // 상태 갱신
+    };
+    const width = useWindowWidth();
+    const isMobile = width <= 600;
+    return (_jsx("div", { className: "mt-6 w-full", children: matched.length > 0 ? (_jsx("div", { className: "overflow-x-auto border w-3/4 border-gray-300 rounded-lg shadow-sm j mx-auto", children: isMobile ? (_jsx("div", { children: matched.map((item, index) => (_jsx(CardList, { children: _jsxs(Card, { children: [_jsxs(CardRow, { children: [_jsx("span", { className: "label", children: "\uBC88\uD638" }), _jsx("span", { className: "value", children: Number(index) + 1 })] }), _jsxs(CardRow, { children: [_jsx("span", { className: "label", children: "\uCCAD\uC18C \uC720\uD615" }), _jsx("span", { className: "value", children: item.cleanType })] }), _jsxs(CardRow, { children: [_jsx("span", { className: "label", children: "\uC608\uC57D\uC790" }), _jsx("span", { className: "value", children: item.customer })] }), _jsxs(CardRow, { children: [_jsx("span", { className: "label", children: "\uC804\uD654\uBC88\uD638" }), _jsx("span", { className: "value", children: item.phoneNumber })] }), _jsxs(CardRow, { children: [_jsx("span", { className: "label", children: "\uC8FC\uC18C" }), _jsx("span", { className: "value", children: item.address })] }), _jsxs(CardRow, { children: [_jsx("span", { className: "label", children: "\uC2E4\uD3C9\uC218" }), _jsx("span", { className: "value", children: item.acreage })] })] }) }))) })) : (_jsxs("table", { className: "min-w-full bg-white", children: [_jsx("thead", { className: "bg-gray-100 text-gray-700 text-sm uppercase", children: _jsxs("tr", { children: [_jsx("th", { className: "px-4 py-3 border", children: "\uCCAD\uC18C \uC720\uD615" }), _jsx("th", { className: "px-4 py-3 border", children: "\uC608\uC57D\uC790" }), _jsx("th", { className: "px-4 py-3 border", children: "\uC804\uD654\uBC88\uD638" }), _jsx("th", { className: "px-4 py-3 border", children: "\uC8FC\uC18C" }), _jsx("th", { className: "px-4 py-3 border", children: "\uC2E4\uD3C9\uC218" })] }) }), _jsx("tbody", { className: "text-center text-gray-800 text-base", children: matched.map((item, index) => (_jsxs("tr", { className: "hover:bg-gray-50", children: [_jsx("td", { className: "px-4 py-3 border", children: item.cleanType }), _jsx("td", { className: "px-4 py-3 border", children: item.customer }), _jsx("td", { className: "px-4 py-3 border", children: item.phoneNumber }), _jsx("td", { className: "px-4 py-3 border", children: item.address }), _jsx("td", { className: "px-4 py-3 border", children: item.acreage })] }, index))) })] })) })) : matched2.length > 0 ? (matched2.map((item, index) => isMobile ? (_jsxs("div", { children: [_jsxs("p", { className: "text-lg font-semibold mb-1 text-center", children: ["\uC120\uD0DD\uD55C \uB0A0\uC9DC:", _jsx("span", { className: "font-bold text-blue-700", children: item.administrationDate })] }), item.adminstrationType === "휴일" ? (_jsxs("div", { className: "text-center", children: [_jsxs("p", { className: "text-md", children: ["\uAD00\uB9AC\uC790 \uB2D8\uAED8\uC11C ", item.adminstrationType, "\uB85C \uC9C0\uC815\uD574\uB193\uC73C\uC2E0 \uB0A0\uC785\uB2C8\uB2E4."] }), _jsx(SmallButton, { onClick: () => handleAdminDelete(item.administrationId ?? ""), children: "\uD734\uC77C \uC0AD\uC81C" })] })) : (_jsxs("div", { children: [_jsx("p", { className: "text-md text-center pt-5 gap-9 mb-6", children: "\uACE0\uAC1D \uB2D8\uC758 \uC608\uC57D\uC774 \uB4E4\uC5B4\uC628 \uB0A0\uC9DC\uC774\uB2C8 \uD655\uC778 \uBD80\uD0C1\uB4DC\uB9BD\uB2C8\uB2E4." }), _jsx(ReservationFind, { selectDate: item.administrationDate, handleCancel: () => handleAdminDelete(item.administrationId ?? ""), administrationId: item.administrationId ?? "" })] }))] }, index)) : (_jsxs("div", { className: "bg-red-100 border border-red-400 text-red-800 rounded-lg px-6 py-4 mt-4 w-8/12 mx-auto text-center", children: [_jsxs("p", { className: "text-lg font-semibold mb-1", children: ["\uC120\uD0DD\uD55C \uB0A0\uC9DC:", _jsx("span", { className: "font-bold text-blue-700", children: item.administrationDate })] }), item.adminstrationType === "휴일" ? (_jsxs("div", { children: [_jsxs("p", { className: "text-md", children: ["\uAD00\uB9AC\uC790 \uB2D8\uAED8\uC11C ", item.adminstrationType, "\uB85C \uC9C0\uC815\uD574\uB193\uC73C\uC2E0 \uB0A0\uC785\uB2C8\uB2E4."] }), _jsx(SmallButton, { onClick: () => handleAdminDelete(item.administrationId ?? ""), children: "\uD734\uC77C \uC0AD\uC81C" })] })) : (_jsxs("p", { className: "text-md", children: ["\uACE0\uAC1D \uB2D8\uC758 \uC608\uC57D\uC774 \uB4E4\uC5B4\uC628 \uB0A0\uC9DC\uC774\uB2C8 \uD655\uC778 \uBD80\uD0C1\uB4DC\uB9BD\uB2C8\uB2E4.", _jsx(ReservationFind, { selectDate: item.administrationDate, handleCancel: () => handleAdminDelete(item.administrationId ?? ""), administrationId: item.administrationId ?? "" })] }))] }, index)))) : (_jsx("div", { className: "bg-red-100 border max-sm:text-sm border-green-400 text-blue-900 font-bold rounded-lg px-6 py-4 mt-4 w-8/12 h-[100px] mx-auto text-center flex items-center justify-center", children: isMobile ? (_jsxs(_Fragment, { children: ["\uC544\uC9C1 \uC815\uD574\uC9C4 \uC5C5\uBB34\uAC00 \uC5C6\uB124\uC694!", _jsx("br", {}), "\uC0C8\uB85C\uC6B4 \uC5C5\uBB34\uAC00 \uC788\uB2E4\uBA74 \uCD94\uAC00\uD574\uC8FC\uC138\uC694."] })) : (_jsx(_Fragment, { children: "\uC120\uD0DD\uD558\uC2E0 \uB0A0\uC9DC\uC5D0\uB294 \uB4F1\uB85D\uB41C \uC77C\uC815\uC774 \uC5C6\uC2B5\uB2C8\uB2E4." })) })) }));
+};
